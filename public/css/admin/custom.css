@@ -1,0 +1,16 @@
+.input-error {
+    font-size: 80%;
+    color: red;
+}
+.ids-column {
+    width: 30px;
+}
+.actions-column-2 {
+    width: 100px;
+}
+.mb-10 {
+    margin-bottom: 10px;
+}
+/* .tab-content > .tab-pane:not(.active) {
+    display: none;
+} */
