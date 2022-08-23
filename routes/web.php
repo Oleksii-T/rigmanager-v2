@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('auth/social/{provider}', [SocialAuthController::class, 'redirect'])->name('auth.social');
+Route::get('auth/callback/{provider}', [SocialAuthController::class, 'callback']);
+
+Route::get('logout', function () {
+    auth()->logout();
+    return redirect()->route('index');
+})->name('logout');
+
+Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(LaravelLocalization::setLocale())->group(function () {
+
+    Route::get('/', [PageController::class, 'index'])->name('index');
+
+    Route::middleware('verified')->group(function () {
+
+    });
+
 });

@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
  *
  * Temporary Dev Routes
  *
+ * Notes:
+ * \{\{ ?loc.*\)\) ?\}\}
+ *
  */
 
 if (config('app.env') == 'production') {
