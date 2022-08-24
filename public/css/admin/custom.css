@@ -8,9 +8,6 @@
 .actions-column-2 {
     width: 100px;
 }
-.mb-10 {
-    margin-bottom: 10px;
+.custom-file-preview {
+    max-width: 200px;
 }
-/* .tab-content > .tab-pane:not(.active) {
-    display: none;
-} */

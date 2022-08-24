@@ -18,6 +18,33 @@ class CategoryController extends Controller
 
         $categories = Category::query();
 
+        if ($request->search && $request->search['value']) {
+            $value = $request->search['value'];
+            $categories->whereHas('translations', function ($q) use ($value) {
+                $q->where('field', 'name')->where('value', 'like', "%$value%");
+            });
+        }
+        if ($request->parent) {
+            $categories->where('category_id', $request->parent);
+        }
+        if ($request->status !== null) {
+            $categories->where('is_active', (bool)$request->status);
+        }
+        if ($request->hasChilds !== null) {
+            if ($request->hasChilds) {
+                $categories->whereHas('childs');
+            } else {
+                $categories->whereDoesntHave('childs');
+            }
+        }
+        if ($request->hasParent !== null) {
+            if ($request->hasParent) {
+                $categories->whereNotNull('category_id');
+            } else {
+                $categories->whereNull('category_id');
+            }
+        }
+
         return Category::dataTable($categories);
     }
 
@@ -29,21 +56,21 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         $input = $request->validated();
-        $input['password'] = Hash::make($input['password']);
-        $user = Category::create($input);
-        $user->roles()->attach($input['roles']);
+        $category = Category::create($input);
+        $category->saveTranslations($input);
+        $category->addAttachment($input['image']);
 
         return $this->jsonSuccess('Category created successfully', [
             'redirect' => route('admin.categories.index')
         ]);
     }
 
-    public function edit(Category $user)
+    public function edit(Category $category)
     {
-        return view('admin.categories.edit', compact('user'));
+        return view('admin.categories.edit', compact('category'));
     }
 
-    public function update(CategoryRequest $request, Category $user)
+    public function update(CategoryRequest $request, Category $category)
     {
         $input = $request->validated();
 
@@ -59,13 +86,9 @@ class CategoryController extends Controller
         return $this->jsonSuccess('Category updated successfully');
     }
 
-    public function destroy(Category $user)
+    public function destroy(Category $category)
     {
-        if ($user->id == auth()->id()) {
-            return $this->jsonError('Can not delete current user', [], 200);
-        }
-
-        $user->delete();
+        $category->delete();
 
         return $this->jsonSuccess('Category deleted successfully');
     }

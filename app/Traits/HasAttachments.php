@@ -17,7 +17,11 @@ trait HasAttachments
             $attachments = $attachment;
         } else {
             $attachments = [$attachment];
-            $this->$group()->delete();
+            Attachment::query()
+                ->where('attachmentable_id', $this->id)
+                ->where('attachmentable_type', self::class)
+                ->where('group', $group)
+                ->delete();
         }
 
         foreach ($attachments as $attachment) {
@@ -25,7 +29,9 @@ trait HasAttachments
             $disk = Attachment::disk($type);
             $path = $attachment->store('', $disk);
 
-            $this->$group()->create([
+            Attachment::create([
+                'attachmentable_id' => $this->id,
+                'attachmentable_type' => self::class,
                 'name' => $path,
                 'original_name' => $attachment->getClientOriginalName(),
                 'type' => $type,
@@ -50,8 +56,11 @@ trait HasAttachments
         return $type;
     }
 
-    public function purgeFiles($group)
+    public function purgeFiles()
     {
-        $this->$group()->delete();
+        Attachment::query()
+            ->where('attachmentable_id', $this->id)
+            ->where('attachmentable_type', self::class)
+            ->delete();
     }
 }

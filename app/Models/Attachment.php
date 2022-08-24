@@ -18,7 +18,7 @@ class Attachment extends Model
         'type',
         'size',
         'attachmentable_id',
-        'attachmentable_id_type'
+        'attachmentable_type'
     ];
 
     protected $appends = [
