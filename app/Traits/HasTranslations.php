@@ -40,7 +40,9 @@ trait HasTranslations
                 continue;
             }
             foreach ($translations as $locale => $value) {
-                $value ??= '';
+                if (!$value) {
+                    continue;
+                }
                 $this->translations()->updateOrCreate(
                     [
                         'field' => $field,

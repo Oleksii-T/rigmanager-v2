@@ -284,7 +284,7 @@ return [
         [
             'text' => 'Categories',
             'route'  => 'admin.categories.index',
-            'icon' => 'fas fa-fw fa-tree',
+            'icon' => 'fas fa-fw fa-sitemap',
         ],
         [
             'text' => 'Settings',

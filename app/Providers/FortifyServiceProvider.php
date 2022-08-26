@@ -21,6 +21,23 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Fortify::createUsersUsing(CreateNewUser::class);
+        Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
+        // login config
+        Fortify::loginView(function () {
+            return view('auth.login');
+        });
         $this->app->instance(LoginResponse::class, new class implements LoginResponse {
             public function toResponse($request)
             {
@@ -39,22 +56,6 @@ class FortifyServiceProvider extends ServiceProvider
                     'message' => 'Logged in successfully'
                 ]);
             }
-        });
-    }
-
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-
-        // login config
-        Fortify::loginView(function () {
-            return view('auth.login');
         });
         RateLimiter::for('login', function (Request $request) {
             $email = (string) $request->email;

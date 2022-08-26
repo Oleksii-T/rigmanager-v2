@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\UniqueSlug;
+use App\Rules\ValidSlug;
 use App\Models\Category;
 
 class CategoryRequest extends FormRequest
@@ -25,12 +25,13 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
+        $model = $this->route('category');
+
         return [
             'name' => ['required', 'array'],
             'name.en' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'array', new UniqueSlug(Category::class)],
-            'slug.en' => ['required', 'string', 'max:255'],
-            'image' => ['required', 'image', 'max:5000'],
+            'slug' => ['required', 'array', new ValidSlug(Category::class, $model->id??null)],
+            'image' => [$model ? 'nullable' : 'required', 'image', 'max:5000'],
             'category_id' => ['nullable', 'exists:categories,id'],
         ];
     }

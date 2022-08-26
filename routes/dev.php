@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Translation;
+use App\Models\Page;
+use App\Models\Post;
 
 /*
  *

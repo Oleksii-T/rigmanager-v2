@@ -18,34 +18,7 @@ class CategoryController extends Controller
 
         $categories = Category::query();
 
-        if ($request->search && $request->search['value']) {
-            $value = $request->search['value'];
-            $categories->whereHas('translations', function ($q) use ($value) {
-                $q->where('field', 'name')->where('value', 'like', "%$value%");
-            });
-        }
-        if ($request->parent) {
-            $categories->where('category_id', $request->parent);
-        }
-        if ($request->status !== null) {
-            $categories->where('is_active', (bool)$request->status);
-        }
-        if ($request->hasChilds !== null) {
-            if ($request->hasChilds) {
-                $categories->whereHas('childs');
-            } else {
-                $categories->whereDoesntHave('childs');
-            }
-        }
-        if ($request->hasParent !== null) {
-            if ($request->hasParent) {
-                $categories->whereNotNull('category_id');
-            } else {
-                $categories->whereNull('category_id');
-            }
-        }
-
-        return Category::dataTable($categories);
+        return Category::dataTable($categories, $request);
     }
 
     public function create()
@@ -65,23 +38,23 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function edit(Category $category)
+    public function edit(Request $request, Category $category)
     {
-        return view('admin.categories.edit', compact('category'));
+        if (!$request->ajax()) {
+            return view('admin.categories.edit', compact('category'));
+        }
+
+        $categories = $category->childs();
+
+        return Category::dataTable($categories, $request);
     }
 
     public function update(CategoryRequest $request, Category $category)
     {
         $input = $request->validated();
-
-        if ($input['password']) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            unset($input['password']);
-        }
-
-        $user->update($input);
-        $user->roles()->sync($input['roles']);
+        $category->update($input);
+        $category->saveTranslations($input);
+        $category->addAttachment($input['image']??null);
 
         return $this->jsonSuccess('Category updated successfully');
     }

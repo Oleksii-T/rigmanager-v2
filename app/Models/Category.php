@@ -70,8 +70,35 @@ class Category extends Model
         );
     }
 
-    public static function dataTable($query)
+    public static function dataTable($query, $request)
     {
+        if ($request->search && $request->search['value']) {
+            $value = $request->search['value'];
+            $categories->whereHas('translations', function ($q) use ($value) {
+                $q->where('field', 'name')->where('value', 'like', "%$value%");
+            });
+        }
+        if ($request->parent) {
+            $categories->where('category_id', $request->parent);
+        }
+        if ($request->status !== null) {
+            $categories->where('is_active', (bool)$request->status);
+        }
+        if ($request->hasChilds !== null) {
+            if ($request->hasChilds) {
+                $categories->whereHas('childs');
+            } else {
+                $categories->whereDoesntHave('childs');
+            }
+        }
+        if ($request->hasParent !== null) {
+            if ($request->hasParent) {
+                $categories->whereNotNull('category_id');
+            } else {
+                $categories->whereNull('category_id');
+            }
+        }
+
         return DataTables::of($query)
             ->addColumn('parent', function ($model) {
                 $parent = $model->parent;
@@ -97,9 +124,6 @@ class Category extends Model
                     'name' => 'categories'
                 ])->render();
             })
-            ->filter(function ($query) {
-
-            }, true)
             ->rawColumns(['parent', 'is_active', 'action'])
             ->make(true);
     }

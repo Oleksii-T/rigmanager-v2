@@ -65,8 +65,69 @@
                     </div>
                 </div>
             </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
+            </div>
         </div>
-        <button type="submit" class="btn btn-success min-w-100">Save</button>
-        <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Child categories</h3>
+            </div>
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <select class="table-filter form-control select2" name="parent">
+                            <option value="">Parent Filter</option>
+                            @foreach (\App\Models\Category::whereHas('childs')->get() as $c)
+                                <option value="{{$c->id}}">{{$c->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="table-filter form-control" name="has_parent">
+                            <option value="">Parent Presence Filter</option>
+                            <option value="1">Is</option>
+                            <option value="0">None</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="table-filter form-control" name="has_childs">
+                            <option value="">Childs Presence Filter</option>
+                            <option value="1">Is</option>
+                            <option value="0">None</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="table-filter form-control" name="status">
+                            <option value="">Status Filter</option>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="categories-table" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="ids-column">ID</th>
+                            <th>Name</th>
+                            <th>Parent</th>
+                            <th>Childs</th>
+                            <th>Is Active</th>
+                            <th>Created_at</th>
+                            <th class="actions-column-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </form>
 @endsection
+
+@push('scripts')
+    <script src="{{asset('/js/admin/categories.js')}}"></script>
+@endpush
