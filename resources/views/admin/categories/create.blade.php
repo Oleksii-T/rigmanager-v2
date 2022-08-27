@@ -64,8 +64,10 @@
                     </div>
                 </div>
             </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
+            </div>
         </div>
-        <button type="submit" class="btn btn-success min-w-100">Save</button>
-        <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
     </form>
 @endsection

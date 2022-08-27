@@ -5,10 +5,7 @@ $(document).ready(function () {
         ajax: {
 			url: window.location.href,
 			data: function (filter) {
-				filter.parent = $('.table-filter[name=parent]').val();
-				filter.status = $('.table-filter[name=status]').val();
-				filter.hasParent = $('.table-filter[name=has_parent]').val();
-				filter.hasChilds = $('.table-filter[name=has_childs]').val();
+                addTableFilters(filter);
 			}
 		},
         columns: [

@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Post;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // set global blade variables
         \View::composer('*', function($view) {
             $cashTime = 5;
 
@@ -34,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
+        // load config values from db
         config(['services.google.client_id'=> Setting::get('google_client_id')]);
         config(['services.google.client_secret'=> Setting::get('google_client_secret')]);
         config(['services.google.redirect'=> Setting::get('google_redirect')]);
@@ -45,5 +48,17 @@ class AppServiceProvider extends ServiceProvider
         config(['services.facebook.client_id'=> Setting::get('facebook_client_id')]);
         config(['services.facebook.client_secret'=> Setting::get('facebook_client_secret')]);
         config(['services.facebook.redirect'=> Setting::get('facebook_redirect')]);
+
+        // add dynamic values to adminlte menu
+        $adminlteMenus = config('adminlte.menu');
+        foreach ($adminlteMenus as &$menu) {
+            if ($menu['route'] == 'admin.posts.index') {
+                $pending = Post::status('pending')->count();
+                if ($pending) {
+                    $menu['label'] = $pending;
+                }
+            }
+        }
+        config(['adminlte.menu'=> $adminlteMenus]);
     }
 }

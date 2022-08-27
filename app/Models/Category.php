@@ -14,7 +14,7 @@ class Category extends Model
 
     protected $fillable = [
         'category_id',
-        'ident'
+        'is_active'
     ];
 
     protected $appends = self::TRANSLATABLES + [
@@ -58,44 +58,45 @@ class Category extends Model
 
     public function slug(): Attribute
     {
-        return new Attribute(
-            get: fn () => $this->translated('slug')
-        );
+        return $this->getTranslatedAttr(__FUNCTION__);
     }
 
     public function name(): Attribute
     {
-        return new Attribute(
-            get: fn () => $this->translated('name')
-        );
+        return $this->getTranslatedAttr(__FUNCTION__);
+    }
+
+    public function scopeActive($query, bool $is=true)
+    {
+        $query->where('is_active', $is);
     }
 
     public static function dataTable($query, $request)
     {
         if ($request->search && $request->search['value']) {
             $value = $request->search['value'];
-            $categories->whereHas('translations', function ($q) use ($value) {
+            $query->whereHas('translations', function ($q) use ($value) {
                 $q->where('field', 'name')->where('value', 'like', "%$value%");
             });
         }
         if ($request->parent) {
-            $categories->where('category_id', $request->parent);
+            $query->where('category_id', $request->parent);
         }
         if ($request->status !== null) {
-            $categories->where('is_active', (bool)$request->status);
+            $query->where('is_active', (bool)$request->status);
         }
-        if ($request->hasChilds !== null) {
-            if ($request->hasChilds) {
-                $categories->whereHas('childs');
+        if ($request->has_childs !== null) {
+            if ($request->has_childs) {
+                $query->whereHas('childs');
             } else {
-                $categories->whereDoesntHave('childs');
+                $query->whereDoesntHave('childs');
             }
         }
-        if ($request->hasParent !== null) {
-            if ($request->hasParent) {
-                $categories->whereNotNull('category_id');
+        if ($request->has_parent !== null) {
+            if ($request->has_parent) {
+                $query->whereNotNull('category_id');
             } else {
-                $categories->whereNull('category_id');
+                $query->whereNull('category_id');
             }
         }
 

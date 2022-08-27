@@ -12,9 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         $data = [
-            'users' => User::latest()->limit(5)->get(),
             'users_total' => User::count(),
-            'posts' => Post::latest()->limit(5)->get(),
             'posts_total' => Post::count(),
         ];
 

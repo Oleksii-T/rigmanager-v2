@@ -37,7 +37,7 @@ class ValidSlug implements Rule
         $slugs = array_values($value);
 
         foreach ($slugs as $slug) {
-            if (!preg_match('/^[a-z-]*$/', $slug)) {
+            if (!preg_match('/^[a-z0-9-]*$/', $slug)) {
                 $this->error = 'Invalid Slug. Only "a-z" and "-" allowed.';
                 return false;
             }

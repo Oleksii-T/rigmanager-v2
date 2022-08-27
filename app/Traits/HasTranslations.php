@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\Translation;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait HasTranslations
 {
@@ -61,5 +62,12 @@ trait HasTranslations
     public function purgeTranslations()
     {
         $this->translations()->delete();
+    }
+
+    public function getTranslatedAttr($attr)
+    {
+        return new Attribute(
+            get: fn () => $this->translated($attr)
+        );
     }
 }

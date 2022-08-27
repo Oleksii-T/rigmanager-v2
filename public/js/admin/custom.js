@@ -46,7 +46,7 @@ $(document).ready(function () {
     // trigger element by click manuly
     $('[data-trigger]').click(function() {
         $($(this).data('trigger')).trigger('click');
-    })
+    });
 
     // copy text
     $('[data-copy]').click(function(e) {
@@ -63,6 +63,53 @@ $(document).ready(function () {
             icon: 'success',
             title: message??'Copied successfully'
         });
+    });
+
+    // add input for multi-file form block
+    $('.add-file-input').click(function(e) {
+        e.preventDefault();
+        $(this)
+            .closest('.card')
+            .find('.file-input.clone')
+            .clone()
+            .appendTo($(this).closest('.card').find('.row'))
+            .removeClass('d-none')
+            .removeClass('clone');
+    });
+
+    // trigger click for multi-file form block to add first input automaticaly
+    $('.add-file-input.auto-add').each(function( index ) {
+        $(this).trigger('click');
+    });
+
+    // remove input for multi-file form block
+    $(document).on('click', '.delete-file-input', function (e) {
+        e.preventDefault();
+        let el = $(this).closest('.file-input');
+        let url = $(this).data('url');
+        console.log(url);
+        if (!url) {
+            el.remove();
+            return;
+        }
+        loading();
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                _method: 'DELETE',
+                _token: $('meta[name=csrf-token]').attr('content')
+            },
+            success: (response)=>{
+                el.remove();
+                swal.close();
+            },
+            error: function(response) {
+                showServerError(response);
+            }
+        });
+
     })
 });
 
@@ -158,5 +205,14 @@ function loading(text='Request processing...') {
         text: text,
         showConfirmButton: false,
         allowOutsideClick: false
+    });
+}
+
+// add table-filters to data-table request
+function addTableFilters(data) {
+    $('.table-filter').each(function(i) {
+        let name = $(this).attr('name');
+        let val = $(this).val();
+        data[name] = val;
     });
 }
