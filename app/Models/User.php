@@ -7,9 +7,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordReset;
+use App\Traits\HasAttachments;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
+    use HasAttachments;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -58,6 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function avatar()
+    {
+        return $this->morphOne(Attachment::class, 'attachmentable')->where('group', 'avatar');
     }
 
     public function sendPasswordResetNotification($token)

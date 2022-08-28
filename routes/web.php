@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,13 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('privacy', [PageController::class, 'privacy'])->name('privacy');
 
     Route::middleware('verified')->group(function () {
+
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/', [ProfileController::class, 'index'])->name('index');
+            Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
+            Route::put('/', [ProfileController::class, 'update'])->name('update');
+            Route::put('password', [ProfileController::class, 'password'])->name('password');
+        });
 
     });
 

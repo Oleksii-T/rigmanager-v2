@@ -2,6 +2,12 @@
 
 return [
 
+    'profile' => [
+        'invalid-curr-pass' => 'The provided password does not match your current password',
+        'updated' => 'Profile updated successfully!',
+        'updated-password' => 'Password updated successfully!',
+        'image-deleted' => 'Profile picture was deleted successfully!',
+    ],
     'inProgress' => 'Functionality is not ready yet',
     'success' => '',
     'error' => 'An error occured.',
@@ -35,7 +41,7 @@ return [
     'tooManyPostsError' => 'You have reached the maximum amount of posts. (200 for Standart, 500 for Pro)',
     'allPostsDeleted' => 'All posts has been deleted!',
     'tooManyUrgentPostsError' => 'You have reached the maximum number of urgent posts. (100 for Standart, 300 for Pro)',
-    
+
     'postTranslationEdited' => 'Post translation has been changed successfully!',
 
     'mailerToManyTags' => 'Too many categories',
@@ -63,10 +69,6 @@ return [
     'mailerEmptyRolesError' => 'At least one legal type required!',
     'mailerEmptyThreadsError' => 'Please choose equipment or service',
 
-    'profileEdited' => 'Profile has been changed successfully!',
-    'profileImgDeleted' => 'Profile picture was deleted successfully!',
-    'profileDeleted' => 'Profile was deleted successfully!',
-
     'signedIn' => 'Welcome!',
     'signedOut' => 'Good bye',
 
@@ -74,8 +76,8 @@ return [
 
     'planUpdated' => 'Your subscription has been changed successfully!',
     'planCanceled' => 'Your subscription has been canceled successfully!',
-    
-    
+
+
     'postImportError' => 'The error occurred while analyzing the import file',
     'postImportSuccess' => 'Posts published successfully',
 

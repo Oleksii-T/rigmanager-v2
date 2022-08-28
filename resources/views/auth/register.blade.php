@@ -29,7 +29,7 @@
                         </div>
                         <div class="reg-col">
                             <label class="label">@lang('ui.phone')</label>
-                            <input class="input format-phone" type="text" name="phone_raw" placeholder="+38 ( _ _ _ ) _ _ _ - _ _ - _ _">
+                            <input class="input format-phone" type="text" name="phone" placeholder="+38 ( _ _ _ ) _ _ _ - _ _ - _ _">
                             <div data-input="phone" class="form-error"></div>
                             <div class="form-note">@lang('ui.phoneHelp')</div>
                         </div>

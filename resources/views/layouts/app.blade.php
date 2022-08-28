@@ -18,6 +18,10 @@
 	<meta property="og:image" content="{{asset('icons/og-favicon.png')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/all.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}" />
+	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery.fancybox.min.css')}}" />
+	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/slick.css')}}" />
+	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery-ui.css')}}" />
+	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/dropzone.css')}}" />
 </head>
 <body>
 	<div id="wrapper">
@@ -25,19 +29,19 @@
 			<!-- Session flash massages -->
 			@if (Session::has('message-success'))
 				<div class="flash flash-success">
-					<p><img src="{{asset('icons/success.svg')}}" alt="{{__('alt.keyword')}}">{{ Session::get('message-success') }}</p>
+					<p><img src="{{asset('icons/success.svg')}}">{{Session::get('message-success')}}</p>
 					<div class="animated-line"></div>
 				</div>
 			@endif
 			@if (Session::has('message-error'))
 				<div class="flash flash-error">
-					<p><img src="{{asset('icons/warning.svg')}}" alt="{{__('alt.keyword')}}">{{ Session::get('message-error') }}</p>
+					<p><img src="{{asset('icons/warning.svg')}}">{{Session::get('message-error')}}</p>
 					<div class="animated-line"></div>
 				</div>
 			@endif
 			@if (session('status'))
 				<div class="flash flash-success">
-					<p><img src="{{asset('icons/success.svg')}}" alt="{{__('alt.keyword')}}">{{ session('status') }}</p>
+					<p><img src="{{asset('icons/success.svg')}}">{{session('status')}}</p>
 					<div class="animated-line"></div>
 				</div>
 			@endif
@@ -47,28 +51,28 @@
 			<div class="holder">
 				<div class="footer-block">
 					<div class="footer-copy">
-						&copy; {{ date("Y") }}
-						<span>«Rigmanager»</span> - {{__('ui.introduction')}}. {{__('ui.footerCopyright')}}
+						&copy; {{date("Y")}}
+						<span>«Rigmanager»</span> - @lang('ui.introduction'). @lang('ui.footerCopyright')
 					</div>
 					<div class="footer-col">
 						<ul class="footer-nav">
-							<li><a href="#">{{__('ui.footerAbout')}}</a></li>
-							<li><a href="#">{{__('ui.footerBlog')}}</a></li>
-							<li><a href="#">{{__('ui.catalog')}}</a></li>
+							<li><a href="#">@lang('ui.footerAbout')</a></li>
+							<li><a href="#">@lang('ui.footerBlog')</a></li>
+							<li><a href="#">@lang('ui.catalog')</a></li>
 						</ul>
 					</div>
 					<div class="footer-col">
 						<ul class="footer-nav">
-							<li><a href="#">{{__('ui.footerSubscription')}}</a></li>
-							<li><a href="#">{{__('ui.footerContact')}}</a></li>
+							<li><a href="#">@lang('ui.footerSubscription')</a></li>
+							<li><a href="#">@lang('ui.footerContact')</a></li>
 							<li><a href="#">FAQ</a></li>
 						</ul>
 					</div>
 					<div class="footer-col">
 						<ul class="footer-nav">
-							<li><a href="#">{{__('ui.footerTerms')}}</a></li>
-							<li><a href="#">{{__('ui.footerPrivacy')}}</a></li>
-							<li><a href="#">{{__('ui.footerSiteMap')}}</a></li>
+							<li><a href="#">@lang('ui.footerTerms')</a></li>
+							<li><a href="#">@lang('ui.footerPrivacy')</a></li>
+							<li><a href="#">@lang('ui.footerSiteMap')</a></li>
 						</ul>
 					</div>
 					<div class="footer-col">
@@ -94,14 +98,11 @@
 			</div>
 		</footer>
 		<div class="development-alert hidden">
-			<p>{{__('ui.development')}}</p>
+			<p>@lang('ui.development')</p>
 		</div>
 	</div>
 	@yield('modals')
-	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery.fancybox.min.css')}}" />
-	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/slick.css')}}" />
-	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery-ui.css')}}" />
-	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/dropzone.css')}}" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="{{asset('js/jquery-2.2.4.min.js')}}"></script>
 	<script type="text/javascript" src="{{ asset('js/jquery.validate.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.validate-additional.js') }}"></script>
@@ -123,10 +124,10 @@
 				} else {
 					var blade = new Object();
 					blade['url'] = "#";
-					blade['removedMes'] = "{{ __('messages.postRemovedFav') }}";
-					blade['addedMes'] = "{{ __('messages.postAddedFav') }}";
-					blade['addErrorMes'] = "{{ __('messages.postAddFavError') }}";
-					blade['errorMes'] = "{{ __('messages.error') }}";
+					blade['removedMes'] = "{{__('messages.postRemovedFav') }}";
+					blade['addedMes'] = "{{__('messages.postAddedFav') }}";
+					blade['addErrorMes'] = "{{__('messages.postAddFavError') }}";
+					blade['errorMes'] = "{{__('messages.error') }}";
 					addPostToFav($(this), getIdFromClasses($(this).attr("class"), 'id_'), blade);
 				}
 			});
@@ -140,7 +141,7 @@
     @yield('scripts')
     <noscript>
         <div id="noscript">
-            <p>{{__('ui.noscript')}}</p>
+            <p>@lang('ui.noscript')</p>
         </div>
     </noscript>
 </body>
