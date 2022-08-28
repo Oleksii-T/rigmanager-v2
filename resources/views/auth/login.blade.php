@@ -1,48 +1,60 @@
 @extends('layouts.page')
 
-@section('meta')
-	<title>{{__('meta.title.auth.login')}}</title>
-	<meta name="description" content="{{__('meta.description.auth.login')}}">
-    <meta name="robots" content="noindex, nofollow">
-@endsection
-
 @section('bc')
     <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name">{{__('ui.auth')}}</span>
+        <span itemprop="name">@lang('ui.auth')</span>
         <meta itemprop="position" content="2" />
     </li>
 @endsection
 
 @section('content')
     <div class="login">
-        <div class="login-title">{{__('ui.auth')}}</div>
-        <form method="POST" action="{{loc_url(route('login'))}}">
+        <div class="login-title">@lang('ui.auth')</div>
+        <form method="POST" action="{{route('login')}}" class="general-ajax-submit">
             @csrf
             <fieldset>
-                <input class="input" type="email" name="email" value="{{old('email')}}" required autocomplete="email" autofocus placeholder="{{__('ui.login')}}">
-                <input class="input" type="password" name="password" required autocomplete="current-password" placeholder="{{__('ui.password')}}">
-                @error('email')
-                    <script type="text/javascript">
-                        document.getElementsByName("email")[0].className += " form-error";
-                        document.getElementsByName("password")[0].className += " form-error";
-                    </script>
-                    <div class="form-error">{{$message}}</div>
-                @enderror
+                <input class="input" type="email" name="email" value="{{old('email')}}" placeholder="@lang('ui.login')">
+                <div data-input="email" class="form-error"></div>
+                <input class="input" type="password" name="password" placeholder="@lang('ui.password')">
+                <div data-input="password" class="form-error"></div>
                 <div class="login-line">
                     <div class="check-item">
                         <input type="checkbox" class="check-input" id="ch1">
-                        <label for="ch1" class="check-label">{{__('ui.remember me')}}</label>
+                        <label for="ch1" class="check-label">@lang('ui.remember me')</label>
                     </div>
-                    <a href="{{loc_url(route('password.request'))}}" class="login-link">{{__('ui.forget password')}}</a>
+                    <a href="{{route('password.request')}}" class="login-link">@lang('ui.forget password')</a>
                 </div>
-                <button class="button">{{__('ui.signIn')}}</button>
+                <button type="submit" class="button">@lang('ui.signIn')</button>
                 <div class="social-buttons">
-                    <a href="{{route('login.social', ['social'=>'facebook'])}}" class="social-fb"><img src="{{asset('icons/fb.svg')}}" alt=""></a>
-                    <a href="{{route('login.social', ['social'=>'google'])}}" class="social-google"><img src="{{asset('icons/google.svg')}}" alt=""></a>
+                    @if (\App\Models\Setting::get('facebook_auth_enabled'))
+                        <a href="{{route('auth.social', 'facebook')}}" class="social-fb">
+                            <img src="{{asset('icons/fb.svg')}}" alt="">
+                        </a>
+                    @endif
+                    @if (\App\Models\Setting::get('google_auth_enabled'))
+                        <a href="{{route('auth.social', 'google')}}" class="social-google">
+                            <img src="{{asset('icons/google.svg')}}" alt="">
+                        </a>
+                    @endif
+                    @if (\App\Models\Setting::get('twitter_auth_enabled'))
+                        <a href="{{route('auth.social', 'twitter')}}" class="social-twitter">
+                            <img src="{{asset('icons/twitter.svg')}}" alt="">
+                        </a>
+                    @endif
+                    @if (\App\Models\Setting::get('linkedin_auth_enabled'))
+                        <a href="{{route('auth.social', 'linkedin')}}" class="social-linkedin">
+                            <img src="{{asset('icons/linkedin.svg')}}" alt="">
+                        </a>
+                    @endif
+                    @if (\App\Models\Setting::get('apple_auth_enabled'))
+                        <a href="{{route('auth.social', 'apple')}}" class="social-apple">
+                            <img src="{{asset('icons/apple.svg')}}" alt="">
+                        </a>
+                    @endif
                 </div>
                 <div class="login-bottom">
-                    {{__('ui.notSignUp?')}}<br>
-                    <a href="{{loc_url(route('register'))}}">{{__('ui.signUp')}}</a>
+                    @lang('ui.notSignUp?')<br>
+                    <a href="{{route('register')}}">@lang('ui.signUp')</a>
                 </div>
             </fieldset>
         </form>

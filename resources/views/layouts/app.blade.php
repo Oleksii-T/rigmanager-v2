@@ -17,6 +17,7 @@
 	<link rel="icon" href="{{asset('icons/favicon.ico')}}">
 	<meta property="og:image" content="{{asset('icons/og-favicon.png')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/all.css')}}" />
+	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}" />
 </head>
 <body>
 	<div id="wrapper">
@@ -109,6 +110,7 @@
 	<script src="{{asset('js/slick.min.js')}}"></script>
 	<script src="{{asset('js/jquery-ui.min.js')}}"></script>
 	<script src="{{asset('js/all.js')}}"></script>
+	<script src="{{asset('js/custom.js')}}"></script>
 	<script type="text/javascript">
         $(document).ready(function(){
 			// add post to fav list

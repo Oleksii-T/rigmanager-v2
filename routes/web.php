@@ -25,6 +25,8 @@ Route::get('logout', function () {
 Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(LaravelLocalization::setLocale())->group(function () {
 
     Route::get('/', [PageController::class, 'index'])->name('index');
+    Route::get('terms', [PageController::class, 'terms'])->name('terms');
+    Route::get('privacy', [PageController::class, 'privacy'])->name('privacy');
 
     Route::middleware('verified')->group(function () {
 

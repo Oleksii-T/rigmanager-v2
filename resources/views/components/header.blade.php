@@ -16,25 +16,19 @@
                 <div class="header-search-form">
                     <form action="#">
                         <fieldset>
-                            <input type="text" name="text" class="header-search-input" placeholder="{{__('ui.search')}}" required>
+                            <input type="text" name="text" class="header-search-input" placeholder="@lang('ui.search')" required>
                             <button class="header-search-button"></button>
                         </fieldset>
                     </form>
                 </div>
             </div>
             <div class="header-right">
-                @if (!App::isLocale('uk'))
-                    <a href="#" class="header-language">Ukr</a>
-                @endif
-                @if (!App::isLocale('ru'))
-                    <a href="#" class="header-language">Rus</a>
-                @endif
-                @if (!App::isLocale('en'))
-                    <a href="#" class="header-language">Eng</a>
-                @endif
+                @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
+                    <a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" class="header-language">{{ $properties['native'] }}</a>
+                @endforeach
                 <div class="header-cabinet">
-                    <a href="#">{{auth()->check() ? __('ui.cabinet') : __('ui.signIn')}}</a>
-                    @if (auth()->check())
+                    @auth
+                        <a href="#">@lang('ui.cabinet')</a>
                         <ul>
                             <li class="header-profile-preview">
                                 @if (auth()->user()->image)
@@ -71,9 +65,11 @@
                                 {{__('ui.signOut')}}
                             </a><form id="logout-header-form" action="#" method="POST" hidden>@csrf</form></li>
                         </ul>
-                    @endif
+                    @else
+                        <a href="{{route('login')}}">@lang('ui.signIn')</a>
+                    @endauth
                 </div>
-                <a href="#" class="header-button">{{__('ui.addPost')}}</a>
+                <a href="#" class="header-button">@lang('ui.addPost')</a>
             </div>
             <div class="mob-nav">
                 <div class="holder">
@@ -82,10 +78,10 @@
                     </ul>
                     <ul class="mob-nav-list">
                         <li><a href="#">{{auth()->check() ? __('ui.cabinet') : __('ui.signIn')}}</a></li>
-                        @if (auth()->check())
+                        @auth
                             <li><a href="#">{{__('ui.myPosts')}}</a></li>
                             <li><a href="#">{{__('ui.favourites')}}</a></li>
-                        @endif
+                        @endauth
                         <li><a href="#">{{__('ui.addPost')}}</a></li>
                     </ul>
                     <ul class="mob-nav-list">

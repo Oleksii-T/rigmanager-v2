@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PasswordReset;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -56,6 +58,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $url = route('password.reset', ['token'=>$token, 'email'=>$this->email]);
+
+        Mail::to($this)->send(new PasswordReset($url));
     }
 
     public static function dataTable($query)

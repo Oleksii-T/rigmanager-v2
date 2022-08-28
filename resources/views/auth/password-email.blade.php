@@ -1,39 +1,34 @@
-@extends('layouts.app')
+@extends('layouts.page')
+
+@section('meta')
+	<title>@lang('meta.title.user.password')}}</title>
+	<meta name="description" content="@lang('meta.description.user.password')}}">
+    <meta name="robots" content="noindex, nofollow">
+@endsection
+
+@section('bc')
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">@lang('ui.passReset')</span>
+        <meta itemprop="position" content="2" />
+    </li>
+@endsection
 
 @section('content')
-    <div class="wrapper_main pt-74">
-        <main class="content">
-            <section class="sing-in">
-                <div class="offer-image">
-                    <img src="{{asset('img/graf.svg')}}">
+    <div class="login">
+        <div class="login-title">@lang('ui.passReset')</div>
+        <form action="{{route('password.email')}}" method="POST">
+            @csrf
+            <fieldset>
+                <input class="input" type="email" name="email" value="{{old('email')}}" placeholder="@lang('ui.login')">
+                @error('email')
+                    <div class="form-error">{{$message}}</div>
+                @enderror
+                <div class="form-note">@lang('ui.passResetEmailHelp')</div>
+                <button class="button">@lang('ui.sendPassResetLink')</button>
+                <div class="login-bottom">
+                    <a href="{{route('login')}}">@lang('ui.backToSignIn')</a>
                 </div>
-                <div class="container sing-in__container">
-                    <form action="{{ route('password.email') }}" method="post" class="sing-in__form">
-                        @csrf
-                        <h3 class="sing-in__title">
-                            Forgot password
-                        </h3>
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-                        <div class="input-group">
-                            <label class="input-group__title">Email address</label>
-                            <input type="text" class="input" name="email">
-                            @error('email')
-                                <span class="input-error">{{$message}}</span>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn btn-sm btn-blue">
-                            Send password reset link
-                        </button>
-                        <p class="login-form__text">Already have an account? <a href="{{route('login')}}" class="blue-link">Login</a></p>
-                    </form>
-                </div>
-            </section>
-        </main>
-        <footer class="footer">
-        </footer>
+            </fieldset>
+        </form>
     </div>
 @endsection

@@ -19,15 +19,20 @@ class Setting extends Model
         [
             'name' => 'Social login',
             'settings' => [
+                'google_auth_enabled' => 'Google Auth Enabled',
                 'google_client_id' => 'Google client id',
                 'google_client_secret' => 'Google client secret',
                 'google_redirect' => 'Google redirect',
+                'facebook_auth_enabled' => 'Facebook Auth Enabled',
                 'facebook_client_id' => 'Facebook client id',
                 'facebook_client_secret' => 'Facebook client secret',
                 'facebook_redirect' => 'Facebook redirect',
+                'twitter_auth_enabled' => 'Twitter Auth Enabled',
                 'twitter_client_id' => 'Twitter client id',
                 'twitter_client_secret' => 'Twitter client secret',
                 'twitter_redirect' => 'Twitter redirect',
+                'linkedin_auth_enabled' => 'LinkedIn Auth Enabled',
+                'apple_auth_enabled' => 'Apple Auth Enabled',
             ]
         ]
     ];

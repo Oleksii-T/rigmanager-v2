@@ -1,55 +1,47 @@
-@extends('layouts.app')
+@extends('layouts.page')
+
+@section('meta')
+	<title>@lang('meta.title.user.password')}}</title>
+	<meta name="description" content="@lang('meta.description.user.password')}}">
+    <meta name="robots" content="noindex, nofollow">
+@endsection
+
+@section('bc')
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">@lang('ui.passReset')</span>
+        <meta itemprop="position" content="2" />
+    </li>
+@endsection
 
 @section('content')
-    <div class="wrapper_main pt-74">
-        <main class="content">
-            <section class="sing-in">
-                <div class="offer-image">
-                    <img src="{{asset('img/graf.svg')}}">
-                </div>
-                <div class="container sing-in__container">
-                    <form action="{{ route('password.update') }}" method="post" class="sing-in__form">
-                        @csrf
-                        <input type="hidden" name="token" value="{{ request()->route('token') }}">
-                        <h3 class="sing-in__title">
-                            Password reset
-                        </h3>
+    <div class="login">
+        <div class="login-title">@lang('ui.passReset')</div>
+        <form id="form-pass-reset" method="POST" action="{{route('password.update')}}">
+            @csrf
+            <input type="hidden" name="token" value="{{ $token }}">
+            <fieldset>
+                <label class="label">@lang('ui.login') <span class="orange">*</span></label>
+                <input class="input" type="email" name="email" value="{{old('email', request()->email)}}" placeholder="@lang('ui.login')">
+                @error('email')
+                    <div class="form-error">{{$message}}</div>
+                @enderror
 
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
+                <label class="label">@lang('ui.password') <span class="orange">*</span></label>
+                <input class="input" id="password" type="password" name="password" placeholder="@lang('ui.password')">
+                @error('password')
+                    <div class="form-error">{{$message}}</div>
+                @enderror
+                <div class="form-note">@lang('ui.passwordHelp')</div>
 
-                        <div class="input-group">
-                            <label class="input-group__title">Email</label>
-                            <input type="text" class="input" name="email" value="{{request()->input('email')}}">
-                            @error('email')
-                                <span class="input-error">{{$message}}</span>
-                            @enderror
-                        </div>
-                        <div class="input-group">
-                            <label class="input-group__title">Password</label>
-                            <input type="password" class="input" name="password">
-                            @error('password')
-                                <span class="input-error">{{$message}}</span>
-                            @enderror
-                        </div>
-                        <div class="input-group">
-                            <label class="input-group__title">Confirm Password</label>
-                            <input type="password" class="input" name="password_confirmation">
-                            @error('password_confirmation')
-                                <span class="input-error">{{$message}}</span>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn btn-sm btn-blue">
-                            Reset password
-                        </button>
-                    </form>
+                <label class="label">@lang('ui.rePass') <span class="orange">*</span></label>
+                <input class="input" type="password" name="password_confirmation" placeholder="@lang('ui.rePass')">
+                <div class="form-note">@lang('ui.rePassHelp')</div>
+
+                <button class="button">@lang('Reset Password')</button>
+                <div class="login-bottom">
+                    <a href="{{route('login')}}">@lang('ui.backToSignIn')</a>
                 </div>
-            </section>
-        </main>
-        <footer class="footer">
-        </footer>
+            </fieldset>
+        </form>
     </div>
 @endsection
