@@ -229,7 +229,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => '/',
+    'dashboard_url' => '/admin/dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => null,
@@ -291,6 +291,11 @@ return [
             'text' => 'Settings',
             'route'  => 'admin.settings.index',
             'icon' => 'fas fa-fw fa-cogs',
+        ],
+        [
+            'text' => 'Return to Site',
+            'route'  => 'index',
+            'icon' => 'fas fa-fw fa-reply',
         ],
     ],
 

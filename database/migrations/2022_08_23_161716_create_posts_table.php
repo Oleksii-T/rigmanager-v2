@@ -28,9 +28,10 @@ return new class extends Migration
             $table->unsignedInteger('amount')->nullable();
             $table->string('location')->nullable();
             $table->string('manufacturer')->nullable();
-            $table->string('manufacture_data')->nullable();
+            $table->string('manufacture_date')->nullable();
             $table->string('part_number')->nullable();
             $table->decimal('cost', 10, 2)->nullable();
+            $table->decimal('cost_usd', 10, 2)->nullable();
             $table->string('currency')->nullable();
             $table->timestamps();
         });

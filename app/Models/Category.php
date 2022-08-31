@@ -71,6 +71,20 @@ class Category extends Model
         $query->where('is_active', $is);
     }
 
+    public function postsAll($get=false)
+    {
+        $res = Post::whereIn('category_id', $this->getCategoriesIds());
+        return $get ? $res->get() : $res;
+    }
+
+    public function childsAll($get=false)
+    {
+        $ids = $this->getCategoriesIds();
+        unset($ids[array_search($this->id, $ids)]);
+        $res = self::whereIn('id', $ids);
+        return $get ? $res->get() : $res;
+    }
+
     public static function dataTable($query, $request)
     {
         if ($request->search && $request->search['value']) {
@@ -127,5 +141,26 @@ class Category extends Model
             })
             ->rawColumns(['parent', 'is_active', 'action'])
             ->make(true);
+    }
+
+    private function getCategoriesIds()
+    {
+        $array = array($this->id);
+        if ($this->childs->isEmpty()) {
+            return $array;
+        }
+        return array_merge($array, $this->getChildrenIds($this->childs));
+    }
+
+    private function getChildrenIds($subcategories)
+    {
+        $array = array();
+        foreach ($subcategories as $subcategory) {
+            array_push($array, $subcategory->id);
+            if ($subcategory->childs->isNotEmpty()) {
+                $array = array_merge($array, $this->getChildrenIds($subcategory->childs));
+            }
+        }
+        return $array;
     }
 }

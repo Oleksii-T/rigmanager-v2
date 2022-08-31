@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\Paginator;
 use App\Models\Post;
 
 class AppServiceProvider extends ServiceProvider
@@ -60,5 +61,7 @@ class AppServiceProvider extends ServiceProvider
             }
         }
         config(['adminlte.menu'=> $adminlteMenus]);
+
+        Paginator::defaultView('components.pagination');
     }
 }

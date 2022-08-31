@@ -47,7 +47,7 @@ class PostRequest extends FormRequest
             'amount' => ['nullable', 'integer', 'min:1', 'max:9999999'],
             'location' => ['nullable'],
             'manufacturer' => ['nullable', 'string', 'max:255'],
-            'manufacture_data' => ['nullable', 'string', 'max:255'],
+            'manufacture_date' => ['nullable', 'string', 'max:255'],
             'part_number' => ['nullable', 'string', 'max:255'],
             'cost' => ['nullable', 'numeric', 'min:1', 'max:9999999'],
             'currency' => ['nullable', 'required_with:cost'],

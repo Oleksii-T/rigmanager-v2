@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\ProfilePasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Post;
 
 class ProfileController extends Controller
 {

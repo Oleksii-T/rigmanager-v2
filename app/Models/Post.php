@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Post extends Model
 {
-    use HasTranslations, HasAttachments;
+    use HasFactory, HasTranslations, HasAttachments;
 
     protected $fillable = [
         'user_id',
@@ -27,10 +27,11 @@ class Post extends Model
         'amount',
         'location',
         'manufacturer',
-        'manufacture_data',
+        'manufacture_date',
         'part_number',
         'cost',
-        'currency'
+        'currency',
+        'cost_usd'
     ];
 
     protected $appends = self::TRANSLATABLES + [
@@ -75,6 +76,8 @@ class Post extends Model
         'slug'
     ];
 
+    const PER_PAGE = 25;
+
     protected static function boot()
     {
         parent::boot();
@@ -88,6 +91,11 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function views()
+    {
+        return $this->hasMany(PostView::class);
     }
 
     public function category()
@@ -110,6 +118,11 @@ class Post extends Model
         return $query->where('is_active', $is);
     }
 
+    public function scopeVisible($query)
+    {
+        return $query->where('is_active', true)->where('status', 'approved');
+    }
+
     public function scopeStatus($query, string $status)
     {
         return $query->where('status', $status);
@@ -128,6 +141,19 @@ class Post extends Model
     public function description(): Attribute
     {
         return $this->getTranslatedAttr(__FUNCTION__);
+    }
+
+    public function costReadable(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->cost ? ('$' . number_format($this->cost, 2)) : null,
+        );
+    }
+
+    public function thumbnail()
+    {
+        // TODO make login
+        return $this->images()->first();
     }
 
     public static function dataTable($query)
@@ -160,5 +186,43 @@ class Post extends Model
             })
             ->rawColumns(['user', 'category', 'is_active', 'action'])
             ->make(true);
+    }
+
+    public static function typeReadable($type)
+    {
+        switch ($type) {
+            case 'sell':
+                return trans('posts.types.sell');
+            case 'buy':
+                return trans('posts.types.buy');
+            case 'rent':
+                return trans('posts.types.rent');
+            case 'lease':
+                return trans('posts.types.lease');
+        }
+    }
+
+    public static function conditionReadable($condition)
+    {
+        switch ($condition) {
+            case 'none':
+                return trans('posts.conditions.none');
+            case 'new':
+                return trans('posts.conditions.new');
+            case 'used':
+                return trans('posts.conditions.used');
+            case 'for-parts':
+                return trans('posts.conditions.for-parts');
+        }
+    }
+
+    public static function legalTypeReadable($legalType)
+    {
+        switch ($legalType) {
+            case 'private':
+                return trans('posts.legal-types.private');
+            case 'business':
+                return trans('posts.legal-types.business');
+        }
     }
 }

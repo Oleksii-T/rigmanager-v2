@@ -3,6 +3,9 @@
 @section('page-content')
     <x-header/>
 
+    <div class="full-loader d-none">
+        <img src="{{asset('icons/loading.svg')}}" alt="">
+    </div>
     <section class="main">
         <div class="holder">
             <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">

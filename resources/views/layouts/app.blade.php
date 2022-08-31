@@ -8,6 +8,7 @@
 	<meta name="theme-color" content="#1f1f1f">
 	<meta name="msapplication-navbutton-color" content="#1f1f1f">
 	<meta name="apple-mobile-web-app-status-bar-style" content="#1f1f1f">
+	<meta name="csrf-token" content="{{csrf_token()}}">
 	@yield('meta')
 	{{-- <link rel="canonical" href="{{url()->full()}}">
 	<link rel="alternate" href="{{hreflang_url(url()->full(), 'uk')}}" hreflang="x-default">
@@ -111,30 +112,12 @@
 	<script src="{{asset('js/slick.min.js')}}"></script>
 	<script src="{{asset('js/jquery-ui.min.js')}}"></script>
 	<script src="{{asset('js/all.js')}}"></script>
-	<script src="{{asset('js/custom.js')}}"></script>
 	<script type="text/javascript">
         $(document).ready(function(){
-			// add post to fav list
-			$('.add-to-fav').click(function(e){
-				e.preventDefault();
-				if ( $(this).hasClass('auth-block') ) {
-					showPopUpMassage(false, "{{ __('messages.authError') }}");
-				} else if ( $(this).hasClass('block') ) {
-					showPopUpMassage(false, "{{ __('messages.postAddFavPersonal') }}");
-				} else {
-					var blade = new Object();
-					blade['url'] = "#";
-					blade['removedMes'] = "{{__('messages.postRemovedFav') }}";
-					blade['addedMes'] = "{{__('messages.postAddedFav') }}";
-					blade['addErrorMes'] = "{{__('messages.postAddFavError') }}";
-					blade['errorMes'] = "{{__('messages.error') }}";
-					addPostToFav($(this), getIdFromClasses($(this).attr("class"), 'id_'), blade);
-				}
-			});
 			//block not-reday links
 			$('.not-ready').click(function(e){
 				e.preventDefault();
-				showPopUpMassage(false, "{{ __('messages.inProgress') }}");
+				showToast(false, "{{ __('messages.inProgress') }}");
 			});
         });
     </script>

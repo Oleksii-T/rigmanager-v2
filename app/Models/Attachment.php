@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 class Attachment extends Model
 {
+    use HasFactory;
+
     /**
      * @var array
      */

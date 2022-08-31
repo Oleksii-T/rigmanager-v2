@@ -43,11 +43,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function isAdmin()
-    {
-        return (bool)$this->roles()->where('name', 'admin')->count();
-    }
-
     public function socials()
     {
         return $this->hasMany(SocialUser::class);
@@ -63,9 +58,19 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class);
     }
 
+    public function favPosts()
+    {
+        return $this->belongsToMany(Post::class, 'user_fav_posts')->withTimestamps();
+    }
+
     public function avatar()
     {
         return $this->morphOne(Attachment::class, 'attachmentable')->where('group', 'avatar');
+    }
+
+    public function isAdmin()
+    {
+        return (bool)$this->roles()->where('name', 'admin')->count();
     }
 
     public function sendPasswordResetNotification($token)

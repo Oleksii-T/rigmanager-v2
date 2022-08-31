@@ -5,7 +5,7 @@
             <div class="header-logo">
                 <a href="{{route('index')}}"><img src="{{asset('icons/logo-big.svg')}}" alt=""></a>
             </div>
-            <a href="#" class="header-catalog">
+            <a href="{{route('categories')}}" class="header-catalog">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <path fill-rule="evenodd"  fill="rgb(255, 255, 255)" d="M0.000,11.000 L0.000,10.000 L11.000,10.000 L11.000,11.000 L0.000,11.000 ZM0.000,5.000 L11.000,5.000 L11.000,6.000 L0.000,6.000 L0.000,5.000 ZM0.000,0.000 L11.000,0.000 L11.000,1.000 L0.000,1.000 L0.000,0.000 Z"/>
                 </svg>
@@ -73,10 +73,12 @@
                         <li><a href="#">@lang('ui.catalog')</a></li>
                     </ul>
                     <ul class="mob-nav-list">
-                        <li><a href="#">{{auth()->check() ? __('ui.cabinet') : __('ui.signIn')}}</a></li>
                         @auth
+                            <li><a href="{{route('profile.index')}}">@lang('ui.cabinet')</a></li>
                             <li><a href="#">@lang('ui.myPosts')</a></li>
                             <li><a href="#">@lang('ui.favourites')</a></li>
+                        @else
+                            <li><a href="{{route('login')}}">@lang('ui.signIn')</a></li>
                         @endauth
                         <li><a href="#">@lang('ui.addPost')</a></li>
                     </ul>
@@ -94,15 +96,9 @@
                         <li><a href="#">FAQ</a></li>
                     </ul>
                     <ul class="mob-nav-list">
-                        @if (!App::isLocale('uk'))
-                            <li><a href="#">Ukr</a></li>
-                        @endif
-                        @if (!App::isLocale('ru'))
-                            <li><a href="#">Rus</a></li>
-                        @endif
-                        @if (!App::isLocale('en'))
-                            <li><a href="#">Eng</a></li>
-                        @endif
+                        @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
+                            <li><a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">{{ $properties['native'] }}</a></li>
+                        @endforeach
                     </ul>
                     <ul class="mob-nav-list mob-nav-grey">
                         <li><a href="#">@lang('ui.footerTerms')</a></li>

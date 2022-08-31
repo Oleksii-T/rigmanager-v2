@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	
+
 	// scroll header
 	$(window).scroll( function(){
 		if ($(this).scrollTop() > 50){
@@ -41,7 +41,7 @@ $(document).ready(function () {
 	});
 	$(document).mouseup(function(e){
 		var container = $(".header-search");
-		if (!container.is(e.target) && container.has(e.target).length === 0) 
+		if (!container.is(e.target) && container.has(e.target).length === 0)
 		{
 			$('.header-search').removeClass('vis');
 			$('.header-search-link').removeClass('active');
@@ -64,7 +64,7 @@ $(document).ready(function () {
 			collision: "flip"  // default is ""
 		}
 	});
-	
+
 	// tumbler
 	$(document).on('click','.tumbler-left',function(e){
 		e.preventDefault();
@@ -212,103 +212,6 @@ $(document).ready(function () {
 	// fancybox touch fix
 	$("[data-fancybox]").fancybox({ touch: false });
 
-	// formate phone field
-	$('.format-phone').focusin(function(){
-		var newVal = phoneFormater( $(this).val(), false );
-		$(this).val(newVal);
-	});
-	$('.format-phone').focusout(function(){
-		var newVal = phoneFormater( $(this).val(), false );
-		var newVal = phoneFormater( newVal, true );
-		$(this).val(newVal);
-	});
-	function phoneFormater(phone, mode) {
-		if (phone) {
-			if (mode) {
-				for (let i = phone.length-1; i >= 0; i--) {
-					if (i==1) {
-						phone = phone.slice(0, i) + ' (' + phone.slice(i);
-					} else if (i==3) {
-						phone = phone.slice(0, i) + ') ' + phone.slice(i);
-					}
-					else if (i==8 || i==6) {
-						phone = phone.slice(0, i) + ' ' + phone.slice(i);
-					}
-				}
-				return phone;
-			} else {
-				return phone.replace(/[^0-9]+/g,"").substring(0,10);
-			}
-		}
-	};
-
-	//format-cost
-	$("input.format-cost").focusin(function(){
-		newVal = $(this).val()
-			? CurrencyToNumber($(this).val())
-			: '';
-		$(this).val(newVal);
-	});
-	$("input.format-cost").focusout(function(){
-		if ($(this).val()){
-			var currency = $('.currency-switch.active').text();
-			$(this).val( NumberToCurrency( currency, $(this).val() ) );
-		}
-	});
-	function CurrencyToNumber(str){
-		return str.replace(/[^0-9.]+/g,"");
-	}
-	function NumberToCurrency(currency, string) {
-		res = CurrencyToNumber(string);
-		res = res.replace(/^0*/g, '');
-		if (!res || res[0] == '.') {
-			return null;
-		}
-		if ( res.includes('.') ) {
-			var firstDot = res.indexOf('.');
-			var dots = (res.match(/\./g) || []).length;
-			if ( dots != 1 ) {
-				res = res.replace(/\./g,"");
-				res = res.slice(0, firstDot) + '.' + res.slice(firstDot);
-			}
-			var coins = res.substring(firstDot);
-			if ( coins.length > 3 ) {
-				toCrop = coins.length - 3;
-				res = res.substring(0, res.length-toCrop);
-			} else if ( coins.length < 3 ) {
-				// add coins
-				toAdd = 3-coins.length;
-				res = res+'0';
-				if (toAdd == 2) {
-					res = res+'0';
-				}
-			}
-		} else {
-			res = res + ".00";
-		}
-		for (let i=res.length-4, step=1; i >= 0; i--,step++) {
-			if (step == 4) {
-				res = res.slice(0, i+1) + ',' + res.slice(i+1);
-				step = 1;
-			}
-
-		}
-		currency=='UAH' ? res='₴'+res : res='$'+res;
-		return res;
-	}
-	$('.currency-switch').click(function(){
-		if ( $(".format-cost").length ) {
-			var currency = $(this).hasClass('uah') ? '₴' : '$';
-			$(".format-cost").each(function(i, obj) {
-				oldVal = $(this).val();
-				if (oldVal) {
-					newVal = oldVal.replace(oldVal[0], currency);
-					$(this).val( newVal );
-				}
-			});
-		}
-	});
-
 	//select tags
 	var selectedTag = new Object();
 	selectedTag.first = "Other";
@@ -358,7 +261,7 @@ $(document).ready(function () {
 		$('input[name=tag_encoded]').val(selectedTag.id);
 		$.fancybox.close();
 	});
-	
+
 	// tab setup
 	$('.tab-content').addClass('clearfix').not(':first').hide();
 	$('ul.tabs').each(function(){
@@ -378,22 +281,172 @@ $(document).ready(function () {
 		$(this).parent().addClass('active');
 		tabs.find('a').removeClass('active');
 		$(this).addClass('active');
-		$(tab_next).show();		
+		$(tab_next).show();
 		return false;
 	});
 
 	$('.block-link').click(function(e){
 		e.preventDefault();
 	});
+
+    // general logic of ajax form submit (supports files)
+    $('form.general-ajax-submit').submit(function(e){
+        e.preventDefault();
+        let form = $(this);
+        let button = $(this).find('button[type=submit]');
+        let formData = new FormData(this);
+        if (button.hasClass('cursor-wait')) {
+            return;
+        }
+
+        if (button.hasClass('ask')) {
+            swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    ajaxSubmit(form, formData, button);
+                }
+            });
+            return;
+        }
+
+        ajaxSubmit(form, formData, button);
+    })
+
+    function ajaxSubmit(form, formData, button) {
+        $('.form-error').empty();
+        button.addClass('cursor-wait');
+        $.ajax({
+            url: form.attr('action'),
+            type: form.attr('method'),
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (response)=>{
+                button.removeClass('cursor-wait');
+                showServerSuccess(response);
+            },
+            error: function(response) {
+                button.removeClass('cursor-wait');
+                showServerError(response);
+            }
+        });
+    }
+
+    // show uploaded file name
+    $('.show-uploaded-file-name input').change(function () {
+        let name = $(this).val().split('\\').pop();
+        $(this).closest('.show-uploaded-file-name').find('.custom-file-label').text(name);
+    })
+
+    // show uploaded file preview
+    $('.show-uploaded-file-preview input').change(function () {
+        const [file] = this.files;
+        if (file) {
+            let el = $(this).closest('.show-uploaded-file-preview').find('.custom-file-preview');
+            el.removeClass('d-none');
+            el.attr('src', URL.createObjectURL(file));
+        }
+    })
 });
 
-// show error from submit post with dropzone 
+// toast notification object
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+});
+
+// show message depends on role and fade out it after 3 sec
+function showToast(title, icon=true) {
+	Toast.fire({
+        icon: icon ? 'success' : 'error',
+        title: title
+    });
+}
+
+// show popup notification
+function showPopUp(title=null, text=null, role) {
+    if (title===null) {
+        title = role ? 'Success' : 'Oops!';
+    }
+    if (text===null) {
+        text = role ? '' : 'Something went wrong!';
+    }
+    swal.fire(title, text, role ? 'success' : 'error');
+}
+
+//show loading unclosable popup
+function loading(text='Request processing...') {
+    swal.fire({
+        title: 'Wait!',
+        text: text,
+        showConfirmButton: false,
+        allowOutsideClick: false
+    });
+}
+
+// show loading overlay
+function fullLoader(show=true) {
+    show ? $('.full-loader').removeClass('d-none') : $('.full-loader').addClass('d-none');
+}
+
+// general error logic, after ajax form submit been processed
+function showServerError(response) {
+    if (response.status == 422) {
+        let r = response.responseJSON ?? JSON.parse(response.responseText)
+        for ([field, value] of Object.entries(r.errors)) {
+            let dotI = field.indexOf('.');
+            if (dotI != -1) {
+                field = field.slice(0, dotI);
+            }
+            let errorText = '';
+            let errorElement = $(`.form-error[data-input=${field}]`);
+            errorElement = errorElement.length ? errorElement : $(`.form-error[data-input="${field}[]"]`);
+            errorElement = errorElement.length ? errorElement : $(`[name=${field}]`).closest('.form-group').find('.form-error');
+            errorElement = errorElement.length ? errorElement : $(`[name="${field}[]"]`).closest('.form-group').find('.form-error');
+            for (const [key, error] of Object.entries(value)) {
+                errorText = errorText ? errorText+'<br>'+error : error;
+            }
+            errorElement.html(errorText);
+        }
+    } else {
+        showPopUp(null, null, false);
+    }
+}
+
+// general success logic, after ajax form submit been processed
+function showServerSuccess(response) {
+    if (response.success) {
+        if (response.data?.redirect) {
+            window.location.href = response.data.redirect;
+        } else if (response.message) {
+            showToast(response.message);
+        }
+    } else {
+        showPopUp(null, response.message, false);
+    }
+}
+
+// show error from submit post with dropzone
 function showErrorsFromDropzone(dz, error) {
 	$("#form-post button[type=submit]").removeClass('loading');
 	$('.post-publishing-alert').addClass('hidden');
 	// parse error messages
 	if (typeof error['message'] != 'undefined' && error['message'] == "The given data was invalid.") { // if it is error from input fields
-		showPopUpMassage(false, "{{ __('messages.postInputErrors') }}");
+		showToast(false, "{{ __('messages.postInputErrors') }}");
 		var invalidInputErrors = error['errors'];
 		$.each(invalidInputErrors, function(key, value) {
 			$('.'+key+'.dz-error').text(value);
@@ -403,11 +456,11 @@ function showErrorsFromDropzone(dz, error) {
 			$('.'+key+'.dz-error').removeClass('hidden');
 		});
 	} else if (typeof error['message'] != 'undefined' && error['message'] != '') {// if it is custom error from post upload no check for 400 error code
-		showPopUpMassage(false, error['message']);
+		showToast(false, error['message']);
 	} else if (error == 'Request timedout after 10000 seconds') {
 		window.location="{{loc_url(route('profile.posts'))}}";
 	} else {
-		showPopUpMassage(false, "{{__('messages.error')}}");
+		showToast(false, "{{__('messages.error')}}");
 	}
 	dz.removeAllFiles();
 }
@@ -428,129 +481,30 @@ function toggleFaqText(item) {
 	}
 }
 
-//get digit from classes of DOM element (depends on prefix)
-function getIdFromClasses(classes, prefix) {
-	// regex special chars does not escaped in prefix!!!
-	var reg = new RegExp("^"+prefix+"[0-9]+$", 'g');
-	var result = '';
-	classes.split(' ').every(function(string){
-		result = reg.exec(string);
-		if ( result != null ) {
-			result = result + '';
-			result = result.split('_')[1];
-			return false;
-		} else {
-			return true;
-		}
-	});
-	return result;
-}
-
-// fade out flash massages after 3 sec
-$("div.flash").delay(4000).fadeOut(350);
-//delete flash message if clicked on
-$('body').on("click", ".flash", function(){
-	$(this).remove();
-});
-// counter for unique pop-up ids
-var popUpId = 1;
-function getPopUpId() {
-	popUpId++;
-	return popUpId;
-}
-// show message depends on role and fade out it after 3 sec
-function showPopUpMassage(role, massage) {
-	var id = "pop-up-" + getPopUpId();
-	if (role) {
-		var src = "/icons/success.svg";
-		role = role = "pop-up-success";
-	} else {
-		var src = "/icons/warning.svg";
-		role = role = "pop-up-error";
-	}
-	$('#pop-up-container').append("<div class='pop-up "+role+"' id="+id+"><p><img src="+src+" alt='{{__('alt.keyword')}}'>"+massage+"</p><div class='animated-line'></div></div>");
-	$("#"+id).delay(4000).fadeOut(350);
-	setTimeout(function(){
-		$("#"+id).remove();
-	}, 4500);
-}
-//delete pop-up message if clicked on
-$('body').on("click", ".pop-up", function(){
-	$(this).remove();
-});
-
 //user adds post to favourites
-function addPostToFav(button, postId, blade) {
-    button.addClass('loading');
-    //send Ajax reqeust to add Item to fav list of user
+$('.add-to-fav').click(function(e) {
+    e.preventDefault();
+    let button = $(this);
+    if (button.hasClass('loading')) {
+        return;
+    }
+    let url = button.attr('href');
+    button.addClass('loading')
     $.ajax({
-        type: "GET",
-        url: blade['url'],
-        data: { post_id: postId },
-        success: function(data) {
-            //if no server errors, change digit of favItemsAmount in nav bar
-            //and change color of AddToFav btn img
-            if ( data ) {
-                //visualize removing/adding from fav list
-                button.hasClass('active') 
-                    ? showPopUpMassage(true, blade['removedMes'])
-                    : showPopUpMassage(true, blade['addedMes']);
-                button.toggleClass('active');
-				if (typeof(removeFromFav) === typeof(Function)) {
-					removeFromFav(postId);
-				}
-            //if server errors occures, pop up error massage
-            } else {
-                showPopUpMassage(false, blade['addErrorMes']);
-            }
-            //remove cursor wait
+        url: url,
+        type: 'post',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+        },
+        success: (response)=>{
+            showToast(response.message);
+            button.toggleClass('active');
             button.removeClass('loading');
         },
-        error: function() {
-            //pop up error massage and remove cursor wait
-            showPopUpMassage(false, blade['errorMes']);
+        error: function(response) {
             button.removeClass('loading');
+            showToast(response.responseJSON.message, false);
+
         }
     });
-};
-
-// transform string to pure number
-function CurrencyToNumber(str){
-	return str.replace(/[^0-9.]+/g,"");
-}
-// transform pure number to readable currency
-function NumberToCurrency(currency, string) {
-	res = CurrencyToNumber(string);
-	if ( res.includes('.') ) {
-		var firstDot = res.indexOf('.');
-		var dots = (res.match(/\./g) || []).length;
-		if ( dots != 1 ) {
-			res = res.replace(/\./g,"");
-			res = res.slice(0, firstDot) + '.' + res.slice(firstDot);
-		}
-		var coins = res.substring(firstDot);
-		if ( coins.length > 3 ) {
-			toCrop = coins.length - 3;
-			res = res.substring(0, res.length-toCrop);
-		} else if ( coins.length < 3 ) {
-			// add coins
-			toAdd = 3-coins.length;
-			res = res+'0';
-			if (toAdd == 2) {
-				res = res+'0';
-			}
-		}
-	} else {
-		res = res + ".00";
-	}
-	for (let i=res.length-4, step=1; i >= 0; i--,step++) {
-		if (step == 4) {
-			res = res.slice(0, i+1) + ',' + res.slice(i+1);
-			step = 1;
-		}
-
-	}
-	currency=='UAH' ? res='₴'+res : res='$'+res;
-	return res;
-}
-
+})
