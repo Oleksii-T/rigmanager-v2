@@ -56,14 +56,6 @@
                             </select>
                         </div>
                         <div class="col-lg-2">
-                            <select class="table-filter form-control" name="legal_type">
-                                <option value="">Legal Type Filter</option>
-                                @foreach (\App\Models\Post::LEGAL_TYPES as $filter)
-                                    <option value="{{$filter}}">{{readable($filter)}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
                             <select class="table-filter form-control" name="duration">
                                 <option value="">Duration Filter</option>
                                 @foreach (\App\Models\Post::DURATIONS as $filter)

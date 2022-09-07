@@ -33,9 +33,6 @@ class PostController extends Controller
         if ($request->condition) {
             $posts->where('condition', $request->condition);
         }
-        if ($request->legal_type) {
-            $posts->where('legal_type', $request->legal_type);
-        }
         if ($request->duration) {
             $posts->where('duration', $request->duration);
         }
@@ -60,9 +57,12 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $input = $request->validated();
+        $user = User::find($input['user_id']);
+        $input['phone'] ??= $user->phone;
+        $input['email'] ??= $user->email;
         $post = Post::create($input);
         $post->saveTranslations($input);
-        $post->addAttachment($input['images'], 'images');
+        $post->addAttachment($input['images']??[], 'images');
         $post->addAttachment($input['documents']??[], 'documents');
 
         return $this->jsonSuccess('Post created successfully', [

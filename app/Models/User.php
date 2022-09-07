@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordReset;
@@ -11,7 +12,7 @@ use App\Traits\HasAttachments;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasAttachments;
+    use HasAttachments, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'slug',
         'email',
         'password',
     ];

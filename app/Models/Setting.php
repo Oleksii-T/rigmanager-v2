@@ -17,6 +17,15 @@ class Setting extends Model
 
     const EDATABLE_SETTINGS = [
         [
+            'name' => 'General',
+            'settings' => [
+                'hide_pending_posts' => 'Hide pending posts',
+                'sort_categories_by_alph' => 'Sort categories by Alphabet',
+                'sort_categories_by_posts' => 'Sort categories by Posts count',
+                'hide_empty_categories' => 'Hide empty categories',
+            ]
+        ],
+        [
             'name' => 'Social login',
             'settings' => [
                 'google_auth_enabled' => 'Google Auth Enabled',

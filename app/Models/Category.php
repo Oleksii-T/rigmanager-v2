@@ -71,17 +71,34 @@ class Category extends Model
         $query->where('is_active', $is);
     }
 
+    /**
+     * get posts which belongs to current category or to any child category
+     */
     public function postsAll($get=false)
     {
         $res = Post::whereIn('category_id', $this->getCategoriesIds());
+
         return $get ? $res->get() : $res;
     }
 
+    /**
+     * get current categories and all parents as an array
+     */
+    public function parents($reverse=false)
+    {
+        $res = self::parentsHelper($this);
+        return $reverse ? array_reverse($res) : $res;
+    }
+
+    /**
+     * get all childs categories
+     */
     public function childsAll($get=false)
     {
         $ids = $this->getCategoriesIds();
         unset($ids[array_search($this->id, $ids)]);
         $res = self::whereIn('id', $ids);
+
         return $get ? $res->get() : $res;
     }
 
@@ -141,6 +158,17 @@ class Category extends Model
             })
             ->rawColumns(['parent', 'is_active', 'action'])
             ->make(true);
+    }
+
+    private static function parentsHelper($category, $result=[])
+    {
+        $result[] = $category;
+        $parent = $category->parent;
+        if ($parent) {
+            $result = self::parentsHelper($parent, $result);
+        }
+
+        return $result;
     }
 
     private function getCategoriesIds()

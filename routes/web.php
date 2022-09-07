@@ -1,11 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\AttachmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,27 +34,42 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('/', [PageController::class, 'index'])->name('index');
     Route::get('terms', [PageController::class, 'terms'])->name('terms');
     Route::get('privacy', [PageController::class, 'privacy'])->name('privacy');
+    Route::get('categories', [PageController::class, 'categories'])->name('categories');
+    Route::get('catalog', [SearchController::class, 'index'])->name('search');
 
-    Route::get('search', [SearchController::class, 'index'])->name('search');
+    Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');
 
-    Route::prefix('categories')->name('categories.')->group(function () {
-        Route::get('{category}', [SearchController::class, 'category'])->name('show');
+    Route::middleware('auth')->group(function () {
+
+        Route::middleware('verified')->group(function () {
+
+            Route::prefix('posts')->name('posts.')->group(function () {
+                Route::get('create', [PostController::class, 'create'])->name('create');
+                Route::post('', [PostController::class, 'store'])->name('store');
+                Route::get('{post}/edit', [PostController::class, 'edit'])->name('edit');
+                Route::put('{post}', [PostController::class, 'update'])->name('update');
+                Route::post('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
+                Route::post('{post}/view', [PostController::class, 'view']);
+                Route::get('{post}/contacts', [PostController::class, 'contacts']);
+                Route::delete('{post}', [PostController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::prefix('profile')->name('profile.')->group(function () {
+                Route::get('/', [ProfileController::class, 'index'])->name('index');
+                Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
+                Route::put('/', [ProfileController::class, 'update'])->name('update');
+                Route::put('password', [ProfileController::class, 'password'])->name('password');
+            });
+
+        });
+
     });
 
     Route::prefix('posts')->name('posts.')->group(function () {
         Route::get('{post}', [PostController::class, 'show'])->name('show');
-        Route::post('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
+        Route::post('{post}/view', [PostController::class, 'view']);
     });
 
-    Route::middleware('verified')->group(function () {
-
-        Route::prefix('profile')->name('profile.')->group(function () {
-            Route::get('/', [ProfileController::class, 'index'])->name('index');
-            Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
-            Route::put('/', [ProfileController::class, 'update'])->name('update');
-            Route::put('password', [ProfileController::class, 'password'])->name('password');
-        });
-
-    });
+    Route::get('catalog/{category}', [SearchController::class, 'category'])->name('search.category');
 
 });

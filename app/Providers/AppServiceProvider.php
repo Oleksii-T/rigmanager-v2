@@ -53,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
         // add dynamic values to adminlte menu
         $adminlteMenus = config('adminlte.menu');
         foreach ($adminlteMenus as &$menu) {
-            if ($menu['route'] == 'admin.posts.index') {
+            if (($menu['route']??null) == 'admin.posts.index') {
                 $pending = Post::status('pending')->count();
                 if ($pending) {
                     $menu['label'] = $pending;

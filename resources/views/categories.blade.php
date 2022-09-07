@@ -8,7 +8,7 @@
 
 @section('bc')
 	<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-		<span itemprop="name">@lang('ui.catalog')</span>
+		<span itemprop="name">@lang('ui.categories')</span>
 		<meta itemprop="position" content="2" />
 	</li>
 @endsection
@@ -21,29 +21,29 @@
                 <div class="side-title">@lang('ui.catalogNav')</div>
                 <ul class="side-list">
                     @foreach ($categories as $category)
-                        <li><a href="{{route('categories.show', $category)}}">{{$category->name}}</a></li>
+                        <li><a href="{{route('search.category', $category)}}">{{$category->name}}</a></li>
                     @endforeach
                 </ul>
             </div>
         </aside>
         <div class="content">
-            <h1>@lang('ui.catalog')</h1>
+            <h1>@lang('ui.categories')</h1>
             <div class="content-top-text catalog-help">@lang('ui.catalogHelp')</div>
             <div class="category">
                 @foreach ($categories as $category)
                     <div class="category-col">
                         <div class="category-item">
-                            <div class="category-img"><a href="{{route('categories.show', $category)}}"><img src="{{$category->image->url}}" alt=""></a></div>
-                            <div class="category-name"><a href="{{route('categories.show', $category)}}">{{$category->name}}</a> (<span class="orange">{{$category->postsAll()->visible()->count()}}</span>)</div>
+                            <div class="category-img"><a href="{{route('search.category', $category)}}"><img src="{{$category->image->url}}" alt=""></a></div>
+                            <div class="category-name"><a href="{{route('search.category', $category)}}">{{$category->name}}</a> (<span class="orange">{{$category->postsAll()->visible()->count()}}</span>)</div>
                             @if ($category->childs->isNotEmpty())
                                 <ul class="category-list">
                                     @foreach ($category->childs as $childCat)
                                         <li>
-                                            <a href="{{route('categories.show', $childCat)}}">{{$childCat->name}}</a>
+                                            <a href="{{route('search.category', $childCat)}}">{{$childCat->name}}</a>
                                             @if ($childCat->childs->isNotEmpty())
                                                 @foreach ($childCat->childs as $childChildCat)
                                                     <ul class="category-sublist">
-                                                        <li><a href="{{route('categories.show', $childChildCat)}}">{{$childChildCat->name}}</a></li>
+                                                        <li><a href="{{route('search.category', $childChildCat)}}">{{$childChildCat->name}}</a></li>
                                                     </ul>
                                                 @endforeach
                                             @endif

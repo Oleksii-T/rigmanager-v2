@@ -41,7 +41,7 @@
                         @foreach ($categoriesColumns as $column)
                             <ul class="main-category-col">
                                 @foreach ($column as $c)
-                                    <li><a href="{{route('categories.show', $c)}}">{{$c->name}}</a></li>
+                                    <li><a href="{{route('search.category', $c)}}">{{$c->name}}</a></li>
                                 @endforeach
                             </ul>
                         @endforeach

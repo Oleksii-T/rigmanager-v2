@@ -78,21 +78,15 @@
 					</div>
 					<div class="footer-col">
 						<ul class="footer-nav footer-langs">
-							@if (App::isLocale('uk'))
-								<li class="active">Ukr</li>
-							@else
-								<li><a href="#">Ukr</a></li>
-							@endif
-							@if (App::isLocale('en'))
-								<li class="active">Eng</li>
-							@else
-								<li><a href="#">Eng</a></li>
-							@endif
-							@if (App::isLocale('ru'))
-								<li class="active">Rus</li>
-							@else
-								<li><a href="#">Rus</a></li>
-							@endif
+                            @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
+                                @if (LaravelLocalization::getCurrentLocale() != $localeCode)
+								    <li class="active">
+                                        <a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                            {{ $localeCode }}
+                                        </a>
+                                    </li>
+                                @endif
+                            @endforeach
 						</ul>
 					</div>
 				</div>
@@ -110,7 +104,7 @@
 	<script type="text/javascript" src="{{ asset('js/dropzone.min.js') }}"></script>
 	<script src="{{asset('js/jquery.fancybox.min.js')}}"></script>
 	<script src="{{asset('js/slick.min.js')}}"></script>
-	<script src="{{asset('js/jquery-ui.min.js')}}"></script>
+	<script src="{{asset('js/jquery-ui-2.min.js')}}"></script>
 	<script src="{{asset('js/all.js')}}"></script>
 	<script type="text/javascript">
         $(document).ready(function(){

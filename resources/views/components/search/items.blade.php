@@ -10,7 +10,7 @@
                 <!--under title line. Lables: type, view, region, date-->
                 <div class="catalog-line">
                     <!--type-->
-                    <a href="{{route('search', ['type' => $post->type])}}" class="catalog-tag">{{\App\Models\Post::typeReadable($post->type)}}</a>
+                    <a href="{{route('search', ['types' => [$post->type]])}}" class="catalog-tag">{{\App\Models\Post::typeReadable($post->type)}}</a>
                     <!--add-to-fav-btn-->
                     <a href="{{route('posts.add-to-fav', $post)}}" class="catalog-fav add-to-fav {{$currentUser?->favPosts->contains($post) ? 'active' : ''}}">
                         <svg viewBox="0 0 464 424" xmlns="http://www.w3.org/2000/svg">

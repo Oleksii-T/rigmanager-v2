@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'main' => 'Main',
 
     // Dev massages
     'workInProgress' => 'Work in progress',
@@ -69,6 +70,7 @@ return [
     'upload' => 'Upload',
     'chooseFile' => 'Choose file',
     'post' => 'Post',
+    'categories' => 'Categories',
     'catalog' => 'Catalog',
     'catalogHelp' => 'The full list of equipment and service categories for fast navigation and searching of posts.',
     'catalogNav' => 'Main equipment categories',
@@ -79,7 +81,7 @@ return [
     'publish' => 'Publish',
     'setting' => 'Setting',
     'here' => 'here',
-    
+
     // auth massages
     'auth' => 'Authorization',
     'signIn' => 'Sign in',
@@ -154,7 +156,7 @@ return [
     'uHave' => 'You have',
     'socialAcc' => 'Social account',
     'deleteProfile' => 'Delete profile',
-    'deleteProfileHelp' => 'All your information will be deleted. 
+    'deleteProfileHelp' => 'All your information will be deleted.
         This action can not be undone.
         All your post will be deleted.
         All your mailers will be deleted.
@@ -356,6 +358,7 @@ return [
     'locationTown' => 'Specify location',
     'location' => 'Location of product',
     'region' => 'Region',
+    'country' => 'Country',
     'town' => 'City / Village / Warehouse / Site',
     'townHelp' => 'Here you can specify the location of product.
         Maximum 100 symbols.',
@@ -541,7 +544,7 @@ return [
     'mon' => 'mon',
     'free' => 'free',
     'account' => 'account',
-    'plansHeader' => 'Cost and comparison of 
+    'plansHeader' => 'Cost and comparison of
         rigmanager.com.ua plans',
     'readMoreAboutPlans' => 'Read more about plans',
     'plansStartAcc' => 'Start
@@ -578,11 +581,11 @@ return [
     'plansPostImport' => 'Bulk posts import',
     'publishTenders' => 'Publish tenders',
     'plansPostTracking' => 'Views statistics',
-    'trackingHelp' => 'Views statistics can be found on "My posts" page. 
+    'trackingHelp' => 'Views statistics can be found on "My posts" page.
         On each post the new banner with number of views will be visible.',
-    'chosen' => 'Chosen',    
+    'chosen' => 'Chosen',
 
-    // user plan 
+    // user plan
     'subscription' => 'Subscription',
     'mySubscription' => 'My subscription',
     'planActivated' => 'Activated subscription',
@@ -591,7 +594,7 @@ return [
     'planStandart' => 'Standart',
     'planPro' => 'Pro',
     'planActiveTo' => 'Active untill',
-    'planDetails' => 'See details, 
+    'planDetails' => 'See details,
         or change subscription:',
     'planCancel' => 'Cancel subscription',
     'planNotActive' => 'You do not have any active subscriptions',
@@ -607,10 +610,10 @@ return [
     'canceled' => 'Canceled',
     'history' => 'History',
     'expired' => 'Expired',
-    
+
     // posts import
     'postImport' => 'Posts import',
-    'postImportTitle' => 'Here you can import a number ofposts at once. 
+    'postImportTitle' => 'Here you can import a number ofposts at once.
         Only equipment posts. Service posts must be published manually.
         The post from import file are always considered as new.
         You can not update already existing posts via import file.',
@@ -634,7 +637,7 @@ return [
     //about us
     'aboutUsIntro' => 'rigmanager.com.ua - the first specialized web platform for cooperation of oil and gas companies in Ukraine.',
     'aboutUsBody' => 'We present a convenient tool for commercial and consulting activities of representatives of the oil and gas market.
-    
+
     Our online web service can help you:
     - Simplify the procurement process.
     - Forge broader, faster and more effective collaboration between members of your niche.

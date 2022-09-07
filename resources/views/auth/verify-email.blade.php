@@ -1,14 +1,14 @@
 @extends('layouts.page')
 
 @section('meta')
-	<title>{{__('meta.title.user.verify')}}</title>
-	<meta name="description" content="{{__('meta.description.user.verify')}}">
+	<title>@lang('meta.title.user.verify')</title>
+	<meta name="description" content="@lang('meta.description.user.verify')}}">
     <meta name="robots" content="noindex, nofollow">
 @endsection
 
 @section('bc')
     <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name">{{__('ui.registerVerify')}}</span>
+        <span itemprop="name">@lang('ui.registerVerify')</span>
         <meta itemprop="position" content="2" />
     </li>
 @endsection
@@ -17,15 +17,15 @@
     <div class="main-block">
         <x-profile-nav active=''/>
         <div class="content">
-            <h1>{{__('ui.verifyNoticeThank')}}</h1>
-            <p>{{__('ui.verifyNoticeBody')}}</p>
-            <form method="POST" action="{{ loc_url(route('verification.resend')) }}">
+            <h1>@lang('ui.verifyNoticeThank')</h1>
+            <p>@lang('ui.verifyNoticeBody')</p>
+            <form method="POST" action="{{route('verification.send')}}">
                 @csrf
-                <button type="submit" class="button">{{ __('ui.verifyClickToResend') }}</button>
+                <button type="submit" class="button">@lang('ui.verifyClickToResend')</button>
             </form>
             @if (session('resent'))
                 <div id="resendBody">
-                    <p>{{__('ui.verifyNoticeResend')}}</p>
+                    <p>@lang('ui.verifyNoticeResend')</p>
                 </div>
             @endif
         </div>

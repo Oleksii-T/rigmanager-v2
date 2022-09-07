@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\ValidSlug;
 use App\Models\Post;
 use Illuminate\Validation\Rule;
 
@@ -29,19 +28,12 @@ class PostRequest extends FormRequest
         $model = $this->route('post');
 
         return [
-            'title' => ['required', 'array'],
-            'title.en' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'array', new ValidSlug(Post::class, $model->id??null)],
-            'description' => ['required', 'array'],
-            'description.en' => ['required', 'string', 'max:5000'],
-            'user_id' => ['required', 'exists:users,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:5000'],
             'category_id' => ['required', 'exists:categories,id'],
-            'origin_lang' => ['required', 'string'],
-            'status' => ['required', 'string', Rule::in(Post::STATUSES)],
             'type' => ['required', 'string', Rule::in(Post::TYPES)],
             'condition' => ['required', 'string', Rule::in(Post::CONDITIONS)],
             'duration' => ['required', 'string', Rule::in(Post::DURATIONS)],
-            'is_active' => ['nullable', 'boolean'],
             'is_urgent' => ['nullable', 'boolean'],
             'is_import' => ['nullable', 'boolean'],
             'amount' => ['nullable', 'integer', 'min:1', 'max:9999999'],

@@ -5,18 +5,34 @@
 @endsection
 
 @section('bc')
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a itemprop="item" href="{{route('categories')}}"><span itemprop="name">@lang('ui.catalog')</span></a>
-        <meta itemprop="position" content="2" />
-    </li>
-    todo
+    @if (isset($category))
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a itemprop="item" href="{{route('search')}}"><span itemprop="name">@lang('ui.catalog')</span></a>
+            <meta itemprop="position" content="2" />
+        </li>
+        @foreach ($category->parents(true) as $category)
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                @if ($loop->last)
+                    <span itemprop="name">{{$category->name}}</span>
+                @else
+                    <a itemprop="item" href="{{route('search.category', $category)}}"><span itemprop="name">{{$category->name}}</span></a>
+                @endif
+                <meta itemprop="position" content="{{$loop->index + 2}}" />
+            </li>
+        @endforeach
+    @else
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span itemprop="name">@lang('ui.catalog')</span>
+            <meta itemprop="position" content="2" />
+        </li>
+    @endif
 @endsection
 
 @section('content')
     <div class="main-block">
         <aside class="side">
-            <a href="#filter-block" data-fancybox class="side-mob">@lang('ui.filters')</a>
-            <div class="filter-block" id="filter-block">
+            <a data-fancybox class="side-mob">@lang('ui.filters')</a>
+            <div class="filter-block">
                 <div class="filter-title">@lang('ui.filters')</div>
 
                 <!--cost-->
@@ -36,11 +52,14 @@
                     <input type="text" class="input" name="cost_to" placeholder="@lang('ui.to')">
                 </div>
 
-                <!--region-->
-                <label class="label">@lang('ui.region')</label>
+                <!--country-->
+                <label class="label">@lang('ui.country')</label>
                 <div class="select-block">
-                    {{-- <x-region-select locale='{{app()->getLocale()}}'/> --}}
-                    todo
+                    <select class="styled" name="country">
+                        <option value="0">{{__('ui.notSpecified')}}</option>
+                        <option value="1">Country 1</option>
+                        <option value="2">Country 2</option>
+                    </select>
                 </div>
 
                 <!--condition-->
@@ -48,7 +67,7 @@
                 <div id="condition" class="check-block">
                     @foreach (\App\Models\Post::CONDITIONS as $item)
                         <div class="check-item">
-                            <input type="checkbox" class="check-input" name="conditions" value="{{$item}}" id="{{$item}}">
+                            <input type="checkbox" class="check-input" name="conditions" value="{{$item}}" id="{{$item}}" @checked(in_array($item, request()->conditions??[]))>
                             <label for="{{$item}}" class="check-label">{{\App\Models\Post::conditionReadable($item)}}</label>
                         </div>
                     @endforeach
@@ -59,19 +78,8 @@
                 <div id="type" class="check-block">
                     @foreach (\App\Models\Post::TYPES as $item)
                         <div class="check-item">
-                            <input type="checkbox" class="check-input" name="types" id="{{$item}}" value="{{$item}}">
+                            <input type="checkbox" class="check-input" name="types" id="{{$item}}" value="{{$item}}" @checked(in_array($item, request()->types??[]))>
                             <label for="{{$item}}" class="check-label">{{\App\Models\Post::typeReadable($item)}}</label>
-                        </div>
-                    @endforeach
-                </div>
-
-                <!--legal-->
-                <label class="label">@lang('ui.postRole')</label>
-                <div id="role" class="check-block">
-                    @foreach (\App\Models\Post::LEGAL_TYPES as $item)
-                        <div class="check-item">
-                            <input type="checkbox" class="check-input" name="legal_types" id="{{$item}}" value="{{$item}}">
-                            <label for="{{$item}}" class="check-label">{{\App\Models\Post::legalTypeReadable($item)}}</label>
                         </div>
                     @endforeach
                 </div>
@@ -80,11 +88,11 @@
                 <label class="label">@lang('ui.urgent')</label>
                 <div id="urgent" class="check-block">
                     <div class="check-item">
-                        <input type="checkbox" class="check-input" name="is_urgent" id="is-urgent-1" value="1">
+                        <input type="checkbox" class="check-input" name="is_urgent" id="is-urgent-1" value="1" @checked(in_array($item, request()->is_urgent??[]))>
                         <label for="is-urgent-1" class="check-label">@lang('ui.yes')</label>
                     </div>
                     <div class="check-item">
-                        <input type="checkbox" class="check-input"  name="is_urgent" id="is-urgent-0" value="0">
+                        <input type="checkbox" class="check-input"  name="is_urgent" id="is-urgent-0" value="0" @checked(in_array($item, request()->is_import??[]))>
                         <label for="is-urgent-0" class="check-label">@lang('ui.no')</label>
                     </div>
                 </div>
@@ -137,7 +145,7 @@
                 @if (isset($category))
                     {{$category->name}}
                 @else
-
+                    @lang('ui.catalog')
                 @endif
                 (<span class="orange searched-amount">{{$posts->total()}}</span>)
             </h1>
@@ -146,9 +154,7 @@
                     <p>@lang('ui.searchFail'). <a href="{{url()->previous()}}">@lang('ui.serverErrorGoBack')</a></p>
                 </div>
             @else
-                @if (isset($category))
-                    <x-search.categories :category="$category"/>
-                @endif
+                <x-search.categories :categories="isset($category) ? $category->childs()->active() : \App\Models\Category::active()->whereNull('category_id')"/>
                 <div class="searched-content">
                     <x-search.items :posts="$posts"/>
                 </div>

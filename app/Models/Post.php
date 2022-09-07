@@ -16,10 +16,10 @@ class Post extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'origin_lang',
         'status',
         'type',
         'condition',
-        'legal_type',
         'duration',
         'is_active',
         'is_urgent',
@@ -120,6 +120,9 @@ class Post extends Model
 
     public function scopeVisible($query)
     {
+        if (Setting::get('hide_pending_posts')) {
+            return $query->where('is_active', true);
+        }
         return $query->where('is_active', true)->where('status', 'approved');
     }
 
@@ -154,6 +157,11 @@ class Post extends Model
     {
         // TODO make login
         return $this->images()->first();
+    }
+
+    public function original($field)
+    {
+        return $this->translated($field, $this->origin_lang);
     }
 
     public static function dataTable($query)
@@ -223,6 +231,18 @@ class Post extends Model
                 return trans('posts.legal-types.private');
             case 'business':
                 return trans('posts.legal-types.business');
+        }
+    }
+
+    public static function durationReadable($duration)
+    {
+        switch ($duration) {
+            case '1m':
+                return trans('ui.activeOneMonth');
+            case '2m':
+                return trans('ui.activeTwoMonth');
+            case 'unlim':
+                return trans('ui.activeForever');
         }
     }
 }

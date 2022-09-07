@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Admin panel | ' . config('app.name'),
     'title_prefix' => '',
-    'title_postfix' => '',
+    'title_postfix' => ' | ' . env('APP_NAME'),
 
     /*
     |--------------------------------------------------------------------------
@@ -291,6 +291,16 @@ return [
             'text' => 'Settings',
             'route'  => 'admin.settings.index',
             'icon' => 'fas fa-fw fa-cogs',
+        ],
+        [
+            'text' => 'Translation',
+            'url'  => '/admin/translations',
+            'icon' => 'fas fa-fw fa-language',
+        ],
+        [
+            'text' => 'Logs',
+            'url'  => '/admin/log-viewer',
+            'icon' => 'fas fa-fw fa-exclamation',
         ],
         [
             'text' => 'Return to Site',

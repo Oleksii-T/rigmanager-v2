@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->string('origin_lang');
             $table->string('status')->default('pending');
             $table->string('type');
             $table->string('condition');
-            $table->string('legal_type');
             $table->string('duration');
             $table->string('is_active')->default(false);
             $table->string('is_urgent')->default(false);

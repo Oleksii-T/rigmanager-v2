@@ -28,14 +28,21 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Name</label>
-                            <input name="name" type="text" class="form-control" placeholder="Name...">
+                            <input name="name" type="text" class="form-control">
                             <span data-input="name" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Slug</label>
+                            <input name="slug" type="text" class="form-control">
+                            <span data-input="slug" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Email Address</label>
-                            <input type="email" name="email" class="form-control" placeholder="Email Address...">
+                            <input type="email" name="email" class="form-control">
                             <span data-input="email" class="input-error"></span>
                         </div>
                     </div>
@@ -62,14 +69,14 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Password</label>
-                            <input name="password" type="password" class="form-control" placeholder="Password...">
+                            <input name="password" type="password" class="form-control">
                             <span data-input="password" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Confirm Password</label>
-                            <input name="password_confirmation" type="password" class="form-control" placeholder="Confirm Password...">
+                            <input name="password_confirmation" type="password" class="form-control">
                         </div>
                     </div>
                 </div>

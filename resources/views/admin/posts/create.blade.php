@@ -98,13 +98,13 @@
                     </div>
                     <div class="col-md-4 col-lg-3 col-xl-2">
                         <div class="form-group">
-                            <label>Legal Type</label>
-                            <select class="form-control" name="legal_type">
-                                @foreach (\App\Models\Post::LEGAL_TYPES as $item)
-                                    <option value="{{$item}}">{{readable($item)}}</option>
+                            <label>Original Lang</label>
+                            <select class="form-control" name="origin_lang">
+                                @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
+                                    <option value="{{$localeCode}}">{{readable($localeCode)}}</option>
                                 @endforeach
                             </select>
-                            <span data-input="legal_type" class="input-error"></span>
+                            <span data-input="origin_lang" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-3 col-xl-2">

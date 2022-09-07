@@ -7,14 +7,21 @@ use Illuminate\Http\Request;
 use App\Models\Attachment;
 use Illuminate\Support\Facades\Storage;
 
-
 class AttachmentController extends Controller
 {
-    public function download(Request $request, Attachment $attachment)
+    public function index()
     {
-        $disk = Attachment::disk($attachment->type);
 
-        return Storage::disk($disk)->download($attachment->name);
+    }
+
+    public function edit()
+    {
+
+    }
+
+    public function update()
+    {
+
     }
 
     public function destroy(Request $request, Attachment $attachment)

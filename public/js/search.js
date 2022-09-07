@@ -4,10 +4,9 @@ $(document).ready(function () {
         curreny: 'usd',
         cost_from: null,
         cost_to: null,
-        region: null,
+        country: null,
         conditions: [],
         types: [],
-        legal_types: [],
         is_urgent: [],
         is_import: [],
         sorting: 'latest'
@@ -28,6 +27,7 @@ $(document).ready(function () {
     });
 
     $('.filter-block input').change(function (e) {
+        console.log('filter!'); //! LOG
         let name = $(this).attr('name');
         let val = $(this).val();
         let filterType = $(this).attr('type');
@@ -84,9 +84,24 @@ $(document).ready(function () {
                     return;
                 }
                 request = null;
-                showError();
+                showPopUp(null, null, false);
                 fullLoader(false);
             }
         });
     }
+
+    function setItialParams() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        for(const entry of urlParams.entries()) {
+            let key = entry[0].replace(/[0-9\]\[]/g, '');
+            if (Array.isArray(params[key])) {
+                params[key].push(entry[1]);
+            } else {
+                params[key] = entry[1];
+            }
+        }
+    }
+
+    setItialParams();
 });

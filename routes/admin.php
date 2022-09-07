@@ -39,7 +39,6 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('users', UserController::class);
 
     Route::prefix('attachments')->name('attachments.')->group(function () {
-        Route::get('{attachment}/download', [AttachmentController::class, 'download'])->name('download');
 		Route::delete('{attachment}', [AttachmentController::class, 'destroy'])->name('destroy');
 	});
 });

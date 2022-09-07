@@ -19,7 +19,7 @@ class SearchController extends Controller
         }
 
         return $this->jsonSuccess('', [
-            'view' => view('components.search-items', ['posts' => $posts])->render(),
+            'view' => view('components.search.items', ['posts' => $posts])->render(),
             'total' => $posts->total()
         ]);
     }
@@ -51,7 +51,7 @@ class SearchController extends Controller
         }
 
         return $this->jsonSuccess('', [
-            'view' => view('components.search-items', ['posts' => $posts])->render(),
+            'view' => view('components.search.items', ['posts' => $posts])->render(),
             'total' => $posts->total()
         ]);
     }
@@ -74,10 +74,6 @@ class SearchController extends Controller
 
         if ($types && count($types) < count(Post::TYPES)) {
             $posts->whereIn('type', $types);
-        }
-
-        if ($legalTypes && count($legalTypes) < Post::LEGAL_TYPES) {
-            $posts->whereIn('legal_type', $legalTypes);
         }
 
         if ($urgent !== null) {
