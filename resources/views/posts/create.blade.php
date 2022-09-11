@@ -29,7 +29,7 @@
 
                             <label class="label">@lang('ui.chooseTag') <span class="orange">*</span></label>
                             <div class="select-block">
-                                <select class="styled select2" name="category_id">
+                                <select class="styled" name="category_id">
                                     @foreach ($categories as $c)
                                         <option value="{{$c->id}}">{{$c->name}}</option>
                                     @endforeach
@@ -80,8 +80,10 @@
 
                                     <label class="label">@lang('ui.locationRegion')</label>
                                     <div class="select-block">
-                                        <select class="styled" name="country select2">
-                                            <option value="1">Todo</option>
+                                        <select class="select2" name="country">
+                                            @foreach (countries() as $key => $name)
+                                                <option value="{{$key}}">{{$name}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
 
@@ -105,7 +107,7 @@
                                     </div>
 
                                     <label class="label">@lang('ui.cost')</label>
-                                    <input class="input format-cost" name="cost" type="text" placeholder="@lang('ui.cost')}}"/>
+                                    <input class="input format-cost" name="cost" type="text"/>
                                     <div data-input="cost" class="form-error"></div>
                                 </div>
                             </div>

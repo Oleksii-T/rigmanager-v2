@@ -417,4 +417,64 @@ $(document).ready(function() {
             }
         });
     })
+
+    $(document).on('click', '.show-post-views', function (e) {
+        e.preventDefault();
+        let url = $(this).attr('href');
+        fullLoader();
+
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: (response)=>{
+                fullLoader(false);
+                swal.fire({
+                    html: response.data
+                });
+            },
+            error: function(response) {
+                showServerError(response);
+            }
+        });
+    })
+
+    /* favorites page */
+    /*****************/
+    $('.clear-favs').click(async function(e) {
+        e.preventDefault();
+        let url = $(this).attr('href');
+
+        let res = await swal.fire({
+            title: 'Are you sure?',//! TRANSLATE
+            text: "All Favorite Posts will be cleared",//! TRANSLATE
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, clear Favorites!'//! TRANSLATE
+        });
+
+        if (!res.isConfirmed) {
+            return;
+        }
+
+        fullLoader();
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                _method: 'PUT',
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: (response)=>{
+                window.location.reload();
+            },
+            error: function(response) {
+                showServerError(response);
+            }
+        });
+    })
 });

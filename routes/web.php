@@ -47,6 +47,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('create', [PostController::class, 'create'])->name('create');
                 Route::get('{post}/edit', [PostController::class, 'edit'])->name('edit');
                 Route::get('{post}/contacts', [PostController::class, 'contacts']);
+                Route::get('{post}/views', [PostController::class, 'views'])->name('views');
                 Route::post('', [PostController::class, 'store'])->name('store');
                 Route::put('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
                 Route::put('{post}/view', [PostController::class, 'view']);
@@ -58,10 +59,12 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
             Route::prefix('profile')->name('profile.')->group(function () {
                 Route::get('/', [ProfileController::class, 'index'])->name('index');
                 Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
+                Route::get('posts/{category?}', [ProfileController::class, 'posts'])->name('posts');
+                Route::get('favorites/{category?}', [ProfileController::class, 'favorites'])->name('favorites');
+                Route::post('posts/action', [ProfileController::class, 'action']);
                 Route::put('/', [ProfileController::class, 'update'])->name('update');
                 Route::put('password', [ProfileController::class, 'password'])->name('password');
-                Route::post('posts/action', [ProfileController::class, 'action']);
-                Route::get('posts/{category?}', [ProfileController::class, 'posts'])->name('posts');
+                Route::put('clear-favs', [ProfileController::class, 'clearFavs'])->name('clear-favs');
             });
 
         });

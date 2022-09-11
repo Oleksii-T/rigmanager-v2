@@ -25,7 +25,7 @@ class Post extends Model
         'is_urgent',
         'is_import',
         'amount',
-        'location',
+        'country',
         'manufacturer',
         'manufacture_date',
         'part_number',
@@ -120,10 +120,13 @@ class Post extends Model
 
     public function scopeVisible($query)
     {
+        $query->where('is_active', true);
+
         if (Setting::get('hide_pending_posts')) {
-            return $query->where('is_active', true);
+            return $query;
         }
-        return $query->where('is_active', true)->where('status', 'approved');
+
+        return $query->where('status', 'approved');
     }
 
     public function scopeStatus($query, string $status)
@@ -288,6 +291,7 @@ class Post extends Model
         $import = $filters['is_import'][0]??null;
         $sort = $filters['sorting']??null;
         $category = $filters['category']??null;
+        $country = $filters['country']??null;
         $search = $filters['search']??null;
         if (!($category instanceof Category)) {
             $category = Category::find($category);
@@ -295,6 +299,10 @@ class Post extends Model
 
         if ($category) {
             $posts->whereIn('category_id', $category->getChildsIds());
+        }
+
+        if ($country) {
+            $posts->where('country', $country);
         }
 
         if ($search) {
@@ -321,7 +329,7 @@ class Post extends Model
 
         switch ($sort) {
             case 'latest':
-                $posts->latest();
+                $posts->latest('posts.created_at');
                 break;
             case 'cheap':
                 $posts->whereNotNull('cost')->orderBy('cost_usd');
@@ -330,11 +338,24 @@ class Post extends Model
                 $posts->whereNotNull('cost')->orderByDesc('cost_usd');
                 break;
             case 'views':
-                $posts->orderByDesc('views_count');
+                $posts->withCount('views')->orderByDesc('views_count');
                 break;
             default:
-                $posts->latest();
+                $posts->latest('posts.created_at');
                 break;
         }
+    }
+
+    // get countries which has at least one post
+    public static function countries()
+    {
+        return cache()->remember('posts.countries', 60*20, function() {
+            $cs = self::visible()->pluck('country')->unique();
+            $countries = [];
+            foreach ($cs as $c) {
+                $countries[$c] = trans("countries.$c");
+            }
+            return $countries;
+        });
     }
 }

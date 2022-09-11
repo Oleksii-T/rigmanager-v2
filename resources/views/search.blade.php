@@ -57,8 +57,9 @@
                 <div class="select-block">
                     <select class="styled" name="country">
                         <option value="0">{{__('ui.notSpecified')}}</option>
-                        <option value="1">Country 1</option>
-                        <option value="2">Country 2</option>
+                        @foreach (\App\Models\Post::countries() as $key => $name)
+                            <option value="{{$key}}">{{$name}}</option>
+                        @endforeach
                     </select>
                 </div>
 

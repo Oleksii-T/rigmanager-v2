@@ -44,7 +44,7 @@ class ProfileController extends Controller
     public function posts(Request $request, Category $category=null)
     {
         $user = auth()->user();
-        $query = $user->posts()->with('views')->withCount('views');
+        $query = $user->posts()->with(['views', 'images']);
         $filters = $request->all();
         $filters['category'] = $category;
         Post::applyFilters($query, $filters);
@@ -106,12 +106,42 @@ class ProfileController extends Controller
         return $this->jsonSuccess($message);
     }
 
+    public function favorites(Request $request, Category $category=null)
+    {
+        $user = auth()->user();
+        $query = $user->favorites()->visible()->with(['views', 'images']);
+        $filters = $request->all();
+        $filters['category'] = $category;
+        Post::applyFilters($query, $filters);
+        $categories = $this->getPostsCategories($query, $category);
+        $posts = $query->paginate(20);
+
+        if (!$request->ajax()) {
+            return view('profile.favorites', compact('posts', 'categories', 'category'));
+        }
+
+        return $this->jsonSuccess('', [
+            'view' => view('components.profile.favorites', compact('posts'))->render(),
+            'total' => $posts->total()
+        ]);
+    }
+
+    public function clearFavs(Request $request)
+    {
+        $user = auth()->user();
+        $user->favorites()->sync([]);
+
+        flash('Favorites cleared');//! TRANSLATE
+
+        return $this->jsonSuccess();
+    }
+
     /**
      * Get categories in which user has posts (only parent categs with posts count)
      */
     private function getPostsCategories($query, $category)
     {
-        $postIds = $query->pluck('id')->toArray();
+        $postIds = $query->pluck('posts.id')->toArray();
 
         $query = $category
             ? $category->childs()

@@ -167,13 +167,13 @@
                     </div>
                     <div class="col-md-4 col-lg-3 col-xl-2">
                         <div class="form-group">
-                            <label>Location</label>
-                            <select class="form-control" name="location">
-                                @foreach (['todo'] as $item)
-                                    <option value="{{$item}}" @selected($post->location)>{{readable($item)}}</option>
+                            <label>Country</label>
+                            <select class="form-control" name="country">
+                                @foreach (countries() as $key => $name)
+                                    <option value="{{$key}}" @selected($post->country == $key)>{{$name}}</option>
                                 @endforeach
                             </select>
-                            <span data-input="location" class="input-error"></span>
+                            <span data-input="country" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-3 col-xl-2">

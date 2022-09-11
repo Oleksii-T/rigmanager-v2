@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('is_urgent')->default(false);
             $table->string('is_import')->default(false);
             $table->unsignedInteger('amount')->nullable();
-            $table->string('location')->nullable();
+            $table->string('country')->nullable();
             $table->string('manufacturer')->nullable();
             $table->string('manufacture_date')->nullable();
             $table->string('part_number')->nullable();

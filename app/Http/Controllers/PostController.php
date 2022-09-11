@@ -121,12 +121,12 @@ class PostController extends Controller
         if ($user->id == $post->user_id) {
             return $this->jsonError(trans('messages.postAddFavPersonal'));
         }
-        if ($user->favPosts()->where('posts.id', $post->id)->count()) {
-            $user->favPosts()->detach($post);
+        if ($user->favorites()->where('posts.id', $post->id)->count()) {
+            $user->favorites()->detach($post);
             return $this->jsonSuccess(trans('messages.postRemovedFav'));
         }
 
-        $user->favPosts()->attach($post);
+        $user->favorites()->attach($post);
         return $this->jsonSuccess(trans('messages.postAddedFav'));
     }
 
@@ -194,6 +194,13 @@ class PostController extends Controller
         $post->update();
 
         return $this->jsonSuccess($message);
+    }
+
+    public function views(Request $request, Post $post)
+    {
+        $views = $post->views()->latest('updated_at')->get();
+
+        return $this->jsonSuccess('', view('components.views', compact('views'))->render());
     }
 
     public function destroy(Request $request, Post $post)

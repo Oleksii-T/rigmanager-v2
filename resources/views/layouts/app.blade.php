@@ -17,12 +17,12 @@
 	<link rel="alternate" href="{{hreflang_url(url()->full(), 'en')}}" hreflang="en"> --}}
 	<link rel="icon" href="{{asset('icons/favicon.ico')}}">
 	<meta property="og:image" content="{{asset('icons/og-favicon.png')}}" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/all.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}" />
-	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery.fancybox.min.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/slick.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery-ui.css')}}" />
-	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/dropzone.css')}}" />
 </head>
 <body>
 	<div id="wrapper">
@@ -96,9 +96,12 @@
 			<p>@lang('ui.development')</p>
 		</div>
 	</div>
+
 	@yield('modals')
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="{{asset('js/jquery-2.2.4.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 	<script type="text/javascript" src="{{ asset('js/jquery.validate.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.validate-additional.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/dropzone.min.js') }}"></script>
@@ -116,6 +119,7 @@
         });
     </script>
     @yield('scripts')
+
     <noscript>
         <div id="noscript">
             <p>@lang('ui.noscript')</p>

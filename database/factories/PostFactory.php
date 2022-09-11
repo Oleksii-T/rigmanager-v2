@@ -31,6 +31,12 @@ class PostFactory extends Factory
             '##?#/#?##',
             '??? / ###-?',
         ];
+        $countries = [
+            'ua',
+            'cn',
+            'ru',
+            'us',
+        ];
 
         return [
             'user_id' => User::inRandomOrder()->value('id'),
@@ -43,6 +49,7 @@ class PostFactory extends Factory
             'is_active' => true,
             'is_urgent' => rand(0,1),
             'is_import' => rand(0,1),
+            'country' => $countries[array_rand($countries)],
             'amount' => $amounts[array_rand($amounts)],
             'manufacturer' => fake()->company(),
             'manufacture_date' => fake()->date(),

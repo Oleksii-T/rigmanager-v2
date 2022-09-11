@@ -54,8 +54,23 @@ if (!function_exists('dlog')) {
         return \Log::channel('dev')->info($text, $array);
     }
 }
+
+// add flash notif for user
 if (!function_exists('flash')) {
     function flash(string $message, $type=true) {
         session()->flash($type ? 'message-success' : 'messsage-error', $message);
+    }
+}
+
+// get localized countries array
+if (!function_exists('countries')) {
+    function countries() {
+        foreach (config('countries') as $c) {
+            $countries[$c] = trans("countries.$c");
+        }
+
+        asort($countries);
+
+        return $countries;
     }
 }

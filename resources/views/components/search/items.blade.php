@@ -14,17 +14,15 @@
                     <!--type-->
                     <a href="{{route('search', ['types' => [$post->type]])}}" class="catalog-tag">{{\App\Models\Post::typeReadable($post->type)}}</a>
                     <!--add-to-fav-btn-->
-                    <a href="{{route('posts.add-to-fav', $post)}}" class="catalog-fav add-to-fav {{$currentUser?->favPosts->contains($post) ? 'active' : ''}}">
+                    <a href="{{route('posts.add-to-fav', $post)}}" class="catalog-fav add-to-fav {{$currentUser?->favorites->contains($post) ? 'active' : ''}}">
                         <svg viewBox="0 0 464 424" xmlns="http://www.w3.org/2000/svg">
                             <path class="cls-1" d="M340,0A123.88,123.88,0,0,0,232,63.2,123.88,123.88,0,0,0,124,0C55.52,0,0,63.52,0,132,0,304,232,424,232,424S464,304,464,132C464,63.52,408.48,0,340,0Z"/>
                         </svg>
                     </a>
                     <!--region-->
-                    @if ($post->region_encoded!=0)
-                        <div class="catalog-lable catalog-region">{{$post->region_readable}}</div>
-                    @endif
+                    <div class="catalog-lable catalog-region">{{$post->country}}</div>
                     <!--views-->
-                    <div class="catalog-lable">{{__('ui.views') . ': ' . $post->views_count}}</div>
+                    <div class="catalog-lable">{{__('ui.views') . ': ' . $post->views->count()}}</div>
                     <!--date-->
                     <div class="catalog-date">{{$post->created_at->diffForHumans()}}</div>
                 </div>

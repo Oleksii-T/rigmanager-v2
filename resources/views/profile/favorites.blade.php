@@ -9,7 +9,7 @@
 @section('bc')
     @if ($category)
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a itemprop="item" href="{{route('profile.posts')}}"><span itemprop="name">@lang('ui.myPosts')</span></a>
+            <a itemprop="item" href="{{route('profile.favorites')}}"><span itemprop="name">@lang('ui.favourites')</span></a>
             <meta itemprop="position" content="2" />
         </li>
         @foreach ($category?->parents(true)??[] as $category)
@@ -17,14 +17,14 @@
                 @if ($loop->last)
                     <span itemprop="name">{{$category->name}}</span>
                 @else
-                    <a itemprop="item" href="{{route('profile.posts', $category)}}"><span itemprop="name">{{$category->name}}</span></a>
+                    <a itemprop="item" href="{{route('profile.favorites', $category)}}"><span itemprop="name">{{$category->name}}</span></a>
                 @endif
                 <meta itemprop="position" content="{{$loop->index + 2}}" />
             </li>
         @endforeach
     @else
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <span itemprop="name">@lang('ui.myPosts')</span>
+            <span itemprop="name">@lang('ui.favourites')</span>
             <meta itemprop="position" content="2" />
         </li>
     @endif
@@ -33,14 +33,14 @@
 @section('content')
     <span class="hidden" data-categoryid="{{$category->id??null}}" page-data></span>
     <div class="main-block">
-        <x-profile.nav active='posts'/>
+        <x-profile.nav active='fav'/>
         <div class="content">
             <h1>
-                @lang('ui.myPosts')
+                @lang('ui.favourites')
                 (<span class="orange searched-amount">{{$posts->total()}}</span>)
             </h1>
             @if ($posts->count() == 0)
-                <p>@lang('ui.noMyPosts')</p>
+                <p>{{__('ui.noFavPosts')}}</p>
             @else
                 <div class="cabinet-line filter-block">
                     <div class="cabinet-search">
@@ -59,30 +59,14 @@
                         </select>
                     </div>
                     <div class="select-block">
-                        Selected:
-                        <span class="selected-posts-count">0</span>
-                    </div>
-                    <div class="select-block">
-                        Select All
-                        <div class="check-item">
-                            <input type="checkbox" class="check-input" id="check-all" value="1">
-                            <label for="check-all" class="check-label"></label>
-                        </div>
-                    </div>
-                    <div class="select-block">
-                        <select class="styled apply-selected-action">
-                            <option value="">Actions</option>
-                            <option value="activete">Activete</option>
-                            <option value="deactivate">Deactivete</option>
-                            <option value="delete">Delete</option>
-                        </select>
+                        <a href="{{route('profile.clear-favs')}}" class="clear-favs">Clear All</a> {{-- //! TRANSLATE --}}
                     </div>
                 </div>
                 @if (count($categories))
                     <div class="sorting">
                         @foreach ($categories as $c)
                             <div class="sorting-col">
-                                <a href="{{route('profile.posts', $c)}}" class="sorting-item">
+                                <a href="{{route('profile.favorites', $c)}}" class="sorting-item">
                                     {{$c->name}}
                                     <span class="sorting-num">{{$c->all_posts_count}}</span>
                                 </a>
@@ -91,7 +75,7 @@
                     </div>
                 @endif
                 <div class="searched-content">
-                    <x-profile.items :posts="$posts"/>
+                    <x-profile.favorites :posts="$posts"/>
                 </div>
             @endif
         </div>

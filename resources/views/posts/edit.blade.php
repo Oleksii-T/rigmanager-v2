@@ -90,9 +90,9 @@
 
                                     <label class="label">@lang('ui.locationRegion')</label>
                                     <div class="select-block">
-                                        <select class="styled" name="country select2">
-                                            <option value="1">Todo</option>
-                                        </select>
+                                        @foreach (countries() as $key => $name)
+                                            <option value="{{$key}}" @selected($post->country == $key)>{{$name}}</option>
+                                        @endforeach
                                     </div>
 
                                     <label class="label">@lang('ui.chooseManufacturer')</label>

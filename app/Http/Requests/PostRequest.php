@@ -37,7 +37,7 @@ class PostRequest extends FormRequest
             'is_urgent' => ['nullable', 'boolean'],
             'is_import' => ['nullable', 'boolean'],
             'amount' => ['nullable', 'integer', 'min:1', 'max:9999999'],
-            'location' => ['nullable'],
+            'country' => ['nullable'],
             'manufacturer' => ['nullable', 'string', 'max:255'],
             'manufacture_date' => ['nullable', 'string', 'max:255'],
             'part_number' => ['nullable', 'string', 'max:255'],

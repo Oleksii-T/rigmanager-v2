@@ -20,7 +20,7 @@
                             <div class="catalog-lable catalog-region">{{$post->region_readable}}</div>
                         @endif
                         <!--views-->
-                        <div class="catalog-lable"><a href="#popup-views-{{$post->id}}" data-fancybox>{{__('ui.views') . ': ' . $post->views_count}}</a></div>
+                        <div class="catalog-lable"><a href="{{route('posts.views', $post)}}" class="show-post-views">{{__('ui.views') . ': ' . $post->views->count()}}</a></div>
                         <!--date-->
                         <div class="catalog-date">{{$post->created_at->diffForHumans()}}</div>
                     </div>
@@ -76,35 +76,11 @@
                     </div>
                 </div>
             </div>
-            <!--pop up with views statictics-->
-            <div id="popup-views-{{$post->id}}" class="popup">
-                <div class="popup-title">{{__('ui.totalUniqViews') . ': ' . $post->views_count}}</div>
-                <div class="popup-prod-info">
-                    @foreach ($post->compileViews() as $view)
-                        <div class="prod-info-item contact-phone">
-                            <div class="prod-info-name">{{$view['name']==null ? __('ui.guest') : $view['name']}}:</div>
-                            <div class="prod-info-text">{{__('ui.views') . ': ' . $view['times']}}</div>
-                            <div class="prod-info-text">{{__('ui.lastView') . ': ' . Carbon\Carbon::parse($view['last_date'])->isoFormat('YYYY, MMMM D')}}</div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            <!--pop up delete-->
-            <div id="popup-delete-post-{{$post->id}}" class="popup">
-                <div class="popup-title">{{__('ui.sure?')}}</div>
-                <div class="sure-dialog">
-                    <form method="POST" action="{{route('posts.destroy', $post->id)}}">
-                        @csrf
-                        @method('DELETE')
-                        <button class="">{{__('ui.deletePost')}}</button>
-                    </form>
-                </div>
-            </div>
         @endforeach
     </div>
     <div class="pagination-field">
         {{ $posts->appends(request()->input())->links() }}
     </div>
 @else
-    <p>No posts found</p>
+    <p>@lang('ui.noMyPosts')</p>
 @endif
