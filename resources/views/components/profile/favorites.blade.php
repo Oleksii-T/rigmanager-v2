@@ -22,9 +22,7 @@
                             </svg>
                         </a>
                         <!--region-->
-                        @if ($post->region_encoded!=0)
-                            <div class="catalog-lable catalog-region">{{$post->region_readable}}</div>
-                        @endif
+                        <div class="catalog-lable catalog-region">{{$post->country_readable}}</div>
                         <!--views-->
                         <div class="catalog-lable">{{__('ui.views') . ': ' . $post->views->count()}}</div>
                         <!--date-->
@@ -41,10 +39,6 @@
                             <!--urgent-->
                             @if ($post->is_urgent)
                                 <div class="catalog-lable orange">{{__('ui.urgent')}}</div>
-                            @endif
-                            <!--import-->
-                            @if ($post->is_import)
-                                <div class="catalog-lable lable-import orange">{{__('ui.import')}}</div>
                             @endif
                         </div>
                     </div>

@@ -47,6 +47,18 @@
                             <div data-input="phone" class="form-error"></div>
                             <div class="form-note">@lang('ui.phoneHelp')</div>
 
+                            <label class="label">@lang('ui.country')</label>
+                            <select class="select2" name="country">
+                                @foreach (countries() as $key => $name)
+                                    <option value="{{$key}}" @selected($currentUser->country == $key)>{{$name}}</option>
+                                @endforeach
+                            </select>
+                            <div data-input="country" class="form-error"></div>
+
+                            <label class="label">@lang('ui.bio')</label>
+                            <textarea name="bio">{{$currentUser->bio}}</textarea>
+                            <div data-input="country" class="form-error"></div>
+
                             <div class="edit-ava show-uploaded-file-preview">
                                 <img class="edit-ava-img custom-file-preview" src="{{$currentUser->avatar->url ?? asset('icons/emptyAva.svg')}}" alt="">
                                 <div class="edit-ava-button">

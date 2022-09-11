@@ -215,12 +215,6 @@
                                     <label for="ch22" class="check-label">@lang('ui.makePostUrgent')</label>
                                 </div>
                             </div>
-                            <div class="check-block">
-                                <div class="check-item">
-                                    <input type="checkbox" name="is_import" class="check-input" id="ch23" value="1" @checked($post->is_import)>
-                                    <label for="ch23" class="check-label">@lang('ui.importExport')</label>
-                                </div>
-                            </div>
                         </div>
                         <div class="form-button-block">
                             <button type="submit" class="button">@lang('ui.publish')</button>

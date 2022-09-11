@@ -93,21 +93,8 @@
                         <label for="is-urgent-1" class="check-label">@lang('ui.yes')</label>
                     </div>
                     <div class="check-item">
-                        <input type="checkbox" class="check-input"  name="is_urgent" id="is-urgent-0" value="0" @checked(in_array($item, request()->is_import??[]))>
+                        <input type="checkbox" class="check-input"  name="is_urgent" id="is-urgent-0" value="0" @checked(in_array($item, request()->is_urgent??[]))>
                         <label for="is-urgent-0" class="check-label">@lang('ui.no')</label>
-                    </div>
-                </div>
-
-                <!--import-->
-                <label class="label">@lang('ui.importExport')</label>
-                <div id="import" class="check-block">
-                    <div class="check-item">
-                        <input type="checkbox" class="check-input" name="is_import" id="is-import-1" value="1">
-                        <label for="is-import-1" class="check-label">@lang('ui.yes')</label>
-                    </div>
-                    <div class="check-item">
-                        <input type="checkbox" class="check-input" name="is_import" id="is-import-0" value="0">
-                        <label for="is-import-0" class="check-label">@lang('ui.no')</label>
                     </div>
                 </div>
 

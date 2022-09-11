@@ -19,17 +19,6 @@ class PostSeeder extends Seeder
     {
         $posts = Post::factory()
             ->has(
-                Attachment::factory()->group('images')->state(
-                    function (array $attributes, Post $post) {
-                        return [
-                            'attachmentable_id' => $post->id,
-                            'attachmentable_type' => Post::class
-                        ];
-                    }
-                ),
-                'images'
-            )
-            ->has(
                 Translation::factory()->locale('en')->field('title')->text(30)->state(
                     function (array $attributes, Post $post) {
                         return [

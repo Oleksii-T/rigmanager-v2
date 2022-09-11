@@ -82,7 +82,7 @@
                                     <div class="select-block">
                                         <select class="select2" name="country">
                                             @foreach (countries() as $key => $name)
-                                                <option value="{{$key}}">{{$name}}</option>
+                                                <option value="{{$key}}" @selected($currentUser->country == $key)>{{$name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -178,12 +178,6 @@
                                 <div class="check-item">
                                     <input type="checkbox" name="is_urgent" class="check-input" id="ch22" value="1">
                                     <label for="ch22" class="check-label">@lang('ui.makePostUrgent')</label>
-                                </div>
-                            </div>
-                            <div class="check-block">
-                                <div class="check-item">
-                                    <input type="checkbox" name="is_import" class="check-input" id="ch23" value="1">
-                                    <label for="ch23" class="check-label">@lang('ui.importExport')</label>
                                 </div>
                             </div>
                         </div>

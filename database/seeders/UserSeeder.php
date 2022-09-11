@@ -23,18 +23,21 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'name' => 'Admin',
+                'country' => 'ua',
                 'password' => Hash::make('admin@mail.com'),
                 'email' => 'admin@mail.com',
                 'email_verified_at' => now()
             ],
             [
                 'name' => 'User',
+                'country' => 'ch',
                 'password' => Hash::make('user@mail.com'),
                 'email' => 'user@mail.com',
                 'email_verified_at' => now(),
             ],
             [
                 'name' => 'User 1',
+                'country' => 'ru',
                 'password' => Hash::make('user1@mail.com'),
                 'email' => 'user1@mail.com'
             ],

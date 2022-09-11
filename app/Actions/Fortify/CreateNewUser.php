@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Stevebauman\Location\Facades\Location;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -35,6 +36,7 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         return User::create([
+            'country' => strtolower(Location::get()->countryCode),
             'name' => $input['name'],
             'email' => $input['email'],
             'phone' => $input['phone'],

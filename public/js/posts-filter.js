@@ -7,7 +7,6 @@ let params = {
     conditions: [],
     types: [],
     is_urgent: [],
-    is_import: [],
     search: '',
     sorting: 'latest'
 };

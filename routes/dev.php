@@ -20,17 +20,6 @@ if (config('app.env') == 'production') {
 
 Route::get('test', function () {
     // some testing code
-    $cs = [
-        'ua',
-        'cn',
-        'ru',
-        'us',
-    ];
-    foreach (Post::all() as $p) {
-        $p->update([
-            'country' => $cs[array_rand($cs)]
-        ]);
-    }
 
     dd('done');
 });

@@ -19,8 +19,8 @@
                             <path class="cls-1" d="M340,0A123.88,123.88,0,0,0,232,63.2,123.88,123.88,0,0,0,124,0C55.52,0,0,63.52,0,132,0,304,232,424,232,424S464,304,464,132C464,63.52,408.48,0,340,0Z"/>
                         </svg>
                     </a>
-                    <!--region-->
-                    <div class="catalog-lable catalog-region">{{$post->country}}</div>
+                    <!--country-->
+                    <div class="catalog-lable catalog-region">{{$post->country_readable}}</div>
                     <!--views-->
                     <div class="catalog-lable">{{__('ui.views') . ': ' . $post->views->count()}}</div>
                     <!--date-->
@@ -37,10 +37,6 @@
                         <!--urgent-->
                         @if ($post->is_urgent)
                             <div class="catalog-lable orange">{{__('ui.urgent')}}</div>
-                        @endif
-                        <!--import-->
-                        @if ($post->is_import)
-                            <div class="catalog-lable lable-import orange">{{__('ui.import')}}</div>
                         @endif
                     </div>
                 </div>

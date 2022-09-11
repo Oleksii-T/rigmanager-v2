@@ -139,16 +139,6 @@
                             <span data-input="is_urgent" class="input-error"></span>
                         </div>
                     </div>
-                    <div class="col-md-2 col-lg-2 col-xl-1">
-                        <div class="form-group">
-                            <label>Import\Export</label>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="is_import" name="is_import" value="1" @checked($post->is_import)>
-                                <label for="is_import" class="custom-control-label">Yes</label>
-                            </div>
-                            <span data-input="is_import" class="input-error"></span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

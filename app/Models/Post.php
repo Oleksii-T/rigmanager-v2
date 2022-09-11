@@ -23,7 +23,6 @@ class Post extends Model
         'duration',
         'is_active',
         'is_urgent',
-        'is_import',
         'amount',
         'country',
         'manufacturer',
@@ -153,6 +152,13 @@ class Post extends Model
     {
         return new Attribute(
             get: fn ($value) => $this->cost ? ('$' . number_format($this->cost, 2)) : null,
+        );
+    }
+
+    public function countryReadable(): Attribute
+    {
+        return new Attribute(
+            get: fn () => trans("countries.$this->country"),
         );
     }
 

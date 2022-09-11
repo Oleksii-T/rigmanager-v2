@@ -15,10 +15,8 @@
                     <div class="catalog-line">
                         <!--type-->
                         <a href="{{route('posts.show', $post)}}" class="catalog-tag">{{\App\Models\Post::typeReadable($post->type)}}</a>
-                        <!--region-->
-                        @if ($post->region_encoded!=0)
-                            <div class="catalog-lable catalog-region">{{$post->region_readable}}</div>
-                        @endif
+                        <!--country-->
+                        <div class="catalog-lable catalog-region">{{$post->country_readable}}</div>
                         <!--views-->
                         <div class="catalog-lable"><a href="{{route('posts.views', $post)}}" class="show-post-views">{{__('ui.views') . ': ' . $post->views->count()}}</a></div>
                         <!--date-->
@@ -35,10 +33,6 @@
                             <!--urgent-->
                             @if ($post->is_urgent)
                                 <div class="catalog-lable orange">{{__('ui.urgent')}}</div>
-                            @endif
-                            <!--import-->
-                            @if ($post->is_import)
-                                <div class="catalog-lable lable-import orange">{{__('ui.import')}}</div>
                             @endif
                         </div>
                     </div>
