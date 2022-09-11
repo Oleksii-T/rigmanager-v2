@@ -113,24 +113,12 @@
                 <!--sorting-->
                 <label class="label">@lang('ui.sort')</label>
                 <div class="radio-block filter-sorting">
-                    <div class="radio-item">
-                        <input type="radio" name="sorting" class="radio-input" id="latest" value="latest" checked>
-                        <label for="latest" class="radio-label">@lang('ui.sortNew')</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" name="sorting" class="radio-input" id="cheapest" value="cheapest">
-                        <label for="cheapest" class="radio-label">@lang('ui.sortCheap')</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" name="sorting" class="radio-input" id="expensive" value="expensive">
-                        <label for="expensive" class="radio-label">@lang('ui.sortExpensive')</label>
-                    </div>
-                    {{-- @if (auth()->check() && auth()->user()->is_pro) --}}
+                    @foreach (\App\Models\Post::getSorts() as $key => $name)
                         <div class="radio-item">
-                            <input type="radio" name="sorting" class="radio-input" id="popular" value="popular">
-                            <label for="popular" class="radio-label">@lang('ui.sortViews')</label>
+                            <input type="radio" name="sorting" class="radio-input" id="{{$key}}" value="{{$key}}" @checked($loop->first)>
+                            <label for="{{$key}}" class="radio-label">{{$name}}</label>
                         </div>
-                    {{-- @endif --}}
+                    @endforeach
                 </div>
 
             </div>
@@ -170,5 +158,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{asset('js/search.js')}}"></script>
+    <script src="{{asset('js/posts-filter.js')}}"></script>
 @endsection

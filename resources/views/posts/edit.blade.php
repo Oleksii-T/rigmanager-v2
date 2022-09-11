@@ -9,7 +9,7 @@
 @section('bc')
     <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
         <span itemprop="name"></span>
-        <a itemprop="item" href="#"><span itemprop="name">@lang('ui.myPosts')</span></a>
+        <a itemprop="item" href="{{route('profile.posts')}}"><span itemprop="name">@lang('ui.myPosts')</span></a>
         <meta itemprop="position" content="2" />
     </li>
     <li class="crop-bc-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">

@@ -45,12 +45,13 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
             Route::prefix('posts')->name('posts.')->group(function () {
                 Route::get('create', [PostController::class, 'create'])->name('create');
-                Route::post('', [PostController::class, 'store'])->name('store');
                 Route::get('{post}/edit', [PostController::class, 'edit'])->name('edit');
-                Route::put('{post}', [PostController::class, 'update'])->name('update');
-                Route::post('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
-                Route::post('{post}/view', [PostController::class, 'view']);
                 Route::get('{post}/contacts', [PostController::class, 'contacts']);
+                Route::post('', [PostController::class, 'store'])->name('store');
+                Route::put('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
+                Route::put('{post}/view', [PostController::class, 'view']);
+                Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle');
+                Route::put('{post}', [PostController::class, 'update'])->name('update');
                 Route::delete('{post}', [PostController::class, 'destroy'])->name('destroy');
             });
 
@@ -59,6 +60,8 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
                 Route::put('/', [ProfileController::class, 'update'])->name('update');
                 Route::put('password', [ProfileController::class, 'password'])->name('password');
+                Route::post('posts/action', [ProfileController::class, 'action']);
+                Route::get('posts/{category?}', [ProfileController::class, 'posts'])->name('posts');
             });
 
         });

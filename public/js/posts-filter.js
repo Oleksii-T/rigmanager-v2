@@ -1,16 +1,18 @@
+let params = {
+    page: 1,
+    curreny: 'usd',
+    cost_from: null,
+    cost_to: null,
+    country: null,
+    conditions: [],
+    types: [],
+    is_urgent: [],
+    is_import: [],
+    search: '',
+    sorting: 'latest'
+};
+
 $(document).ready(function () {
-    let params = {
-        page: 1,
-        curreny: 'usd',
-        cost_from: null,
-        cost_to: null,
-        country: null,
-        conditions: [],
-        types: [],
-        is_urgent: [],
-        is_import: [],
-        sorting: 'latest'
-    };
     let request;
     let timeout;
 
@@ -27,8 +29,10 @@ $(document).ready(function () {
     });
 
     $('.filter-block input').change(function (e) {
-        console.log('filter!'); //! LOG
         let name = $(this).attr('name');
+        if (!name || params[name] == undefined) {
+            return;
+        }
         let val = $(this).val();
         let filterType = $(this).attr('type');
         if (filterType=='checkbox') {
@@ -41,7 +45,16 @@ $(document).ready(function () {
         } else if (filterType=='radio') {
             params[name] = val;
         }
-        // console.log(params, name, val); //! LOG
+        filter();
+    });
+
+    $('.filter-block select').on('selectmenuchange', function() {
+        let name = $(this).attr('name');
+        if (!name) {
+            return;
+        }
+        let val = $(this).val();
+        params[name] = val;
         filter();
     });
 
@@ -53,6 +66,10 @@ $(document).ready(function () {
         filter();
     })
 
+    $(document).on('posts:filter', function(e) {
+        filter();
+    });
+
     function getParameterByName(name, url) {
         name = name.replace(/[\[\]]/g, '\\$&');
         var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -63,6 +80,7 @@ $(document).ready(function () {
     }
 
     function filter() {
+        console.log('filter'); //! LOG
         clearTimeout(timeout);
         prevParams = JSON.parse(JSON.stringify(params));
         fullLoader();
@@ -76,16 +94,17 @@ $(document).ready(function () {
             success: (response)=>{
                 request = null;
                 $('.searched-content').empty().append(response.data.view);
+                $(document).trigger('posts:filtered');
                 $('.searched-amount').text(response.data.total);
                 fullLoader(false);
             },
             error: function(response) {
                 if (response.statusText == 'abort') {
+                    // reqeust been aborted by js
                     return;
                 }
                 request = null;
-                showPopUp(null, null, false);
-                fullLoader(false);
+                showServerError(response);
             }
         });
     }

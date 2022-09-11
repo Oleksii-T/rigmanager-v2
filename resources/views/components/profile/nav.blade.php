@@ -4,7 +4,7 @@
         <div class="side-title">@lang('ui.cabinet')</div>
         <ul class="side-list">
             <li><a href="{{route('profile.index')}}" class="{{$active=="profile" ? 'active' : ''}}">@lang('ui.profileInfo')</a></li>
-            <li><a href="" class="{{$active=="posts" ? 'active' : ''}}">@lang('ui.myPosts')</a></li>
+            <li><a href="{{route('profile.posts')}}" class="{{$active=="posts" ? 'active' : ''}}">@lang('ui.myPosts')</a></li>
             <li><a href="" class="{{$active=="fav" ? 'active' : ''}}">@lang('ui.favourites')</a></li>
             <li><a href="" class="{{$active=="mailer" ? 'active' : ''}}">@lang('ui.mailer')</a></li>
             <li><a href="" class="{{$active=="subscription" ? 'active' : ''}}">@lang('ui.mySubscription')</a></li>

@@ -4,29 +4,20 @@ $(document).ready(function() {
     let documents = [];
     let removedDocuments = [];
     let maxImages = 8;
-    let maxDocuments= 8;
+    let maxDocuments = 8;
 
-    $('.upload-images').sortable({
-        items: '> div:not(:last-child)',
-        stop: function() {
-            let sorted = [];
-            $('.upload-images .upload-images_wrapper.user-image').each(function(i) {
-                let index = $(this).data('index')
-                sorted.unshift(images[index]);
-            });
-            images = sorted;
-            showImages();
-        }
-    });
+    /* show page */
+    /*************/
 
     //count views
-    let id = $('[post-data]').data('id');
+    let id = $('[page-data]').data('postid');
     if (id) {
         $.ajax({
             type: "POST",
             url: `/posts/${id}/view`,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+            data: {
+                _method: 'PUT',
+                _token: $('meta[name=csrf-token]').attr('content')
             },
         });
     }
@@ -86,6 +77,9 @@ $(document).ready(function() {
         });
     });
 
+    /* create\edit page */
+    /********************/
+
     // submit form
     $('#form-post').submit(function(e) {
         e.preventDefault();
@@ -127,6 +121,19 @@ $(document).ready(function() {
             }
         });
     })
+
+    $('.upload-images').sortable({
+        items: '> div:not(:last-child)',
+        stop: function() {
+            let sorted = [];
+            $('.upload-images .upload-images_wrapper.user-image').each(function(i) {
+                let index = $(this).data('index')
+                sorted.unshift(images[index]);
+            });
+            images = sorted;
+            showImages();
+        }
+    });
 
     // load drag&drop images
     $('.upload-images_empty').on('drop dragdrop',function(e){
@@ -243,7 +250,7 @@ $(document).ready(function() {
     // save documents localy
     function handleDocuments(files) {
         files.forEach(file => {
-            if (documents.length >= maxImages) {
+            if (documents.length >= maxDocuments) {
                 showToast('Documents limit is reached', false);
                 return;
             }
@@ -268,4 +275,146 @@ $(document).ready(function() {
             i++;
         });
     }
+
+    /* my posts page */
+    /*****************/
+    let selectedAll = false;
+    let selected = [];
+
+    $('#check-all').change(function(e) {
+        e.preventDefault();
+        let val = $(this).is(':checked');
+        let checks = $('.catalog-item .check-item input');
+        selectedAll = val;
+        selected = [];
+        checks.each(function(i) {
+            $(this).prop('checked', val);
+        });
+        let total = val ? $('.searched-amount').text() : selected.length;
+        $('.selected-posts-count').text(total);
+    })
+
+    $(document).on('click', '.catalog-item .check-item input', function (e) {
+        let id = $(this).closest('.catalog-item').data('id');
+        let i = selected.indexOf(id);
+        let found = i > -1;
+        if (found) {
+            selected.splice(i, 1);
+        } else {
+            selected.push(id);
+        }
+        if (selectedAll) {
+            $('#check-all').prop('checked', false);
+            let total = +$('.searched-amount').text();
+            $('.selected-posts-count').text(total-selected.length);
+        } else {
+            $('.selected-posts-count').text(selected.length);
+        }
+    })
+
+    // visualize checked selected posts
+    $(document).on('posts:filtered', function(e) {
+        e.preventDefault();
+        $('.catalog-item').each(function(i) {
+            let id = $(this).data('id');
+            let input = $(this).find('.check-item input');
+            let found = selected.indexOf(id) > -1;
+            if (selectedAll && !found) {
+                input.prop('checked', true);
+            } else if (!selectedAll && found) {
+                input.prop('checked', true);
+            }
+        });
+    });
+
+    $('.apply-selected-action').on('selectmenuchange', function(e) {
+        e.preventDefault();
+        let val = $(this).val();
+        if (!val) {
+            return;
+        }
+        $(this).val('');
+        $(this).selectmenu('refresh');
+        fullLoader();
+
+        let filters = params;
+        filters.category = $('[page-data]').data('categoryid');
+
+        $.ajax({
+            url: '/profile/posts/action',
+            type: 'post',
+            data: {
+                action: val,
+                all: +selectedAll,
+                selected: selected,
+                filters: filters,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: (response)=>{
+                showToast(response.message);
+                $(document).trigger('posts:filter');
+            },
+            error: function(response) {
+                showServerError(response);
+            }
+        });
+    })
+
+    $(document).on('click', '.bar-view', function (e) {
+        e.preventDefault();
+        fullLoader();
+        let url = $(this).attr('href');
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                _method: 'PUT',
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: (response)=>{
+                showToast(response.message);
+                $(document).trigger('posts:filter');
+            },
+            error: function(response) {
+                showServerError(response);
+            }
+        });
+    })
+
+    $(document).on('click', '.bar-delete', async function (e) {
+        e.preventDefault();
+        let url = $(this).attr('href');
+
+        let res = await swal.fire({
+            title: 'Are you sure?',//! TRANSLATE
+            text: "You won't be able to revert this!",//! TRANSLATE
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'//! TRANSLATE
+        });
+
+        if (!res.isConfirmed) {
+            return;
+        }
+
+        fullLoader();
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                _method: 'DELETE',
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: (response)=>{
+                showToast(response.message);
+                $(document).trigger('posts:filter');
+            },
+            error: function(response) {
+                showServerError(response);
+            }
+        });
+    })
 });

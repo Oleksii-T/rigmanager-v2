@@ -153,15 +153,28 @@ class Post extends Model
         );
     }
 
-    public function thumbnail()
+    public function thumbnail($defaultImg=true)
     {
-        // TODO make login
-        return $this->images()->first();
+        $img = $this->images->first();
+        if (!$img) {
+            if ($defaultImg) {
+                return asset('icons/no-image.svg');
+            }
+
+            return null;
+        }
+
+        return $img->url;
     }
 
     public function original($field)
     {
         return $this->translated($field, $this->origin_lang);
+    }
+
+    public function compileViews()
+    {
+        return [];
     }
 
     public static function dataTable($query)
@@ -194,6 +207,26 @@ class Post extends Model
             })
             ->rawColumns(['user', 'category', 'is_active', 'action'])
             ->make(true);
+    }
+
+    public static function allSlugs($ignore=null)
+    {
+        return Translation::query()
+            ->where('translatable_type', self::class)
+            ->where('translatable_id', '!=', $ignore)
+            ->where('field', 'slug')
+            ->pluck('value')
+            ->toArray();
+    }
+
+    public static function getSorts()
+    {
+        return [
+            'latest' => trans('ui.sortNew'),
+            'cheap' => trans('ui.sortCheap'),
+            'expensive' => trans('ui.sortExpensive'),
+            'views' => trans('ui.sortViews')
+        ];
     }
 
     public static function typeReadable($type)
@@ -243,6 +276,65 @@ class Post extends Model
                 return trans('ui.activeTwoMonth');
             case 'unlim':
                 return trans('ui.activeForever');
+        }
+    }
+
+    public static function applyFilters($posts, $filters)
+    {
+        $conditions = $filters['conditions']??[];
+        $types = $filters['types']??[];
+        $legalTypes = $filters['legal_types']??[];
+        $urgent = $filters['is_urgent'][0]??null;
+        $import = $filters['is_import'][0]??null;
+        $sort = $filters['sorting']??null;
+        $category = $filters['category']??null;
+        $search = $filters['search']??null;
+        if (!($category instanceof Category)) {
+            $category = Category::find($category);
+        }
+
+        if ($category) {
+            $posts->whereIn('category_id', $category->getChildsIds());
+        }
+
+        if ($search) {
+            $posts->whereHas('translations', function ($q) use ($search){
+                $q->whereIn('field', ['title', 'description'])->where('value', 'like', "%$search%");
+            });
+        }
+
+        if ($conditions && count($conditions) < count(Post::CONDITIONS)) {
+            $posts->whereIn('condition', $conditions);
+        }
+
+        if ($types && count($types) < count(Post::TYPES)) {
+            $posts->whereIn('type', $types);
+        }
+
+        if ($urgent !== null) {
+            $posts->where('is_urgent', $urgent);
+        }
+
+        if ($import !== null) {
+            $posts->where('is_import', $import);
+        }
+
+        switch ($sort) {
+            case 'latest':
+                $posts->latest();
+                break;
+            case 'cheap':
+                $posts->whereNotNull('cost')->orderBy('cost_usd');
+                break;
+            case 'expensive':
+                $posts->whereNotNull('cost')->orderByDesc('cost_usd');
+                break;
+            case 'views':
+                $posts->orderByDesc('views_count');
+                break;
+            default:
+                $posts->latest();
+                break;
         }
     }
 }

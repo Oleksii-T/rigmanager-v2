@@ -15,7 +15,7 @@
 
 @section('content')
     <div class="main-block">
-        <x-profile-nav active=''/>
+        <x-profile.nav active=''/>
         <div class="content">
             <h1>@lang('ui.verifyNoticeThank')</h1>
             <p>@lang('ui.verifyNoticeBody')</p>

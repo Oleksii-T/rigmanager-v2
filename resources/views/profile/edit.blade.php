@@ -19,7 +19,7 @@
 
 @section('content')
     <div class="main-block">
-        <x-profile-nav active='profile'/>
+        <x-profile.nav active='profile'/>
         <div class="content">
             <h1>@lang('ui.profileEditing')</h1>
             <div class="profile-edit">

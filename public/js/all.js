@@ -405,6 +405,9 @@ function fullLoader(show=true) {
 
 // general error logic, after ajax form submit been processed
 function showServerError(response) {
+    loading(false);
+    fullLoader(false);
+
     if (response.status == 422) {
         let r = response.responseJSON ?? JSON.parse(response.responseText)
         for ([field, value] of Object.entries(r.errors)) {
@@ -423,7 +426,9 @@ function showServerError(response) {
             errorElement.html(errorText);
         }
     } else {
-        showPopUp(null, null, false);
+        let msg = response.responseJSON?.message;
+        msg = msg ? msg : response.statusText;
+        showPopUp(null, msg ? msg : null, false);
     }
 }
 
@@ -438,31 +443,6 @@ function showServerSuccess(response) {
     } else {
         showPopUp(null, response.message, false);
     }
-}
-
-// show error from submit post with dropzone
-function showErrorsFromDropzone(dz, error) {
-	$("#form-post button[type=submit]").removeClass('loading');
-	$('.post-publishing-alert').addClass('hidden');
-	// parse error messages
-	if (typeof error['message'] != 'undefined' && error['message'] == "The given data was invalid.") { // if it is error from input fields
-		showToast(false, "{{ __('messages.postInputErrors') }}");
-		var invalidInputErrors = error['errors'];
-		$.each(invalidInputErrors, function(key, value) {
-			$('.'+key+'.dz-error').text(value);
-			$('input[name='+key+']').addClass('form-error');
-			$('textarea[name='+key+']').addClass('form-error');
-			$('select[name='+key+']').addClass('form-error');
-			$('.'+key+'.dz-error').removeClass('hidden');
-		});
-	} else if (typeof error['message'] != 'undefined' && error['message'] != '') {// if it is custom error from post upload no check for 400 error code
-		showToast(false, error['message']);
-	} else if (error == 'Request timedout after 10000 seconds') {
-		window.location="{{loc_url(route('profile.posts'))}}";
-	} else {
-		showToast(false, "{{__('messages.error')}}");
-	}
-	dz.removeAllFiles();
 }
 
 // faq dropdown
@@ -493,8 +473,9 @@ $('.add-to-fav').click(function(e) {
     $.ajax({
         url: url,
         type: 'post',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+        data: {
+            _method: 'PUT',
+            _token: $('meta[name=csrf-token]').attr('content')
         },
         success: (response)=>{
             showToast(response.message);

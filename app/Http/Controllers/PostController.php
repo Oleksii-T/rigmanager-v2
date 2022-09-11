@@ -53,6 +53,9 @@ class PostController extends Controller
         $input['is_active']= true;
         $input['origin_lang'] = 'en'; //TODO
         $input['cost_usd'] = $input['cost']??null; //TODO
+        $input['slug'] = [
+            'en' => makeSlug($input['title'], Post::allSlugs())
+        ];
         $input['title'] = [
             'en' => $input['title']
         ];
@@ -64,7 +67,9 @@ class PostController extends Controller
         $post->addAttachment($input['images']??[], 'images');
         $post->addAttachment($input['documents']??[], 'documents');
 
-        return $this->jsonSuccess(trans('messages.post.created'), [
+        flash(trans('messages.post.created')); //! TRANSLATE
+
+        return $this->jsonSuccess('', [
             'redirect' => route('posts.show', $post)
         ]);
     }
@@ -87,6 +92,9 @@ class PostController extends Controller
         $input['title'] = [
             'en' => $input['title']
         ];
+        $input['slug'] = [
+            'en' => makeSlug($input['title'], Post::allSlugs($post->id))
+        ];
         $input['description'] = [
             'en' => $input['description']
         ];
@@ -97,7 +105,9 @@ class PostController extends Controller
         $post->addAttachment($input['images']??[], 'images');
         $post->addAttachment($input['documents']??[], 'documents');
 
-        return $this->jsonSuccess(trans('messages.post.updated'), [
+        flash(trans('messages.post.updated')); //! TRANSLATE
+
+        return $this->jsonSuccess('', [
             'redirect' => route('posts.show', $post)
         ]);
     }
@@ -167,8 +177,34 @@ class PostController extends Controller
         return;
     }
 
+    public function toggle(Request $request, Post $post)
+    {
+        $user = auth()->user();
+
+        abort_if($post->user_id != $user->id, 403);
+
+        if ($post->is_active) {
+            $post->is_active = false;
+            $message = 'Post deactivated';//! TRANSLATE
+        } else {
+            $post->is_active = true;
+            $message = 'Post activated';//! TRANSLATE
+        }
+
+        $post->update();
+
+        return $this->jsonSuccess($message);
+    }
+
     public function destroy(Request $request, Post $post)
     {
+        $user = auth()->user();
+
+        abort_if($post->user_id == $user->id, 403);
+
         $post->delete();
+
+
+        return $this->jsonSuccess('Post deleted'); //! TRANSLATE
     }
 }

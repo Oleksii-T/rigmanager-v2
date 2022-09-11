@@ -26,7 +26,7 @@
 @endsection
 
 @section('content')
-    <span class="hidden" data-id="{{$post->id}}" post-data></span>
+    <span class="hidden" data-postid="{{$post->id}}" page-data></span>
 
     @if (!$post->is_active)
         <div class="outdated-post-alert">

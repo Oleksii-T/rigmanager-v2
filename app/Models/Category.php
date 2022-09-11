@@ -76,7 +76,7 @@ class Category extends Model
      */
     public function postsAll($get=false)
     {
-        $res = Post::whereIn('category_id', $this->getCategoriesIds());
+        $res = Post::whereIn('category_id', $this->getChildsIds());
 
         return $get ? $res->get() : $res;
     }
@@ -95,7 +95,7 @@ class Category extends Model
      */
     public function childsAll($get=false)
     {
-        $ids = $this->getCategoriesIds();
+        $ids = $this->getChildsIds();
         unset($ids[array_search($this->id, $ids)]);
         $res = self::whereIn('id', $ids);
 
@@ -171,7 +171,10 @@ class Category extends Model
         return $result;
     }
 
-    private function getCategoriesIds()
+    /**
+     * get all childs ids including current
+     */
+    public function getChildsIds()
     {
         $array = array($this->id);
         if ($this->childs->isEmpty()) {

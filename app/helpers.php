@@ -54,3 +54,8 @@ if (!function_exists('dlog')) {
         return \Log::channel('dev')->info($text, $array);
     }
 }
+if (!function_exists('flash')) {
+    function flash(string $message, $type=true) {
+        session()->flash($type ? 'message-success' : 'messsage-error', $message);
+    }
+}
