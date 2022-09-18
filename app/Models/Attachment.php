@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Yajra\DataTables\DataTables;
+
 class Attachment extends Model
 {
     use HasFactory;
@@ -27,6 +29,16 @@ class Attachment extends Model
         'url'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            $disk = self::disk($model->type);
+            Storage::disk($disk)->delete($model->name);
+        });
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
@@ -47,21 +59,34 @@ class Attachment extends Model
         }
     }
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($model) {
-            $disk = self::disk($model->type);
-            Storage::disk($disk)->delete($model->name);
-        });
-    }
-
     public function url(): Attribute
     {
         return new Attribute(
             get: fn ($value) => Storage::disk(self::disk($this->type))->url($this->name),
         );
+    }
+
+    public static function dataTable($query)
+    {
+        return DataTables::of($query)
+            ->addColumn('preview', function ($model) {
+                return $model->type == 'image' ? '<img src="'.$model->url.'" alt="">' : '';
+            })
+            ->addColumn('resource', function ($model) {
+                return $model->attachmentable_type . ': ' . $model->attachmentable_id;
+            })
+            ->editColumn('created_at', function ($model) {
+                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+            })
+            ->addColumn('action', function ($model) {
+                return view('components.admin.actions', [
+                    'model' => $model,
+                    'name' => 'attachments',
+                    'actions' => ['edit']
+                ])->render();
+            })
+            ->rawColumns(['preview', 'action'])
+            ->make(true);
     }
 
     public static function disk($type)

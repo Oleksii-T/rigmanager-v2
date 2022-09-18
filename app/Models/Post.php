@@ -82,7 +82,7 @@ class Post extends Model
         parent::boot();
 
         static::deleting(function ($model) {
-            $model->purgeFiles();
+            $model->purgeAttachments();
             $model->purgeTranslations();
         });
     }
@@ -165,15 +165,8 @@ class Post extends Model
     public function thumbnail($defaultImg=true)
     {
         $img = $this->images->first();
-        if (!$img) {
-            if ($defaultImg) {
-                return asset('icons/no-image.svg');
-            }
 
-            return null;
-        }
-
-        return $img->url;
+        return $img;
     }
 
     public function original($field)

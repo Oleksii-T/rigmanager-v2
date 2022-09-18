@@ -5,7 +5,6 @@
 @section('content_header')
     <x-admin.title
         text="Create Post"
-        bcRoute="admin.posts.create"
     />
 @stop
 

@@ -6,7 +6,6 @@
     <x-admin.title
         text="Users"
         :button="['+ Add User', route('admin.users.create')]"
-        bcRoute="admin.users.index"
     />
 @stop
 

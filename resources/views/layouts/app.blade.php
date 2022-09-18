@@ -26,27 +26,7 @@
 </head>
 <body>
 	<div id="wrapper">
-		<div id="pop-up-container">
-			<!-- Session flash massages -->
-			@if (Session::has('message-success'))
-				<div class="flash flash-success">
-					<p><img src="{{asset('icons/success.svg')}}">{{Session::get('message-success')}}</p>
-					<div class="animated-line"></div>
-				</div>
-			@endif
-			@if (Session::has('message-error'))
-				<div class="flash flash-error">
-					<p><img src="{{asset('icons/warning.svg')}}">{{Session::get('message-error')}}</p>
-					<div class="animated-line"></div>
-				</div>
-			@endif
-			@if (session('status'))
-				<div class="flash flash-success">
-					<p><img src="{{asset('icons/success.svg')}}">{{session('status')}}</p>
-					<div class="animated-line"></div>
-				</div>
-			@endif
-		</div>
+        <div class="hidden" data-flash="{{json_encode(getActiveFlash())}}" flash-notif-data></div>
 		@yield('page-content')
 		<footer class="footer">
 			<div class="holder">

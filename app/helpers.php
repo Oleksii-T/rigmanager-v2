@@ -62,6 +62,37 @@ if (!function_exists('flash')) {
     }
 }
 
+// get current flash to display
+if (!function_exists('getActiveFlash')) {
+    function getActiveFlash() {
+        $m = session()->has('message-success');
+        if ($m) {
+            return [
+                'level' => 'success',
+                'message' => session()->get('message-success')
+            ];
+        }
+
+        $m = session()->has('message-error');
+        if ($m) {
+            return [
+                'level' => 'error',
+                'message' => session()->get('message-error')
+            ];
+        }
+
+        $m = session('status');
+        if ($m) {
+            return [
+                'level' => 'success',
+                'message' => $m
+            ];
+        }
+
+        return null;
+    }
+}
+
 // get localized countries array
 if (!function_exists('countries')) {
     function countries() {

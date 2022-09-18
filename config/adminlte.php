@@ -288,6 +288,16 @@ return [
             'icon' => 'fas fa-fw fa-sitemap',
         ],
         [
+            'text' => 'Partners',
+            'route'  => 'admin.partners.index',
+            'icon' => 'fas fa-fw fa-star',
+        ],
+        [
+            'text' => 'Attachments',
+            'route'  => 'admin.attachments.index',
+            'icon' => 'fas fa-fw fa-folder-open',
+        ],
+        [
             'text' => 'Settings',
             'route'  => 'admin.settings.index',
             'icon' => 'fas fa-fw fa-cogs',

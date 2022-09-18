@@ -6,7 +6,6 @@
     <x-admin.title
         text="Categorys"
         :button="['+ Add Category', route('admin.categories.create')]"
-        bcRoute="admin.categories.index"
     />
 @stop
 

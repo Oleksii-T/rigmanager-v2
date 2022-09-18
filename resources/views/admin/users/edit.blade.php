@@ -5,7 +5,6 @@
 @section('content_header')
     <x-admin.title
         text="Edit User"
-        :bcRoute="['admin.users.edit', $user]"
     />
 @stop
 
@@ -14,18 +13,19 @@
         @csrf
         @method('PUT')
         <div class="card">
-            <div class="card-header">
-                <h5 class="m-0">Basic Info</h5>
-            </div>
             <div class="card-body">
-                <div class="d-flex align-items-center mb-4 user-image-block">
-                    <label class="uploader mr-3 show-uploaded-file-preview">
-                        <input type="file" name="avatar" class="sr-only" id="avatar">
-                        <img src="{{$user->avatar ? $user->avatar : asset('img/empty-avatar.jpeg')}}" class="custom-file-preview" alt="" style="width: 30px">
-                    </label>
-                    <button type="button" class="btn btn-default" data-trigger="#avatar">Change Photo</button>
-                </div>
                 <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group show-uploaded-file-name show-uploaded-file-preview">
+                            <label>Avatar</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="avatar">
+                                <label class="custom-file-label">{{$user->avatar->original_name ?? 'Choose File'}}</label>
+                            </div>
+                            <img src="{{$user->avatar->url??''}}" alt="" class="custom-file-preview">
+                            <span data-input="avatar" class="input-error"></span>
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Name</label>
@@ -58,14 +58,25 @@
                             <span data-input="role" class="input-error"></span>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select class="form-control select2" name="country">
+                                @foreach (countries() as $key => $name)
+                                    <option value="{{$key}}" @selected($user->country == $key)>{{$name}}</option>
+                                @endforeach
+                            </select>
+                            <span data-input="role" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <textarea name="bio" class="form-control">{{$user->bio}}</textarea>
+                            <span data-input="bio" class="input-error"></span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h5 class="m-0">Set Password</h5>
-            </div>
-            <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">

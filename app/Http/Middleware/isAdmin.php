@@ -17,10 +17,7 @@ class isAdmin
     public function handle(Request $request, Closure $next)
     {
         $user = auth()->user();
-        if (!$user){
-            return redirect()->route('admin.login');
-        }
-        if (!$user->isAdmin()) {
+        if (!$user || !$user->isAdmin()) {
             return redirect()->route('index');
         }
 

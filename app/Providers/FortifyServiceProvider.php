@@ -43,17 +43,13 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->instance(LoginResponse::class, new class implements LoginResponse {
             public function toResponse($request)
             {
-                $route = auth()->user()->isAdmin()
-                    ? 'admin.index'
-                    : 'index';
-
                 if (!$request->ajax()) {
-                    return redirect()->route($route);
+                    return redirect()->route('index');
                 }
                 return response()->json([
                     'success' => true,
                     'data' => [
-                        'redirect' => route($route)
+                        'redirect' => route('index')
                     ],
                     'message' => 'Logged in successfully'
                 ]);

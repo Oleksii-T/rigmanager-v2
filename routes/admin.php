@@ -7,19 +7,13 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttachmentController;
+use App\Http\Controllers\Admin\PartnerController;
 
 /*
  *
  * Routes for admin panel
  *
  */
-
-Route::get('/login', function() {
-    if (auth()->check()) {
-        return redirect()->route('admin.index');
-    }
-    return view('admin.auth.login');
-})->name('login');
 
 Route::middleware('is-admin')->group(function () {
 
@@ -36,9 +30,9 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('posts', PostController::class);
 
+    Route::resource('partners', PartnerController::class)->except('show');
+
     Route::resource('users', UserController::class);
 
-    Route::prefix('attachments')->name('attachments.')->group(function () {
-		Route::delete('{attachment}', [AttachmentController::class, 'destroy'])->name('destroy');
-	});
+    Route::resource('attachments', AttachmentController::class)->only('index', 'edit', 'update', 'destroy');
 });

@@ -5,7 +5,6 @@
 @section('content_header')
     <x-admin.title
         text="Settings"
-        bcRoute="admin.settings.index"
     />
 @stop
 

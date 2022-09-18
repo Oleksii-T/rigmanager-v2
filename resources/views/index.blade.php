@@ -50,30 +50,13 @@
             </div>
             <div class="brand-line">
                 <div class="brand-slider">
-                    <div class="brand-slide">
-                        <a href="#" class="brand-item brand-valid"><img src="{{asset('icons/companies/beiken.jpeg')}}" alt=""></a>
-                    </div>
-                    <div class="brand-slide">
-                        <a href="#" class="brand-item block-link"><img src="{{asset('icons/companies/halliburton.svg')}}" alt=""></a>
-                    </div>
-                    <div class="brand-slide">
-                        <a href="#" class="brand-item block-link"><img src="{{asset('icons/companies/ppc.png')}}" alt=""></a>
-                    </div>
-                    <div class="brand-slide">
-                        <a href="#" class="brand-item block-link"><img src="{{asset('icons/companies/schlumberger.svg')}}" alt=""></a>
-                    </div>
-                    <div class="brand-slide">
-                        <a href="#" class="brand-item block-link"><img src="{{App::isLocale('uk') || App::isLocale('ru') ? asset('icons/companies/ubs-uk.svg') : asset('icons/companies/ubs-en.svg')}}" alt=""></a>
-                    </div>
-                    <div class="brand-slide">
-                        <a href="#" class="brand-item block-link"><img src="{{asset('icons/companies/weatherford.svg')}}" alt=""></a>
-                    </div>
-                    <div class="brand-slide">
-                        <a href="#" class="brand-item block-link"><img src="{{asset('icons/companies/dtek.svg')}}" alt=""></a>
-                    </div>
-                    <div class="brand-slide">
-                        <a href="#" class="brand-item block-link"><img src="{{asset('icons/companies/parker-drilling.png')}}" alt=""></a>
-                    </div>
+                    @foreach ($partners as $partner)
+                        <div class="brand-slide">
+                            <a href="{{$partner->url??''}}" class="brand-item {{$partner->link ? 'brand-valid' : 'block-link'}}">
+                                <img src="{{$partner->image->url}}" alt="{{$partner->image->alt}}">
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
             </div>
             <div class="ad-section">

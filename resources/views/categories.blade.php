@@ -33,7 +33,7 @@
                 @foreach ($categories as $category)
                     <div class="category-col">
                         <div class="category-item">
-                            <div class="category-img"><a href="{{route('search.category', $category)}}"><img src="{{$category->image->url}}" alt=""></a></div>
+                            <div class="category-img"><a href="{{route('search.category', $category)}}"><img src="{{$category->image->url}}" alt="{{$category->image->alt}}"></a></div>
                             <div class="category-name"><a href="{{route('search.category', $category)}}">{{$category->name}}</a> (<span class="orange">{{$category->postsAll()->visible()->count()}}</span>)</div>
                             @if ($category->childs->isNotEmpty())
                                 <ul class="category-list">

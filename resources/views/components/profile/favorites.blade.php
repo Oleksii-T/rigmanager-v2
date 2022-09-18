@@ -5,7 +5,7 @@
             <div class="catalog-item" data-id="{{$post->id}}">
                 <!--post-image-->
                 <a href="{{route('posts.show', $post)}}" class="catalog-img">
-                    <img src="{{$post->thumbnail()}}" alt="">
+                    <img src="{{$post->thumbnail()->url ?? asset('icons/no-image.svg')}}" alt="{{$post->title}}" title="{{$post->title}}">
                 </a>
                 <!--all post preview but image-->
                 <div class="catalog-content">

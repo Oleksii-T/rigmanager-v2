@@ -69,7 +69,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function avatar()
     {
-        return $this->morphOne(Attachment::class, 'attachmentable')->where('group', 'avatar');
+        return $this->morphOne(Attachment::class, 'attachmentable');
     }
 
     public function isAdmin()
@@ -96,7 +96,8 @@ class User extends Authenticatable implements MustVerifyEmail
             ->addColumn('action', function ($model) {
                 return view('components.admin.actions', [
                     'model' => $model,
-                    'name' => 'users'
+                    'name' => 'users',
+                    'actions' => ['show', 'edit', 'destroy']
                 ])->render();
             })
             ->rawColumns(['action'])

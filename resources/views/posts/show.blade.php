@@ -54,9 +54,11 @@
             </div>
             @if ( $post->images->isNotEmpty() )
                 <div class="prod-photo">
-                    @foreach ($post->images as $image)
+                    @foreach ($post->images as $i => $image)
                         <div class="prod-photo-slide">
-                            <a href="{{$image->url}}" data-fancybox="prod"><img src="{{$image->url}}" alt=""></a>
+                            <a href="{{$image->url}}" data-fancybox="prod">
+                                <img src="{{$image->url}}" alt="{{$post->title . ' - ' . trans('ui.seo-img-image-suffix'). ' ' . $i+1}}" title="{{$post->title . ' - ' . trans('ui.seo-img-image-suffix'). ' ' . $i+1}}">
+                            </a>
                         </div>
                     @endforeach
                 </div>
@@ -75,7 +77,7 @@
             <div class="prod-author">
                 <div class="prod-author-info">
                     @if ($post->user->avatar)
-                        <img class="prod-author-ava" src="{{$post->user->avatar->url}}" alt="">
+                        <img class="prod-author-ava" src="{{$post->user->avatar->url}}" alt="{{$post->user->avatar->alt}}">
                     @else
                         <img class="prod-author-ava" src="{{asset('icons/emptyAva.svg')}}" alt="">
                     @endif

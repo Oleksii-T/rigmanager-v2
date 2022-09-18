@@ -5,7 +5,6 @@
 @section('content_header')
     <x-admin.title
         text="Create User"
-        bcRoute="admin.users.create"
     />
 @stop
 
@@ -17,14 +16,18 @@
                 <h5 class="m-0">Basic Info</h5>
             </div>
             <div class="card-body">
-                <div class="d-flex align-items-center mb-4 user-image-block">
-                    <label class="uploader mr-3 show-uploaded-file-preview">
-                        <input type="file" name="avatar" class="sr-only" id="avatar">
-                        <img src="{{asset('img/empty-avatar.jpeg')}}" class="custom-file-preview" alt="" style="width: 30px">
-                    </label>
-                    <button type="button" class="btn btn-default" data-trigger="#avatar">Change Photo</button>
-                </div>
                 <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group show-uploaded-file-name show-uploaded-file-preview">
+                            <label>Avatar</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="avatar">
+                                <label class="custom-file-label">Choose document</label>
+                            </div>
+                            <img src="" alt="" class="custom-file-preview">
+                            <span data-input="avatar" class="input-error"></span>
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Name</label>
@@ -57,14 +60,25 @@
                             <span data-input="role" class="input-error"></span>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select class="form-control select2" name="country">
+                                @foreach (countries() as $key => $name)
+                                    <option value="{{$key}}">{{$name}}</option>
+                                @endforeach
+                            </select>
+                            <span data-input="role" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <textarea name="bio" class="form-control"></textarea>
+                            <span data-input="bio" class="input-error"></span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h5 class="m-0">Set Password</h5>
-            </div>
-            <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">

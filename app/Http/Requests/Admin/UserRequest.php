@@ -32,10 +32,13 @@ class UserRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', Rule::unique(User::class)->ignore($model->id??null, 'slug')],
+            'slug' => ['required', 'string', 'max:255', Rule::unique(User::class, 'slug')->ignore($model)],
             'email' => ['required', 'email', 'max:255'],
-            'roles' => ['required', 'array'],
+            'country' => ['required', 'string', 'max:5'],
+            'avatar' => ['nullable', 'image', 'max:5000'],
+            'bio' => ['nullable', 'string', 'max:5000'],
             'password' =>  $this->passwordRules(!$model),
+            'roles' => ['required', 'array'],
             'roles.*' => ['required', 'exists:roles,id'],
         ];
     }

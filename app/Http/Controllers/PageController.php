@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Partner;
 use App\Models\Post;
 
 class PageController extends Controller
@@ -22,8 +23,11 @@ class PageController extends Controller
         }
         $newPosts = Post::visible()->latest()->limit(3)->get();
         $urgentPosts = Post::visible()->latest()->where('is_urgent', true)->limit(3)->get();
+        $partners = cache()->remember('partners', 60*10, function () {
+            return Partner::orderBy('order')->get();
+        });
 
-        return view('index', compact('categoriesColumns', 'newPosts', 'urgentPosts'));
+        return view('index', compact('categoriesColumns', 'newPosts', 'urgentPosts', 'partners'));
     }
 
     public function categories()

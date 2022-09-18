@@ -5,7 +5,6 @@
 @section('content_header')
     <x-admin.title
         text="Edit Post"
-        :bcRoute="['admin.posts.edit', $post]"
     />
 @stop
 
@@ -255,7 +254,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <span class="mr-2">Documents</span>
-                    <button type="button" class="btn btn-success add-file-input auto-add">Add</button>
+                    <button type="button" class="btn btn-success add-file-input">Add</button>
                 </h3>
             </div>
             <div class="card-body">

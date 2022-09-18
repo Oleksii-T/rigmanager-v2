@@ -19,10 +19,9 @@ class Setting extends Model
         [
             'name' => 'General',
             'settings' => [
-                'hide_pending_posts' => 'Hide pending posts',
-                'sort_categories_by_alph' => 'Sort categories by Alphabet',
-                'sort_categories_by_posts' => 'Sort categories by Posts count',
-                'hide_empty_categories' => 'Hide empty categories',
+                'hide_pending_posts' => 'Hide pending posts (1/0)',
+                // 'sort_categories_by' => 'Categories sorting (alphabet/posts)',
+                // 'hide_empty_categories' => 'Hide empty categories (1/0)',
             ]
         ],
         [

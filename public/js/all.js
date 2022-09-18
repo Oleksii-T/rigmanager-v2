@@ -5,15 +5,12 @@ $(document).ready(function () {
 	$(window).scroll( function(){
 		if ($(this).scrollTop() > 50){
 			$('.header').addClass('fixed');
-			$('#pop-up-container').addClass('scrolled');
 		}else{
 			$('.header').removeClass('fixed');
-			$('#pop-up-container').removeClass('scrolled');
 		}
 	});
 	if ($(window).scrollTop() > 50){
 		$('.header').addClass('fixed');
-		$('#pop-up-container').addClass('scrolled');
 	}
 
 	// mob nav
@@ -355,6 +352,15 @@ $(document).ready(function () {
             el.attr('src', URL.createObjectURL(file));
         }
     })
+
+    let flash = $('[flash-notif-data]').data('flash');
+    if (flash) {
+        if (flash.level == 'success') {
+            showToast(flash.message);
+        } else {
+            showToast(flash.message, false);
+        }
+    }
 });
 
 // toast notification object
@@ -406,10 +412,10 @@ function fullLoader(show=true) {
 
 // general error logic, after ajax form submit been processed
 function showServerError(response) {
-    loading(false);
     fullLoader(false);
 
     if (response.status == 422) {
+        swal.close();
         let r = response.responseJSON ?? JSON.parse(response.responseText)
         for ([field, value] of Object.entries(r.errors)) {
             let dotI = field.indexOf('.');

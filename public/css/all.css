@@ -94,7 +94,7 @@ ul li {list-style: none;}
 }
 @media (min-width: 768px){
 	.holder {
-		max-width: 720px;	
+		max-width: 720px;
 	}
 }
 @media (min-width: 1024px) {
@@ -703,81 +703,6 @@ textarea.form-error {
 .mob-nav-icon.active .mob-nav-block:after {
     top: 0;
     transform: rotate(-45deg);
-}
-/************************* pop-up-messages **********************/
-#pop-up-container {
-    z-index: 99999;
-    position: fixed;
-    top: 111px;
-    right: 0px;
-    overflow: hidden;
-	max-width: 90%;
-}
-#pop-up-container.scrolled {
-	top: 91px;
-}
-.pop-up, .flash {
-    padding: 7px 10px;
-    margin-bottom: 15px;
-    border-right: 5px solid #ff8d11;
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-    float: right;
-    display: block;
-    clear: right;
-    position: relative;
-	cursor: pointer;
-}
-.pop-up img,
-.flash img {
-    position: absolute;
-    left: 0px;
-    height: 25px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.pop-up p,
-.flash p{
-    position: relative;
-    padding-left: 35px;
-	margin: 0;
-	color: #000000;
-}
-.pop-up-success, 
-.flash-success {
-    background-color: rgb(114, 190, 117);
-}
-.pop-up-error,
-.flash-error {
-    background-color: #fd8981;
-}
-.animated-line {
-    height: 5px;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    width: 100%;
-	border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-    background-color: #0159ac;
-    animation-duration: 4s;
-    animation-delay: 0s;
-    animation-timing-function: linear;
-    animation-fill-mode: forwards;
-    animation-name: animated-line;
-    -webkit-animation-duration: 4s;
-    -webkit-animation-delay: 0s;
-    -webkit-animation-timing-function: linear;
-    -webkit-animation-fill-mode: forwards;
-    -webkit-animation-name: animated-line;
-}
-@keyframes animated-line {
-    0% {width: 100%;}
-    100% {width: 0%;}
-}
-@-webkit-keyframes animated-line {
-    0% {width: 100%;}
-    100% {width: 0%;}
 }
 /************************* main page *************************/
 /*------------------------ developing alert -----------------*/
@@ -2158,7 +2083,7 @@ textarea.form-error {
 	margin: 0 0 50px;
 	background: #1f1f1f;
 	border-radius: 8px;
-}	
+}
 .profile-edit-column {
 	width: 50%;
 	padding: 44px 50px 50px;
@@ -3247,10 +3172,6 @@ article ul li:before {
 	.category-img {
 		height: 220px;
 	}
-	#pop-up-container,
-	#pop-up-container.scrolled {
-		top: 67px;
-	}
 	a.brand-item.brand-more {
 		padding-left: 20px;
 	}
@@ -3328,9 +3249,6 @@ article ul li:before {
 	.header-main .header-search.vis .header-search-link {
 		background: url(../icons/close-white.svg) 50% 50% no-repeat;
 		background-size: 15px;
-	}
-	#pop-up-container {
-		top: 70px;
 	}
 	.mob-nav-icon {
 		display: block;
@@ -3554,7 +3472,7 @@ article ul li:before {
 	}
 
 
-	
+
 }
 @media screen and (max-width: 767px) {
 	body {font-size: 14px;}
@@ -4125,24 +4043,6 @@ article ul li:before {
 	.category-img {
 		height: 160px;
 	}
-	#pop-up-container,
-	#pop-up-container.scrolled {
-		width: 100%;
-		left: 0px;
-		max-width: none;
-	}
-	.pop-up, .flash {
-		padding: 2px 5px;
-		margin-bottom: 0px;
-		border-right: none;
-		border-bottom: 2px solid #ff8d11;
-		border-top-left-radius: 0px;
-		border-bottom-left-radius: 0px;
-		float: none;
-		position: relative;
-		cursor: pointer;
-		width: 100%;
-	}
 	.catalog-name {
 		white-space: pre-line;
 		overflow: hidden;
@@ -4273,4 +4173,3 @@ article ul li:before {
 		max-width: 258px;
 	}
 }
-  

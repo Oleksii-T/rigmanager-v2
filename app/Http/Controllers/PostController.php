@@ -89,11 +89,11 @@ class PostController extends Controller
         $input['is_active']= true;
         $input['origin_lang'] = 'en'; //TODO
         $input['cost_usd'] = $input['cost']??null; //TODO
-        $input['title'] = [
-            'en' => $input['title']
-        ];
         $input['slug'] = [
             'en' => makeSlug($input['title'], Post::allSlugs($post->id))
+        ];
+        $input['title'] = [
+            'en' => $input['title']
         ];
         $input['description'] = [
             'en' => $input['description']
@@ -207,7 +207,7 @@ class PostController extends Controller
     {
         $user = auth()->user();
 
-        abort_if($post->user_id == $user->id, 403);
+        abort_if($post->user_id != $user->id, 403);
 
         $post->delete();
 

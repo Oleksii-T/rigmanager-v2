@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // set global blade variables
         \View::composer('*', function($view) {
-            $cashTime = 5;
+            $cashTime = 60*5;
 
             $view->with(
                 'currentUser',

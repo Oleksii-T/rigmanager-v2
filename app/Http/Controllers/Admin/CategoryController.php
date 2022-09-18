@@ -61,6 +61,21 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        $parents = $category->parents();
+        foreach ($parents as $parent) {
+            if ($parent->id != $category->id && $parent->is_active) {
+                break;
+            }
+        }
+        if (!$parent) {
+            $parent = Category::getDefault();
+        }
+        foreach ($category->postsAll(true) as $post) {
+            $post->update([
+                'category_id' => $parent->id
+            ]);
+        }
+
         $category->delete();
 
         return $this->jsonSuccess('Category deleted successfully');

@@ -31,7 +31,7 @@ class Category extends Model
         parent::boot();
 
         static::deleting(function ($model) {
-            $model->purgeFiles();
+            $model->purgeAttachments();
             $model->purgeTranslations();
         });
     }
@@ -181,6 +181,11 @@ class Category extends Model
             return $array;
         }
         return array_merge($array, $this->getChildrenIds($this->childs));
+    }
+
+    public static function getDefault()
+    {
+        return self::find(1);
     }
 
     private function getChildrenIds($subcategories)

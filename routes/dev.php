@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Translation;
 use App\Models\Page;
 use App\Models\Post;
+use App\Models\Category;
 
 /*
  *
@@ -20,6 +21,9 @@ if (config('app.env') == 'production') {
 
 Route::get('test', function () {
     // some testing code
+    $c = Category::find(17);
+
+    dump($c->parents());
 
     dd('done');
 });

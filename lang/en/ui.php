@@ -651,4 +651,7 @@ return [
     'aboutUsContactLink' => 'Feedback page',
     'aboutUsSlg' => 'Respectfully,
     rigmanager.com.ua team',
+
+    //new
+    'seo-img-image-suffix' => 'image'
 ];

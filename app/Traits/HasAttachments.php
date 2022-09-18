@@ -56,7 +56,7 @@ trait HasAttachments
         return $type;
     }
 
-    public function purgeFiles()
+    public function purgeAttachments()
     {
         Attachment::query()
             ->where('attachmentable_id', $this->id)

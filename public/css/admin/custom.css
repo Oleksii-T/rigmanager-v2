@@ -11,3 +11,11 @@
 .custom-file-preview {
     max-width: 200px;
 }
+.custom-file-input,
+.delete-file-input {
+    cursor: pointer;
+}
+.dataTable tbody td img {
+    max-width: 80px;
+    max-height: 80px;
+}

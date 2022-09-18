@@ -78,7 +78,7 @@ $(document).ready(function () {
     });
 
     // trigger click for multi-file form block to add first input automaticaly
-    $('.add-file-input.auto-add').each(function( index ) {
+    $('.add-file-input.auto-add').each(function(i) {
         $(this).trigger('click');
     });
 

@@ -39,7 +39,7 @@
 
                             <label class="label">@lang('ui.chooseTag') <span class="orange">*</span></label>
                             <div class="select-block">
-                                <select class="styled select2" name="category_id">
+                                <select class="styled" name="category_id">
                                     @foreach ($categories as $c)
                                         <option value="{{$c->id}}" @selected($post->category_id == $c->id)>{{$c->name}}</option>
                                     @endforeach
@@ -90,9 +90,11 @@
 
                                     <label class="label">@lang('ui.locationRegion')</label>
                                     <div class="select-block">
-                                        @foreach (countries() as $key => $name)
-                                            <option value="{{$key}}" @selected($post->country == $key)>{{$name}}</option>
-                                        @endforeach
+                                        <select class="select2" name="country">
+                                            @foreach (countries() as $key => $name)
+                                                <option value="{{$key}}" @selected($post->country == $key)>{{$name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <label class="label">@lang('ui.chooseManufacturer')</label>
@@ -165,7 +167,7 @@
                                                     </svg>
                                                 </button>
                                             </div>
-                                            <img class="preview" src="{{$img->url}}" alt="">
+                                            <img class="preview" src="{{$img->url}}" alt="{{$img->alt}}">
                                         </div>
                                     </div>
                                 @endforeach

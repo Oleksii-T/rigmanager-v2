@@ -38,6 +38,7 @@ class CreateNewUser implements CreatesNewUsers
         return User::create([
             'country' => strtolower(Location::get()->countryCode),
             'name' => $input['name'],
+            'slug' => makeSlug($input['name'], User::pluck('slug')->toArray()),
             'email' => $input['email'],
             'phone' => $input['phone'],
             'password' => Hash::make($input['password']),

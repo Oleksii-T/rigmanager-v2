@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('attachments', function (Blueprint $table) {
+        Schema::create('partners', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('attachmentable_id');
-            $table->string('attachmentable_type');
-            $table->string('name');
-            $table->string('original_name');
-            $table->string('type')->nullable();
-            $table->double('size')->nullable();
-            $table->string('group')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->integer('order');
+            $table->string('link')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attachments');
+        Schema::dropIfExists('partners');
     }
 };
