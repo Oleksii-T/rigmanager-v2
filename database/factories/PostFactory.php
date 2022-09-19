@@ -31,12 +31,14 @@ class PostFactory extends Factory
             '##?#/#?##',
             '??? / ###-?',
         ];
-        $countries = [
-            'ua',
-            'cn',
-            'ru',
-            'us',
+        $countriesCurrencies = [
+            'ua' => 'uah',
+            'cn' => 'cny',
+            'ru' => 'rub',
+            'us' => 'usd',
         ];
+
+        $country = array_rand($countriesCurrencies);
 
         return [
             'user_id' => User::inRandomOrder()->value('id'),
@@ -48,13 +50,12 @@ class PostFactory extends Factory
             'is_active' => true,
             'is_urgent' => rand(0,1),
             'is_import' => rand(0,1),
-            'country' => $countries[array_rand($countries)],
+            'country' => $country,
             'origin_lang' => 'en',
             'amount' => $amounts[array_rand($amounts)],
             'manufacturer' => fake()->company(),
             'manufacture_date' => fake()->date(),
             'part_number' => fake()->bothify($partNumberFormats[array_rand($partNumberFormats)]),
-            'cost' => fake()->randomFloat(2, 100, 9999),
         ];
     }
 }

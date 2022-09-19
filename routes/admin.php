@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttachmentController;
+use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\PartnerController;
 
 /*
@@ -33,6 +34,9 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('partners', PartnerController::class)->except('show');
 
     Route::resource('users', UserController::class);
+
+    Route::post('exchange-rates/sync', [ExchangeRateController::class, 'sync'])->name('exchange-rates.sync');
+    Route::resource('exchange-rates', ExchangeRateController::class)->only('index', 'edit', 'update', 'create');
 
     Route::resource('attachments', AttachmentController::class)->only('index', 'edit', 'update', 'destroy');
 });

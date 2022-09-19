@@ -84,6 +84,13 @@ class User extends Authenticatable implements MustVerifyEmail
         Mail::to($this)->send(new PasswordReset($url));
     }
 
+    public function lastCurrency()
+    {
+        $c = $this->posts()->whereNotNull('currency')->latest()->select('currency')->first();
+
+        return $c->currency ?? 'usd';
+    }
+
     public static function dataTable($query)
     {
         return DataTables::of($query)

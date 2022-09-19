@@ -105,3 +105,12 @@ if (!function_exists('countries')) {
         return $countries;
     }
 }
+
+// get currencies array
+if (!function_exists('currencies')) {
+    function currencies($code=null) {
+        $all = config('currencies');
+
+        return $code ? $all[$code] : $all;
+    }
+}

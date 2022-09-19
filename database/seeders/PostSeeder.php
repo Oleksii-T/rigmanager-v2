@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Post;
 use App\Models\Translation;
 use App\Models\Attachment;
+use App\Models\ExchangeRate;
 
 class PostSeeder extends Seeder
 {
@@ -38,13 +39,28 @@ class PostSeeder extends Seeder
                     }
                 )
             )
-            ->count(500)
+            ->count(100)
             ->create();
 
+        $countriesCurrencies = [
+            'ua' => 'uah',
+            'cn' => 'cny',
+            'ru' => 'rub',
+            'us' => 'usd',
+        ];
+
         foreach ($posts as $post) {
-            $post->update([
-                'cost_usd' => $post->cost
-            ]);
+
+            $baseCurrency = $countriesCurrencies[$post->country];
+            $cost = fake()->randomFloat(2, 100, 9999);
+
+            foreach ($countriesCurrencies as $country => $currency) {
+                $post->costs()->create([
+                    'currency' => $currency,
+                    'cost' => ExchangeRate::convert($baseCurrency, $currency, $cost),
+                    'is_default' => $currency == $baseCurrency,
+                ]);
+            }
         }
     }
 }

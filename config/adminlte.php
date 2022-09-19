@@ -298,6 +298,11 @@ return [
             'icon' => 'fas fa-fw fa-folder-open',
         ],
         [
+            'text' => 'Exchange Rates',
+            'route'  => 'admin.exchange-rates.index',
+            'icon' => 'fas fa-fw fa-folder-open',
+        ],
+        [
             'text' => 'Settings',
             'route'  => 'admin.settings.index',
             'icon' => 'fas fa-fw fa-cogs',

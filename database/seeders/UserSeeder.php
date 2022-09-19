@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'name' => 'Admin',
+                'slug' => 'admin',
                 'country' => 'ua',
                 'password' => Hash::make('admin@mail.com'),
                 'email' => 'admin@mail.com',
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'User',
+                'slug' => 'user',
                 'country' => 'ch',
                 'password' => Hash::make('user@mail.com'),
                 'email' => 'user@mail.com',
@@ -37,6 +39,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'User 1',
+                'slug' => 'user-1',
                 'country' => 'ru',
                 'password' => Hash::make('user1@mail.com'),
                 'email' => 'user1@mail.com'

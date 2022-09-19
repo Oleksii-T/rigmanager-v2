@@ -35,17 +35,19 @@
             <div class="filter-block">
                 <div class="filter-title">@lang('ui.filters')</div>
 
+                <!--currency-->
+                <label class="label">@lang('ui.currency')</label>
+                <div class="select-block">
+                    <select class="styled" name="currency">
+                        <option value="0">{{__('ui.any')}}</option>
+                        @foreach (currencies() as $key => $symbol)
+                            <option value="{{$key}}">{{strtoupper($key)}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <!--cost-->
-                <label class="label">
-                    @lang('ui.cost'),
-                    <div class="tumbler-inline">
-                        <div class="tumbler">
-                            <a href="" class="tumbler-left currency-switch uah active">UAH</a>
-                            <span class="tumbler-block"></span>
-                            <a href="" class="tumbler-right currency-switch usd">USD</a>
-                        </div>
-                    </div>
-                </label>
+                <label class="label">@lang('ui.cost')</label>
                 <div class="price-input">
                     <input type="text" class="input" name="cost_from" placeholder="@lang('ui.from')">
                     <span class="price-input-divider">-</span>

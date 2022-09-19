@@ -63,6 +63,7 @@ class PostController extends Controller
             'en' => $input['description']
         ];
         $post = $user->posts()->create($input);
+        $post->saveCosts($input);
         $post->saveTranslations($input);
         $post->addAttachment($input['images']??[], 'images');
         $post->addAttachment($input['documents']??[], 'documents');
@@ -99,6 +100,7 @@ class PostController extends Controller
             'en' => $input['description']
         ];
         $post->update($input);
+        $post->saveCosts($input);
         $post->saveTranslations($input);
         $post->images()->whereIn('id', $request->removed_images??[])->delete();
         $post->documents()->whereIn('id', $request->removed_documents??[])->delete();

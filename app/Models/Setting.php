@@ -25,24 +25,50 @@ class Setting extends Model
             ]
         ],
         [
-            'name' => 'Social login',
+            'name' => 'Open Exchange Rates',
+            'settings' => [
+                'openexchangerates_app_id' => 'App ID',
+            ]
+        ],
+        [
+            'name' => 'Google auth',
             'settings' => [
                 'google_auth_enabled' => 'Google Auth Enabled',
                 'google_client_id' => 'Google client id',
                 'google_client_secret' => 'Google client secret',
                 'google_redirect' => 'Google redirect',
+            ]
+        ],
+        [
+            'name' => 'Facebook auth',
+            'settings' => [
                 'facebook_auth_enabled' => 'Facebook Auth Enabled',
                 'facebook_client_id' => 'Facebook client id',
                 'facebook_client_secret' => 'Facebook client secret',
                 'facebook_redirect' => 'Facebook redirect',
+            ]
+        ],
+        [
+            'name' => 'Twitter auth',
+            'settings' => [
                 'twitter_auth_enabled' => 'Twitter Auth Enabled',
                 'twitter_client_id' => 'Twitter client id',
                 'twitter_client_secret' => 'Twitter client secret',
                 'twitter_redirect' => 'Twitter redirect',
+            ]
+        ],
+        [
+            'name' => 'LinkedIn auth',
+            'settings' => [
                 'linkedin_auth_enabled' => 'LinkedIn Auth Enabled',
+            ]
+        ],
+        [
+            'name' => 'Apple auth',
+            'settings' => [
                 'apple_auth_enabled' => 'Apple Auth Enabled',
             ]
-        ]
+        ],
     ];
 
     public static function get($key, $onlyValue = true)

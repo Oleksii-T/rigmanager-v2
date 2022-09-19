@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\User;
 use App\Http\Requests\Admin\PostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -61,6 +62,7 @@ class PostController extends Controller
         $input['phone'] ??= $user->phone;
         $input['email'] ??= $user->email;
         $post = Post::create($input);
+        $post->saveCosts($input);
         $post->saveTranslations($input);
         $post->addAttachment($input['images']??[], 'images');
         $post->addAttachment($input['documents']??[], 'documents');
@@ -82,6 +84,7 @@ class PostController extends Controller
         $input['is_urgent'] ??= false;
         $input['is_import'] ??= false;
         $post->update($input);
+        $post->saveCosts($input);
         $post->saveTranslations($input);
         $post->addAttachment($input['images']??null, 'images');
         $post->addAttachment($input['documents']??[], 'documents');

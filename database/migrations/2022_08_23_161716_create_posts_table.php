@@ -30,9 +30,6 @@ return new class extends Migration
             $table->string('manufacturer')->nullable();
             $table->string('manufacture_date')->nullable();
             $table->string('part_number')->nullable();
-            $table->decimal('cost', 10, 2)->nullable();
-            $table->decimal('cost_usd', 10, 2)->nullable();
-            $table->string('currency')->nullable();
             $table->timestamps();
         });
     }

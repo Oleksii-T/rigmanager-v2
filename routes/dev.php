@@ -21,9 +21,6 @@ if (config('app.env') == 'production') {
 
 Route::get('test', function () {
     // some testing code
-    $c = Category::find(17);
-
-    dump($c->parents());
 
     dd('done');
 });

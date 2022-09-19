@@ -109,10 +109,12 @@
                                     <input class="input" name="part_number" type="text" value="{{$post->part_number}}"/>
                                     <div data-input="part_number" class="form-error"></div>
 
-                                    <label class="label">@lang('ui.currency')</label>
+                                    <label class="label">@lang('ui.currency')</label> {{-- //! TRANSLATE --}}
                                     <div class="select-block">
                                         <select class="styled" name="currency">
-                                            <option value="1">Todo</option>
+                                            @foreach (currencies() as $key => $symbol)
+                                                <option value="{{$key}}" @selected($post->currency == $key)>{{strtoupper($key)}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
 

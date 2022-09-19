@@ -78,7 +78,7 @@
                                     <div data-input="amount" class="form-error"></div>
                                     <div class="form-note">@lang('ui.amountHelp')</div>
 
-                                    <label class="label">@lang('ui.locationRegion')</label>
+                                    <label class="label">@lang('ui.locationRegion')</label> {{-- //! TRANSLATE --}}
                                     <div class="select-block">
                                         <select class="select2" name="country">
                                             @foreach (countries() as $key => $name)
@@ -99,13 +99,14 @@
                                     <input class="input" name="part_number" type="text"/>
                                     <div data-input="part_number" class="form-error"></div>
 
-                                    <label class="label">@lang('ui.currency')</label>
+                                    <label class="label">@lang('ui.currency')</label> {{-- //! TRANSLATE --}}
                                     <div class="select-block">
                                         <select class="styled" name="currency">
-                                            <option value="1">Todo</option>
+                                            @foreach (currencies() as $key => $symbol)
+                                                <option value="{{$key}}" @selected($currentUser->lastCurrency() == $key)>{{strtoupper($key)}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
-
                                     <label class="label">@lang('ui.cost')</label>
                                     <input class="input format-cost" name="cost" type="text"/>
                                     <div data-input="cost" class="form-error"></div>

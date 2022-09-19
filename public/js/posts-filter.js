@@ -1,6 +1,6 @@
 let params = {
     page: 1,
-    curreny: 'usd',
+    currency: null,
     cost_from: null,
     cost_to: null,
     country: null,

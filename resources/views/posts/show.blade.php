@@ -52,7 +52,7 @@
                     </div>
                 @endif
             </div>
-            @if ( $post->images->isNotEmpty() )
+            @if ($post->images->isNotEmpty())
                 <div class="prod-photo">
                     @foreach ($post->images as $i => $image)
                         <div class="prod-photo-slide">

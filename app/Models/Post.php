@@ -28,9 +28,6 @@ class Post extends Model
         'manufacturer',
         'manufacture_date',
         'part_number',
-        'cost',
-        'currency',
-        'cost_usd'
     ];
 
     protected $appends = self::TRANSLATABLES + [
@@ -107,6 +104,11 @@ class Post extends Model
         return $this->morphMany(Attachment::class, 'attachmentable')->where('group', 'images');
     }
 
+    public function costs()
+    {
+        return $this->hasMany(PostCost::class);
+    }
+
     public function documents()
     {
         return $this->morphMany(Attachment::class, 'attachmentable')->where('group', 'documents');
@@ -133,6 +135,13 @@ class Post extends Model
         return $query->where('status', $status);
     }
 
+    public function scopeCostByCurrency($query, string $curreny)
+    {
+        // TODO add column cost_by_currency (join post_costs);
+
+        return $query;
+    }
+
     public function slug(): Attribute
     {
         return $this->getTranslatedAttr(__FUNCTION__);
@@ -148,18 +157,44 @@ class Post extends Model
         return $this->getTranslatedAttr(__FUNCTION__);
     }
 
-    public function costReadable(): Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => $this->cost ? ('$' . number_format($this->cost, 2)) : null,
-        );
-    }
-
     public function countryReadable(): Attribute
     {
         return new Attribute(
             get: fn () => trans("countries.$this->country"),
         );
+    }
+
+    public function cost(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->getCost(false)
+        );
+    }
+
+    public function costReadable(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->getCost(true)
+        );
+    }
+
+    public function getCost($readable, $currency=null)
+    {
+        $costM = $currency
+            ? $this->costs->where('currency', $currency)->first()
+            : $this->costs->where('is_default', true)->first();
+
+        if (!$costM) {
+            return null;
+        }
+
+        if (!$readable) {
+            return $costM->cost;
+        }
+
+        $symbol = currencies($currency??$costM->currency);
+
+        return $symbol . number_format($costM->cost, 2);
     }
 
     public function thumbnail($defaultImg=true)
@@ -209,6 +244,32 @@ class Post extends Model
             })
             ->rawColumns(['user', 'category', 'is_active', 'action'])
             ->make(true);
+    }
+
+    public function saveCosts($input)
+    {
+        $cost = $input['cost']??null;
+        $baseCurrency = $input['currency'];
+
+        if (!$cost) {
+            $this->costs()->delete();
+            return;
+        }
+
+        foreach (currencies() as $currency => $symbol) {
+            PostCost::updateOrCreate(
+                [
+                    'post_id' => $this->id,
+                    'currency' => $currency
+                ],
+                [
+                    'post_id' => $this->id,
+                    'currency' => $currency,
+                    'cost' => ExchangeRate::convert($baseCurrency, $currency, $input['cost']),
+                    'is_default' => $currency == $baseCurrency
+                ]
+            );
+        }
     }
 
     public static function allSlugs($ignore=null)

@@ -197,8 +197,8 @@
                         <div class="form-group">
                             <label>Currency</label>
                             <select class="form-control" name="currency">
-                                @foreach (['todo'] as $item)
-                                    <option value="{{$item}}" @selected($post->currency)>{{readable($item)}}</option>
+                                @foreach (currencies() as $key => $symbol)
+                                    <option value="{{$key}}" @selected($post->currency)>{{strtoupper($key)}}</option>
                                 @endforeach
                             </select>
                             <span data-input="currency" class="input-error"></span>

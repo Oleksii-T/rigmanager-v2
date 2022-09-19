@@ -1,10 +1,10 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Create Partner')
+@section('title', 'Edit Partner')
 
 @section('content_header')
     <x-admin.title
-        text="Create Partner"
+        text="Edit Partner"
     />
 @stop
 
