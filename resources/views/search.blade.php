@@ -39,7 +39,7 @@
                 <label class="label">@lang('ui.currency')</label>
                 <div class="select-block">
                     <select class="styled" name="currency">
-                        <option value="0">{{__('ui.any')}}</option>
+                        <option value="">{{__('ui.any')}}</option>
                         @foreach (currencies() as $key => $symbol)
                             <option value="{{$key}}">{{strtoupper($key)}}</option>
                         @endforeach

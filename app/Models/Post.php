@@ -180,6 +180,13 @@ class Post extends Model
 
     public function getCost($readable, $currency=null)
     {
+        if (!$currency) {
+            $requestedCurr = request()->currency;
+            if (array_key_exists($requestedCurr, currencies())) {
+                $currency = $requestedCurr;
+            }
+        }
+
         $costM = $currency
             ? $this->costs->where('currency', $currency)->first()
             : $this->costs->where('is_default', true)->first();
@@ -350,11 +357,31 @@ class Post extends Model
         $urgent = $filters['is_urgent'][0]??null;
         $import = $filters['is_import'][0]??null;
         $sort = $filters['sorting']??null;
-        $category = $filters['category']??null;
         $country = $filters['country']??null;
         $search = $filters['search']??null;
+        $currency = $filters['currency']??null;
+        $costFrom = $filters['cost_from']??null;
+        $costTo = $filters['cost_to']??null;
+        $category = $filters['category']??null;
         if (!($category instanceof Category)) {
             $category = Category::find($category);
+        }
+
+        // append cost to query if cost filteting\sorting is used
+        if (($currency && ($costFrom || $costTo)) || $sort == 'expensive' || $sort == 'cheap') {
+            $posts->whereHas('costs')->leftJoin('post_costs', function ($join) use ($currency) {
+                $c = $currency ?? 'usd'; // user may select sorting but not currency
+                $join->on('posts.id', '=', 'post_costs.post_id');
+                $join->on('currency', '=', \DB::raw("'$c'"));
+            });
+        }
+
+        if ($currency && $costFrom) {
+            $posts->where('post_costs.cost', '>=', $costFrom);
+        }
+
+        if ($currency && $costTo) {
+            $posts->where('post_costs.cost', '<=', $costFrom);
         }
 
         if ($category) {
@@ -392,13 +419,13 @@ class Post extends Model
                 $posts->latest('posts.created_at');
                 break;
             case 'cheap':
-                $posts->whereNotNull('cost')->orderBy('cost_usd');
+                $posts->orderBy('post_costs.cost');
                 break;
             case 'expensive':
-                $posts->whereNotNull('cost')->orderByDesc('cost_usd');
+                $posts->orderByDesc('post_costs.cost');
                 break;
             case 'views':
-                $posts->withCount('views')->orderByDesc('views_count');
+                $posts->orderByDesc('views_count');
                 break;
             default:
                 $posts->latest('posts.created_at');

@@ -38,6 +38,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('catalog', [SearchController::class, 'index'])->name('search');
 
     Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');
+    Route::put('posts/{post}/view', [PostController::class, 'view']);
 
     Route::middleware('auth')->group(function () {
 
@@ -50,7 +51,6 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('{post}/views', [PostController::class, 'views'])->name('views');
                 Route::post('', [PostController::class, 'store'])->name('store');
                 Route::put('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
-                Route::put('{post}/view', [PostController::class, 'view']);
                 Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle');
                 Route::put('{post}', [PostController::class, 'update'])->name('update');
                 Route::delete('{post}', [PostController::class, 'destroy'])->name('destroy');

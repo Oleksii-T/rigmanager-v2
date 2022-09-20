@@ -29,7 +29,7 @@ class SearchController extends Controller
 
     public function index(Request $request)
     {
-        $posts = Post::latest()->visible();
+        $posts = Post::visible()->withCount('views');
         if (isset($request->text)) {
             // todo
         } else if (isset($request->author)){
@@ -40,6 +40,22 @@ class SearchController extends Controller
         }
 
         Post::applyFilters($posts, $request->all());
+
+        // $currency = 'uah';
+        // $costFrom = 4000;
+        // $posts->whereHas('costs')->leftJoin('post_costs', function ($join) use ($currency) {
+        //     $join->on('posts.id', '=', 'post_costs.post_id');
+        //     $join->on('currency', '=', \DB::raw("'$currency'"));
+        // })
+        // ->orderBy('post_costs.cost')
+        // ->orderByDesc('post_costs.cost')
+        // ->select('posts.*', 'post_costs.cost', 'post_costs.currency')
+        // ;
+        // $post = $posts->first();
+        // dump($post->cost);
+        // dd($post);
+
+
         $posts = $posts->paginate(Post::PER_PAGE);
 
         if (!$request->ajax()) {

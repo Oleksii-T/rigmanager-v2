@@ -23,6 +23,7 @@ $(document).ready(function () {
             clearTimeout(timeout);
         }
         timeout = setTimeout(() => {
+            checkCurrency(name, val);
             filter();
         }, 600)
     });
@@ -41,9 +42,10 @@ $(document).ready(function () {
             } else {
                 params[name].push(val);
             }
-        } else if (filterType=='radio') {
+        } else {
             params[name] = val;
         }
+        checkCurrency(name, val);
         filter();
     });
 
@@ -54,6 +56,7 @@ $(document).ready(function () {
         }
         let val = $(this).val();
         params[name] = val;
+        checkCurrency(name, val);
         filter();
     });
 
@@ -65,6 +68,7 @@ $(document).ready(function () {
         filter();
     })
 
+    // trigger filter function if external event is corresponding event
     $(document).on('posts:filter', function(e) {
         filter();
     });
@@ -106,6 +110,15 @@ $(document).ready(function () {
                 showServerError(response);
             }
         });
+    }
+
+    function checkCurrency(name, val) {
+        console.log('checkCurrency', name, val, params.currency); //! LOG
+        if ((name == 'cost_from' || name == 'cost_from') && val && !params.currency) {
+            showToast('Cost filter require currency', false); //! TRANSLATE
+        } else if (name == 'currency' && !val && (params.cost_from || params.cost_to)) {
+            showToast('Cost filter require currency', false); //! TRANSLATE
+        }
     }
 
     function setItialParams() {
