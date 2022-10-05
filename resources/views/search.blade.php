@@ -29,6 +29,8 @@
 @endsection
 
 @section('content')
+    <span class="hidden" data-category="{{isset($category) ? $category->id : ''}}" page-data></span>
+
     <div class="main-block">
         <aside class="side">
             <a data-fancybox class="side-mob">@lang('ui.filters')</a>
@@ -39,7 +41,7 @@
                 <label class="label">@lang('ui.currency')</label>
                 <div class="select-block">
                     <select class="styled" name="currency">
-                        <option value="">{{__('ui.any')}}</option>
+                        <option value="">{{__('ui.notSpecified')}}</option>
                         @foreach (currencies() as $key => $symbol)
                             <option value="{{$key}}">{{strtoupper($key)}}</option>
                         @endforeach
@@ -115,7 +117,7 @@
             <div class="side-add">
                 <div class="side-add-text">@lang('ui.mailerSuggestText')</div>
                 <div class="side-add-icon"><img src="{{asset('icons/add-icon.svg')}}" alt=""></div>
-                <a href="" class="button add-request-to-mailer">@lang('ui.add')</a>
+                <button data-url="{{route('mailers.store')}}" class="button add-request-to-mailer">@lang('ui.add')</button>
             </div>
         </aside>
         <div class="content">

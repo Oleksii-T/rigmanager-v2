@@ -51,17 +51,6 @@
                                         @endforeach
                                     </div>
                                 </div>
-                                <div class="add-radio-col">
-                                    <label class="label">@lang('ui.chooseCondition')<span class="orange">*</span></label>
-                                    <div class="radio-block">
-                                        @foreach (\App\Models\Post::CONDITIONS as $item)
-                                            <div class="radio-item">
-                                                <input type="radio" name="condition" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($loop->first)>
-                                                <label for="{{$item}}" class="radio-label">{{\App\Models\Post::conditionReadable($item)}}</label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
                             </div>
                             <div class="faq-item optionals">
                                 <a href="" class="faq-top">
@@ -85,6 +74,22 @@
                                                 <option value="{{$key}}" @selected($currentUser->country == $key)>{{$name}}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+
+                                    <label class="label">@lang('ui.chooseCondition')</label>
+                                    <div class="select-block">
+                                        <div class="radio-block">
+                                            <div class="radio-item">
+                                                <input type="radio" name="condition" class="radio-input" id="cond-none" value="" checked>
+                                                <label for="cond-none" class="radio-label">@lang('ui.none')</label> {{-- //! TRANSLATE --}}
+                                            </div>
+                                            @foreach (\App\Models\Post::CONDITIONS as $item)
+                                                <div class="radio-item">
+                                                    <input type="radio" name="condition" class="radio-input" id="{{$item}}" value="{{$item}}">
+                                                    <label for="{{$item}}" class="radio-label">{{\App\Models\Post::conditionReadable($item)}}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
 
                                     <label class="label">@lang('ui.chooseManufacturer')</label>

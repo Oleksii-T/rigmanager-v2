@@ -87,17 +87,20 @@
                         @auth
                             <br>
                             @if ($post->user_id != $currentUser->id)
-                                @if (auth()->user()->mailers && auth()->user()->mailers->pluck('author')->contains($post->user_id))
-                                    <a href="" class="prod-author-link add-to-mailer">{{__('ui.mailerAuthorAlreadyAdded')}}</a>
+                                @if ($currentUser->mailers()->where('filters->author', $post->user_id)->first())
+                                    <a class="prod-author-link">{{__('ui.mailerAuthorAlreadyAdded')}}</a>
                                 @else
-                                    <a href="" class="prod-author-link add-to-mailer">{{__('ui.mailerAddAuthor')}}</a>
+                                    <form action="{{route('mailers.store')}}" method="post" class="general-ajax-submit">
+                                        @csrf
+                                        <input type="hidden" name="filters[author]" value="{{$post->user_id}}">
+                                        <button type="submit" class="prod-author-link btn-as-link">{{__('ui.mailerAddAuthor')}}</button>
+                                    </form>
                                 @endif
                             @endif
                         @endauth
                     </div>
                 </div>
                 <a href="#" class="button button-light show-contacts">{{__('ui.showContacts')}}</a>
-                <button href="#popup-contacts" class="hidden open-contacts" data-fancybox></button>
                 @if ($currentUser && $post->user_id==$currentUser->id)
                     <br>
                     <a href="{{route('posts.edit', $post)}}" class="button button-light">{{__('ui.edit')}}</a>

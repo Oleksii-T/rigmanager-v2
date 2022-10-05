@@ -71,11 +71,26 @@ class Setting extends Model
         ],
     ];
 
-    public static function get($key, $onlyValue = true)
+    public static function get($key, $onlyValue = true, $cache = false)
     {
         try {
+            if ($cache) {
+                $cKey = "settings.$key";
+                $fallbackVal = 'no-value-from-cache';
+                $value = cache()->get($cKey, $fallbackVal);
+                if ($value != $fallbackVal) {
+                    return $value;
+                }
+            }
+
             $setting = self::where('key', $key)->first();
-            return $onlyValue ? $setting->data['value'] : $setting->data;
+            $setting = $onlyValue ? $setting->data['value'] : $setting->data;
+
+            if ($cache) {
+                cache()->put($cKey, $setting, 60);
+            }
+
+            return $setting;
         } catch (\Exception $e) {
             return null;
         }

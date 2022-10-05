@@ -8,6 +8,9 @@ use Yajra\DataTables\DataTables;
 use App\Traits\HasTranslations;
 use App\Traits\HasAttachments;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Events\PostCreated;
+use App\Jobs\MailerProcessNewPost;
 
 class Post extends Model
 {
@@ -55,7 +58,6 @@ class Post extends Model
     ];
 
     const CONDITIONS = [
-        'none',
         'new',
         'used',
         'for-parts'
@@ -81,6 +83,28 @@ class Post extends Model
         static::deleting(function ($model) {
             $model->purgeAttachments();
             $model->purgeTranslations();
+        });
+
+        static::created(function ($model) {
+            $hidePending = Setting::get('hide_pending_posts', true, true);
+            if (!$hidePending) {
+                MailerProcessNewPost::dispatch($model);
+            }
+        });
+
+        static::updated(function ($model) {
+            $hidePending = Setting::get('hide_pending_posts', true, true);
+            $nowActive = $model->getAttribute('is_active');
+            $wasActive = $model->getOriginal('is_active');
+            $wasStatus = $model->getAttribute('status');
+            $nowStatus = $model->getOriginal('status');
+
+            $sendBecauseActive = !$hidePending && !$wasActive && $nowActive;
+            $sendBecauseStatus = $hidePending && $wasStatus == 'pending' && $nowStatus == 'approved';
+
+            if ($sendBecauseActive || $sendBecauseStatus) {
+                MailerProcessNewPost::dispatch($model);
+            }
         });
     }
 
@@ -121,13 +145,14 @@ class Post extends Model
 
     public function scopeVisible($query)
     {
+        $hidePending = Setting::get('hide_pending_posts', true, true);
         $query->where('is_active', true);
 
-        if (Setting::get('hide_pending_posts')) {
-            return $query;
+        if ($hidePending) {
+            return $query->where('status', 'approved');
         }
 
-        return $query->where('status', 'approved');
+        return $query;
     }
 
     public function scopeStatus($query, string $status)
@@ -316,8 +341,6 @@ class Post extends Model
     public static function conditionReadable($condition)
     {
         switch ($condition) {
-            case 'none':
-                return trans('posts.conditions.none');
             case 'new':
                 return trans('posts.conditions.new');
             case 'used':
@@ -353,7 +376,6 @@ class Post extends Model
     {
         $conditions = $filters['conditions']??[];
         $types = $filters['types']??[];
-        $legalTypes = $filters['legal_types']??[];
         $urgent = $filters['is_urgent'][0]??null;
         $import = $filters['is_import'][0]??null;
         $sort = $filters['sorting']??null;
@@ -362,9 +384,17 @@ class Post extends Model
         $currency = $filters['currency']??null;
         $costFrom = $filters['cost_from']??null;
         $costTo = $filters['cost_to']??null;
+        $author = $filters['author']??null;
         $category = $filters['category']??null;
         if (!($category instanceof Category)) {
             $category = Category::find($category);
+        }
+
+        if ($author){
+            $user = User::where('slug', $author)->orWhere('id', $author)->first();
+            if ($user) {
+                $posts->where('user_id', $user->id);
+            }
         }
 
         // append cost to query if cost filteting\sorting is used
@@ -394,7 +424,9 @@ class Post extends Model
 
         if ($search) {
             $posts->whereHas('translations', function ($q) use ($search){
-                $q->whereIn('field', ['title', 'description'])->where('value', 'like', "%$search%");
+                $q->whereIn('field', ['title', 'description'])
+                    ->where('locale', LaravelLocalization::getCurrentLocale())
+                    ->where('value', 'like', "%$search%");
             });
         }
 

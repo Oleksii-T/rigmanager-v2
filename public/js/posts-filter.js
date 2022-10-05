@@ -24,6 +24,7 @@ $(document).ready(function () {
         }
         timeout = setTimeout(() => {
             checkCurrency(name, val);
+            params.page = 1;
             filter();
         }, 600)
     });
@@ -46,6 +47,7 @@ $(document).ready(function () {
             params[name] = val;
         }
         checkCurrency(name, val);
+        params.page = 1;
         filter();
     });
 
@@ -73,6 +75,32 @@ $(document).ready(function () {
         filter();
     });
 
+    // add current search reqeust in mailer
+    $('.add-request-to-mailer').click(function(e) {
+        e.preventDefault();
+        let url = $(this).data('url');
+        let filters = params;
+        filters.category = $('[page-data]').data('category');
+
+        fullLoader();
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                filters: filters
+            },
+            success: (response)=>{
+                fullLoader(false);
+                showToast(response.message);
+            },
+            error: function(response) {
+                fullLoader(false);
+                showServerError(response);
+            }
+        });
+    });
+
     function getParameterByName(name, url) {
         name = name.replace(/[\[\]]/g, '\\$&');
         var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -85,7 +113,6 @@ $(document).ready(function () {
     function filter() {
         console.log('filter'); //! LOG
         clearTimeout(timeout);
-        prevParams = JSON.parse(JSON.stringify(params));
         fullLoader();
 
         if (request) {
@@ -107,6 +134,7 @@ $(document).ready(function () {
                     return;
                 }
                 request = null;
+                fullLoader(false);
                 showServerError(response);
             }
         });

@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\MailerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,7 @@ use App\Http\Controllers\AttachmentController;
 Route::get('auth/social/{provider}', [SocialAuthController::class, 'redirect'])->name('auth.social');
 Route::get('auth/callback/{provider}', [SocialAuthController::class, 'callback']);
 Route::get('catalog', [PageController::class, 'categories'])->name('categories');
+Route::get('contact-us', [PageController::class, 'contact-us'])->name('contact-us');
 
 Route::get('logout', function () {
     auth()->logout();
@@ -55,6 +57,18 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::put('{post}', [PostController::class, 'update'])->name('update');
                 Route::delete('{post}', [PostController::class, 'destroy'])->name('destroy');
             });
+
+            Route::prefix('mailers')->name('mailers.')->group(function () {
+                Route::get('', [MailerController::class, 'index'])->name('index');
+                Route::get('{mailer}/edit', [MailerController::class, 'edit'])->name('edit');
+                Route::post('', [MailerController::class, 'store'])->name('store');
+                Route::put('deactivate', [MailerController::class, 'deactivate'])->name('deactivate');
+                Route::put('{mailer}/toggle-active', [MailerController::class, 'toggle'])->name('toggle');
+                Route::put('{mailer}', [MailerController::class, 'update'])->name('update');
+                Route::delete('', [MailerController::class, 'destroyAll'])->name('destroy-all');
+                Route::delete('{mailer}', [MailerController::class, 'destroy'])->name('destroy');
+            });
+            Route::resource('mailers', MailerController::class)->except('show');
 
             Route::prefix('profile')->name('profile.')->group(function () {
                 Route::get('/', [ProfileController::class, 'index'])->name('index');

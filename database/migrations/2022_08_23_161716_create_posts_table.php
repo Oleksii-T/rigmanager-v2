@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('origin_lang');
             $table->string('status')->default('pending');
             $table->string('type');
-            $table->string('condition');
+            $table->string('condition')->nullable();
             $table->string('duration');
             $table->string('is_active')->default(false);
             $table->string('is_urgent')->default(false);

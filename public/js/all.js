@@ -297,14 +297,15 @@ $(document).ready(function () {
             return;
         }
 
-        if (button.hasClass('ask')) {
+        if (form.hasClass('ask')) {
             swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: form.data('asktitle'),
+                text: form.data('asktext'),
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: form.data('askyes'),
+                cancelButtonText: form.data('askno')
             }).then((result) => {
                 if (result.value) {
                     ajaxSubmit(form, formData, button);
@@ -361,6 +362,13 @@ $(document).ready(function () {
             showToast(flash.message, false);
         }
     }
+
+    // remove author in mailer page
+    $('.remove-author-btn').click(function(e) {
+        e.preventDefault();
+        $('input[name=filters\\[author\\]]').val('');
+        $('input[name=author_name]').val('');
+    });
 });
 
 // toast notification object

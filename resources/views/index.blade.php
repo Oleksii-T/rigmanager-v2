@@ -14,17 +14,17 @@
                 <h1>@lang('ui.introduction')</h1>
                 <div class="top-links">
                     <div class="top-links-item">
-                        <a href="{{route('search', ['type'=>'sell'])}}">@lang('ui.introSellEq')</a>
+                        <a href="{{route('search', ['types'=>['sell', 'lease']])}}">@lang('ui.introSellEq')</a>
                     </div>
                     <div class="top-links-item">
-                        <a href="{{route('search', ['type'=>'buy'])}}">@lang('ui.introBuyEq')</a>
+                        <a href="{{route('search', ['types'=>['buy', 'rent']])}}">@lang('ui.introBuyEq')</a>
                     </div>
                 </div>
                 <div class="top-form">
-                    <form action="#">
+                    <form action="{{route('search')}}">
                         <fieldset>
                             <div class="top-form-line">
-                                <input type="text" class="input" name="text" placeholder="@lang('ui.search')" required>
+                                <input type="text" class="input" name="search" placeholder="@lang('ui.search')" required>
                                 <button class="button">@lang('ui.search')</button>
                             </div>
                         </fieldset>

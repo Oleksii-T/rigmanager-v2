@@ -13,8 +13,14 @@ class PostController extends Controller
 {
     public function show(Request $request, Post $post)
     {
-        $user = $post->user;
-        $authorPosts = $user->posts()
+        $user = auth()->user();
+
+        if (!$post->is_active && $post->user_id != $user->id) {
+            return view('posts.inactive', compact('post'));
+        }
+
+        $authorPosts = Post::query()
+            ->where('user_id', $post->user_id)
             ->visible()
             ->where('id', '!=', $post->id)
             ->inRandomOrder()

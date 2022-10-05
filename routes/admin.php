@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\MailerController;
 
 /*
  *
@@ -30,6 +31,8 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('categories', CategoryController::class);
 
     Route::resource('posts', PostController::class);
+
+    Route::resource('mailers', MailerController::class)->except('show');
 
     Route::resource('partners', PartnerController::class)->except('show');
 

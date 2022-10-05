@@ -39,7 +39,7 @@ class PostRequest extends FormRequest
             'origin_lang' => ['required', 'string'],
             'status' => ['required', 'string', Rule::in(Post::STATUSES)],
             'type' => ['required', 'string', Rule::in(Post::TYPES)],
-            'condition' => ['required', 'string', Rule::in(Post::CONDITIONS)],
+            'condition' => ['nullable', 'string', Rule::in(Post::CONDITIONS)],
             'duration' => ['required', 'string', Rule::in(Post::DURATIONS)],
             'is_active' => ['nullable', 'boolean'],
             'is_urgent' => ['nullable', 'boolean'],

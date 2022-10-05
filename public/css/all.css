@@ -1779,8 +1779,9 @@ textarea.form-error {
 	width: 30%;
 	padding: 0 10px;
 }
-#form-mailer .add-radio-col {
+.add-radio-col-50 {
 	width: 50%;
+	padding: 0 10px;
 }
 .tumbler {
 	display: -webkit-box;

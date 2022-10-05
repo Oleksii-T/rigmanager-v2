@@ -67,6 +67,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Post::class, 'user_fav_posts')->withTimestamps();
     }
 
+    public function mailers()
+    {
+        return $this->hasMany(Mailer::class);
+    }
+
     public function avatar()
     {
         return $this->morphOne(Attachment::class, 'attachmentable');
@@ -86,9 +91,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function lastCurrency()
     {
-        $c = $this->posts()->whereNotNull('currency')->latest()->select('currency')->first();
+        // $c = $this->posts()->whereNotNull('currency')->latest()->select('currency')->first();
+        $c = $this->posts()->whereHas('costs')->latest()->first()?->costs()->where('is_default', true)->value('currency');
 
-        return $c->currency ?? 'usd';
+        return $c ?? 'usd';
     }
 
     public static function dataTable($query)

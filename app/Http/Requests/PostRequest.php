@@ -32,7 +32,7 @@ class PostRequest extends FormRequest
             'description' => ['required', 'string', 'max:5000'],
             'category_id' => ['required', 'exists:categories,id'],
             'type' => ['required', 'string', Rule::in(Post::TYPES)],
-            'condition' => ['required', 'string', Rule::in(Post::CONDITIONS)],
+            'condition' => ['nullable', 'string', Rule::in(Post::CONDITIONS)],
             'duration' => ['required', 'string', Rule::in(Post::DURATIONS)],
             'is_urgent' => ['nullable', 'boolean'],
             'amount' => ['nullable', 'integer', 'min:1', 'max:9999999'],

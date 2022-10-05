@@ -283,6 +283,11 @@ return [
             'icon' => 'fas fa-fw fa-paste',
         ],
         [
+            'text' => 'Mailers',
+            'route'  => 'admin.mailers.index',
+            'icon' => 'fas fa-fw fa-inbox',
+        ],
+        [
             'text' => 'Categories',
             'route'  => 'admin.categories.index',
             'icon' => 'fas fa-fw fa-sitemap',

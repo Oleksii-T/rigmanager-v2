@@ -22,35 +22,6 @@ $(document).ready(function() {
         });
     }
 
-    // user click add author to mailer btn
-    $('.add-to-mailer').click(function(e) {
-        e.preventDefault();
-        var button = $(this);
-        button.addClass('loading');
-        $.ajax({
-            type: "GET",
-            url: "{{ route('mailer.create.by.author', $post->user_id) }}",
-            success: function(data) {
-                try {
-                    data = JSON.parse(data);
-                    if ( data.code == 200 ) {
-                        showPopUpMassage(true, data.message);
-                        button.text("{{ __('ui.mailerAuthorAlreadyAdded') }}");
-                    } else {
-                        showPopUpMassage(false, data.message);
-                    }
-                } catch (error) {
-                    showPopUpMassage(false, "{{ __('messages.error') }}");
-                }
-                button.removeClass('loading');
-            },
-            error: function() {
-                showPopUpMassage(false, "{{ __('messages.error') }}");
-                button.removeClass('loading');
-            }
-        });
-    });
-
     //hide/show translated/origin title/description
     $('.show-origin-text').click(function(e){
         e.preventDefault();
@@ -66,9 +37,14 @@ $(document).ready(function() {
             url: `/posts/${id}/contacts`,
             success: function(response) {
                 button.removeClass('loading');
-                $('.open-contacts').trigger('click');
-                $('.contact-email .prod-info-text').text(response.data.email);
-                $('.contact-phone .prod-info-text').text(response.data.phone);
+                let email = response.data.email;
+                let phone = response.data.phone;
+                swal.fire({
+                    html: `<p>Email: <b>${email}</b></p>` +  //! TRANSLATE
+                        `<p>Phone: <b>${phone}</b></p>`,
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                });
             },
             error: function(response) {
                 button.removeClass('loading');

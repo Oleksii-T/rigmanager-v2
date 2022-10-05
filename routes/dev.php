@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Translation;
 use App\Models\Page;
 use App\Models\Post;
+use App\Models\Mailer;
 use App\Models\Category;
 
 /*
@@ -21,6 +22,13 @@ if (config('app.env') == 'production') {
 
 Route::get('test', function () {
     // some testing code
+    $query = Post::where('posts.id', 111);
+    $mailer = Mailer::find(1);
+    Post::applyFilters($query, $mailer->filters);
+
+    $p = $query->first();
+
+    dd($p);
 
     dd('done');
 });
