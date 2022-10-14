@@ -32,7 +32,9 @@
                                 <th class="ids-column">ID</th>
                                 <th>Email</th>
                                 <th>Name</th>
-                                <th>Created_at</th>
+                                <th>Posts</th>
+                                <th>Last active at</th>
+                                <th>Created at</th>
                                 <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>

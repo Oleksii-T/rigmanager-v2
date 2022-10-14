@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->datetime('last_active_at');
             $table->timestamps();
         });
     }

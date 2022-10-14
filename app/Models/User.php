@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'country',
         'bio',
+        'last_active_at',
     ];
 
     /**
@@ -45,6 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_active_at' => 'datetime',
     ];
 
     public function socials()
@@ -107,6 +109,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return DataTables::of($query)
             ->addColumn('name', function ($model) {
                 return $model->name;
+            })
+            ->addColumn('posts', function ($model) {
+                return $model->posts->count();
+            })
+            ->editColumn('last_active_at', function ($model) {
+                return $model->last_active_at->diffForHumans();
             })
             ->editColumn('created_at', function ($model) {
                 return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
