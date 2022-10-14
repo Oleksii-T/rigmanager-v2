@@ -23,6 +23,7 @@ class Import extends Model
     ];
 
     const STATUS_PENDING = 'pending';
+    const STATUS_PROCESSING = 'processing';
     const STATUS_FAILED = 'failed';
     const STATUS_DONE = 'done';
 
@@ -61,8 +62,8 @@ class Import extends Model
                 return count($model->posts??[]);
             })
             ->editColumn('status', function ($model) {
-                if ($model->status == 'pending') {
-                    return '<span class="badge badge-warning">Pending</span>';
+                if ($model->status == 'pending' || $model->status == 'processing') {
+                    return '<span class="badge badge-warning">'.$model->status.'</span>';
                 }
 
                 if ($model->status == 'done') {

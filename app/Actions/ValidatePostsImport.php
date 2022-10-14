@@ -29,7 +29,7 @@ class ValidatePostsImport
             try {
                 self::row($row);
             } catch (\Throwable $th) {
-                return [$i, $th->getMessage()];
+                return [$i+1, $th->getMessage()];
             }
         }
 

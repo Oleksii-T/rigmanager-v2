@@ -44,6 +44,10 @@ class PostsImport implements ShouldQueue
     public function handle()
     {
         try {
+            $this->import->update([
+                'status' => Import::STATUS_PROCESSING
+            ]);
+
             $pages = \Excel::toArray(new PostsImportExcel, $this->import->file->path);
             $rows = $pages[0]; // get first excel page
             $rows = array_slice($rows, 2); // remove the header from import file
@@ -60,10 +64,10 @@ class PostsImport implements ShouldQueue
             });
         } catch (\Throwable $th) {
 
-            \Log::error('Posts create from import ERROR', [
-                'import' => $import,
+            \Log::error('PostsImport Job: ERROR', [
+                'import' => $this->import,
                 'error' => $th->getMessage(),
-                'trace' => substr($e->getTraceAsString(), 0, 600)
+                'trace' => substr($th->getTraceAsString(), 0, 600)
             ]);
 
             $this->import->update([
@@ -122,6 +126,9 @@ class PostsImport implements ShouldQueue
 
         // attach images from url
         foreach (explode(' ', $row[4]) as $url) {
+            if (!$url) {
+                return;
+            }
             $contents = file_get_contents($url);
             $name = substr($url, strrpos($url, '/') + 1);
             $ext = substr($name, strrpos($name, '.'));

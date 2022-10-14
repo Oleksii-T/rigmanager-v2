@@ -54,10 +54,12 @@ class AppServiceProvider extends ServiceProvider
         $adminlteMenus = config('adminlte.menu');
         foreach ($adminlteMenus as &$menu) {
             if (($menu['route']??null) == 'admin.posts.index') {
-                $pending = Post::status('pending')->count();
-                if ($pending) {
-                    $menu['label'] = $pending;
-                }
+                try {
+                    $pending = Post::status('pending')->count();
+                    if ($pending) {
+                        $menu['label'] = $pending;
+                    }
+                } catch (\Throwable $th) {}
             }
         }
         config(['adminlte.menu'=> $adminlteMenus]);

@@ -81,7 +81,11 @@ return [
     'postImportSuccess' => 'Posts published successfully',
 
     'import' => [
-        'example-file-name' => 'rigmanager-import-file.xlsx'
+        'example-file-name' => 'rigmanager-import-file.xlsx',
+        'errors' => [
+            'AtPost' => 'An error occured at post #',
+            'type' => 'Invalid "Type"'
+        ]
     ],
     'importExtError' => 'Only xlsx files are allowed.',
     'importStructureError' => 'The import file structure is broken.',
