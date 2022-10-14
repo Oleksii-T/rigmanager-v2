@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\MailerController;
 
 /*
@@ -35,6 +36,8 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('mailers', MailerController::class)->except('show');
 
     Route::resource('partners', PartnerController::class)->except('show');
+
+    Route::resource('imports', ImportController::class)->only('index', 'show');
 
     Route::resource('users', UserController::class);
 

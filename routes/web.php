@@ -9,6 +9,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\MailerController;
+use App\Http\Controllers\ImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
     Route::get('/', [PageController::class, 'index'])->name('index');
     Route::get('terms', [PageController::class, 'terms'])->name('terms');
+    Route::get('faq', [PageController::class, 'faq'])->name('faq');
     Route::get('privacy', [PageController::class, 'privacy'])->name('privacy');
     Route::get('categories', [PageController::class, 'categories'])->name('categories');
     Route::get('catalog', [SearchController::class, 'index'])->name('search');
@@ -45,6 +47,20 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::middleware('auth')->group(function () {
 
         Route::middleware('verified')->group(function () {
+
+            Route::prefix('imports')->name('imports.')->group(function () {
+                Route::get('', [ImportController::class, 'index'])->name('index');
+                Route::get('create', [ImportController::class, 'create'])->name('create');
+                Route::get('store', [ImportController::class, 'store'])->name('store');
+                Route::get('rules', [ImportController::class, 'rules'])->name('rules');
+                Route::get('downloads', [ImportController::class, 'downloadExample'])->name('download-example');
+                Route::get('{import}/posts', [ImportController::class, 'posts'])->name('posts');
+                Route::get('{import}/download', [ImportController::class, 'download'])->name('download');
+                Route::post('{import}/posts/delete', [ImportController::class, 'postsDelete'])->name('posts.delete');
+                Route::post('{import}/posts/deactivate', [ImportController::class, 'postsDeactivate'])->name('posts.deactivate');
+                Route::post('{import}/posts/activate', [ImportController::class, 'postsActivate'])->name('posts.activate');
+                Route::post('', [ImportController::class, 'store'])->name('store');
+            });
 
             Route::prefix('posts')->name('posts.')->group(function () {
                 Route::get('create', [PostController::class, 'create'])->name('create');

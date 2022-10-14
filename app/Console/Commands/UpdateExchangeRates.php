@@ -39,7 +39,6 @@ class UpdateExchangeRates extends Command
                     $data = $service->latest($from);
                     $base = $data['base'];
                 } catch (\Throwable $th) {
-                    dlog(" data", $data); //! LOG
                     continue;
                 }
                 if (!$base || $base != strtoupper($from)) {

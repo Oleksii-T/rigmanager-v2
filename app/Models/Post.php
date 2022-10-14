@@ -63,11 +63,6 @@ class Post extends Model
         'for-parts'
     ];
 
-    CONST LEGAL_TYPES = [
-        'private',
-        'business'
-    ];
-
     const TRANSLATABLES = [
         'title',
         'description',

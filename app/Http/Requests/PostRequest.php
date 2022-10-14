@@ -36,18 +36,21 @@ class PostRequest extends FormRequest
             'duration' => ['required', 'string', Rule::in(Post::DURATIONS)],
             'is_urgent' => ['nullable', 'boolean'],
             'amount' => ['nullable', 'integer', 'min:1', 'max:9999999'],
-            'country' => ['required', 'string', 'max:5'],
-            'manufacturer' => ['nullable', 'string', 'max:255'],
-            'manufacture_date' => ['nullable', 'string', 'max:255'],
-            'part_number' => ['nullable', 'string', 'max:255'],
+            'country' => ['required', 'string', 'max:2'],
+            'manufacturer' => ['nullable', 'string', 'max:70'],
+            'manufacture_date' => ['nullable', 'string', 'max:70'],
+            'part_number' => ['nullable', 'string', 'max:70'],
             'cost' => ['nullable', 'numeric', 'min:1', 'max:9999999'],
             'currency' => ['nullable', 'required_with:cost'],
             'images' => ['nullable', 'array'],
-            // .jpg, .jpeg, .png, .bmp, .gif, .svg, .webp
-            'images.*' => ['nullable', 'image', 'max:8000'],
+            'images.*' => ['nullable', 'image', 'max:8000'], // .jpg, .jpeg, .png, .bmp, .gif, .svg, .webp
             'documents' => ['nullable', 'array'],
-            // .pdf, .xls, .xlsx, .xml, .doc, .docx
-            'documents.*' => ['nullable', 'file', 'mimetypes:application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'max:8000']
+            'documents.*' => [
+                'nullable',
+                'file',
+                'mimetypes:application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'max:8000'
+            ] // .pdf, .xls, .xlsx, .xml, .doc, .docx
         ];
     }
 }

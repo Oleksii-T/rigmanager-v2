@@ -66,6 +66,13 @@ class Attachment extends Model
         );
     }
 
+    public function path(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => Storage::disk(self::disk($this->type))->path($this->name),
+        );
+    }
+
     public static function dataTable($query)
     {
         return DataTables::of($query)

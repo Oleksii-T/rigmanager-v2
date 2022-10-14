@@ -72,6 +72,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Mailer::class);
     }
 
+    public function imports()
+    {
+        return $this->hasMany(Import::class);
+    }
+
     public function avatar()
     {
         return $this->morphOne(Attachment::class, 'attachmentable');

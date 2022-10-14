@@ -298,6 +298,11 @@ return [
             'icon' => 'fas fa-fw fa-star',
         ],
         [
+            'text' => 'Imports',
+            'route'  => 'admin.imports.index',
+            'icon' => 'fas fa-fw fa-table',
+        ],
+        [
             'text' => 'Attachments',
             'route'  => 'admin.attachments.index',
             'icon' => 'fas fa-fw fa-folder-open',
@@ -305,7 +310,7 @@ return [
         [
             'text' => 'Exchange Rates',
             'route'  => 'admin.exchange-rates.index',
-            'icon' => 'fas fa-fw fa-folder-open',
+            'icon' => 'fas fa-fw fa-balance-scale',
         ],
         [
             'text' => 'Settings',

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'profile' => [
         'invalid-curr-pass' => 'The provided password does not match your current password',
         'updated' => 'Profile updated successfully!',
@@ -81,6 +80,9 @@ return [
     'postImportError' => 'The error occurred while analyzing the import file',
     'postImportSuccess' => 'Posts published successfully',
 
+    'import' => [
+        'example-file-name' => 'rigmanager-import-file.xlsx'
+    ],
     'importExtError' => 'Only xlsx files are allowed.',
     'importStructureError' => 'The import file structure is broken.',
     'importEmptyError' => 'The uploaded file is empty.',

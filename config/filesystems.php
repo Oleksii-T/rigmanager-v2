@@ -51,6 +51,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'import-examples' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/import-examples'),
+            'url' => env('APP_URL').'/storage/import-examples',
+            'visibility' => 'public',
+        ],
+
         'adocuments' => [
             'driver' => 'local',
             'root' => storage_path('app/public/attachments/documents'),

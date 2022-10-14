@@ -317,27 +317,6 @@ $(document).ready(function () {
         ajaxSubmit(form, formData, button);
     })
 
-    function ajaxSubmit(form, formData, button) {
-        $('.form-error').empty();
-        button.addClass('cursor-wait');
-        $.ajax({
-            url: form.attr('action'),
-            type: form.attr('method'),
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: (response)=>{
-                button.removeClass('cursor-wait');
-                showServerSuccess(response);
-            },
-            error: function(response) {
-                button.removeClass('cursor-wait');
-                showServerError(response);
-            }
-        });
-    }
-
     // show uploaded file name
     $('.show-uploaded-file-name input').change(function () {
         let name = $(this).val().split('\\').pop();
@@ -369,7 +348,62 @@ $(document).ready(function () {
         $('input[name=filters\\[author\\]]').val('');
         $('input[name=author_name]').val('');
     });
+
+    // submit import creat form when import file uploaded
+    $('#import-file').change(function(e) {
+        e.preventDefault();
+        console.log('trigger submit'); //! LOG
+        $(this).closest('form').trigger('submit');
+    })
+
+    // shoa all imported posts
+    $('.see-import-posts').click(function(e) {
+        e.preventDefault();
+
+        let button = $(this);
+
+        if (button.hasClass('cursor-wait')) {
+            return;
+        }
+
+        button.addClass('cursor-wait');
+
+        $.ajax({
+            url: button.attr('href'),
+            type: 'get',
+            success: (response)=>{
+                button.removeClass('cursor-wait');
+                swal.fire({html: response.data});
+            },
+            error: function(response) {
+                button.removeClass('cursor-wait');
+                showServerError(response);
+            }
+        });
+    })
 });
+
+
+function ajaxSubmit(form, formData, button) {
+    $('.form-error').empty();
+    button.addClass('cursor-wait');
+    $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: (response)=>{
+            button.removeClass('cursor-wait');
+            showServerSuccess(response);
+        },
+        error: function(response) {
+            button.removeClass('cursor-wait');
+            showServerError(response);
+        }
+    });
+}
 
 // toast notification object
 const Toast = Swal.mixin({

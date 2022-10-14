@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Post;
 use App\Models\Attachment;
-use App\Models\category;
+use App\Models\Category;
 use App\Http\Requests\PostRequest;
+use App\Jobs\PostTranslate;
 
 class PostController extends Controller
 {
@@ -57,8 +58,6 @@ class PostController extends Controller
         $input = $request->validated();
         $input['status'] = 'pending';
         $input['is_active']= true;
-        $input['origin_lang'] = 'en'; //TODO
-        $input['cost_usd'] = $input['cost']??null; //TODO
         $input['slug'] = [
             'en' => makeSlug($input['title'], Post::allSlugs())
         ];
@@ -73,6 +72,7 @@ class PostController extends Controller
         $post->saveTranslations($input);
         $post->addAttachment($input['images']??[], 'images');
         $post->addAttachment($input['documents']??[], 'documents');
+        PostTranslate::dispatch($post);
 
         flash(trans('messages.post.created')); //! TRANSLATE
 
