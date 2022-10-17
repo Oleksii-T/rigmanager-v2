@@ -297,6 +297,10 @@ $(document).ready(function () {
             return;
         }
 
+        if (form.hasClass('show-full-loader')) {
+            fullLoader();
+        }
+
         if (form.hasClass('ask')) {
             swal.fire({
                 title: form.data('asktitle'),
@@ -381,6 +385,15 @@ $(document).ready(function () {
             }
         });
     })
+
+    // unfold faq requested FAQ paragraph
+    let params = (new URL(document.location)).searchParams;
+    let faqSlug = params.get("question");
+    if (faqSlug){
+        toggleFaqText($('.faq-item #'+faqSlug));
+    }
+
+    //
 });
 
 
@@ -395,10 +408,12 @@ function ajaxSubmit(form, formData, button) {
         contentType: false,
         processData: false,
         success: (response)=>{
+            fullLoader(false);
             button.removeClass('cursor-wait');
             showServerSuccess(response);
         },
         error: function(response) {
+            fullLoader(false);
             button.removeClass('cursor-wait');
             showServerError(response);
         }
@@ -496,6 +511,7 @@ function showServerSuccess(response) {
 
 // faq dropdown
 function toggleFaqText(item) {
+    console.log(`toggle el`, item); //! LOG
 	if(item.hasClass('active')){
 		$('.faq-hidden').slideUp();
 		$('.faq-top').removeClass('active');

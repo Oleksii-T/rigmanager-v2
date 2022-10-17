@@ -3,6 +3,10 @@
 return [
     'main' => 'Main',
 
+    'faq' => [
+        'intro' => 'We have collected frequently asked questions for you. If you still have questions or suggestions - you always can',
+    ],
+
     // Dev massages
     'workInProgress' => 'Work in progress',
     'development' => 'The site is at a late development stage. Coming soon.',

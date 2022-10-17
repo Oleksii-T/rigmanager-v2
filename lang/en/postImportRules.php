@@ -33,19 +33,15 @@ return [
         Minimum 5 characters.
         Maximum 200 characters.',
     'type' => 'Type',
-    'typeRule' => 'Only certain values ​​are allowed for input:
-        1 - Equipment sale
-        2 - Equipment purchase
-        3 - Equipment rent
-        4 - Equipment lease',
-    'roleRule' => 'Only certain values ​​are allowed for input:
-        1 - Private person
-        2 - Business',
+    'typeRule' => 'Only certain values ​a​re allowed for input:
+        SELL - Equipment sale
+        BUY - Equipment purchase
+        RENT - Equipment rent
+        LEASE - Equipment lease',
     'conditionRule' => 'Only certain values ​​are allowed for input:
-        1 - Not specified
-        2 - New
-        3 - Used
-        4 - For spare parts',
+        NEW - New
+        USED - Used
+        FOR-PARTS - For spare parts',
     'tag' => 'Category',
     'tagRule' => 'Tag must be one of available category-code, click the button below to see the full list of available codes.',
     'tagRuleEqBtn' => 'See list of equipment category codes',
@@ -59,22 +55,9 @@ return [
     'cost' => 'Cost-Currency',
     'currencyRule' => 'After the price, indicate the currency - "USD" or "UAH". Example: "999.9USD"',
     'regionRule' => 'Region must be one of region-code, click the button below to see the full list of available codes.',
-    'regionRuleBtn' => 'See list of region codes',
-    'regionsList' => 'List of region codes',
-    'emailRule' => 'Mail is not required if a contact phone number has been entered.
-        You can enter any email address.
-        Max lenght: 254',
-    'phoneRule' => 'A phone number is not required if a contact email has been entered.
-        You can enter any phone number.
-        Only phone numbers of Ukraine are considered valid.
-        Phone format: 
-        0 (12) 345 67 89',
-    'VTW' => 'Have Viber / Telegram / Whatsapp',
-    'VTWRule' => 'Leave the field blank if you are not using this application, or enter any character if you are.',
-    'importRule' => 'Enter any character, if you want to indicate that this deal will be held on the terms of import / export.',
     'lifetime' => 'Live period',
     'lifetimeRule' => 'Only certain values ​​are allowed for input:
-        1 - 1 month
-        2 - 2 months
-        3 - Unlimited (Available for Pro accounts)',
+        1M - 1 month
+        2M - 2 months
+        UNLIN - Unlimited (Available for Pro accounts)',
 ];

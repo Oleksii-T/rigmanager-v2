@@ -37,23 +37,23 @@
 					</div>
 					<div class="footer-col">
 						<ul class="footer-nav">
-							<li><a href="#">@lang('ui.footerAbout')</a></li>
+							<li><a href="{{route('about')}}">@lang('ui.footerAbout')</a></li>
 							<li><a href="#">@lang('ui.footerBlog')</a></li>
-							<li><a href="#">@lang('ui.catalog')</a></li>
+							<li><a href="{{route('search')}}">@lang('ui.catalog')</a></li>
 						</ul>
 					</div>
 					<div class="footer-col">
 						<ul class="footer-nav">
 							<li><a href="#">@lang('ui.footerSubscription')</a></li>
 							<li><a href="#">@lang('ui.footerContact')</a></li>
-							<li><a href="#">FAQ</a></li>
+							<li><a href="{{route('faq')}}">FAQ</a></li>
 						</ul>
 					</div>
 					<div class="footer-col">
 						<ul class="footer-nav">
-							<li><a href="#">@lang('ui.footerTerms')</a></li>
-							<li><a href="#">@lang('ui.footerPrivacy')</a></li>
-							<li><a href="#">@lang('ui.footerSiteMap')</a></li>
+							<li><a href="{{route('terms')}}">@lang('ui.footerTerms')</a></li>
+							<li><a href="{{route('privacy')}}">@lang('ui.footerPrivacy')</a></li>
+							<li><a href="{{route('site-map')}}">@lang('ui.footerSiteMap')</a></li>
 						</ul>
 					</div>
 					<div class="footer-col">

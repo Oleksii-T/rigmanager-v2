@@ -35,10 +35,13 @@ Route::get('logout', function () {
 Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(LaravelLocalization::setLocale())->group(function () {
 
     Route::get('/', [PageController::class, 'index'])->name('index');
-    Route::get('terms', [PageController::class, 'terms'])->name('terms');
+    Route::get('about', [PageController::class, 'about'])->name('about');
     Route::get('faq', [PageController::class, 'faq'])->name('faq');
     Route::get('privacy', [PageController::class, 'privacy'])->name('privacy');
+    Route::get('terms', [PageController::class, 'terms'])->name('terms');
+    Route::get('site-map', [PageController::class, 'siteMap'])->name('site-map');
     Route::get('categories', [PageController::class, 'categories'])->name('categories');
+    Route::get('import/rules', [PageController::class, 'importRules'])->name('import-rules');
     Route::get('catalog', [SearchController::class, 'index'])->name('search');
 
     Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');

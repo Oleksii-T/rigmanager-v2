@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Partner;
 use App\Models\Post;
+use App\Models\FAQ;
 
 class PageController extends Controller
 {
@@ -40,5 +41,40 @@ class PageController extends Controller
             ->sortBy('name');
 
         return view('categories', compact('categories'));
+    }
+
+    public function about()
+    {
+        return view('about');
+    }
+
+    public function faq()
+    {
+
+        $faqs = cache()->remember('global.faqs', 60*60*24, function () {
+            return FAQ::orderBy('order')->get();
+        });
+
+        return view('faq', compact('faqs'));
+    }
+
+    public function terms()
+    {
+        return view('terms');
+    }
+
+    public function siteMap()
+    {
+        return view('sitemap');
+    }
+
+    public function privacy()
+    {
+        return view('privacy');
+    }
+
+    public function importRules()
+    {
+        return view('import-rules');
     }
 }

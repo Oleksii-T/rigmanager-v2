@@ -21,7 +21,7 @@
             <div class="import">
                 <div class="import-top">
                     <div class="import-top-text">{{__('ui.postImportTitle')}}</div>
-                    <form id="form-import" action="{{route('imports.store')}}" method="post" class="general-ajax-submit">
+                    <form id="form-import" action="{{route('imports.store')}}" method="post" class="general-ajax-submit show-full-loader">
                         @csrf
                         <div class="form-button">
                             <div data-input="file" class="form-error"></div>

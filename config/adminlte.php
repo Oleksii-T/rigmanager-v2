@@ -271,6 +271,7 @@ return [
             'route'  => 'admin.index',
             'icon' => 'fas fa-fw fa-home',
         ],
+        'MAIN SECTIONS',
         [
             'text' => 'Users',
             'route'  => 'admin.users.index',
@@ -283,14 +284,15 @@ return [
             'icon' => 'fas fa-fw fa-paste',
         ],
         [
-            'text' => 'Mailers',
-            'route'  => 'admin.mailers.index',
-            'icon' => 'fas fa-fw fa-inbox',
-        ],
-        [
             'text' => 'Categories',
             'route'  => 'admin.categories.index',
             'icon' => 'fas fa-fw fa-sitemap',
+        ],
+        'SECONDARY SECTIONS',
+        [
+            'text' => 'Mailers',
+            'route'  => 'admin.mailers.index',
+            'icon' => 'fas fa-fw fa-inbox',
         ],
         [
             'text' => 'Partners',
@@ -306,6 +308,12 @@ return [
             'text' => 'Attachments',
             'route'  => 'admin.attachments.index',
             'icon' => 'fas fa-fw fa-folder-open',
+        ],
+        'EXTRA',
+        [
+            'text' => 'FAQs',
+            'route'  => 'admin.faqs.index',
+            'icon' => 'fas fa-fw fa-question-circle',
         ],
         [
             'text' => 'Exchange Rates',

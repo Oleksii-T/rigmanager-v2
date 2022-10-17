@@ -45,6 +45,6 @@ class AttachmentController extends Controller
     {
         $attachment->delete();
 
-        return $this->jsonSuccess('Blog updated successfully');
+        return $this->jsonSuccess('Attachment updated successfully');
     }
 }

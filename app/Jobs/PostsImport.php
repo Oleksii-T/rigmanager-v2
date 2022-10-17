@@ -97,7 +97,7 @@ class PostsImport implements ShouldQueue
             'manufacturer' => $row[8],
             'manufactureDate' => $row[9],
             'partNumber' => $row[10],
-            'country' => strtolower($row[12]),
+            'country' => $row[12] ? strtolower($row[12]) : $this->user->country,
             'duration' => strtolower($row[13]),
         ]);
 

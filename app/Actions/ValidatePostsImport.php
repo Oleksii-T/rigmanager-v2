@@ -181,8 +181,12 @@ class ValidatePostsImport
 
     public static function country($val)
     {
+        if ($val === null) {
+            return;
+        }
+
         $countries = array_keys(countries());
-        if (!$val || !in_array(strtolower($val), $countries)) {
+        if (!in_array(strtolower($val), $countries)) {
             abort(422, trans('messages.import.errors.country'));
         }
     }
