@@ -45,7 +45,7 @@
 					<div class="footer-col">
 						<ul class="footer-nav">
 							<li><a href="#">@lang('ui.footerSubscription')</a></li>
-							<li><a href="#">@lang('ui.footerContact')</a></li>
+							<li><a href="{{route('feedbacks.create')}}">@lang('ui.footerContact')</a></li>
 							<li><a href="{{route('faq')}}">FAQ</a></li>
 						</ul>
 					</div>

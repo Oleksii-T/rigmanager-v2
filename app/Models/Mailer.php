@@ -15,13 +15,15 @@ class Mailer extends Model
         'slug',
         'filters',
         'posts',
+        'to_send',
         'last_at'
     ];
 
     protected $casts = [
         'filters' => 'array',
         'posts' => 'array',
-        'last_at' => 'datetime'
+        'last_at' => 'datetime',
+        'to_send' => 'array'
     ];
 
     public function user()

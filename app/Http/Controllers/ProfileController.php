@@ -44,10 +44,9 @@ class ProfileController extends Controller
     public function posts(Request $request, Category $category=null)
     {
         $user = auth()->user();
-        $query = $user->posts()->with(['views', 'images']);
         $filters = $request->all();
         $filters['category'] = $category;
-        Post::applyFilters($query, $filters);
+        $query = $user->posts()->with(['views', 'images'])->filter($filters);
         $categories = $this->getPostsCategories($query, $category);
         $posts = $query->paginate(20);
 
@@ -64,10 +63,8 @@ class ProfileController extends Controller
     public function action(Request $request)
     {
         $user = auth()->user();
-        $query = $user->posts();
+        $query = $user->posts()->filter($request->filters);
         $selected = $request->selected??[];
-
-        Post::applyFilters($query, $request->filters);
 
         if ($request->all) {
             $query->whereNotIn('id', $selected);
@@ -109,10 +106,9 @@ class ProfileController extends Controller
     public function favorites(Request $request, Category $category=null)
     {
         $user = auth()->user();
-        $query = $user->favorites()->visible()->with(['views', 'images']);
         $filters = $request->all();
         $filters['category'] = $category;
-        Post::applyFilters($query, $filters);
+        $query = $user->favorites()->visible()->with(['views', 'images'])->filters($filters);
         $categories = $this->getPostsCategories($query, $category);
         $posts = $query->paginate(20);
 

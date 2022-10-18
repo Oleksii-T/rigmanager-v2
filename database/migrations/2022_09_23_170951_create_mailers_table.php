@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->json('filters');
             $table->json('posts')->nullable();
+            $table->json('to_mail')->nullable();
             $table->datetime('last_at')->nullable();
             $table->timestamps();
         });

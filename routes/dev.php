@@ -6,6 +6,8 @@ use App\Models\Page;
 use App\Models\Post;
 use App\Models\Mailer;
 use App\Models\Category;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailerPostFound;
 
 /*
  *
@@ -22,13 +24,20 @@ if (config('app.env') == 'production') {
 
 Route::get('test', function () {
     // some testing code
-    $query = Post::where('posts.id', 111);
-    $mailer = Mailer::find(1);
-    Post::applyFilters($query, $mailer->filters);
 
-    $p = $query->first();
+    $a = [12,23];
+    $b = [13];
 
-    dd($p);
+    dd($a + $b);
+
+    $c = array_merge($a, $b);
+
+    dd($c);
+
+    $mailer = Mailer::first();
+    $posts = Post::latest()->limit(5)->get();
+
+    return new MailerPostFound($mailer, $posts);
 
     dd('done');
 });

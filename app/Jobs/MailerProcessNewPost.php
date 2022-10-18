@@ -18,17 +18,15 @@ class MailerProcessNewPost implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $post;
-    private $created;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Post $post, $created=true)
+    public function __construct(Post $post)
     {
         $this->post = $post;
-        $this->created = $created;
     }
 
     /**
@@ -38,35 +36,25 @@ class MailerProcessNewPost implements ShouldQueue
      */
     public function handle()
     {
-        sleep(1); // wait untill post translations saved as well.
-
-        dlog("MailerProcessNewPost@handle. " . $this->post->id); //! LOG
-
         $mailersByUser = Mailer::where('is_active', true)->get()->groupBy('user_id');
 
         foreach ($mailersByUser as $userId => $mailers) {
             $send = false;
-            dlog(" check mailers for $userId user"); //! LOG
             foreach ($mailers as $mailer) {
                 if ($send) {
-                    dlog("  already send"); //! LOG
                     break;
                 }
 
-                $query = Post::where('posts.id', $this->post->id);
-                Post::applyFilters($query, $mailer->filters);
-                $post = $query->first();
+                $post = Post::where('posts.id', $this->post->id)->filter($mailer->filters)->first();
 
                 if (!$post) {
-                    dlog("  not meets mailer filters"); //! LOG
                     continue;
                 }
 
-                dlog("  send"); //! LOG
-                Mail::to($post->user)->send(new MailerPostFound($mailer, $post, $this->created));
+                $toSend = $mailer->to_send??[];
+                $toSend[] = $this->post->id;
                 $mailer->update([
-                    'last_at' => now(),
-                    'posts' => ($mailer->posts??[]) + [$this->post->id]
+                    'to_send' => $toSend
                 ]);
 
                 $send = true;

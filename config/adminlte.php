@@ -309,6 +309,12 @@ return [
             'route'  => 'admin.attachments.index',
             'icon' => 'fas fa-fw fa-folder-open',
         ],
+        [
+            'text' => 'Feedbacks',
+            'route'  => 'admin.feedbacks.index',
+            'label_color' => 'warning',
+            'icon' => 'fas fa-fw fa-reply',
+        ],
         'EXTRA',
         [
             'text' => 'FAQs',

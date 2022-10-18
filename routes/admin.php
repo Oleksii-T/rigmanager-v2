@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ImportController;
@@ -43,6 +44,9 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('users', UserController::class);
 
     Route::resource('faqs', FaqController::class)->except('show');
+
+    Route::get('feedbacks/{feedback}/read', [FeedbackController::class, 'read'])->name('feedbacks.read');
+    Route::resource('feedbacks', FeedbackController::class)->only('show', 'index', 'destroy');
 
     Route::post('exchange-rates/sync', [ExchangeRateController::class, 'sync'])->name('exchange-rates.sync');
     Route::resource('exchange-rates', ExchangeRateController::class)->only('index', 'edit', 'update', 'create');

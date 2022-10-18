@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\MailerController;
 use App\Http\Controllers\ImportController;
@@ -25,7 +26,6 @@ use App\Http\Controllers\ImportController;
 Route::get('auth/social/{provider}', [SocialAuthController::class, 'redirect'])->name('auth.social');
 Route::get('auth/callback/{provider}', [SocialAuthController::class, 'callback']);
 Route::get('catalog', [PageController::class, 'categories'])->name('categories');
-Route::get('contact-us', [PageController::class, 'contact-us'])->name('contact-us');
 
 Route::get('logout', function () {
     auth()->logout();
@@ -43,6 +43,9 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('categories', [PageController::class, 'categories'])->name('categories');
     Route::get('import/rules', [PageController::class, 'importRules'])->name('import-rules');
     Route::get('catalog', [SearchController::class, 'index'])->name('search');
+
+    Route::get('contact-us', [FeedbackController::class, 'create'])->name('feedbacks.create');
+    Route::post('contact-us', [FeedbackController::class, 'store'])->name('feedbacks.store');
 
     Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');
     Route::put('posts/{post}/view', [PostController::class, 'view']);

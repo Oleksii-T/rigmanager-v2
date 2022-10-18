@@ -7,6 +7,7 @@ use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\Paginator;
 use App\Models\Post;
+use App\Models\Feedback;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -58,6 +59,14 @@ class AppServiceProvider extends ServiceProvider
                     $pending = Post::status('pending')->count();
                     if ($pending) {
                         $menu['label'] = $pending;
+                    }
+                } catch (\Throwable $th) {}
+            }
+            if (($menu['route']??null) == 'admin.feedbacks.index') {
+                try {
+                    $count = Feedback::where('is_read', false)->count();
+                    if ($count) {
+                        $menu['label'] = $count;
                     }
                 } catch (\Throwable $th) {}
             }

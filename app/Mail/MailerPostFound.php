@@ -13,27 +13,21 @@ class MailerPostFound extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $pTitle;
-    public $pDescription;
-    public $created;
+    public $posts;
     public $mTitle;
     public $mId;
-    public $url;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Mailer $mailer, Post $post, $created)
+    public function __construct(Mailer $mailer, $posts)
     {
-        $this->pTitle = $post->title;
-        $desc = substr($post->description, 0, 190);
-        $this->pDescription = strlen($post->description) > 190 ? ($desc . '...') : $desc;
-        $this->created = $created;
+        $this->posts = $posts;
+
         $this->mTitle = $mailer->title;
         $this->mId = $mailer->id;
-        $this->url = route('posts.show', $post);
     }
 
     /**
