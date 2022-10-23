@@ -26,6 +26,9 @@ class SettingSeeder extends Seeder
             'google_client_id' => '1035671449664-f3a1h3h6d6953qs9pp3fseag9gl81skb.apps.googleusercontent.com',
             'google_client_secret' => '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',
             'google_redirect' => 'http://localhost/auth/callback/google',
+            'gcp_project' => 'rigmanager',
+            'gcp_id' => 'rigmanager',
+            'gcp_key' => 'AIzaSyBOUWqqSTd8CGE6MewQrt56nDNhdnYzDVg'
         ];
 
         foreach ($settings as $key => $value) {

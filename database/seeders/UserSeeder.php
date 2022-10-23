@@ -27,7 +27,8 @@ class UserSeeder extends Seeder
                 'country' => 'ua',
                 'password' => Hash::make('admin@mail.com'),
                 'email' => 'admin@mail.com',
-                'email_verified_at' => now()
+                'email_verified_at' => now(),
+                'last_active_at' => now()
             ],
             [
                 'name' => 'User',
@@ -36,6 +37,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('user@mail.com'),
                 'email' => 'user@mail.com',
                 'email_verified_at' => now(),
+                'last_active_at' => now()
             ],
             [
                 'name' => 'User 1',

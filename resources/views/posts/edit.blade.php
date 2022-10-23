@@ -225,6 +225,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-section"> <!--edit_translations-->
+                            <p><a href="{{route('posts.translations.edit', $post)}}">{{__('ui.editTrans')}}</a></p>
+                        </div>
                         <div class="form-button-block">
                             <button type="submit" class="button">@lang('ui.publish')</button>
                         </div>

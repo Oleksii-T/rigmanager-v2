@@ -9,6 +9,7 @@ use App\Models\Attachment;
 use App\Models\Category;
 use App\Http\Requests\PostRequest;
 use App\Jobs\PostTranslate;
+use App\Services\TranslationService;
 
 class PostController extends Controller
 {
@@ -52,20 +53,22 @@ class PostController extends Controller
         return view('posts.create', compact('categories'));
     }
 
-    public function store(PostRequest $request)
+    public function store(PostRequest $request, TranslationService $translator)
     {
         $user = auth()->user();
         $input = $request->validated();
         $input['status'] = 'pending';
         $input['is_active']= true;
+        $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
+        $input['origin_lang'] = $textLocale;
         $input['slug'] = [
-            'en' => makeSlug($input['title'], Post::allSlugs())
+            $textLocale => makeSlug($input['title'], Post::allSlugs())
         ];
         $input['title'] = [
-            'en' => $input['title']
+            $textLocale => $input['title']
         ];
         $input['description'] = [
-            'en' => $input['description']
+            $textLocale => $input['description']
         ];
         $post = $user->posts()->create($input);
         $post->saveCosts($input);
@@ -78,6 +81,39 @@ class PostController extends Controller
 
         return $this->jsonSuccess('', [
             'redirect' => route('posts.show', $post)
+        ]);
+    }
+
+    public function translationsEdit(Request $request, Post $post)
+    {
+        return view('posts.translations', compact('post'));
+    }
+
+    public function translationsUpdate(Request $request, Post $post)
+    {
+        $input = $request->validate([
+            'auto_translate' => ['nullable'],
+            'title' => ['required', 'array'],
+            'title.*' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'array'],
+            'description.*' => ['required', 'string', 'max:5000'],
+        ]);
+
+        $input['auto_translate'] ??= false;
+        $allPostSlugs = Post::allSlugs();
+        foreach ($input['title'] as $locale => $title) {
+            if ($title != $post->translated('title', $locale)) {
+                $input['slug'][$locale] = makeSlug($title, $allPostSlugs);
+            }
+        }
+
+        $post->update($input);
+        $post->saveTranslations($input);
+
+        flash(trans('messages.post.translations-updates')); //! TRANSLATE
+
+        return $this->jsonSuccess('', [
+            'redirect' => route('posts.edit', $post)
         ]);
     }
 

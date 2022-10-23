@@ -393,7 +393,14 @@ $(document).ready(function () {
         toggleFaqText($('.faq-item #'+faqSlug));
     }
 
-    //
+    $('.post-auto-translate-toggle').change(function(e) {
+        e.preventDefault();
+        let is = $(this).is(':checked');
+        $(this).closest('form').find('input, textarea').prop('disabled', is);
+        $(this).closest('form').find('.form-button-block .button').toggleClass('d-none');
+
+        console.log(`checked: ` + is ); //! LOG
+    })
 });
 
 

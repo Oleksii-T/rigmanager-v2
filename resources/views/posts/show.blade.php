@@ -82,7 +82,11 @@
                         <img class="prod-author-ava" src="{{asset('icons/emptyAva.svg')}}" alt="">
                     @endif
                     <div class="prod-author-about">
-                        <div class="prod-author-name">{{$post->user->name}}</div>
+                        <div class="prod-author-name">
+                            <a href="{{route('users.show', $post->user)}}">
+                                {{$post->user->name}}
+                            </a>
+                        </div>
                         <a href="{{route('search', ['author'=>$post->user->slug])}}" class="prod-author-link">{{__('ui.allAuthorPosts')}}</a>
                         @auth
                             <br>

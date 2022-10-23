@@ -40,6 +40,14 @@ class Setting extends Model
             ]
         ],
         [
+            'name' => 'GCP',
+            'settings' => [
+                'gcp_project' => 'GCP project',
+                'gcp_id' => 'GCP id',
+                'gcp_key' => 'GCP key'
+            ]
+        ],
+        [
             'name' => 'Facebook auth',
             'settings' => [
                 'facebook_auth_enabled' => 'Facebook Auth Enabled',

@@ -73,10 +73,7 @@
                 <div class="ad-section">
                     <h2>@lang('ui.urgentPosts')</h2>
                     <div class="ad-list">
-                        <div class="ad-col">
-                            {{-- $urgent_posts --}}
-                            <x-home-items :posts="$urgentPosts" />
-                        </div>
+                        <x-home-items :posts="$urgentPosts" />
                     </div>
                 </div>
             @endif

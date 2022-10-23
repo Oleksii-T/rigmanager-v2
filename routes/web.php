@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
@@ -45,7 +46,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('catalog', [SearchController::class, 'index'])->name('search');
 
     Route::get('contact-us', [FeedbackController::class, 'create'])->name('feedbacks.create');
-    Route::post('contact-us', [FeedbackController::class, 'store'])->name('feedbacks.store');
+    Route::post('contact-us', [FeedbackController::class, 'store'])->middleware('throttle:feedbacks')->name('feedbacks.store');
 
     Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');
     Route::put('posts/{post}/view', [PostController::class, 'view']);
@@ -73,9 +74,11 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('{post}/edit', [PostController::class, 'edit'])->name('edit');
                 Route::get('{post}/contacts', [PostController::class, 'contacts']);
                 Route::get('{post}/views', [PostController::class, 'views'])->name('views');
+                Route::get('{post}/translations', [PostController::class, 'translationsEdit'])->name('translations.edit');
                 Route::post('', [PostController::class, 'store'])->name('store');
                 Route::put('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
                 Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle');
+                Route::put('{post}/translations', [PostController::class, 'translationsUpdate'])->name('translations.update');
                 Route::put('{post}', [PostController::class, 'update'])->name('update');
                 Route::delete('{post}', [PostController::class, 'destroy'])->name('destroy');
             });
@@ -101,6 +104,10 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::put('/', [ProfileController::class, 'update'])->name('update');
                 Route::put('password', [ProfileController::class, 'password'])->name('password');
                 Route::put('clear-favs', [ProfileController::class, 'clearFavs'])->name('clear-favs');
+            });
+
+            Route::prefix('users')->name('users.')->group(function () {
+                Route::get('/', [UserController::class, 'show'])->name('show');
             });
 
         });
