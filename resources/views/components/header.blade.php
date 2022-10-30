@@ -30,7 +30,7 @@
             </div>
             <div class="header-right">
                 @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
-                    @if (LaravelLocalization::getCurrentLocale() != $localeCode)
+                    @if ($currentLocale != $localeCode)
                         <a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" class="header-language">{{ $localeCode }}</a>
                     @endif
                 @endforeach

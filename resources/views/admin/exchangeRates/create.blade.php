@@ -9,7 +9,7 @@
 @stop
 
 @section('content')
-    <form action="{{route('admin.exchange-rates.sync')}}" method="POST" class="general-ajax-submit">
+    <form action="{{route('admin.exchange-rates.sync-currencies')}}" method="POST" class="general-ajax-submit">
         @csrf
         <div class="card">
             <div class="card-body">
@@ -17,7 +17,7 @@
                 <ul>
                     <li>Add new currency to "/config/currencies.php" file</li>
                     <li>Initiate rates for new currency by clicking "Sync rates with currencies" button bellow</li>
-                    <li>Find and set up rate manualy from <a href="{{route('admin.exchange-rates.index')}}">Exchange rates</a> page</li>
+                    <li>Set up new rate manualy or by using "Sync Rates with API" button on from <a href="{{route('admin.exchange-rates.index')}}">Exchange rates</a> page</li>
                 </ul>
             </div>
         </div>

@@ -1,7 +1,6 @@
 <?php
 
 return [
-    // title
     'title' => [
         'home' => 'Drilling and oil and gas equipment on the rig manager bulletin board.',
         'catalog' => 'Catalog of categories of drilling and oil and gas equipment and services.',
@@ -16,9 +15,9 @@ return [
             'verify' => 'Account verification | rigmanger.com.ua',
             'post' => [
                 'posts' => 'My posts | rigmanger.com.ua',
-                'favs' =>' My Favorite posts | rigmanger.com.ua',
+                'favs' => ' My Favorite posts | rigmanger.com.ua',
                 'edit' => 'Editing post | rigmanger.com.ua',
-                'edit-trans' =>' Editing post translation | rigmanger.com.ua',
+                'edit-trans' => ' Editing post translation | rigmanger.com.ua',
             ],
             'mailer' => 'My mailers | rigmanger.com.ua',
             'mailer-edit' => 'Edit mailer | rigmanger.com.ua',
@@ -38,11 +37,11 @@ return [
         'info' => [
             'subscription' => 'Paid subscriptions | rigmanger.com.ua',
             'blog' => 'News | rigmanger.com.ua',
-            'about-us' =>'About us | rigmanger.com.ua',
-            'tos' =>'Terms of service | rigmanger.com.ua',
+            'about-us' => 'About us | rigmanger.com.ua',
+            'tos' => 'Terms of service | rigmanger.com.ua',
             'pp' => 'Privacy Policy | rigmanger.com.ua',
             'faq' => 'Question-Answer | rigmanger.com.ua',
-            'contacts' =>'Contacts and feedback | rigmanger.com.ua',
+            'contacts' => 'Contacts and feedback | rigmanger.com.ua',
             'sitemap' => 'Sitemap | rigmanger.com.ua',
             'import' => 'Posts import rules | rigmanger.com.ua',
         ],
@@ -55,8 +54,6 @@ return [
         ],
         'error' => 'Server error',
     ],
-
-    //description
     'description' => [
         'home' => 'rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market. Buying, selling, renting and services.',
         'catalog' => 'A complete catalog of all categories of equipment and services in the field of drilling and oil and gas. Drill pipes, drilling rigs, mud pumps.',
@@ -71,9 +68,9 @@ return [
             'verify' => 'Account verification. rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market.',
             'post' => [
                 'posts' => 'My posts. rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market.',
-                'favs' =>' My Favorite posts. rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market.',
+                'favs' => ' My Favorite posts. rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market.',
                 'edit' => 'Editing post. rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market.',
-                'edit-trans' =>' Editing post translation. rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market.',
+                'edit-trans' => ' Editing post translation. rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market.',
             ],
             'mailer' => 'My mailers. rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market.',
             'mailer-edit' => 'Edit mailer. rigmanager.com.ua - specialized bulletin board for participants in the oil and gas market.',
@@ -110,8 +107,6 @@ return [
         ],
         'error' => '',
     ],
-    
-    //keywords
     'keywords' => [
         'home' => '',
         'catalog' => '',
@@ -163,5 +158,4 @@ return [
         ],
         'error' => '',
     ],
-    
 ];

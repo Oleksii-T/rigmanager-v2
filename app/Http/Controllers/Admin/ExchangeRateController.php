@@ -28,11 +28,21 @@ class ExchangeRateController extends Controller
     }
 
     // sync rates with currencies
-    public function sync()
+    public function syncCurrencies()
     {
         Artisan::call('db:seed --class=ExchangeRateSeeder');
 
-        return $this->jsonSuccess('ExchangeRate synced successfully');
+        return $this->jsonSuccess('Currencies synced successfully');
+    }
+
+    // sync rates with currencies
+    public function syncRates()
+    {
+        Artisan::call('rates:update');
+
+        return $this->jsonSuccess('Exchange rates synced successfully', [
+            'redirect' => route('admin.exchange-rates.index')
+        ]);
     }
 
     public function create()

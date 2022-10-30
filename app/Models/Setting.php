@@ -31,20 +31,20 @@ class Setting extends Model
             ]
         ],
         [
+            'name' => 'GCP',
+            'settings' => [
+                'gcp_project' => 'GCP project',
+                'gcp_id' => 'GCP id',
+                'gcp_key' => 'GCP key'
+            ]
+        ],
+        [
             'name' => 'Google auth',
             'settings' => [
                 'google_auth_enabled' => 'Google Auth Enabled',
                 'google_client_id' => 'Google client id',
                 'google_client_secret' => 'Google client secret',
                 'google_redirect' => 'Google redirect',
-            ]
-        ],
-        [
-            'name' => 'GCP',
-            'settings' => [
-                'gcp_project' => 'GCP project',
-                'gcp_id' => 'GCP id',
-                'gcp_key' => 'GCP key'
             ]
         ],
         [

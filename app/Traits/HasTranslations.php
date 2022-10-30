@@ -17,20 +17,15 @@ trait HasTranslations
     {
         $currLocale = LaravelLocalization::getCurrentLocale();
         $translations = $this->translations->where('field', $field);
-        $defLocale = config('app.locale');
-
         $result = $translations->where('locale', $locale??$currLocale)->value('value');
 
         if (!$result && !$locale) {
-            $result = $translations->where('locale', $defLocale)->value('value');
+            $this->failed_translation = true;
+            $origin = $this->origin_lang;
+            $result = $translations->where('locale', $origin ? $origin : 'en')->value('value');
         }
 
         return $result;
-    }
-
-    public function getLocalizedRouteKey($locale)
-    {
-        return $this->localed('slug');
     }
 
     public function saveTranslations($fieldsTranslations)
@@ -69,5 +64,16 @@ trait HasTranslations
         return new Attribute(
             get: fn () => $this->translated($attr)
         );
+    }
+
+    public static function getBySlug($slug)
+    {
+        return Translation::query()
+            ->where('translatable_type', self::class)
+            // ->where('locale', LaravelLocalization::getCurrentLocale())
+            ->where('field', 'slug')
+            ->where('value', $slug)
+            ->firstOrFail()
+            ->translatable;
     }
 }

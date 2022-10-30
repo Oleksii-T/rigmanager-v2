@@ -23,6 +23,7 @@
 @endsection
 
 @section('content')
+    <span class="d-none" page-data data-images="{{$post->images}}"></span>
     <div class="main-block">
         <div class="content">
             <h1>@lang('ui.postSettings')</h1>
@@ -153,13 +154,12 @@
                                             </svg>
                                         </button>
                                     </div>
-                                    {{-- http://localhost/storage/attachments/images/qvqbgz3GWaV7IdWD4iQuLNZEc5vz2upfNwIpaAZw.jpg --}}
                                     <img class="preview" src="" alt="">
                                 </div>
                             </div>
                             <div class="upload-images">
                                 @foreach ($post->images as $img)
-                                    <div class="upload-images_wrapper user-image">
+                                    <div class="upload-images_wrapper user-image" data-index={{$post->images->count() - $loop->index - 1}}>
                                         <div class="upload-images_label">
                                             @lang('ui.main')
                                         </div>
@@ -229,7 +229,7 @@
                             <p><a href="{{route('posts.translations.edit', $post)}}">{{__('ui.editTrans')}}</a></p>
                         </div>
                         <div class="form-button-block">
-                            <button type="submit" class="button">@lang('ui.publish')</button>
+                            <button type="submit" class="button">@lang('ui.update')</button>
                         </div>
                     </fieldset>
                 </form>

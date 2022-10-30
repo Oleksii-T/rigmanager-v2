@@ -40,6 +40,12 @@ class PostTranslate implements ShouldQueue
             return;
         }
 
+        $this->log('start', [
+            'origin_lang' => $p->origin_lang,
+            'title' => $p->translated('title', $p->origin_lang),
+            'description' => $p->translated('description', $p->origin_lang)
+        ]);
+
         $translator = new TranslationService();
         $toLocales = array_diff(LaravelLocalization::getSupportedLanguagesKeys(), [$p->origin_lang]);
         $translatables = Post::TRANSLATABLES;
@@ -60,6 +66,14 @@ class PostTranslate implements ShouldQueue
             $translations[$translatable] = $translated;
         }
 
+        $this->log('end', $translations);
+
         $p->saveTranslations($translations);
+    }
+
+    private function log($text, $data)
+    {
+        $id = $this->post->id;
+        \Log::info("POST TRANSLATION #$id: $text", $data);
     }
 }

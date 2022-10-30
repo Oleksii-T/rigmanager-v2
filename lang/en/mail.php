@@ -1,12 +1,9 @@
 <?php
 
 return [
-    // general
     'mailGreetings' => 'Hi',
     'mailSlg' => 'With best regards,',
     'contactBack' => 'If you have any questions or concerns, don\'t hesitate to get in touch:',
-
-    //subscription notifications
     'subNotifSubject' => 'Reminder about paid subscription.',
     'subExpired' => 'Your paid subscription has expired.
         All you posts and mailers was deactivated.',

@@ -44,12 +44,22 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('categories', [PageController::class, 'categories'])->name('categories');
     Route::get('import/rules', [PageController::class, 'importRules'])->name('import-rules');
     Route::get('catalog', [SearchController::class, 'index'])->name('search');
+    Route::get('catalog/{category}', [SearchController::class, 'category'])->name('search.category');
 
     Route::get('contact-us', [FeedbackController::class, 'create'])->name('feedbacks.create');
     Route::post('contact-us', [FeedbackController::class, 'store'])->middleware('throttle:feedbacks')->name('feedbacks.store');
 
     Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');
     Route::put('posts/{post}/view', [PostController::class, 'view']);
+
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('{user}', [UserController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('posts')->name('posts.')->group(function () {
+        Route::get('{post}', [PostController::class, 'show'])->name('show');
+        Route::post('{post}/view', [PostController::class, 'view']);
+    });
 
     Route::middleware('auth')->group(function () {
 
@@ -76,6 +86,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('{post}/views', [PostController::class, 'views'])->name('views');
                 Route::get('{post}/translations', [PostController::class, 'translationsEdit'])->name('translations.edit');
                 Route::post('', [PostController::class, 'store'])->name('store');
+                Route::post('{post}/translations/report', [PostController::class, 'translationsReport'])->name('translations.report');
                 Route::put('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
                 Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle');
                 Route::put('{post}/translations', [PostController::class, 'translationsUpdate'])->name('translations.update');
@@ -106,19 +117,8 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::put('clear-favs', [ProfileController::class, 'clearFavs'])->name('clear-favs');
             });
 
-            Route::prefix('users')->name('users.')->group(function () {
-                Route::get('/', [UserController::class, 'show'])->name('show');
-            });
-
         });
 
     });
-
-    Route::prefix('posts')->name('posts.')->group(function () {
-        Route::get('{post}', [PostController::class, 'show'])->name('show');
-        Route::post('{post}/view', [PostController::class, 'view']);
-    });
-
-    Route::get('catalog/{category}', [SearchController::class, 'category'])->name('search.category');
 
 });

@@ -142,7 +142,6 @@
                                             </svg>
                                         </button>
                                     </div>
-                                    {{-- http://localhost/storage/attachments/images/qvqbgz3GWaV7IdWD4iQuLNZEc5vz2upfNwIpaAZw.jpg --}}
                                     <img class="preview" src="" alt="">
                                 </div>
                             </div>

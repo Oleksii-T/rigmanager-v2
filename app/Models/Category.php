@@ -36,6 +36,12 @@ class Category extends Model
         });
     }
 
+    // overload laravel`s method for route key generation
+    public function getRouteKey()
+    {
+        return $this->slug;
+    }
+
     public function image()
     {
         return $this->morphOne(Attachment::class, 'attachmentable');

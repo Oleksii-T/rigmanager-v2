@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    let images = [];
+    let images = ($('[page-data]').data('images') ?? []).reverse();
     let removedImages = [];
     let documents = [];
     let removedDocuments = [];
@@ -23,9 +23,10 @@ $(document).ready(function() {
     }
 
     //hide/show translated/origin title/description
-    $('.show-origin-text').click(function(e){
+    $('.post-translated-text-toggle a').click(function(e){
         e.preventDefault();
         $('.prod-about h1, .prod-about p').toggleClass('hidden');
+        $('.post-translated-text-toggle').toggleClass('d-none');
     });
 
     //show modal contacts
@@ -67,7 +68,11 @@ $(document).ready(function() {
         button.addClass('cursor-wait');
         let formData = new FormData(this);
         images.forEach(img => {
-            formData.append('images[]', img.file);
+            if (img.id) {
+                formData.append('old_images[]', img.id);
+            } else {
+                formData.append('images[]', img.file);
+            }
         });
         removedImages.forEach(id => {
             formData.append('removed_images[]', id);
@@ -110,6 +115,53 @@ $(document).ready(function() {
             showImages();
         }
     });
+
+    // toggle auto-translation edit logic
+    $('.post-auto-translate-toggle').change(function(e) {
+        e.preventDefault();
+        console.log(`checked`); //! LOG
+        let is = $(this).is(':checked');
+        console.log(`now is`, is ? 'checked' : 'unchecked'); //! LOG
+        if (is) {
+
+        }
+        $(this).closest('form').find('input[type=text], textarea').prop('disabled', is);
+        // $(this).closest('form').find('.form-button-block .button').toggleClass('d-none');
+    })
+
+    // submit post translations
+    $('form.post-translations').submit(function(e){
+        e.preventDefault();
+        let form = $(this);
+        let is = form.find('.post-auto-translate-toggle').is(':checked');
+        let button = $(this).find('button[type=submit]');
+        let formData = new FormData(this);
+        if (button.hasClass('cursor-wait')) {
+            return;
+        }
+
+        if (form.hasClass('show-full-loader')) {
+            fullLoader();
+        }
+
+        if (is) {
+            swal.fire({
+                title: form.data('asktitle'),
+                text: form.data('asktext'),
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: form.data('askyes'),
+                cancelButtonText: form.data('askno')
+            }).then((result) => {
+                formData.append('rerun-translator', result.value?1:0);
+                ajaxSubmit(form, formData, button);
+            });
+            return;
+        }
+
+        ajaxSubmit(form, formData, button);
+    })
 
     // load drag&drop images
     $('.upload-images_empty').on('drop dragdrop',function(e){
@@ -173,8 +225,8 @@ $(document).ready(function() {
     function showImages() {
         let clone = $('.upload-images_wrapper.clone');
         let wrpr = $('.upload-images');
-        wrpr.find('.upload-images_wrapper.user-image').remove();
         let i = 0;
+        wrpr.find('.upload-images_wrapper.user-image').remove();
         images.forEach(image => {
             let imageEl = clone.clone()
                 .removeClass('clone')

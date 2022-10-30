@@ -2,30 +2,20 @@
 
 return [
     'main' => 'Main',
-
     'faq' => [
         'intro' => 'We have collected frequently asked questions for you. If you still have questions or suggestions - you always can',
     ],
-
-    // Dev massages
     'workInProgress' => 'Work in progress',
     'development' => 'The site is at a late development stage. Coming soon.',
-
     'tagsCodesNotReady' => 'The list of categories is not ready. See list of categories in import file.',
-
-    // no script massage
     'noscript' => 'Javascript is disabled in your browser.
         It may serously reflect the web site functionality.',
-
-    //maintenance mode
     'maintenance' => 'Maintenance',
     'maintenanceHeader' => 'Sorry for the inconvenience',
     'maintenanceText' => 'The website is temporarily unavailable
     We will be available',
     'maintenanceContact' => 'Feel free to contact us:',
     'maintenanceSoon' => 'soon',
-
-    //home massages
     'home' => 'Home',
     'cabinet' => 'Profile',
     'introduction' => 'Specialized platform for cooperation
@@ -52,8 +42,6 @@ return [
     'epilogue2' => 'Market analysis, sales planning, simplification of the process and increase of the level of purchases/sales, control of relevance of purchases and timely supply - all this on the rigmanager platform!',
     'info' => 'Information',
     'gotToSeTags' => 'Show service categories',
-
-    // jeneral massages
     'error' => 'Error',
     'delete' => 'Delete',
     'no' => 'No',
@@ -85,8 +73,6 @@ return [
     'publish' => 'Publish',
     'setting' => 'Setting',
     'here' => 'here',
-
-    // auth massages
     'auth' => 'Authorization',
     'signIn' => 'Sign in',
     'socialSignInTitle' => 'Are you on social media?',
@@ -111,25 +97,16 @@ return [
         Don\'t forget to check the spam folder.',
     'sendPassResetLink' => 'Send "Password reset" link',
     'backToSignIn' => 'Return to sign in',
-
-    //home massages
-    'home' => 'Home',
     'addToFav' => 'Add to favourites',
     'clearText' => 'Clear search bar',
-
-    // my posts massages
     'myPosts' => 'My posts',
     'noMyPosts' => 'You did not publish any posts yet.',
     'noMyPostsBySearch' => 'Unfortunately, we cannot find any posts by your request.',
-
-    // favoutites massages
     'favourites' => 'Favourites',
     'noFavPosts' => 'No favourites post.',
     'noFavPostsBySearch' => 'Unfortunately, we cannot find any posts by your request.',
     'inFav' => 'In favourites',
     'removeFromFav' => 'Remove from favourites',
-
-    // profile massages
     'profile' => 'Profle',
     'profileEditing' => 'Profle editing',
     'loginHelp' => 'Login should be the email address.',
@@ -165,8 +142,6 @@ return [
         All your post will be deleted.
         All your mailers will be deleted.
         You subscription will be canceled.',
-
-    //mailer massages
     'mailer' => 'Mailer',
     'setUpMailer' => 'Set up Mailer',
     'noMailer' => 'Your Mailer is not configured',
@@ -209,8 +184,6 @@ return [
     'mailerAllPosts' => 'All new posts',
     'addNewMailer' => 'Set up new Mailer',
     'editMailers' => 'Edit Mailers',
-
-    // search bar and search result massages
     'search' => 'Search',
     'searchEquipment' => 'Search equipment by categories',
     'searchService' => 'Search services by categories',
@@ -234,8 +207,6 @@ return [
     'postType' => 'Post type',
     'postRole' => 'Legal type',
     'tryOtherFilters' => 'You may try other filters',
-
-    // post edit/create/show massages
     'postsWithoutEqTag' => 'Equipment without chosen category',
     'tender' => 'Tender',
     'tenders' => 'Tenders',
@@ -271,7 +242,7 @@ return [
         Minimum 10 symbols.
         Maximum 70 symbols.',
     'autoTranslateHeader' => 'Preferences of',
-    'autoTranslate' =>  'Auto-Translator',
+    'autoTranslate' => 'Auto-Translator',
     'AutoTranslateToUk' => 'Auto-Translate to Ukrainian',
     'AutoTranslateToRu' => 'Auto-Translate to Russian',
     'translationHelp' => 'Available languages suggested base on your interface language.
@@ -282,20 +253,19 @@ return [
         Example: "432 pcs."',
     'type' => 'Type',
     'choosePostType' => 'Choose post type',
-    'postTypeSell' => 'Sell', // type = 1
-    'postTypeSellFull' => 'Equipment sell', // type = 1
-    'postTypeBuy' => 'Buy', // type = 2
-    'postTypeBuyFull' => 'Equipment buy', // type = 2
-    'postTypeRent' => 'Rental', // type = 3
-    'postTypeRentFull' => 'Equipment rental', // type = 3
-    'postTypeRentShort' => 'Rental', // type = 3
-    'postTypeLeas' => 'Leasing', // type = 4
-    'postTypeLeasFull' => 'Equipment leasing', // type = 4
-    'postTypeLeasShort' => 'Leasing', // type = 4
-    'postTypeGiveS' => 'Providing of service', // type = 5
-    'postTypeGetS' => 'Request for service', // type = 6
+    'postTypeSell' => 'Sell',
+    'postTypeSellFull' => 'Equipment sell',
+    'postTypeBuy' => 'Buy',
+    'postTypeBuyFull' => 'Equipment buy',
+    'postTypeRent' => 'Rental',
+    'postTypeRentFull' => 'Equipment rental',
+    'postTypeRentShort' => 'Rental',
+    'postTypeLeas' => 'Leasing',
+    'postTypeLeasFull' => 'Equipment leasing',
+    'postTypeLeasShort' => 'Leasing',
+    'postTypeGiveS' => 'Providing of service',
+    'postTypeGetS' => 'Request for service',
     'postTypeHelp' => 'The variant you choose will be appended to your title.',
-    'postRole' => 'Legal type',
     'choosePostRole' => 'Chose legal type',
     'postRoleBusiness' => 'Business',
     'postRolePrivate' => 'Private person',
@@ -316,7 +286,6 @@ return [
     'chooseManufacturer' => 'Manufacturer',
     'chooseManufacturedDate' => 'Manufacture date',
     'choosePartNum' => 'Part number',
-    'clearTagsFromPost' => 'Clear сhosen categories',
     'manufacturer' => 'Manufacturer',
     'manufHelp' => 'We advise include manufacturer detail to simplify search and understanding of your proposition by viewers.
         Minimum 3 symbols.
@@ -409,8 +378,6 @@ return [
     'lastView' => 'Last view',
     'importExport' => 'Import-Export',
     'postPublishingAlert' => 'Post been publishing. Please wait',
-
-    //post translation edit messagess
     'postTransSettingsHelp' => 'Our Auto-Translator is constantly improving, but still the translation is sometimes not accurate.
         Here you can check and change the translation of your post.
         You can learn more about the work of Auto-Translator',
@@ -423,16 +390,12 @@ return [
     'ukDescription' => 'Translated description into Ukrainian',
     'ruDescription' => 'Translated description into Russian',
     'enDescription' => 'Translated description into English',
-
-    //post deactivated messages
     'postHiddenNotifSubject' => 'Post has been deactivated',
     'postHiddenNotifGreetings' => 'Hello',
     'postHiddenNotifHeader' => 'Those posts has been deactivated',
     'postHiddenNotifBody1' => 'Lifetime of the post expired, please update the lifetime inpost settings if you want to make thispost public again',
     'postHiddenNotifBody2' => 'If you’re having trouble clicking thepost above, copy and paste the URL below into your web browser',
     'postHiddenNotifSlg' => 'Regards,',
-
-    //dropzone
     'dzDesc' => 'Drop files or click
     to upload images',
     'dzBigFile' => 'This image is too big',
@@ -442,8 +405,6 @@ return [
     'dzUploadRemoveLink' => 'Remove',
     'dzTooFewFiles' => 'Too many files',
     'dzInvalidMimeXlsx' => 'The import file must be .XLSX',
-
-    // post show masssages
     'similarPosts' => 'Similar posts',
     'yoursPost' => 'This post is yours',
     'postAuthor' => 'Post author',
@@ -454,8 +415,6 @@ return [
     'postCreated' => 'Post uploaded',
     'condition' => 'Condition',
     'deleteAllImgs' => 'Delete all saved images',
-
-    // verification notice massages
     'verifyNoticeThank' => 'Thank you, for choosing our resource',
     'verifyNoticeBody' => 'The account activation message was sent to your email address.
     Please, follow the link in our message.
@@ -463,8 +422,6 @@ return [
     'verifyClickToResend' => 'new activation message',
     'verifyNoticeResend' => 'new account activation message
     was sent to your email address.',
-
-    // footer massages
     'footerAbout' => 'About',
     'footerFAQ' => 'FAQ',
     'footerCopyright' => 'All rights reserved.',
@@ -480,8 +437,6 @@ return [
     'footerBlog' => 'News',
     'contactsFooter' => 'Сontact us by filling the form below or using the following credentials:',
     'ourPartners' => 'Our partners',
-
-    //blog
     'emptyBlog' => 'Articles are publishing...',
     'by' => 'By',
     'posted' => 'posted',
@@ -491,16 +446,12 @@ return [
     'blogSlg' => 'Thanks for your attention
         with best regards,
         :name',
-
-    // sitemap
     'stMain' => 'Main',
     'stPost' => 'Posts',
     'stAuth' => 'Authentication',
     'stProfile' => 'User',
     'stMisc' => 'Details',
     'siteMapDesc' => '',
-
-    // Regions
     'regionOdessa' => 'Odessa region',
     'import' => 'Import',
     'regionDnipropetrovsk' => 'Dnipropetrovsk region',
@@ -527,23 +478,17 @@ return [
     'regionTernopil' => 'Ternopil region',
     'regionCarpathian' => 'Carpathian region',
     'regionChernivtsi' => 'Chernivtsi region',
-
-    // notification from user
     'fromUserTitle' => 'Got a question?',
     'fromUserEmail' => 'Email (for feedback)',
     'fromUserSubject' => 'Subject',
     'fromUserText' => 'How can we help you?',
     'fromUserTextPlaceholder' => 'Describe your problem/offer/suggestion',
     'fromUserSubmit' => 'Send message',
-
-    // server error
     'serverErrorTittle' => 'Oops!',
     'serverErrorDesc' => 'Seems like you got a server error.',
     'serverErrorContact' => 'Let us know about your issue',
     'serverErrorGoHome' => 'Return to home page',
     'serverErrorGoBack' => 'Return to previus page',
-
-    //plans
     'details' => 'details',
     'mon' => 'mon',
     'free' => 'free',
@@ -587,9 +532,6 @@ return [
     'plansPostTracking' => 'Views statistics',
     'trackingHelp' => 'Views statistics can be found on "My posts" page.
         On each post the new banner with number of views will be visible.',
-    'chosen' => 'Chosen',
-
-    // user plan
     'subscription' => 'Subscription',
     'mySubscription' => 'My subscription',
     'planActivated' => 'Activated subscription',
@@ -614,8 +556,6 @@ return [
     'canceled' => 'Canceled',
     'history' => 'History',
     'expired' => 'Expired',
-
-    // posts import
     'postImport' => 'Posts import',
     'postImportTitle' => 'Here you can import a number ofposts at once.
         Only equipment posts. Service posts must be published manually.
@@ -637,8 +577,6 @@ return [
     'totalImported' => 'Total amount',
     'firstImported' => 'First post',
     'lastImported' => 'Last post',
-
-    //about us
     'aboutUsIntro' => 'rigmanager.com.ua - the first specialized web platform for cooperation of oil and gas companies in Ukraine.',
     'aboutUsBody' => 'We present a convenient tool for commercial and consulting activities of representatives of the oil and gas market.
 
@@ -655,7 +593,5 @@ return [
     'aboutUsContactLink' => 'Feedback page',
     'aboutUsSlg' => 'Respectfully,
     rigmanager.com.ua team',
-
-    //new
-    'seo-img-image-suffix' => 'image'
+    'seo-img-image-suffix' => 'image',
 ];

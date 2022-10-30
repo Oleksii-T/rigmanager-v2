@@ -18,7 +18,2232 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $shemas = [
+        $shemas =$this->getSchema();
+
+        foreach ($shemas as $shema) {
+            $model = Category::create([
+                'category_id' => null,
+                'is_active' => true
+            ]);
+            // $model->saveTranslations([
+            //     'name' => $shema['name'],
+            //     'slug' => $this->makeSlugs($shema['name'])
+            // ]);
+            $model->saveTranslations([
+                'name' => ['en'=>$shema['name']['en']],
+                'slug' => ['en'=>Str::slug($shema['name']['en'])]
+            ]);
+            Attachment::create($shema['image'] + [
+                'original_name' => $shema['image']['name'],
+                'group' => '',
+                'type' => 'image',
+                'attachmentable_id' => $model->id,
+                'attachmentable_type' => Category::class
+            ]);
+            $this->saveChildCat($model, $shema['childs']??[]);
+        }
+    }
+
+    private function saveChildCat($parent, $childs)
+    {
+        if (!$childs) {
+            return;
+        }
+        foreach ($childs as $child) {
+            $model = Category::create([
+                'category_id' => $parent->id,
+                'is_active' => true
+            ]);
+            // $model->saveTranslations([
+            //     'name' => $child['name'],
+            //     'slug' => makeSlugs($child['name'])
+            // ]);
+            $model->saveTranslations([
+                'name' => ['en'=>$child['name']['en']],
+                'slug' => ['en'=>Str::slug($child['name']['en'])]
+            ]);
+            $this->saveChildCat($model, $child['childs']??[]);
+        }
+    }
+
+    private function makeSlugs($names)
+    {
+        $res = [];
+        foreach ($names as $locale => $name) {
+            $res[$locale] = Str::slug($name);
+        }
+
+        return $res;
+    }
+
+    private function getSchema()
+    {
+        return [
+            // Rig & Accessories
+            [
+                'name' => [
+                    'en' => 'Rig & Accessories',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Hook Block',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Swivel',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Rotary Table',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Kelly Valve',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Draw works',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hydraulic Power Unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Air Winch',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hydraulic Winch',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Generator Set & spare parts',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Bucking Unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Weight Indicator',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'BOP Testing Unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Top Drive Drilling System',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Deadline Anchor',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Drilling hose',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Wire rope / Wireline',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Cementing unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mast',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Substructure',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mobile drilling rig',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Cat walks',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Monkey board',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Dog house',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Rails',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Rig up & down system',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // Well Control Equipment
+            [
+                'name' => [
+                    'en' => 'Well Control Equipment',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'boe.png',
+                    'size' => '28000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'IBOP',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'BOP Control unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Drill Pipe Float Valve',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Annular BOP',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Ram BOP',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Drilling Spool',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Accumulator Unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Choke Manifold / Kill Manifold',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Lubricator',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'BOP Parts',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Flare system',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Lines',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Valves & weels',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // Solid Control Equipment
+            [
+                'name' => [
+                    'en' => 'Solid Control Equipment',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'mud-circulation.png',
+                    'size' => '47000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Shale Shaker',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Cleaner',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Desander',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Desilter',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Vacuum Degasser',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Decanter Centrifuge',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Gas Separator',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Sand Pump',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Agitator',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Tank',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Gun',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Shaker Screen',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hydrocyclone',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hoses',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Sludge pump',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Filters',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Spare parts',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // Drill String
+            [
+                'name' => [
+                    'en' => 'Drill String',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'jars.png',
+                    'size' => '35000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Square Kelly / Hexagonal Kelly',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Drill Pipe (DP)',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Heavy Weight Drill Pipe(HWDP)',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Drill Collar (DC)',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Stabilizer',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ],
+                        'childs' => [
+                            [
+                                'name' => [
+                                    'en' => 'Blade stabiliser',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Spiral-blade stabiliser',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Preumopercussion stabiliser',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Expanding stabiliser',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Roller stabiliser',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Cones & Rollers for stabiliser',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'PDC stabiliser',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Centralizer',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Filters',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hole Opener',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Drilling Motor',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Lifting Sub',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Drill Subs',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Drifts',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Drill Bit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ],
+                        'childs' => [
+                            [
+                                'name' => [
+                                    'en' => 'Bicentric bits',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Bit breakers',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Measuring devices (Diameter)',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Wing bits',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Bit nozzles',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Pneumopercussion bits',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Cone bits',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Carbide bits',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'PDC bits',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'TSP bits',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Down Hole Motors',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ],
+                        'childs' => [
+                            [
+                                'name' => [
+                                    'en' => 'Rotational',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Percussion',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Pneumatic',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Electrical',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Hydraulic',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                        ]
+                    ],
+                ]
+            ],
+            // Handling Tools
+            [
+                'name' => [
+                    'en' => 'Handling Tools',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'pipe-handling.png',
+                    'size' => '72000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Drilling Elevator',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Elevator Link',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Manual Tong',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Slip',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Safety Clamp',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Power Tong',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Spider',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Stabbing Guide',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Pipe Wiper',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Sucker Rod Tools',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Quick Release Thread Protector',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Lifting Cap',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Casing Bushing and Insert Bowls',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Casing Spider And Insert Bowl',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Roller Kelly Bushing',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Rotary table Bushing And Insert',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Bowls',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Dies',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Fill In Circulate Tools',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Iron Roughneck',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Spinning Wrenches',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Elevator',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hydraulic tong',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hydraulic tong control unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Tubing tong',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Casing tong',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Forks',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Pipe spanner',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Chain spanner',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hinged tong',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // Downhole Tools
+            [
+                'name' => [
+                    'en' => 'Downhole Tools',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'dhm.png',
+                    'size' => '17000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Casing Centralizer',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Cementing Plug',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Float Collar & Float Shoe',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'External Hook',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Internal Hook',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Casing Cup Tester',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Fishing tools',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ],
+                        'childs' => [
+                            [
+                                'name' => [
+                                    'en' => 'Fishing Magnet',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Fishing Jar',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Drift',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Junk mills',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Junk Basket',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Die Collar',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Taper Tap',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Junk Sub',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Overshot',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Releasing Spear',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ]
+                            ],
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Stop Collar',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Casing Scraper',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Milling Shoes',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Casing Cutter',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // Mud Pump & Spare Parts
+            [
+                'name' => [
+                    'en' => 'Mud Pump & Spare Parts',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'pumps.png',
+                    'size' => '50000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Mud Pump',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Centrifugal pump',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Plunger pump',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Sinkig pump',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Pump Unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Pump Liner',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Pump Piston',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Pump Valve & Seat',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Pulsation Dampener',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Fluid End Module',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hydraulic components',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Engine',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Gear box',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Control unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Filters',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Safety valves',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Cooling system',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Spare parts',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ]
+                ]
+            ],
+            // Production Equipment & OCTG
+            [
+                'name' => [
+                    'en' => 'Production Equipment & OCTG',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'cementing.png',
+                    'size' => '22000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Pumping Unit',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Sucker Rod',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Sucker Rod Pump',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Progressive Cavity Pump',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Electric Submersible Pump',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Sucker Rod Guide',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Casing Pipe',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Tubing',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Line Pipe',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Fiber Reinforced Plastic Pipe (FRP Pipe)',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Screen Pipe',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Vacuum Insulated Tubing',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Pup Joint',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Thread Protector',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Thread Gauge',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Coupling',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Shoe',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Pipe joints',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Crossovers',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Scratcher',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Cementing tools',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Packers',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // Wellhead Equipment
+            [
+                'name' => [
+                    'en' => 'Wellhead Equipment',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'well-head.png',
+                    'size' => '45000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Casing Head',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Tubing Head',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Christmas Tree',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Blind Flange',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Companion Flange',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Double Studded Adapter (DSA)',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Weld Neck Flange',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Tee & Cross',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Mud Gate Valve',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Gate Valve',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Check Valve',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Crossover Adapter',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Spacer Spool',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // Flowline Products
+            [
+                'name' => [
+                    'en' => 'Flowline Products',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'parts.png',
+                    'size' => '26000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Swivel Joint',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hose Loop',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Integral Fitting',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Integral Pup Joint',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Hammer Union',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Relief Valve',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Check Valve',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Plug Valve',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ]
+                ]
+            ],
+            // Laboratory of mud chemical-analysis
+            [
+                'name' => [
+                    'en' => 'Laboratory of mud chemical-analysis',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'chem-lab-eq.png',
+                    'size' => '41000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Density measurment equipment',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'ASG measurment equipment',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Viscosity measurment equipment',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'SSS measurment equipment',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'pH measurment equipment',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Water loss measurment equipment',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // Geo-physical borehole survey
+            [
+                'name' => [
+                    'en' => 'Geo-physical borehole survey',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'logging.png',
+                    'size' => '75000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Coring equipment',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ],
+                        'childs' => [
+                            [
+                                'name' => [
+                                    'en' => 'Coring boxes',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Core BBL',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Core recievers',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Coring pipes',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Corint bits',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ]
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Well logging',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ],
+                        'childs' => [
+                            [
+                                'name' => [
+                                    'en' => 'Video logging',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Additional equipment',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Continuous directional survey',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Caliper log',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Logging units',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Coils',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Winches',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Magnetic logging',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Water flow survey',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Radiometrics',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Flow survey',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Data recording system',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Seismic measurements',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Photometry & nephelometry',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                            [
+                                'name' => [
+                                    'en' => 'Geoelectric survey',
+                                    'ru' => '',
+                                    'uk' => '',
+                                    'zh' => ''
+                                ],
+                            ],
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Sensors',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Cables',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Cameras',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Data recording system',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Special loggin equipment',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // Others & Spare parts
+            [
+                'name' => [
+                    'en' => 'Others & Spare parts',
+                    'ru' => '',
+                    'uk' => '',
+                    'zh' => ''
+                ],
+                'image' => [
+                    'name' => 'misc-eq.png',
+                    'size' => '62000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Additional equipment & electrics',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Camp houses',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Lubricants',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Pneumatic system',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Power supply system',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Fuel storage system',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Chemical reagents',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Fire safety system',
+                            'ru' => '',
+                            'uk' => '',
+                            'zh' => ''
+                        ]
+                    ],
+                ]
+            ],
+        ];
+    }
+
+    private function getSchemaOld()
+    {
+        return [
             // Other
             [
                 'name' => [
@@ -2953,52 +5178,5 @@ class CategorySeeder extends Seeder
                 ]
             ],
         ];
-
-        foreach ($shemas as $shema) {
-            $model = Category::create([
-                'category_id' => null,
-                'is_active' => true
-            ]);
-            $model->saveTranslations([
-                'name' => $shema['name'],
-                'slug' => $this->makeSlugs($shema['name'])
-            ]);
-            Attachment::create($shema['image'] + [
-                'original_name' => $shema['image']['name'],
-                'group' => '',
-                'type' => 'image',
-                'attachmentable_id' => $model->id,
-                'attachmentable_type' => Category::class
-            ]);
-            $this->saveChildCat($model, $shema['childs']??[]);
-        }
-    }
-
-    private function saveChildCat($parent, $childs)
-    {
-        if (!$childs) {
-            return;
-        }
-        foreach ($childs as $child) {
-            $model = Category::create([
-                'category_id' => $parent->id,
-                'is_active' => true
-            ]);
-            $model->saveTranslations([
-                'name' => $child['name'],
-                'slug' => $this->makeSlugs($child['name'])
-            ]);
-            $this->saveChildCat($model, $child['childs']??[]);
-        }
-    }
-
-    private function makeSlugs($names)
-    {
-        $res = [];
-        foreach ($names as $locale => $name) {
-            $res[$locale] = Str::slug($name);
-        }
-
-        return $res;
     }
 }

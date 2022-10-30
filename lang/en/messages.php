@@ -14,10 +14,8 @@ return [
     'authError' => 'You must be logged in to perform this action',
     'serverError' => 'Server error occurred',
     'accountActivated' => 'Your account has been verified!',
-
     'requireStandart' => 'The «Standart» account is required',
     'requirePro' => 'The «Pro» account is required',
-
     'postUploaded' => 'Post has been published successfully!',
     'postUploadedError' => 'Error occured while publishing the post.',
     'postDeleted' => 'Post has been deleted successfully!',
@@ -40,9 +38,7 @@ return [
     'tooManyPostsError' => 'You have reached the maximum amount of posts. (200 for Standart, 500 for Pro)',
     'allPostsDeleted' => 'All posts has been deleted!',
     'tooManyUrgentPostsError' => 'You have reached the maximum number of urgent posts. (100 for Standart, 300 for Pro)',
-
     'postTranslationEdited' => 'Post translation has been changed successfully!',
-
     'mailerToManyTags' => 'Too many categories',
     'mailersDeactivated' => 'All mailer deactivated successfully!',
     'mailerActivated' => 'Mailer has been activated successfully!',
@@ -67,25 +63,19 @@ return [
     'mailerEmptyTypesError' => 'At least one type required!',
     'mailerEmptyRolesError' => 'At least one legal type required!',
     'mailerEmptyThreadsError' => 'Please choose equipment or service',
-
     'signedIn' => 'Welcome!',
     'signedOut' => 'Good bye',
-
     'messageSent' => 'The message has been sent!',
-
     'planUpdated' => 'Your subscription has been changed successfully!',
     'planCanceled' => 'Your subscription has been canceled successfully!',
-
-
     'postImportError' => 'The error occurred while analyzing the import file',
     'postImportSuccess' => 'Posts published successfully',
-
     'import' => [
         'example-file-name' => 'rigmanager-import-file.xlsx',
         'errors' => [
             'AtPost' => 'An error occured at post #',
-            'type' => 'Invalid "Type"'
-        ]
+            'type' => 'Invalid "Type"',
+        ],
     ],
     'importExtError' => 'Only xlsx files are allowed.',
     'importStructureError' => 'The import file structure is broken.',
@@ -110,5 +100,4 @@ return [
     'importTooManyPostsError' => 'You are trying to import :amount posts, but there are only :diff to maximum.',
     'importTooManyPremiums' => '',
     'importTooManyUrgents' => 'Too many urgent posts. You have :am. Maximum :max',
-
 ];

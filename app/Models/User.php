@@ -49,6 +49,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_active_at' => 'datetime',
     ];
 
+    // Get the route key for the model.
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function socials()
     {
         return $this->hasMany(SocialUser::class);

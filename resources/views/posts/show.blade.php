@@ -64,8 +64,19 @@
                 </div>
             @endif
             <div class="prod-about">
-                @if (LaravelLocalization::getCurrentLocale() != $post->origin_lang)
-                    <div class="warning">{{__('ui.originPostLang')}} <a class="show-origin-text" href="">{{$post->origin_lang_readable}}</a>.</div>
+                @if ($post->failed_translation)
+                    <div class="warning">
+                        {{__('ui.posts.autoTranslationNotAvailable')}}
+                    </div>
+                @elseif ($currentLocale != $post->origin_lang && $post->auto_translate)
+                    <div class="warning post-translated-text-toggle">
+                        {{__('ui.originPostLang')}}
+                        <a href="">{{$post->origin_lang}}</a>.
+                    </div>
+                    <div class="warning post-translated-text-toggle d-none">
+                        {{__('ui.posts.showTranslatedAgain')}}
+                        <a href="">{{$currentLocale}}</a>.
+                    </div>
                     <h1 class="hidden">{{$post->translated('title', $post->origin_lang)}}</h1>
                     <p class="hidden">{{$post->translated('description', $post->origin_lang)}}</p>
                 @endif
@@ -223,22 +234,6 @@
             </div>
         </div>
     @endif
-@endsection
-
-@section('modals')
-    <div id="popup-contacts" class="popup">
-        <div class="popup-title">{{__('ui.contactInfo')}}</div>
-        <div class="popup-prod-info">
-            <div class="prod-info-item contact-email">
-                <div class="prod-info-name">{{__('ui.email')}}:</div>
-                <div class="prod-info-text"></div>
-            </div>
-            <div class="prod-info-item contact-phone">
-                <div class="prod-info-name">{{__('ui.phone')}}:</div>
-                <div class="prod-info-text"></div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('scripts')

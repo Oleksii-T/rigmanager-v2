@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "barryvdh/laravel-ide-helper": "^2.12",
         "barryvdh/laravel-translation-manager": "^0.6.3",
         "doctrine/dbal": "^3.4",
         "google/cloud-translate": "^1.12",

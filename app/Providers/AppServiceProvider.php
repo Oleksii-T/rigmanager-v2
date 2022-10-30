@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\Paginator;
 use App\Models\Post;
 use App\Models\Feedback;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
             $view->with(
                 'currentUser',
                 auth()->user()
+            );
+
+            $view->with(
+                'currentLocale',
+                LaravelLocalization::getCurrentLocale()
             );
         });
 

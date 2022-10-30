@@ -17,6 +17,7 @@ use App\Models\Attachment;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Services\TranslationService;
 
 class PostsImport implements ShouldQueue
 {
@@ -84,12 +85,15 @@ class PostsImport implements ShouldQueue
     private function processRow($row)
     {
         $disk = Storage::disk('aimages');
+        $translator = new TranslationService();
+        $textLocale = $translator->detectLanguage($row[1] . '. ' . $row[2]);
 
         // create post from row
         $post = Post::create([
             'status' => 'pending',
             'is_active' => true,
             'user_id' => $this->user->id,
+            'origin_lang' => $textLocale,
             'category_id' => $this->category($row[3]),
             'type' => strtolower($row[5]),
             'condition' => strtolower($row[6]),
@@ -105,13 +109,13 @@ class PostsImport implements ShouldQueue
         // save translations
         $post->saveTranslations([
             'slug' => [
-                'en' => makeSlug($row[1], Post::allSlugs())
+                $textLocale => makeSlug($row[1], Post::allSlugs())
             ],
             'title' => [
-                'en' => $row[1]
+                $textLocale => $row[1]
             ],
             'description' => [
-                'en' => $row[2]
+                $textLocale => $row[2]
             ]
         ]);
         PostTranslate::dispatch($post);

@@ -43,6 +43,11 @@
                                             @if ($childCat->childs->isNotEmpty())
                                                 @foreach ($childCat->childs as $childChildCat)
                                                     <ul class="category-sublist">
+                                                        @php
+                                                            if (!$childChildCat->slug) {
+                                                                dd($childChildCat);
+                                                            }
+                                                        @endphp
                                                         <li><a href="{{route('search.category', $childChildCat)}}">{{$childChildCat->name}}</a></li>
                                                     </ul>
                                                 @endforeach

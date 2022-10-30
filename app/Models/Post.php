@@ -104,6 +104,12 @@ class Post extends Model
         });
     }
 
+    // overload laravel`s method for route key generation
+    public function getRouteKey()
+    {
+        return $this->slug;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

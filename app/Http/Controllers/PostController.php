@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Post;
 use App\Models\Attachment;
+use App\Models\Feedback;
 use App\Models\Category;
 use App\Http\Requests\PostRequest;
 use App\Jobs\PostTranslate;
@@ -57,10 +58,10 @@ class PostController extends Controller
     {
         $user = auth()->user();
         $input = $request->validated();
-        $input['status'] = 'pending';
-        $input['is_active']= true;
         $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
         $input['origin_lang'] = $textLocale;
+        $input['status'] = 'pending';
+        $input['is_active']= true;
         $input['slug'] = [
             $textLocale => makeSlug($input['title'], Post::allSlugs())
         ];
@@ -93,28 +94,60 @@ class PostController extends Controller
     {
         $input = $request->validate([
             'auto_translate' => ['nullable'],
-            'title' => ['required', 'array'],
-            'title.*' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'array'],
-            'description.*' => ['required', 'string', 'max:5000'],
+            'rerun-translator' => ['nullable'],
+            'title' => ['required_without:auto_translate', 'array'],
+            'title.*' => ['required_without:auto_translate', 'string', 'max:255'],
+            'description' => ['required_without:auto_translate', 'array'],
+            'description.*' => ['required_without:auto_translate', 'string', 'max:5000'],
         ]);
 
         $input['auto_translate'] ??= false;
-        $allPostSlugs = Post::allSlugs();
-        foreach ($input['title'] as $locale => $title) {
-            if ($title != $post->translated('title', $locale)) {
-                $input['slug'][$locale] = makeSlug($title, $allPostSlugs);
-            }
-        }
 
-        $post->update($input);
-        $post->saveTranslations($input);
+        if (!$input['auto_translate']) {
+            $post->update($input);
+            $allPostSlugs = Post::allSlugs();
+            foreach ($input['title'] as $locale => $title) {
+                if ($title != $post->translated('title', $locale)) {
+                    $input['slug'][$locale] = makeSlug($title, $allPostSlugs);
+                }
+            }
+            $post->saveTranslations($input);
+        } else if ($input['rerun-translator']??false) {
+            $cKay = 'users.' . auth()->id() . '.posts.translation-request';
+            $spam = cache()->get($cKay, false);
+
+            if ($spam) {
+                \Log::info("POST TRANSLATION #$post->id: user spammed auto-translation");
+
+                return $this->jsonError(trans('messages.posts.translations-spam'));
+            }
+
+            cache()->put($cKay, true, 60);
+            $post->update($input);
+
+            PostTranslate::dispatch($post);
+        }
 
         flash(trans('messages.post.translations-updates')); //! TRANSLATE
 
         return $this->jsonSuccess('', [
             'redirect' => route('posts.edit', $post)
         ]);
+    }
+
+    public function translationsReport(Request $request, Post $post)
+    {
+        $user = auth()->user();
+
+        Feedback::create([
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'name' => $user->name,
+            'subject' => "Post #$post->id translations are invalid",
+            'text' => 'User reported invalid auto-translations of hist post.'
+        ]);
+
+        return $this->jsonSuccess(trans('messages.posts.invalid-translations-reported'));
     }
 
     public function edit(Request $request, Post $post)
@@ -124,22 +157,22 @@ class PostController extends Controller
         return view('posts.edit', compact('post', 'categories'));
     }
 
-    public function update(PostRequest $request, Post $post)
+    public function update(PostRequest $request, Post $post, TranslationService $translator)
     {
         $user = auth()->user();
         $input = $request->validated();
+        $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
+        $input['origin_lang'] = $textLocale;
         $input['status'] = 'pending';
         $input['is_active']= true;
-        $input['origin_lang'] = 'en'; //TODO
-        $input['cost_usd'] = $input['cost']??null; //TODO
         $input['slug'] = [
-            'en' => makeSlug($input['title'], Post::allSlugs($post->id))
+            $textLocale => makeSlug($input['title'], Post::allSlugs($post->id))
         ];
         $input['title'] = [
-            'en' => $input['title']
+            $textLocale => $input['title']
         ];
         $input['description'] = [
-            'en' => $input['description']
+            $textLocale => $input['description']
         ];
         $post->update($input);
         $post->saveCosts($input);
@@ -148,6 +181,7 @@ class PostController extends Controller
         $post->documents()->whereIn('id', $request->removed_documents??[])->delete();
         $post->addAttachment($input['images']??[], 'images');
         $post->addAttachment($input['documents']??[], 'documents');
+        PostTranslate::dispatch($post);
 
         flash(trans('messages.post.updated')); //! TRANSLATE
 

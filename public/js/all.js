@@ -210,56 +210,6 @@ $(document).ready(function () {
 	// fancybox touch fix
 	$("[data-fancybox]").fancybox({ touch: false });
 
-	//select tags
-	var selectedTag = new Object();
-	selectedTag.first = "Other";
-	selectedTag.second = "0";
-	selectedTag.third = "0";
-	selectedTag.id = "0";
-	$('.tag-lvl-1 select').selectmenu({
-		change: function (event, ui) {
-			var val = $(this).find('option:selected').val(); //get tag id
-			$('.tag-lvl-2 select, .tag-lvl-3 select').addClass('hidden'); //hide all previusly chosen tags
-			$('select.tags_'+val).removeClass('hidden'); //show oppropriate child tag
-			selectedTag.id = val;
-			selectedTag.first = $(this).find('option:selected').text();
-			selectedTag.second = "0";
-			selectedTag.third = "0";
-			// TODO - reset select
-		}
-	});//Облегшені бурові труби (ЛБТ)
-	$('.tag-lvl-2 select').selectmenu({
-		change: function (event, ui) {
-			var val = $(this).find('option:selected').val(); //get tag id
-			$('.tag-lvl-3 select').addClass('hidden'); //hide all previusly chosen tags
-			selectedTag.id = val;
-			val = val.replace('.', '\\.'); //escape dot in class name
-			$('select.tags_'+val).removeClass('hidden'); //show oppropriate child tag
-			selectedTag.second = $(this).find('option:selected').text();
-			selectedTag.third = "0";
-			// TODO - reset select
-		}
-	});
-	$('.tag-lvl-3 select').selectmenu({
-		change: function (event, ui) {
-			selectedTag.id = $(this).find('option:selected').val();
-			selectedTag.third = $(this).find('option:selected').text();
-		}
-	});
-	$('.select-tag-btn').click(function(){
-		var list = $('.form-category-list');
-		list.empty();
-		list.append('<li>'+selectedTag.first+'</li>');
-		if (selectedTag.second != "0") {
-			list.append('<li>'+selectedTag.second+'</li>');
-			if (selectedTag.third != "0") {
-				list.append('<li>'+selectedTag.third+'</li>');
-			}
-		}
-		$('input[name=tag_encoded]').val(selectedTag.id);
-		$.fancybox.close();
-	});
-
 	// tab setup
 	$('.tab-content').addClass('clearfix').not(':first').hide();
 	$('ul.tabs').each(function(){
@@ -393,14 +343,6 @@ $(document).ready(function () {
         toggleFaqText($('.faq-item #'+faqSlug));
     }
 
-    $('.post-auto-translate-toggle').change(function(e) {
-        e.preventDefault();
-        let is = $(this).is(':checked');
-        $(this).closest('form').find('input, textarea').prop('disabled', is);
-        $(this).closest('form').find('.form-button-block .button').toggleClass('d-none');
-
-        console.log(`checked: ` + is ); //! LOG
-    })
 });
 
 

@@ -20,6 +20,10 @@ class TranslationService
 
     public function detectLanguage($text)
     {
+        if (app()->environment('local')) {
+            return 'en';
+        }
+
         try {
             $res = $this->translator->detectLanguage($text)['languageCode'];
             $locales = array_keys(LaravelLocalization::getLocalesOrder());
@@ -41,6 +45,10 @@ class TranslationService
 
     public function translate($text, $to)
     {
+        if (app()->environment('local')) {
+            return "$to | $text";
+        }
+
         try {
             $res = $this->translator->translate($text, ['target' => $to, 'format'=>'text'])['text'];
         } catch (\Throwable $th) {

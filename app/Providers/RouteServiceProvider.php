@@ -7,6 +7,8 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Models\Post;
+use App\Models\Category;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,14 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
+
+        Route::bind('post', function ($value) {
+            return Post::getBySlug($value);
+        });
+
+        Route::bind('category', function ($value) {
+            return Category::getBySlug($value);
+        });
 
         $this->routes(function () {
             Route::middleware('api')

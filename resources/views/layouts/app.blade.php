@@ -59,7 +59,7 @@
 					<div class="footer-col">
 						<ul class="footer-nav footer-langs">
                             @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
-                                @if (LaravelLocalization::getCurrentLocale() != $localeCode)
+                                @if ($currentLocale != $localeCode)
 								    <li class="active">
                                         <a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
                                             {{ $localeCode }}

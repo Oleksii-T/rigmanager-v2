@@ -44,7 +44,8 @@ class UserSeeder extends Seeder
                 'slug' => 'user-1',
                 'country' => 'ru',
                 'password' => Hash::make('user1@mail.com'),
-                'email' => 'user1@mail.com'
+                'email' => 'user1@mail.com',
+                'last_active_at' => now()
             ],
         ];
 

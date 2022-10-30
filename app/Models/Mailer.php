@@ -26,6 +26,12 @@ class Mailer extends Model
         'to_send' => 'array'
     ];
 
+    // Get the route key for the model.
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

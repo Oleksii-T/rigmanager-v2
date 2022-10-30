@@ -3,10 +3,28 @@
 @section('title', 'Exchange Rates')
 
 @section('content_header')
-    <x-admin.title
-        text="Exchange Rates"
-        :button="['+ Add Rate', route('admin.exchange-rates.create')]"
-    />
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <div class="float-left">
+                    <h1 class="m-0">Exchange Rates</h1>
+                </div>
+                <div class="float-left pl-3">
+                    <a href="{{route('admin.exchange-rates.create')}}" class="btn btn-primary">
+                        + Add Rate
+                    </a>
+                </div>
+                <div class="float-left pl-3">
+                    <form action="{{route('admin.exchange-rates.sync-rates')}}" method="post" class="general-ajax-submit">
+                        @csrf
+                        <button class="btn btn-primary">
+                            Sync Rates with API
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('content')

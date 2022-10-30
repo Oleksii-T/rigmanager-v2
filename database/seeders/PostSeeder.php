@@ -39,7 +39,7 @@ class PostSeeder extends Seeder
                     }
                 )
             )
-            ->count(100)
+            ->count(200)
             ->create();
 
         $countriesCurrencies = [
@@ -61,6 +61,14 @@ class PostSeeder extends Seeder
                     'is_default' => $currency == $baseCurrency,
                 ]);
             }
+
+            Translation::create([
+                'field' => 'slug',
+                'locale' => 'en',
+                'value' => makeSlug($post->title, Post::allSlugs()),
+                'translatable_id' => $post->id,
+                'translatable_type' => Post::class,
+            ]);
         }
     }
 }
