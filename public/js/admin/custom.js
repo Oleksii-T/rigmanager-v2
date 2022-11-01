@@ -209,8 +209,11 @@ function loading(text='Request processing...') {
 }
 
 // add table-filters to data-table request
-function addTableFilters(data) {
-    $('.table-filter').each(function(i) {
+function addTableFilters(data, wraper=null) {
+    let selector = '.table-filter';
+    let filters = wraper ? wraper.find(selector) : $(selector);
+
+    filters.each(function(i) {
         let name = $(this).attr('name');
         let val = $(this).val();
         data[name] = val;

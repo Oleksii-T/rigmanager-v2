@@ -52,7 +52,7 @@
                 <div class="brand-slider">
                     @foreach ($partners as $partner)
                         <div class="brand-slide">
-                            <a href="{{$partner->url??''}}" class="brand-item {{$partner->link ? 'brand-valid' : 'block-link'}}">
+                            <a href="{{$partner->link}}" class="brand-item {{$partner->link ? 'brand-valid' : 'block-link'}}">
                                 <img src="{{$partner->image->url}}" alt="{{$partner->image->alt}}">
                             </a>
                         </div>

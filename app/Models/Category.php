@@ -108,6 +108,18 @@ class Category extends Model
         return $get ? $res->get() : $res;
     }
 
+    /**
+     * get all childs ids including current
+     */
+    public function getChildsIds()
+    {
+        $array = array($this->id);
+        if ($this->childs->isEmpty()) {
+            return $array;
+        }
+        return array_merge($array, $this->getChildrenIds($this->childs));
+    }
+
     public static function dataTable($query, $request)
     {
         if ($request->search && $request->search['value']) {
@@ -153,6 +165,9 @@ class Category extends Model
             ->addColumn('childs', function ($model) {
                 return $model->childs()->count();
             })
+            ->addColumn('posts', function ($model) {
+                return $model->postsAll()->count();
+            })
             ->editColumn('created_at', function ($model) {
                 return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
             })
@@ -175,18 +190,6 @@ class Category extends Model
         }
 
         return $result;
-    }
-
-    /**
-     * get all childs ids including current
-     */
-    public function getChildsIds()
-    {
-        $array = array($this->id);
-        if ($this->childs->isEmpty()) {
-            return $array;
-        }
-        return array_merge($array, $this->getChildrenIds($this->childs));
     }
 
     public static function getDefault()

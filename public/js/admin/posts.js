@@ -1,11 +1,12 @@
 $(document).ready(function () {
-    let table = $('#posts-table').DataTable({
+    let selector = '#posts-table';
+    let table = $(selector).DataTable({
         order: [[ 0, "desc" ]],
         serverSide: true,
         ajax: {
 			url: window.location.href,
 			data: function (filter) {
-                addTableFilters(filter);
+                addTableFilters(filter, $(selector).closest('.card'));
 			}
 		},
         columns: [
@@ -21,7 +22,7 @@ $(document).ready(function () {
         ]
     });
 
-    $(document).on('click', '#posts-table .delete-resource', function (e) {
+    $(document).on('click', `${selector} .delete-resource`, function (e) {
         e.preventDefault();
         deleteResource(table, $(this).data('link'));
     });

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
@@ -46,6 +47,9 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('catalog', [SearchController::class, 'index'])->name('search');
     Route::get('catalog/{category}', [SearchController::class, 'category'])->name('search.category');
 
+    Route::get('plans', [SubscriptionPlanController::class, 'index'])->name('plans.index');
+    Route::get('plans/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.subscribe');
+
     Route::get('contact-us', [FeedbackController::class, 'create'])->name('feedbacks.create');
     Route::post('contact-us', [FeedbackController::class, 'store'])->middleware('throttle:feedbacks')->name('feedbacks.store');
 
@@ -56,11 +60,6 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
         Route::get('{user}', [UserController::class, 'show'])->name('show');
     });
 
-    Route::prefix('posts')->name('posts.')->group(function () {
-        Route::get('{post}', [PostController::class, 'show'])->name('show');
-        Route::post('{post}/view', [PostController::class, 'view']);
-    });
-
     Route::middleware('auth')->group(function () {
 
         Route::middleware('verified')->group(function () {
@@ -69,7 +68,6 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('', [ImportController::class, 'index'])->name('index');
                 Route::get('create', [ImportController::class, 'create'])->name('create');
                 Route::get('store', [ImportController::class, 'store'])->name('store');
-                Route::get('rules', [ImportController::class, 'rules'])->name('rules');
                 Route::get('downloads', [ImportController::class, 'downloadExample'])->name('download-example');
                 Route::get('{import}/posts', [ImportController::class, 'posts'])->name('posts');
                 Route::get('{import}/download', [ImportController::class, 'download'])->name('download');
@@ -111,6 +109,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
                 Route::get('posts/{category?}', [ProfileController::class, 'posts'])->name('posts');
                 Route::get('favorites/{category?}', [ProfileController::class, 'favorites'])->name('favorites');
+                Route::get('subscription', [ProfileController::class, 'subscription'])->name('subscription');
                 Route::post('posts/action', [ProfileController::class, 'action']);
                 Route::put('/', [ProfileController::class, 'update'])->name('update');
                 Route::put('password', [ProfileController::class, 'password'])->name('password');
@@ -119,6 +118,11 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
         });
 
+    });
+
+    Route::prefix('posts')->name('posts.')->group(function () {
+        Route::get('{post}', [PostController::class, 'show'])->name('show');
+        Route::post('{post}/view', [PostController::class, 'view']);
     });
 
 });

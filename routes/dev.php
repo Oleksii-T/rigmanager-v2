@@ -25,22 +25,11 @@ if (config('app.env') == 'production') {
 Route::get('test', function () {
     // some testing code
 
-    $a = [12,23];
-    $b = [13];
-
-    dd($a + $b);
-
-    $c = array_merge($a, $b);
-
-    dd($c);
-
-    $mailer = Mailer::first();
-    $posts = Post::latest()->limit(5)->get();
-
-    return new MailerPostFound($mailer, $posts);
-
     dd('done');
 });
+
+Route::view('front-elements', 'dev.front-elements');
+Route::view('invoice-pdf', 'dev.invoice-pdf');
 
 Route::get('login/{user?}', function () {
 

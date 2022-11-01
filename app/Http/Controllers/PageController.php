@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Partner;
 use App\Models\Post;
-use App\Models\FAQ;
+use App\Models\Faq;
 
 class PageController extends Controller
 {
@@ -50,9 +50,8 @@ class PageController extends Controller
 
     public function faq()
     {
-
         $faqs = cache()->remember('global.faqs', 60*60*24, function () {
-            return FAQ::orderBy('order')->get();
+            return Faq::orderBy('order')->get();
         });
 
         return view('faq', compact('faqs'));
@@ -75,6 +74,11 @@ class PageController extends Controller
 
     public function importRules()
     {
-        return view('import-rules');
+        $categoriesAll = Category::all();
+        foreach ($categoriesAll as $c) {
+            $categories[$c->name] = $c->translated('slug', 'en');
+        }
+
+        return view('import-rules', compact('categories'));
     }
 }

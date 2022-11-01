@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Post;
 use App\Http\Requests\Admin\CategoryRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -44,9 +45,16 @@ class CategoryController extends Controller
             return view('admin.categories.edit', compact('category'));
         }
 
-        $categories = $category->childs();
+        if ($request->has('parent')) {
 
-        return Category::dataTable($categories, $request);
+            $categories = $category->childs();
+
+            return Category::dataTable($categories, $request);
+        }
+
+        $posts = $category->postsAll();
+
+        return Post::dataTable($posts, $request);
     }
 
     public function update(CategoryRequest $request, Category $category)

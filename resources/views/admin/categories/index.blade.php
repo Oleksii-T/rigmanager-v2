@@ -53,7 +53,8 @@
                                 <th class="ids-column">ID</th>
                                 <th>Name</th>
                                 <th>Parent</th>
-                                <th>Childs</th>
+                                <th>Sub-categories</th>
+                                <th>Posts</th>
                                 <th>Is Active</th>
                                 <th>Created_at</th>
                                 <th class="actions-column-2">Actions</th>

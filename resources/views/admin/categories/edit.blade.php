@@ -114,8 +114,33 @@
                             <th>Name</th>
                             <th>Parent</th>
                             <th>Childs</th>
+                            <th>Posts</th>
                             <th>Is Active</th>
                             <th>Created_at</th>
+                            <th class="actions-column-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Posts</h3>
+            </div>
+            <div class="card-body">
+                <table id="posts-table" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="ids-column">ID</th>
+                            <th>Title</th>
+                            <th>User</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Is Active</th>
+                            <th>Created at</th>
+                            <th>Updated at</th>
                             <th class="actions-column-2">Actions</th>
                         </tr>
                     </thead>
@@ -129,4 +154,5 @@
 
 @push('scripts')
     <script src="{{asset('/js/admin/categories.js')}}"></script>
+    <script src="{{asset('/js/admin/posts.js')}}"></script>
 @endpush

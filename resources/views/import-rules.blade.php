@@ -55,7 +55,7 @@
                     <p><span class="white">{{__('postImportRules.required')}}: {{__('ui.yes')}}</span>
                         {{__('postImportRules.tagRule')}}</p>
                     <div class="article-buttons">
-                        <a href="#popup-eq-tags" data-fancybox class="button button-blue">{{__('postImportRules.tagRuleEqBtn')}}</a>
+                        <button class="button button-blue show-all-categories-in-popup">{{__('postImportRules.tagRuleEqBtn')}}</button>
                     </div>
                 </div>
                 <div class="article-part"> <!--images-->
@@ -105,14 +105,10 @@
 @endsection
 
 @section('modals')
-    <div id="popup-eq-tags" class="popup">
+    <div class="all-categories-as-popup">
         <div class="popup-title">{{__('postImportRules.tagsEqList')}}</div>
-        <p>{{__('ui.tagsCodesNotReady')}}</p>
-        <div class="code">
-            <div class="code-item">
-                <div class="code-num">0</div>
-                <div class="code-text">{{__('ui.notSpecified')}}</div>
-            </div>
-        </div>
+        @foreach ($categories as $name => $key)
+            <li>{{$name}}: {{$key}}</li>
+        @endforeach
     </div>
 @endsection

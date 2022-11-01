@@ -164,97 +164,7 @@ class Post extends Model
 
     public function scopeFilter($posts, array $filters)
     {
-        $conditions = $filters['conditions']??[];
-        $types = $filters['types']??[];
-        $urgent = $filters['is_urgent'][0]??null;
-        $import = $filters['is_import'][0]??null;
-        $sort = $filters['sorting']??null;
-        $country = $filters['country']??null;
-        $search = $filters['search']??null;
-        $currency = $filters['currency']??null;
-        $costFrom = $filters['cost_from']??null;
-        $costTo = $filters['cost_to']??null;
-        $author = $filters['author']??null;
-        $category = $filters['category']??null;
-        if (!($category instanceof Category)) {
-            $category = Category::find($category);
-        }
-
-        if ($author){
-            $user = User::where('slug', $author)->orWhere('id', $author)->first();
-            if ($user) {
-                $posts->where('user_id', $user->id);
-            }
-        }
-
-        // append cost to query if cost filteting\sorting is used
-        if (($currency && ($costFrom || $costTo)) || $sort == 'expensive' || $sort == 'cheap') {
-            $posts->whereHas('costs')->leftJoin('post_costs', function ($join) use ($currency) {
-                $c = $currency ?? 'usd'; // user may select sorting but not currency
-                $join->on('posts.id', '=', 'post_costs.post_id');
-                $join->on('currency', '=', \DB::raw("'$c'"));
-            });
-        }
-
-        if ($currency && $costFrom) {
-            $posts->where('post_costs.cost', '>=', $costFrom);
-        }
-
-        if ($currency && $costTo) {
-            $posts->where('post_costs.cost', '<=', $costFrom);
-        }
-
-        if ($category) {
-            $posts->whereIn('category_id', $category->getChildsIds());
-        }
-
-        if ($country) {
-            $posts->where('country', $country);
-        }
-
-        if ($search) {
-            $posts->whereHas('translations', function ($q) use ($search){
-                $q->whereIn('field', ['title', 'description'])
-                    ->where('locale', LaravelLocalization::getCurrentLocale())
-                    ->where('value', 'like', "%$search%");
-            });
-        }
-
-        if ($conditions && count($conditions) < count(Post::CONDITIONS)) {
-            $posts->whereIn('condition', $conditions);
-        }
-
-        if ($types && count($types) < count(Post::TYPES)) {
-            $posts->whereIn('type', $types);
-        }
-
-        if ($urgent !== null) {
-            $posts->where('is_urgent', $urgent);
-        }
-
-        if ($import !== null) {
-            $posts->where('is_import', $import);
-        }
-
-        switch ($sort) {
-            case 'latest':
-                $posts->latest('posts.created_at');
-                break;
-            case 'cheap':
-                $posts->orderBy('post_costs.cost');
-                break;
-            case 'expensive':
-                $posts->orderByDesc('post_costs.cost');
-                break;
-            case 'views':
-                $posts->orderByDesc('views_count');
-                break;
-            default:
-                $posts->latest('posts.created_at');
-                break;
-        }
-
-        return $posts;
+        return self::applyFilters($posts, $filters);
     }
 
     public function scopeCostByCurrency($query, string $curreny)
@@ -480,5 +390,100 @@ class Post extends Model
             }
             return $countries;
         });
+    }
+
+    public static function applyFilters($posts, array $filters)
+    {
+        $conditions = $filters['conditions']??[];
+        $types = $filters['types']??[];
+        $urgent = $filters['is_urgent'][0]??null;
+        $import = $filters['is_import'][0]??null;
+        $sort = $filters['sorting']??null;
+        $country = $filters['country']??null;
+        $search = $filters['search']??null;
+        $currency = $filters['currency']??null;
+        $costFrom = $filters['cost_from']??null;
+        $costTo = $filters['cost_to']??null;
+        $author = $filters['author']??null;
+        $category = $filters['category']??null;
+        if (!($category instanceof Category)) {
+            $category = Category::find($category);
+        }
+
+        if ($author){
+            $user = User::where('slug', $author)->orWhere('id', $author)->first();
+            if ($user) {
+                $posts->where('user_id', $user->id);
+            }
+        }
+
+        // append cost to query if cost filteting\sorting is used
+        if (($currency && ($costFrom || $costTo)) || $sort == 'expensive' || $sort == 'cheap') {
+            $posts->whereHas('costs')->leftJoin('post_costs', function ($join) use ($currency) {
+                $c = $currency ?? 'usd'; // user may select sorting but not currency
+                $join->on('posts.id', '=', 'post_costs.post_id');
+                $join->on('currency', '=', \DB::raw("'$c'"));
+            });
+        }
+
+        if ($currency && $costFrom) {
+            $posts->where('post_costs.cost', '>=', $costFrom);
+        }
+
+        if ($currency && $costTo) {
+            $posts->where('post_costs.cost', '<=', $costFrom);
+        }
+
+        if ($category) {
+            $posts->whereIn('category_id', $category->getChildsIds());
+        }
+
+        if ($country) {
+            $posts->where('country', $country);
+        }
+
+        if ($search) {
+            $posts->whereHas('translations', function ($q) use ($search){
+                $q->whereIn('field', ['title', 'description'])
+                    ->where('locale', LaravelLocalization::getCurrentLocale())
+                    ->where('value', 'like', "%$search%");
+            });
+        }
+
+        if ($conditions && count($conditions) < count(Post::CONDITIONS)) {
+            $posts->whereIn('condition', $conditions);
+        }
+
+        if ($types && count($types) < count(Post::TYPES)) {
+            $posts->whereIn('type', $types);
+        }
+
+        if ($urgent !== null) {
+            $posts->where('is_urgent', $urgent);
+        }
+
+        if ($import !== null) {
+            $posts->where('is_import', $import);
+        }
+
+        switch ($sort) {
+            case 'latest':
+                $posts->latest('posts.created_at');
+                break;
+            case 'cheap':
+                $posts->orderBy('post_costs.cost');
+                break;
+            case 'expensive':
+                $posts->orderByDesc('post_costs.cost');
+                break;
+            case 'views':
+                $posts->orderByDesc('views_count');
+                break;
+            default:
+                $posts->latest('posts.created_at');
+                break;
+        }
+
+        return $posts;
     }
 }

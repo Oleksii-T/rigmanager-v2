@@ -8,8 +8,8 @@
             <li><a href="{{route('terms')}}" {{$active=="terms" ? 'class=active' : ''}}>{{__('ui.footerTerms')}}</a></li>
             <li><a href="{{route('privacy')}}" {{$active=="pp" ? 'class=active' : ''}}>{{__('ui.footerPrivacy')}}</a></li>
             <li><a href="{{route('site-map')}}" {{$active=="sitemap" ? 'class=active' : ''}}>{{__('ui.footerSiteMap')}}</a></li>
-            <li><a href="#" {{$active=="plans" ? 'class=active' : ''}}>{{__('ui.footerSubscription')}}</a></li>
-            <li><a href="#" {{$active=="contact" ? 'class=active' : ''}}>{{__('ui.footerContact')}}</a></li>
+            <li><a href="{{route('plans.index')}}" {{$active=="plans" ? 'class=active' : ''}}>{{__('ui.footerSubscription')}}</a></li>
+            <li><a href="{{route('feedbacks.create')}}" {{$active=="contact" ? 'class=active' : ''}}>{{__('ui.footerContact')}}</a></li>
             <li><a href="{{route('import-rules')}}" {{$active=="xlsx-info" ? 'class=active' : ''}}>{{__('postImportRules.title')}}</a></li>
             <li><a href="{{route('faq')}}" {{$active=="faq" ? 'class=active' : ''}}>FAQ</a></li>
         </ul>

@@ -108,7 +108,8 @@ class ProfileController extends Controller
         $user = auth()->user();
         $filters = $request->all();
         $filters['category'] = $category;
-        $query = $user->favorites()->visible()->with(['views', 'images'])->filters($filters);
+        $query = $user->favorites()->visible()->with(['views', 'images']);
+        $query = Post::applyFilters($query, $filters);
         $categories = $this->getPostsCategories($query, $category);
         $posts = $query->paginate(20);
 
@@ -130,6 +131,11 @@ class ProfileController extends Controller
         flash('Favorites cleared');//! TRANSLATE
 
         return $this->jsonSuccess();
+    }
+
+    public function subscription(Request $request)
+    {
+        return view('profile.subscription');
     }
 
     /**

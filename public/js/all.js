@@ -207,8 +207,6 @@ $(document).ready(function () {
 			$(this).addClass('active');
 		}
 	});
-	// fancybox touch fix
-	$("[data-fancybox]").fancybox({ touch: false });
 
 	// tab setup
 	$('.tab-content').addClass('clearfix').not(':first').hide();
@@ -342,6 +340,16 @@ $(document).ready(function () {
     if (faqSlug){
         toggleFaqText($('.faq-item #'+faqSlug));
     }
+
+	// import rules page - show cateogies in popup
+	$('.show-all-categories-in-popup').click(function(e) {
+		e.preventDefault();
+		let html = $('.all-categories-as-popup');
+		swal.fire({
+			title: 'Test',
+			html: html
+		});
+	})
 
 });
 

@@ -23,13 +23,13 @@ class PartnerRequest extends FormRequest
      */
     public function rules()
     {
-        $model = $this->route('user');
+        $model = $this->route('partner');
 
         return [
             'user_id' => ['nullable', 'exists:users,id'],
             'link' => ['nullable', 'string', 'max:255'],
             'order' => ['nullable', 'integer', 'min:0'],
-            'image' => ['required', 'image', 'max:5000'],
+            'image' => [$model ? 'nullable' : 'required', 'image', 'max:5000'],
         ];
     }
 }

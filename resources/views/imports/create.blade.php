@@ -34,7 +34,7 @@
                     <div class="import-bottom-title">{{__('ui.importHow?')}}</div>
                     <div class="import-bottom-text">
                         <p>{{__('ui.postImportHow')}}</p>
-                        <p>{{__('ui.postImportRules')}} <a href="{{route('imports.rules')}}">{{__('postImportRules.title')}}</a>.</p>
+                        <p>{{__('ui.postImportRules')}} <a href="{{route('import-rules')}}">{{__('postImportRules.title')}}</a>.</p>
                         <p>{{__('ui.importFileLastUpdate')}}: {{env('IMPORT_FILE_UPDATED')}}</p>
                     </div>
                     <a href="{{route('imports.download-example')}}" class="button button-blue">{{__('ui.postImportDownload')}}</a>
@@ -43,8 +43,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('scripts')
-
 @endsection
