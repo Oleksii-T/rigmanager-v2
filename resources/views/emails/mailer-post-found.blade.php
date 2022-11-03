@@ -23,6 +23,6 @@ Regards,<br>
 @component('mail::table')
 ||
 |-|
-|If the posts does not meet the given Mailer parameters, please <a href="{{route('contact-us')}}">contact us</a> and describe the issue.|
+|If the posts does not meet the given Mailer parameters, please <a href="{{route('feedbacks.create')}}">contact us</a> and describe the issue.|
 @endcomponent
 @endcomponent

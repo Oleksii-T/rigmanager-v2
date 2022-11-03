@@ -5,9 +5,12 @@ use App\Models\Translation;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\Mailer;
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailerPostFound;
+use App\Mail\PasswordReset;
+use App\Mail\TmpMail;
 
 /*
  *
@@ -26,6 +29,21 @@ Route::get('test', function () {
     // some testing code
 
     dd('done');
+});
+
+Route::get('emails/mailer', function () {
+    $posts = Post::inRandomOrder()->limit(4)->get();
+    $mailer = Mailer::first();
+
+    return new MailerPostFound($mailer, $posts);
+});
+
+Route::get('emails/email-verify', function () {
+    return new TmpMail('https://rigmanager.com.ua/');
+});
+
+Route::get('emails/pasword-reset', function () {
+    return new PasswordReset('https://rigmanager.com.ua/');
 });
 
 Route::view('front-elements', 'dev.front-elements');
