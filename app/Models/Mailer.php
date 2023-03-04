@@ -15,7 +15,7 @@ class Mailer extends Model
         'slug',
         'filters',
         'posts',
-        'to_send',
+        'to_mail',
         'last_at'
     ];
 
@@ -23,7 +23,7 @@ class Mailer extends Model
         'filters' => 'array',
         'posts' => 'array',
         'last_at' => 'datetime',
-        'to_send' => 'array'
+        'to_mail' => 'array'
     ];
 
     // Get the route key for the model.
@@ -35,6 +35,11 @@ class Mailer extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(MailerLog::class);
     }
 
     public function scopeActive($query)

@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $('.summernote').summernote();
     $('.select2').select2();
+    $('.daterangepicker').daterangepicker();
 
     // general logic of ajax form submit (supports files)
     $('form.general-ajax-submit').submit(function(e){

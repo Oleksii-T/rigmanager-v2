@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\MailerController;
+use App\Http\Controllers\Admin\MailerLogController;
 
 /*
  *
@@ -26,7 +27,12 @@ Route::middleware('is-admin')->group(function () {
         return redirect()->route('admin.index');
     });
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('index');
+    Route::prefix('charts')->name('charts.')->group(function () {
+        Route::get('users-created', [DashboardController::class, 'usersCreated'])->name('users-created');
+        Route::get('posts-created', [DashboardController::class, 'postsCreated'])->name('posts-created');
+        Route::get('models-created', [DashboardController::class, 'modelsCreated'])->name('models-created');
+    });
 
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
@@ -34,6 +40,8 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('categories', CategoryController::class);
 
     Route::resource('posts', PostController::class);
+
+    Route::resource('mailer-logs', MailerLogController::class)->only('index');
 
     Route::resource('mailers', MailerController::class)->except('show');
 

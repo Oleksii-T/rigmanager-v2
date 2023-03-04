@@ -6,7 +6,7 @@
     <x-admin.title
         text="Dashboard"
     />
-@stop
+@endsection
 
 @section('content')
     {{--
@@ -1154,11 +1154,30 @@
     --}}
     <div class="row">
         <div class="col-lg-3 col-sm-6">
-            <!-- small box -->
             <div class="small-box" style="background: linear-gradient(94.79deg, #1AA7F6 1.91%, #57C3FF 95.64%);">
                 <div class="inner">
-                    <h3>{{$data['users_total']}}</h3>
-                    <p>User</p>
+                    <h3>Users: {{$usersNumbers['total']}}</h3>
+                    <p>Online: <b>{{$usersNumbers['online']}}</b></p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$usersNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$usersNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$usersNumbers['1w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$usersNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$usersNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$usersNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
                 </div>
                 <div class="icon">
                     <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1168,28 +1187,33 @@
                         <path d="M48.25 16.75C50.75 19.25 50.75 23.25 48.25 25.5C45.75 27.75 41.75 28 39.5 25.5C37.25 23 37 19 39.5 16.75C41.75 14.5 45.75 14.5 48.25 16.75" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
-                <a href="{{route('admin.users.index')}}" class="small-box-footer">More Info
-                    <span class="fas">
-                        <svg width="6" height="9" viewBox="0 0 6 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_965_31214)">
-                                <path d="M0.967557 1.59001L3.87756 4.50001L0.967557 7.41001C0.898121 7.47944 0.843041 7.56188 0.805462 7.6526C0.767884 7.74332 0.748542 7.84056 0.748542 7.93876C0.748542 8.03696 0.767884 8.13419 0.805462 8.22492C0.843041 8.31564 0.898121 8.39807 0.967557 8.46751C1.03699 8.53694 1.11943 8.59202 1.21015 8.6296C1.30087 8.66718 1.39811 8.68652 1.49631 8.68652C1.59451 8.68652 1.69174 8.66718 1.78246 8.6296C1.87319 8.59202 1.95562 8.53694 2.02506 8.46751L5.46756 5.02501C5.53708 4.95562 5.59224 4.87321 5.62988 4.78248C5.66752 4.69175 5.68689 4.59448 5.68689 4.49626C5.68689 4.39803 5.66752 4.30077 5.62988 4.21004C5.59224 4.11931 5.53708 4.03689 5.46756 3.96751L2.02506 0.525007C1.73256 0.232507 1.26006 0.232507 0.967557 0.525008C0.682557 0.817508 0.675057 1.29751 0.967557 1.59001Z" fill="white" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_965_31214">
-                                    <rect width="6" height="9" fill="white" transform="translate(6 9) rotate(180)" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                    </span>
-                </a>
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
-            <!-- small box -->
             <div class="small-box" style="background: linear-gradient(94.79deg, #1DE183 1.91%, #5CECA7 95.64%);">
                 <div class="inner">
-                    <h3>{{$data['posts_total']}}</h3>
-                    <p>Posts</p>
+                    <h3>Posts: {{$postsNumbers['total']}}</h3>
+                    <p>Inactive: <b>{{$postsNumbers['inactive']}}</b></p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$postsNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$postsNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$postsNumbers['2w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$postsNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$postsNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$postsNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
                 </div>
                 <div class="icon">
                     <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1198,21 +1222,426 @@
                         <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
-                <a href="{{route('admin.posts.index')}}" class="small-box-footer">More Info
-                    <span class="fas">
-                        <svg width="6" height="9" viewBox="0 0 6 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_965_31214)">
-                                <path d="M0.967557 1.59001L3.87756 4.50001L0.967557 7.41001C0.898121 7.47944 0.843041 7.56188 0.805462 7.6526C0.767884 7.74332 0.748542 7.84056 0.748542 7.93876C0.748542 8.03696 0.767884 8.13419 0.805462 8.22492C0.843041 8.31564 0.898121 8.39807 0.967557 8.46751C1.03699 8.53694 1.11943 8.59202 1.21015 8.6296C1.30087 8.66718 1.39811 8.68652 1.49631 8.68652C1.59451 8.68652 1.69174 8.66718 1.78246 8.6296C1.87319 8.59202 1.95562 8.53694 2.02506 8.46751L5.46756 5.02501C5.53708 4.95562 5.59224 4.87321 5.62988 4.78248C5.66752 4.69175 5.68689 4.59448 5.68689 4.49626C5.68689 4.39803 5.66752 4.30077 5.62988 4.21004C5.59224 4.11931 5.53708 4.03689 5.46756 3.96751L2.02506 0.525007C1.73256 0.232507 1.26006 0.232507 0.967557 0.525008C0.682557 0.817508 0.675057 1.29751 0.967557 1.59001Z" fill="white" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_965_31214">
-                                    <rect width="6" height="9" fill="white" transform="translate(6 9) rotate(180)" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                    </span>
-                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #e1bd1d 1.91%, #ece25c 95.64%);">
+                <div class="inner">
+                    <h3>Mailers: {{$mailersNumbers['total']}}</h3>
+                    <p>Inactive: <b>{{$mailersNumbers['inactive']}}</b></p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$mailersNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$mailersNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$mailersNumbers['1w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$mailersNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$mailersNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$mailersNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #2d1de1 1.91%, #5e5cec 95.64%);">
+                <div class="inner">
+                    <h3>Imports: {{$importsNumbers['total']}}</h3>
+                    <p>Success: <b>{{$importsNumbers['success']}}</b></p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$importsNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$importsNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$importsNumbers['1w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$importsNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$importsNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$importsNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #e1371d 1.91%, #ec6f5c 95.64%);">
+                <div class="inner">
+                    <h3>Feedbacks: {{$feedbacksNumbers['total']}}</h3>
+                    <p>From users: <b>{{$feedbacksNumbers['from-users']}}</b></p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$feedbacksNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$feedbacksNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$feedbacksNumbers['1w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$feedbacksNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$feedbacksNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$feedbacksNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #1de1de 1.91%, #5ce9ec 95.64%);">
+                <div class="inner">
+                    <h3>Subscriptions: ?</h3>
+                    <p>-<b></b></p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>?</b>
+                            <br>
+                            Last 2d: <b>?</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>?</b>
+                            <br>
+                            Last 2w: <b>?</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>?</b>
+                            <br>
+                            Last 2m: <b>?</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
             </div>
         </div>
     </div>
-@stop
+    <div class="row">
+        {{-- models created chart --}}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Models Created</h3>
+                    <div class="card-tools">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="far fa-calendar-alt"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="period" class="form-control daterangepicker">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="models-created" data-url="{{route('admin.charts.models-created')}}"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {{-- Users per country chart --}}
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Users per country</h3>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content p-0">
+                        <div class="chart" id="revenue-chart">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {{-- Posts per origin locale chart --}}
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Posts per origin locale</h3>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content p-0">
+                        <div class="chart" id="revenue-chart">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- Global post views --}}
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"> Global post views</h3>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content p-0">
+                        <div class="chart" id="revenue-chart">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {{-- Mailer created chart --}}
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Mailer Created</h3>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content p-0">
+                        <div class="chart" id="revenue-chart">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- Mailer emails chart --}}
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Mailer emails</h3>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content p-0">
+                        <div class="chart" id="revenue-chart">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {{-- Feedbacks created chart --}}
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Feedbacks Created</h3>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content p-0">
+                        <div class="chart" id="revenue-chart">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top users by posts count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Posts</th>
+                                <th>Last active at</th>
+                                <th>Created at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top users by mailers count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Posts</th>
+                                <th>Last active at</th>
+                                <th>Created at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top users by imports count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Posts</th>
+                                <th>Last active at</th>
+                                <th>Created at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top posts by views count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="posts-table" class="table table-bordered table-striped">
+                        <x-admin.posts-table />
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top categories by posts count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>Name</th>
+                                <th>Parent</th>
+                                <th>Sub-categories</th>
+                                <th>Posts</th>
+                                <th>Is Active</th>
+                                <th>Created_at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top useless mailers <small>(3d without mails since last update)</small></h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>User</th>
+                                <th>Title</th>
+                                <th>Active</th>
+                                <th>Posts Emailed #</th>
+                                <th>Last Mail At</th>
+                                <th>Created_at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top useless posts <small>(3d without views since last update)</small></h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <x-admin.posts-table />
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
+    <script src="{{asset('/js/admin/dashboard.js')}}"></script>
+@endpush

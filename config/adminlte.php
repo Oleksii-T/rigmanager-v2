@@ -269,7 +269,7 @@ return [
         [
             'text' => 'Dashboard',
             'route'  => 'admin.index',
-            'icon' => 'fas fa-fw fa-home',
+            'icon' => 'fa fa-fw fa-tachometer',
         ],
         'MAIN SECTIONS',
         [
@@ -302,7 +302,7 @@ return [
         [
             'text' => 'Imports',
             'route'  => 'admin.imports.index',
-            'icon' => 'fas fa-fw fa-table',
+            'icon' => 'fa fa-fw fa-file-excel-o',
         ],
         [
             'text' => 'Attachments',
@@ -313,7 +313,7 @@ return [
             'text' => 'Feedbacks',
             'route'  => 'admin.feedbacks.index',
             'label_color' => 'warning',
-            'icon' => 'fas fa-fw fa-reply',
+            'icon' => 'fa fa-fw fa-paper-plane',
         ],
         'EXTRA',
         [
@@ -336,15 +336,22 @@ return [
             'url'  => '/admin/translations',
             'icon' => 'fas fa-fw fa-language',
         ],
+        'LOGS',
+        [
+            'text' => 'Mailer Logs',
+            'route'  => 'admin.mailer-logs.index',
+            'icon' => 'fas fa-fw fa-navicon',
+        ],
         [
             'text' => 'Logs',
             'url'  => '/admin/log-viewer',
-            'icon' => 'fas fa-fw fa-exclamation',
+            'icon' => 'fa fa-fw fa-warning',
         ],
+        ' ',
         [
             'text' => 'Return to Site',
             'route'  => 'index',
-            'icon' => 'fas fa-fw fa-reply',
+            'icon' => 'fa fa-fw fa-reply',
         ],
     ],
 
@@ -433,13 +440,28 @@ return [
                 ],
             ],
         ],
-        'Chartjs' => [
-            'active' => false,
+        'Moments' => [
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js',
+                    'location' => '//cdn.jsdelivr.net/momentjs/latest/moment.min.js',
+                ],
+            ],
+        ],
+        'Chartjs' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/chart.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1',
                 ],
             ],
         ],
@@ -465,6 +487,21 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js',
+                ],
+            ],
+        ],
+        'DateRangePicker' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js',
                 ],
             ],
         ],

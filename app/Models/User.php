@@ -14,6 +14,8 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasAttachments, Notifiable;
 
+    const ONLINE_MINUTES = 5;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -88,6 +90,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function avatar()
     {
         return $this->morphOne(Attachment::class, 'attachmentable');
+    }
+
+    public function scopeOnline($query, bool $is=true)
+    {
+        return $query->where('last_active_at', '>=', now()->subMinutes(self::ONLINE_MINUTES));
     }
 
     public function isAdmin()

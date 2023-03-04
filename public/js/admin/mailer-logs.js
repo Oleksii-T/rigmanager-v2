@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    let selector = '#mailers-table';
+    let selector = '#mailer-logs-table';
 
     let table = $(selector).DataTable({
         order: [[ 0, "desc" ]],
@@ -12,19 +12,11 @@ $(document).ready(function () {
 		},
         columns: [
             { data: 'id', name: 'id' },
-            { data: 'user', name: 'user' },
-            { data: 'title', name: 'title' },
-            { data: 'is_active', name: 'is_active' },
+            { data: 'mailer', name: 'mailer' },
             { data: 'posts', name: 'posts' },
-            { data: 'last_at', name: 'last_at', searchable: false },
+            { data: 'filters', name: 'filters' },
             { data: 'created_at', name: 'created_at', searchable: false },
-            { data: 'action', name: 'action', orderable: false, searchable: false }
         ]
-    });
-
-    $(document).on('click', selector+' .delete-resource', function (e) {
-        e.preventDefault();
-        deleteResource(table, $(this).data('link'));
     });
 
 	$('.table-filter').change(function() {

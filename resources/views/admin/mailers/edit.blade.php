@@ -9,7 +9,7 @@
 @stop
 
 @section('content')
-    <form action="{{route('admin.mailers.update', $mailer)}}" method="POST" class="general-ajax-submit">
+    <form action="{{route('admin.mailers.update', $mailer)}}" method="POST" class="general-ajax-submit mb-3">
         @csrf
         @method('PUT')
         <div class="card">
@@ -158,8 +158,26 @@
                     </div>
                 </div>
             </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success min-w-100">Save</button>
+                <a href="{{route('admin.mailer-logs.index', ['mailer'=>$mailer->id])}}" class="btn btn-primary min-w-100">Logs</a>
+                <a href="{{ route('admin.mailers.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
+            </div>
         </div>
-        <button type="submit" class="btn btn-success min-w-100">Save</button>
-        <a href="{{ route('admin.mailers.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
     </form>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="m-0">To mail posts</h5>
+        </div>
+        <div class="card-body">
+            <table id="posts-table" class="table table-bordered table-striped">
+                <x-admin.posts-table />
+            </table>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+    <script src="{{asset('/js/admin/posts.js')}}"></script>
+@endpush

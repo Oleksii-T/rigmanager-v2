@@ -17,6 +17,7 @@
                     <div class="row">
                         <div class="col-lg-2">
                             <select class="table-filter form-control" name="is_active">
+                                <option value="">All</option>
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>

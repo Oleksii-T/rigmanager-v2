@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mailer;
+use App\Models\MailerLog;
+use App\Models\Post;
 use App\Http\Requests\Admin\MailerRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,10 +20,8 @@ class MailerController extends Controller
 
         $mailers = Mailer::query();
 
-        if ($request->role !== null) {
-            $mailers->whereHas('roles', function($q) use ($request){
-                $q->where('roles.id', $request->role);
-            });
+        if ($request->is_active !== null) {
+            $mailers->where('is_active', $request->is_active);
         }
 
         return Mailer::dataTable($mailers);
@@ -42,9 +42,15 @@ class MailerController extends Controller
         ]);
     }
 
-    public function edit(Mailer $mailer)
+    public function edit(Request $request, Mailer $mailer)
     {
-        return view('admin.mailers.edit', compact('mailer'));
+        if (!$request->ajax()) {
+            return view('admin.mailers.edit', compact('mailer'));
+        }
+
+        $posts = Post::whereIn('id', $mailer->to_mail);
+
+        return Post::dataTable($posts);
     }
 
     public function update(MailerRequest $request, Mailer $mailer)

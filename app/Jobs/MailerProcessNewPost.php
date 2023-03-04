@@ -54,7 +54,7 @@ class MailerProcessNewPost implements ShouldQueue
                 $toSend = $mailer->to_send??[];
                 $toSend[] = $this->post->id;
                 $mailer->update([
-                    'to_send' => $toSend
+                    'to_mail' => $toSend
                 ]);
 
                 $send = true;

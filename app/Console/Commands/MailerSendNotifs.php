@@ -23,7 +23,7 @@ class MailerSendNotifs extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Send email notifications of mailer found posts';
 
     /**
      * Execute the console command.
@@ -33,29 +33,36 @@ class MailerSendNotifs extends Command
     public function handle()
     {
         try {
-            $mailers = Mailer::where('is_active', true)->whereNotNull('to_send')->get();
+            $mailers = Mailer::where('is_active', true)->whereNotNull('to_mail')->get();
 
             foreach ($mailers as $mailer) {
 
                 $posts = Post::query()
                     ->visible()
-                    ->whereIn('id', $mailer->to_send)
+                    ->whereIn('id', $mailer->to_mail)
                     ->filter($mailer->filters)
                     ->get();
 
                 if ($posts->isEmpty()) {
                     $mailer->update([
-                        'to_send' => null
+                        'to_mail' => null
                     ]);
                     continue;
                 }
 
                 Mail::to($mailer->user)->send(new MailerPostFound($mailer, $posts));
 
+                $postsIds = $posts->pluck('id')->toArray();
+
+                $mailer->logs()->create([
+                    'posts' => $postsIds,
+                    'filters' => $mailer->filters
+                ]);
+
                 $mailer->update([
                     'last_at' => now(),
-                    'posts' => array_merge($mailer->posts??[], $posts->pluck('id')->toArray()),
-                    'to_send' => null
+                    'posts' => array_merge($mailer->posts??[], $postsIds),
+                    'to_mail' => null
                 ]);
 
             }
