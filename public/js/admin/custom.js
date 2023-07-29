@@ -176,8 +176,12 @@ function showServerError(response) {
             errorElement = errorElement.length ? errorElement : $(`.input-error[data-input="${field}[]"]`);
             errorElement = errorElement.length ? errorElement : $(`[name=${field}]`).closest('.form-group').find('.input-error');
             errorElement = errorElement.length ? errorElement : $(`[name="${field}[]"]`).closest('.form-group').find('.input-error');
-            for (const [key, error] of Object.entries(value)) {
-                errorText = errorText ? errorText+'<br>'+error : error;
+            if (typeof value === 'string' || value instanceof String) {
+                errorText = value;
+            } else {
+                for (const [key, error] of Object.entries(value)) {
+                    errorText = errorText ? errorText+'<br>'+error : error;
+                }
             }
             errorElement.html(errorText);
         }

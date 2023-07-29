@@ -9,6 +9,8 @@ use Illuminate\Pagination\Paginator;
 use App\Models\Post;
 use App\Models\Feedback;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $user = auth()->user();
+
         // set global blade variables
         \View::composer('*', function($view) {
             $cashTime = 60*5;
@@ -42,6 +46,28 @@ class AppServiceProvider extends ServiceProvider
                 'currentLocale',
                 LaravelLocalization::getCurrentLocale()
             );
+        });
+
+        $data = [
+            'csrf' => csrf_token(),
+            'route_name' => \Route::currentRouteName(),
+            // some more public data to use in JS
+        ];
+        if ($user) {
+            $data['user'] = [
+                'name' => $user->name,
+                'email' => $user->email
+            ];
+        }
+        $view->with('LaravelDataForJS', json_encode($data));
+
+        Builder::macro('toSqlWithBindings', function () {
+            $bindings = array_map(
+                fn ($value) => is_numeric($value) ? $value : "'{$value}'",
+                $this->getBindings()
+            );
+
+            return Str::replaceArray('?', $bindings, $this->toSql());
         });
 
         // load config values from db

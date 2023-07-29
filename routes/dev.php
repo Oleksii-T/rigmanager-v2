@@ -27,8 +27,9 @@ if (config('app.env') == 'production') {
 
 Route::get('test', function () {
     // some testing code
+    $d = [];
 
-    dd('done');
+    dd($d);
 });
 
 Route::get('emails/mailer', function () {

@@ -93,8 +93,10 @@
 	<script src="{{asset('js/jquery-ui-2.min.js')}}"></script>
 	<script src="{{asset('js/all.js')}}"></script>
 	<script type="text/javascript">
+        window.Laravel = {!!$LaravelDataForJS!!};
+
         $(document).ready(function(){
-			//block not-reday links
+			//block not-ready links
 			$('.not-ready').click(function(e){
 				e.preventDefault();
 				showToast(false, "{{ __('messages.inProgress') }}");

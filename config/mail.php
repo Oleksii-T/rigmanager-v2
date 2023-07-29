@@ -2,6 +2,8 @@
 
 return [
 
+    'log_sent_emails' => env('LOG_SENT_EMAILS', false),
+
     /*
     |--------------------------------------------------------------------------
     | Default Mailer
