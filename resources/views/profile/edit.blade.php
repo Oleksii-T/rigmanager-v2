@@ -78,11 +78,19 @@
                         @csrf
                         @method('PUT')
                         <fieldset>
-                            <div class="form-title">@lang('ui.password')</div>
+                            <div class="form-title">
+                                @lang('ui.password')
+                                <br>
+                                <small style="font-size: 50%" class="orange">
+                                    Your account do not have password (only {{$currentUser->socials()->first()->provider}} login)
+                                </small>
+                            </div>
 
-                            <label class="label">@lang('ui.curPass') <span class="orange">*</span></label>
-                            <input type="password" name="current_password" class="input">
-                            <div data-input="current_password" class="form-error"></div>
+                            @if ($currentUser->password)
+                                <label class="label">@lang('ui.curPass') <span class="orange">*</span></label>
+                                <input type="password" name="current_password" class="input">
+                                <div data-input="current_password" class="form-error"></div>
+                            @endif
 
                             <label class="label">@lang('ui.newPass') <span class="orange">*</span></label>
                             <input type="password" name="password" id="password" class="input">

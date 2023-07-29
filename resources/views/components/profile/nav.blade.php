@@ -8,7 +8,7 @@
             <li><a href="{{route('profile.favorites')}}" class="{{$active=="fav" ? 'active' : ''}}">@lang('ui.favourites')</a></li>
             <li><a href="{{route('imports.index')}}" class="{{$active=="import" ? 'active' : ''}}">@lang('ui.imports')</a></li>
             <li><a href="{{route('mailers.index')}}" class="{{$active=="mailer" ? 'active' : ''}}">@lang('ui.mailer')</a></li>
-            <li><a href="#" class="{{$active=="subscription" ? 'active' : ''}}">@lang('ui.mySubscription')</a></li>
+            <li><a href="{{route('profile.subscription')}}" class="{{$active=="subscription" ? 'active' : ''}}">@lang('ui.mySubscription')</a></li>
             @if ($currentUser->isAdmin())
                 <li><a href="{{route('admin.index')}}">Admin Panel</a></li>
             @endif

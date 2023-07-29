@@ -269,7 +269,7 @@
 						</div>
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
-                    <a href="{{route('plans.subscribe')}}" class="sub-button">{{__('ui.choose')}}</a>
+                    <a href="{{route('plans.subscribe')}}" class="not-ready sub-button">{{__('ui.choose')}}</a>
 				</div>
 			</div>
 		</div>

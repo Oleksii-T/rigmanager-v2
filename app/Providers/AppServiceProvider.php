@@ -31,10 +31,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $user = auth()->user();
 
         // set global blade variables
         \View::composer('*', function($view) {
+            $user = auth()->user();
             $cashTime = 60*5;
 
             $view->with(
@@ -46,20 +46,21 @@ class AppServiceProvider extends ServiceProvider
                 'currentLocale',
                 LaravelLocalization::getCurrentLocale()
             );
+
+            $data = [
+                'csrf' => csrf_token(),
+                'route_name' => \Route::currentRouteName(),
+                // some more public data to use in JS
+            ];
+            if ($user) {
+                $data['user'] = [
+                    'name' => $user->name,
+                    'email' => $user->email
+                ];
+            }
+            $view->with('LaravelDataForJS', json_encode($data));
         });
 
-        $data = [
-            'csrf' => csrf_token(),
-            'route_name' => \Route::currentRouteName(),
-            // some more public data to use in JS
-        ];
-        if ($user) {
-            $data['user'] = [
-                'name' => $user->name,
-                'email' => $user->email
-            ];
-        }
-        $view->with('LaravelDataForJS', json_encode($data));
 
         Builder::macro('toSqlWithBindings', function () {
             $bindings = array_map(

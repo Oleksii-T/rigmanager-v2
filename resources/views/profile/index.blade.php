@@ -44,7 +44,7 @@
                         @if ( auth()->user()->subscription && auth()->user()->subscription->is_active )
                             <div class="profile-info-text green">@lang('ui.active') «{{auth()->user()->subscription->role_readable}}» @lang('ui.until') {{auth()->user()->subscription->expire_at}}</div>
                         @else
-                            <div class="profile-info-text">@lang('ui.inactive')</div>
+                            <div class="profile-info-text">@lang('ui.active')</div>
                         @endif
                     </div>
                 </div>

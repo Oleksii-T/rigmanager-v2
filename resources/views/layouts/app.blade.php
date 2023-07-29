@@ -38,7 +38,7 @@
 					<div class="footer-col">
 						<ul class="footer-nav">
 							<li><a href="{{route('about')}}">@lang('ui.footerAbout')</a></li>
-							<li><a href="#">@lang('ui.footerBlog')</a></li>
+							<li><a href="#" class="not-ready">@lang('ui.footerBlog')</a></li>
 							<li><a href="{{route('search')}}">@lang('ui.catalog')</a></li>
 						</ul>
 					</div>
@@ -59,9 +59,11 @@
 					<div class="footer-col">
 						<ul class="footer-nav footer-langs">
                             @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
-                                @if ($currentLocale != $localeCode)
-								    <li class="active">
-                                        <a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                @if ($currentLocale == $localeCode)
+                                    <span>{{ $localeCode }}</span>
+                                @else
+                                    <li class="active">
+                                        <a class="not-ready" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
                                             {{ $localeCode }}
                                         </a>
                                     </li>
@@ -99,7 +101,7 @@
 			//block not-ready links
 			$('.not-ready').click(function(e){
 				e.preventDefault();
-				showToast(false, "{{ __('messages.inProgress') }}");
+				showToast("{{ __('messages.inProgress') }}", false);
 			});
         });
     </script>

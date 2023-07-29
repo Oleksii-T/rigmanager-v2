@@ -26,7 +26,7 @@
 
                 </div>
                 <div class="pack-button">
-                    <a href="https://rigmanager.com.ua/en/plans" class="button button-light">Change plan</a>
+                    <a href="{{route('plans.index')}}" class="button button-light">Change plan</a>
                 </div>
             </div>
 

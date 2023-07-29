@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Stevebauman\Location\Facades\Location;
 use App\Models\User;
 
 class SocialAuthController extends Controller
@@ -21,10 +22,17 @@ class SocialAuthController extends Controller
         $user = User::where('email', $socialUser->email)->first();
         if (!$user) {
             $user = User::create([
+                'country' => strtolower(Location::get()->countryCode),
+                'slug' => makeSlug($socialUser->name, User::pluck('slug')->toArray()),
                 'name' => $socialUser->name,
                 'email' => $socialUser->email,
-                'email_verified_at' => now()
+                'last_active_at' => now(),
             ]);
+        }
+
+        if (!$user->email_verified_at) {
+            $user->email_verified_at = now();
+            $user->save();
         }
 
         $social = [

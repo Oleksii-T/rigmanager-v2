@@ -476,7 +476,7 @@ textarea.form-error {
 	transition: all 0.3s linear;
 }
 .header-search.vis {
-	width: 240px;
+	width: 230px;
 }
 .header-search.vis .header-search-form {opacity: 1;}
 .header-search.vis .header-search-link {
