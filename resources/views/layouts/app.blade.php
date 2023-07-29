@@ -72,8 +72,11 @@
 				</div>
 			</div>
 		</footer>
-		<div class="development-alert hidden">
-			<p>@lang('ui.development')</p>
+		<div class="development-alert">
+			<p>
+                @lang('ui.development')
+                <a href="{{route('feedbacks.create')}}">@lang('ui.footerContact')</a>
+            </p>
 		</div>
 	</div>
 

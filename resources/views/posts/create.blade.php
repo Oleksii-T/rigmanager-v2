@@ -156,7 +156,7 @@
                             <div data-input="images" class="form-error"></div>
                             <label class="label">@lang('ui.chooseDoc')</label>
                             <div class="edit-doc-button">
-                                <input type="file" id="documents-multiple-input" type="file" class="hidden" multiple>
+                                <input type="file" id="documents-multiple-input" type="file" class="hidden" accept=".pdf,.xls,.xlsx,.xml,.doc,.docx" multiple>
                                 <label for="documents-multiple-input" class="edit-doc-label">@lang('ui.chooseFile')</label>
                             </div>
                             <div class="upload-documents_wrapper hidden clone">
