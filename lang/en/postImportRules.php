@@ -4,7 +4,7 @@ return [
     'title' => 'Posts import policy',
     'intro' => 'Here is described the procedure and rules of',
     'introLink' => 'bulk posts import',
-    'intro1' => 'from an XLSX file into rigmanager.com.ua.',
+    'intro1' => 'from an XLSX file into rigmanagers.com.',
     'mainRulesTitle' => 'General rules',
     'mainRules1' => 'The file designed for bulk uploading of posts about equipment. Thus, posts сoncerning services must be uploaded manually.',
     'mainRules2' => 'Changing the file structure makes automatic import impossible. Thus, adding / removing columns / pages, swapping or moving already created cells is highly discouraged.',

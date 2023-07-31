@@ -59,7 +59,7 @@
                         </select>
                     </div>
                     <div class="select-block">
-                        <a href="{{route('profile.clear-favs')}}" class="clear-favs">Clear All</a> {{-- //! TRANSLATE --}}
+                        <a href="{{route('profile.clear-favs')}}" class="clear-favs orange">Clear All</a> {{-- //! TRANSLATE --}}
                     </div>
                 </div>
                 @if (count($categories))

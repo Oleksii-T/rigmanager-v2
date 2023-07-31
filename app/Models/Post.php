@@ -10,7 +10,6 @@ use App\Traits\HasAttachments;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Events\PostCreated;
-use App\Jobs\MailerProcessNewPost;
 
 class Post extends Model
 {
@@ -79,28 +78,6 @@ class Post extends Model
         static::deleting(function ($model) {
             $model->purgeAttachments();
             $model->purgeTranslations();
-        });
-
-        static::created(function ($model) {
-            $hidePending = Setting::get('hide_pending_posts', true, true);
-            if (!$hidePending) {
-                MailerProcessNewPost::dispatch($model);
-            }
-        });
-
-        static::updated(function ($model) {
-            $hidePending = Setting::get('hide_pending_posts', true, true);
-            $nowActive = $model->getAttribute('is_active');
-            $wasActive = $model->getOriginal('is_active');
-            $wasStatus = $model->getAttribute('status');
-            $nowStatus = $model->getOriginal('status');
-
-            $sendBecauseActive = !$hidePending && !$wasActive && $nowActive;
-            $sendBecauseStatus = $hidePending && $wasStatus == 'pending' && $nowStatus == 'approved';
-
-            if ($sendBecauseActive || $sendBecauseStatus) {
-                MailerProcessNewPost::dispatch($model);
-            }
         });
     }
 

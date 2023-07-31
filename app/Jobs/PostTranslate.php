@@ -16,15 +16,17 @@ class PostTranslate implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $post;
+    protected $oldTrans;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Post $post)
+    public function __construct(Post $post, $oldTrans=[])
     {
         $this->post = $post;
+        $this->oldTrans = $oldTrans;
     }
 
     /**
@@ -40,11 +42,12 @@ class PostTranslate implements ShouldQueue
             return;
         }
 
-        $this->log('start', [
+        dlog(' PostTranslate@handle. START', [
+            'id' => $p->id,
             'origin_lang' => $p->origin_lang,
             'title' => $p->translated('title', $p->origin_lang),
             'description' => $p->translated('description', $p->origin_lang)
-        ]);
+        ]); //!LOG
 
         $translator = new TranslationService();
         $toLocales = array_diff(LaravelLocalization::getSupportedLanguagesKeys(), [$p->origin_lang]);
@@ -53,7 +56,12 @@ class PostTranslate implements ShouldQueue
         $translations = [];
 
         foreach ($translatables as $translatable) {
+            $oldValue = $this->oldTrans[$translatable] ?? null;
             $origin = $p->translated($translatable, $p->origin_lang);
+            if ($oldValue && $oldValue == $origin) {
+                dlog("  PostTranslate@handle. $translatable not changed - skip translation", ); //!LOG
+                continue;
+            }
             $translated = [];
             foreach ($toLocales as $toLocale) {
                 $res = $translator->translate($origin, $toLocale);
@@ -66,14 +74,8 @@ class PostTranslate implements ShouldQueue
             $translations[$translatable] = $translated;
         }
 
-        $this->log('end', $translations);
+        dlog('  PostTranslate@handle. END', $translations); //!LOG
 
         $p->saveTranslations($translations);
-    }
-
-    private function log($text, $data)
-    {
-        $id = $this->post->id;
-        \Log::info("POST TRANSLATION #$id: $text", $data);
     }
 }

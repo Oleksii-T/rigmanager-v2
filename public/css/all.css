@@ -138,6 +138,7 @@ a {transition: all .3s linear;}
 p {margin: 0 0 24px;}
 p a, .article li a {color: #ff8d11;}
 .orange {color: #ff8d11;}
+.gray-t {color: #999999;}
 .center {text-align: center;}
 .upper {text-transform: uppercase;}
 .button-holder {text-align: center;}
@@ -1091,7 +1092,6 @@ textarea.form-error {
 	margin-bottom: 24px;
 }
 .prod-arrow.prod-prev {
-	position: absolute;
 	top: 50%;
 	left: 0px;
 }

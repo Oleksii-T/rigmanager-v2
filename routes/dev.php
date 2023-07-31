@@ -29,23 +29,36 @@ Route::get('test', function () {
     // some testing code
     $d = [];
 
+    $a = $b;
+
     dd($d);
 });
 
-Route::get('emails/mailer', function () {
-    $posts = Post::inRandomOrder()->limit(4)->get();
-    $mailer = Mailer::first();
+Route::prefix('emails')->group(function () {
+    Route::get('verify', function () {
+        $url = url('');
+        $mail = new \App\Mail\TmpMail($url);
 
-    return new MailerPostFound($mailer, $posts);
+        if (request()->email) {
+            Mail::to(request()->email)->send($mail);
+        }
+
+        return $mail;
+    });
+
+    Route::get('mailer', function () {
+        $posts = Post::inRandomOrder()->limit(4)->get();
+        $mailer = Mailer::first();
+        $mail = new MailerPostFound($mailer, $posts);
+
+        return $mail;
+    });
+
+    Route::get('pasword-reset', function () {
+        return new PasswordReset('https://rigmanagers.com/');
+    });
 });
 
-Route::get('emails/email-verify', function () {
-    return new TmpMail('https://rigmanager.com.ua/');
-});
-
-Route::get('emails/pasword-reset', function () {
-    return new PasswordReset('https://rigmanager.com.ua/');
-});
 
 Route::view('front-elements', 'dev.front-elements');
 Route::view('invoice-pdf', 'dev.invoice-pdf');

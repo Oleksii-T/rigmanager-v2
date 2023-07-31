@@ -67,7 +67,7 @@ class MailerSendNotifs extends Command
 
             }
         } catch (\Throwable $th) {
-            Log::channel('commands')->error('[rates.update] Rates updating fails. '.$th->getMessage(), [
+            Log::channel('commands')->error("[$this->signature] " . $th->getMessage(), [
                 'mailer' => $mailer??null,
                 'trace' => substr($th->getTraceAsString(), 0, 600)
             ]);

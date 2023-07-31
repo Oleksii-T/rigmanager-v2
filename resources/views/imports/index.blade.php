@@ -24,7 +24,7 @@
                         {{__('ui.history')}}
                     </div>
                     <div class="history-title">
-                        <a href="{{route('imports.create')}}">Create</a>
+                        <a href="{{route('imports.create')}}" class="orange">Create</a>
                     </div>
                 </div>
                 <div class="history-table">
@@ -33,7 +33,7 @@
                             <th>№</th>
                             <th>{{__('ui.date')}}</th>
                             <th>{{__('ui.name')}}</th>
-                            <th>{{__('ui.posts')}}</th>
+                            <th>{{__('ui.stPosts')}}</th>
                             <th>{{__('ui.status')}}</th>
                             <th></th>
                         </tr>
@@ -44,12 +44,12 @@
                                     {{$import->created_at->format('d M, Y')}}
                                     <span class="history-table-date">{{$import->created_at->format('H:i')}}</span>
                                 </td>
-                                <td><a href="{{route('imports.download', $import)}}">{{$import->file->original_name}}</a></td>
+                                <td><a class="orange" href="{{route('imports.download', $import)}}">{{$import->file->original_name}}</a></td>
                                 <td>
                                     {{count($import->posts??[])}}
                                     @if (count($import->posts??[]))
                                         <span class="history-table-date">
-                                            <a href="{{route('imports.posts', $import)}}" class="see-import-posts">See</a>
+                                            <a href="{{route('imports.posts', $import)}}" class="see-import-posts orange">See</a>
                                         </span>
                                     @endif
                                 </td>
@@ -58,15 +58,15 @@
                                     @if ($import->status == 'done' && count($import->posts??[]))
                                         <form action="{{route('imports.posts.delete', $import)}}" method="post" class="general-ajax-submit ask" data-asktitle="Are you sure?" data-asktext="You won't be able to revert this!" data-askno="Cancel" data-askyes="Yes, delete all">{{-- //! TRANSLATE --}}
                                             @csrf
-                                            <button type="submit">Delete all</button>
+                                            <button class="btn-as-link gray-t" type="submit">Delete all</button>
                                         </form>
                                         <form action="{{route('imports.posts.deactivate', $import)}}" method="post" class="general-ajax-submit">
                                             @csrf
-                                            <button type="submit">Deactivate all</button>
+                                            <button class="btn-as-link gray-t " type="submit">Deactivate all</button>
                                         </form>
                                         <form action="{{route('imports.posts.activate', $import)}}" method="post" class="general-ajax-submit">
                                             @csrf
-                                            <button type="submit">Activate all</button>
+                                            <button class="btn-as-link gray-t" type="submit">Activate all</button>
                                         </form>
                                     @endif
                                 </td>

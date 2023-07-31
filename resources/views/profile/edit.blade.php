@@ -43,7 +43,7 @@
                             <div class="form-note">@lang('ui.userNameHelp')</div>
 
                             <label class="label">@lang('ui.phone')</label>
-                            <input type="tel" class="input format-phone" name="phone" value="{{$currentUser->phone_readable}}" placeholder="+38 ( _ _ _ ) _ _ _ - _ _ - _ _">
+                            <input type="tel" class="input format-phone" name="phone" value="{{$currentUser->phone}}" placeholder="+__ ( _ _ _ ) _ _ _ - _ _ - _ _">
                             <div data-input="phone" class="form-error"></div>
                             <div class="form-note">@lang('ui.phoneHelp')</div>
 
@@ -55,9 +55,11 @@
                             </select>
                             <div data-input="country" class="form-error"></div>
 
+                            {{-- 
                             <label class="label">@lang('ui.bio')</label>
-                            <textarea name="bio">{{$currentUser->bio}}</textarea>
+                            <textarea maxlength="2000" name="bio" class="textarea" placeholder="Describe your business" style="height: 194px;">{{$currentUser->bio}}</textarea>
                             <div data-input="country" class="form-error"></div>
+                            --}}
 
                             <div class="edit-ava show-uploaded-file-preview">
                                 <img class="edit-ava-img custom-file-preview" src="{{$currentUser->avatar->url ?? asset('icons/emptyAva.svg')}}" alt="">
@@ -80,10 +82,12 @@
                         <fieldset>
                             <div class="form-title">
                                 @lang('ui.password')
-                                <br>
-                                <small style="font-size: 50%" class="orange">
-                                    Your account do not have password (only {{$currentUser->socials()->first()->provider}} login)
-                                </small>
+                                @if (!$currentUser->password)
+                                    <br>
+                                    <small style="font-size: 50%" class="orange">
+                                        Your account do not have password (only {{$currentUser->socials()->first()->provider}} login)
+                                    </small>
+                                @endif
                             </div>
 
                             @if ($currentUser->password)

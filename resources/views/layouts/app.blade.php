@@ -94,16 +94,20 @@
 	<script src="{{asset('js/slick.min.js')}}"></script>
 	<script src="{{asset('js/jquery-ui-2.min.js')}}"></script>
 	<script src="{{asset('js/all.js')}}"></script>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9RPT79VDXE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-9RPT79VDXE');
+    </script>
+    
 	<script type="text/javascript">
         window.Laravel = {!!$LaravelDataForJS!!};
-
-        $(document).ready(function(){
-			//block not-ready links
-			$('.not-ready').click(function(e){
-				e.preventDefault();
-				showToast("{{ __('messages.inProgress') }}", false);
-			});
-        });
+        console.log(`window.Laravel`, window.Laravel); //! LOG
     </script>
     @yield('scripts')
 

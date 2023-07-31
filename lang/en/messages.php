@@ -40,13 +40,10 @@ return [
     'tooManyUrgentPostsError' => 'You have reached the maximum number of urgent posts. (100 for Standart, 300 for Pro)',
     'postTranslationEdited' => 'Post translation has been changed successfully!',
     'mailerToManyTags' => 'Too many categories',
-    'mailersDeactivated' => 'All mailer deactivated successfully!',
     'mailerActivated' => 'Mailer has been activated successfully!',
     'mailerDeactivated' => 'Mailer has been deactivated successfully!',
     'mailerUploaded' => 'Mailer has been configured successfully!',
     'mailerUploadedError' => 'Error occured while configuring the Mailer.',
-    'mailerDeleted' => 'Mailer has been deleted successfully!',
-    'mailersDeleted' => 'All Mailers has been deleted successfully!',
     'mailerEditedError' => 'Error occured while editing the Mailer.',
     'mailerEdited' => 'Mailer has been changed successfully!',
     'mailerAddedAuthor' => 'Author added to Mailer',
@@ -100,4 +97,25 @@ return [
     'importTooManyPostsError' => 'You are trying to import :amount posts, but there are only :diff to maximum.',
     'importTooManyPremiums' => '',
     'importTooManyUrgents' => 'Too many urgent posts. You have :am. Maximum :max',
+    'feedback' => [
+        'created' => 'Message sent successfully!'
+    ],
+    'mailers' => [
+        'updated' => 'Mailer updated successfully!',
+        'deactivated' => 'Mailer deactivated successfully!',
+        'deactivated-all' => 'All mailers deactivated successfully!',
+        'activated' => 'Mailer activated successfully!',
+        'deleted' => 'Mailer has been deleted successfully!',
+        'deleted-all' => 'All Mailers has been deleted successfully!',
+        'created' => 'Mailer created successfully!',
+        'title' => [
+            'from-author' => 'Posts from ',
+            'default-title' => 'Mailer',
+        ],
+    ],
+    'posts' => [
+        'created' => 'Post created successfully!',
+        'updated' => 'Post updated successfully!',
+        'translations-updates' => 'Translations updated',
+    ],
 ];

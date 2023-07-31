@@ -109,26 +109,20 @@ return [
     'removeFromFav' => 'Remove from favourites',
     'profile' => 'Profle',
     'profileEditing' => 'Profle editing',
-    'loginHelp' => 'Login should be the email address.',
+    'loginHelp' => '',
     'password' => 'Password',
-    'passwordHelp' => 'Minimum 6 symbols.
-        Minimum one char and one digit.',
+    'passwordHelp' => '',
     'curPass' => 'Current password',
     'newPass' => 'New password',
     'reNewPass' => 'Repeat new password',
     'rePass' => 'Repeat the password',
-    'rePassHelp' => 'Check yourself, repeat the password again.',
-    'passwordEditHelp' => 'Minimum 6 symbols.
-        Minimum one char and one digit.
-        Leave empty to keep old password.',
+    'rePassHelp' => '',
     'changePassword' => 'Change password',
     'avatar' => 'Profile picture',
     'userName' => 'Name',
-    'userNameHelp' => 'Your name will be public within the web site.
-        Only chars and digits are allowed.',
+    'userNameHelp' => '',
     'phone' => 'Phone number',
-    'phoneHelp' => 'Without country code.
-        Optional.',
+    'phoneHelp' => '',
     'profileInfo' => 'Profile information',
     'deleteProfileImg' => 'Delete image',
     'passwordEncrypted' => 'In terms of safety, we store encrypted password. If forget password, you can change it in profile settings.',
@@ -446,6 +440,7 @@ return [
     'blogSlg' => 'Thanks for your attention
         with best regards,
         :name',
+    'none' => 'None',
     'stMain' => 'Main',
     'stPost' => 'Posts',
     'stAuth' => 'Authentication',
@@ -454,6 +449,7 @@ return [
     'siteMapDesc' => '',
     'regionOdessa' => 'Odessa region',
     'import' => 'Import',
+    'imports' => 'Imports',
     'regionDnipropetrovsk' => 'Dnipropetrovsk region',
     'regionChernihiv' => 'Chernihiv region',
     'regionKharkiv' => 'Kharkiv region',
@@ -494,7 +490,7 @@ return [
     'free' => 'free',
     'account' => 'account',
     'plansHeader' => 'Cost and comparison of
-        rigmanager.com.ua plans',
+        rigmanagers.com plans',
     'readMoreAboutPlans' => 'Read more about plans',
     'plansStartAcc' => 'Start
         Account',
@@ -536,7 +532,7 @@ return [
     'mySubscription' => 'My subscription',
     'planActivated' => 'Activated subscription',
     'planStart' => 'Start',
-    'planStartChoosedHelp' => 'Free plan to get acquainted with the rigmanager.com.ua',
+    'planStartChoosedHelp' => 'Free plan to get acquainted with the rigmanagers.com',
     'planStandart' => 'Standart',
     'planPro' => 'Pro',
     'planActiveTo' => 'Active untill',
@@ -547,6 +543,7 @@ return [
     'planRole' => 'Type',
     'payment' => 'Payment',
     'comment' => 'Comment',
+    'currency' => 'Currency',
     'active' => 'Active',
     'inactive' => 'Inactive',
     'until' => 'until',
@@ -577,7 +574,7 @@ return [
     'totalImported' => 'Total amount',
     'firstImported' => 'First post',
     'lastImported' => 'Last post',
-    'aboutUsIntro' => 'rigmanager.com.ua - the first specialized web platform for cooperation of oil and gas companies in Ukraine.',
+    'aboutUsIntro' => 'rigmanagers.com - the first specialized web platform for cooperation of oil and gas companies in Ukraine.',
     'aboutUsBody' => 'We present a convenient tool for commercial and consulting activities of representatives of the oil and gas market.
 
     Our online web service can help you:
@@ -592,6 +589,17 @@ return [
     'aboutUsContact' => 'If you have any questions or suggestions, you can contact us using the',
     'aboutUsContactLink' => 'Feedback page',
     'aboutUsSlg' => 'Respectfully,
-    rigmanager.com.ua team',
+    rigmanagers.com team',
     'seo-img-image-suffix' => 'image',
+    'date' => 'Date',
+    'name' => 'Name',
+    'update' => 'Update',
+    'selectFileAndPublish' => 'Select file and publish',
+    'manufactureDate' => 'Manufacture Date',
+    'posts' => [
+        'my-translations-is-invalid' => 'My translations is not valid',
+        'use-auto-translate' => 'Use auto-translation',
+        'titleInLang' => 'Title in',
+        'descriptionInLang' => 'Description in',
+    ],
 ];

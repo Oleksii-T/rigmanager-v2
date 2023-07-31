@@ -29,8 +29,8 @@
                     </div>
                     <div class="profile-info">
                         <div class="profile-info-title">@lang('ui.phone')</div>
-                        @if ($currentUser->phone_raw)
-                            <div class="profile-info-text">{{$currentUser->phone_intern}}</div>
+                        @if ($currentUser->phone)
+                            <div class="profile-info-text">{{$currentUser->phone}}</div>
                         @else
                             <div class="profile-info-text">@lang('ui.notSpecified')</div>
                         @endif

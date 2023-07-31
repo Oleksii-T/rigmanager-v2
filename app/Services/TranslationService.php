@@ -20,7 +20,7 @@ class TranslationService
 
     public function detectLanguage($text)
     {
-        if (app()->environment('local')) {
+        if (!Setting::get('detect_post_language')) {
             return 'en';
         }
 
@@ -28,7 +28,7 @@ class TranslationService
             $res = $this->translator->detectLanguage($text)['languageCode'];
             $locales = array_keys(LaravelLocalization::getLocalesOrder());
             if (!in_array($res, $locales)) {
-                $res = 'en';
+                abort(500, "Detected unsupported language: $res");
             }
         } catch (\Throwable $th) {
             Log::error("Can not detect language.", [
@@ -45,7 +45,7 @@ class TranslationService
 
     public function translate($text, $to)
     {
-        if (app()->environment('local')) {
+        if (Setting::get('fake_autotranslation')) {
             return "$to | $text";
         }
 
@@ -59,7 +59,7 @@ class TranslationService
                 'error' => $th->getMessage(),
                 'trace' => substr($th->getTraceAsString(), 0, 600)
             ]);
-            $res = $text;
+            $res = null;
         }
 
         return $res;

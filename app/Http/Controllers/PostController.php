@@ -8,9 +8,12 @@ use App\Models\Post;
 use App\Models\Attachment;
 use App\Models\Feedback;
 use App\Models\Category;
+use App\Models\Setting;
 use App\Http\Requests\PostRequest;
 use App\Jobs\PostTranslate;
+use App\Jobs\MailerProcessNewPost;
 use App\Services\TranslationService;
+use Illuminate\Support\Facades\Bus;
 
 class PostController extends Controller
 {
@@ -76,9 +79,17 @@ class PostController extends Controller
         $post->saveTranslations($input);
         $post->addAttachment($input['images']??[], 'images');
         $post->addAttachment($input['documents']??[], 'documents');
-        PostTranslate::dispatch($post);
 
-        flash(trans('messages.post.created')); //! TRANSLATE
+        $chain = [new PostTranslate($post)];
+        $hidePending = Setting::get('hide_pending_posts', true, true);
+
+        if (!$hidePending) {
+            $chain[] = new MailerProcessNewPost($post);
+        }
+
+        Bus::chain($chain)->dispatch();
+        
+        flash(trans('messages.posts.created'));
 
         return $this->jsonSuccess('', [
             'redirect' => route('posts.show', $post)
@@ -128,7 +139,7 @@ class PostController extends Controller
             PostTranslate::dispatch($post);
         }
 
-        flash(trans('messages.post.translations-updates')); //! TRANSLATE
+        flash(trans('messages.posts.translations-updates'));
 
         return $this->jsonSuccess('', [
             'redirect' => route('posts.edit', $post)
@@ -159,6 +170,7 @@ class PostController extends Controller
 
     public function update(PostRequest $request, Post $post, TranslationService $translator)
     {
+        // dlog("PostController@update. START. post #$post->id", $request->all()); //! LOG
         $user = auth()->user();
         $input = $request->validated();
         $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
@@ -168,12 +180,18 @@ class PostController extends Controller
         $input['slug'] = [
             $textLocale => makeSlug($input['title'], Post::allSlugs($post->id))
         ];
+        $oldTranslations = [
+            'title' => $post->translated('title', $textLocale),
+            'description' => $post->translated('description', $textLocale),
+            'slug' => $post->translated('slug', $textLocale),
+        ];
         $input['title'] = [
             $textLocale => $input['title']
         ];
         $input['description'] = [
             $textLocale => $input['description']
         ];
+        // dlog(" PostController@update. input", $input); //! LOG
         $post->update($input);
         $post->saveCosts($input);
         $post->saveTranslations($input);
@@ -181,9 +199,11 @@ class PostController extends Controller
         $post->documents()->whereIn('id', $request->removed_documents??[])->delete();
         $post->addAttachment($input['images']??[], 'images');
         $post->addAttachment($input['documents']??[], 'documents');
-        PostTranslate::dispatch($post);
+        PostTranslate::dispatch($post, $oldTranslations);
 
-        flash(trans('messages.post.updated')); //! TRANSLATE
+        flash(trans('messages.posts.updated'));
+        
+        // dlog(" PostController@update. END"); //! LOG
 
         return $this->jsonSuccess('', [
             'redirect' => route('posts.show', $post)
@@ -208,7 +228,7 @@ class PostController extends Controller
         return $this->jsonSuccess(trans('messages.postAddedFav'));
     }
 
-    public function contacts(Request $request, Post $post)
+    public function contacts($post)
     {
         $user = auth()->user();
         if (!$user) {

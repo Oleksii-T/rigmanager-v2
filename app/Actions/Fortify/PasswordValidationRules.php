@@ -13,6 +13,6 @@ trait PasswordValidationRules
      */
     protected function passwordRules($r=true)
     {
-        return [$r ? 'required' : 'nullable', 'string', new Password, 'confirmed'];
+        return [$r ? 'required' : 'nullable', 'string', 'min:4', 'confirmed']; //new Password
     }
 }

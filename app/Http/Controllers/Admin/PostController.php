@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Setting;
 use App\Http\Requests\Admin\PostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Jobs\MailerProcessNewPost;
 
 class PostController extends Controller
 {
@@ -83,11 +85,17 @@ class PostController extends Controller
         $input['is_active'] ??= false;
         $input['is_urgent'] ??= false;
         $input['is_import'] ??= false;
+        $oldStatus = $post->status;
         $post->update($input);
         $post->saveCosts($input);
         $post->saveTranslations($input);
         $post->addAttachment($input['images']??null, 'images');
         $post->addAttachment($input['documents']??[], 'documents');
+
+        $hidePending = Setting::get('hide_pending_posts', true, true);
+        if ($oldStatus == 'pending' && $post->status == 'approved' && $hidePending) {
+            MailerProcessNewPost::dispatch($post);
+        }
 
         return $this->jsonSuccess('Post updated successfully');
     }

@@ -50,8 +50,13 @@ class AppServiceProvider extends ServiceProvider
             $data = [
                 'csrf' => csrf_token(),
                 'route_name' => \Route::currentRouteName(),
+                'translations' => [],
                 // some more public data to use in JS
             ];
+            $translationsForJs = ['messages.inProgress', 'ui.email', 'ui.phone'];
+            foreach ($translationsForJs as $t) {
+                $data['translations'][str_replace('.', '_', $t)] = trans($t);
+            }
             if ($user) {
                 $data['user'] = [
                     'name' => $user->name,

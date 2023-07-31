@@ -26,17 +26,17 @@ class MailerController extends Controller
         $category = $input['filters']['category']??null;
 
         if ($author) {
-            $input['title'] = trans('messages.mailers.title.from-author') . User::find($author)->name; //! TRANSLATE
+            $input['title'] = trans('messages.mailers.title.from-author') . User::find($author)->name;
         } else if ($category)  {
             $input['title'] = Category::find($category)->name;
         } else {
-            $input['title'] = trans('messages.mailers.default-title') . $user->mailers()->count() + 1; //! TRANSLATE
+            $input['title'] = trans('messages.mailers.default-title') . $user->mailers()->count() + 1;
         }
 
         $input['slug'] = makeSlug($input['title'], Mailer::pluck('slug')->toArray());
         $user->mailers()->create($input);
 
-        return $this->jsonSuccess(trans('messages.mailers.created')); //! TRANSLATE
+        return $this->jsonSuccess(trans('messages.mailers.created'));
     }
 
     public function edit(Mailer $mailer)
@@ -66,7 +66,7 @@ class MailerController extends Controller
             ]);
         }
 
-        flash(trans('messages.mailersDeactivated'));
+        flash(trans('messages.mailers.deactivated-all'));
 
         return $this->jsonSuccess('', [
             'redirect' => route('mailers.index')
@@ -76,19 +76,15 @@ class MailerController extends Controller
     public function toggle(Mailer $mailer)
     {
         $user = auth()->user();
-
-        if ($mailer->is_active) {
-            $m = trans('messages.mailersDeactivated');
-        } else {
-            $m = trans('messages.mailersActivated'); //! TRANSLATE
-        }
+        $m = $mailer->is_active 
+            ? 'messages.mailers.deactivated'
+            : 'messages.mailers.activated';
 
         $mailer->update([
             'is_active' => !$mailer->is_active
         ]);
 
-
-        flash($m);
+        flash(trans($m));
 
         return $this->jsonSuccess('', [
             'redirect' => route('mailers.index')
@@ -103,7 +99,7 @@ class MailerController extends Controller
             $m->delete();
         }
 
-        flash(trans('messages.mailersDeleted'));
+        flash(trans('messages.mailers.deleted-all'));
 
         return $this->jsonSuccess('', [
             'redirect' => route('mailers.index')
@@ -118,7 +114,7 @@ class MailerController extends Controller
 
         $mailer->delete();
 
-        flash(trans('messages.mailerDeleted'));
+        flash(trans('messages.mailers.deleted'));
 
         return $this->jsonSuccess('', [
             'redirect' => route('mailers.index')

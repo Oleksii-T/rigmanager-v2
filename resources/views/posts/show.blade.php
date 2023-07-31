@@ -26,7 +26,7 @@
 @endsection
 
 @section('content')
-    <span class="hidden" data-postid="{{$post->id}}" page-data></span>
+    <span class="hidden" data-postid="{{$post->id}}" data-viewurl="{{route('posts.view', $post)}}" page-data></span>
 
     @if (!$post->is_active)
         <div class="outdated-post-alert">
@@ -94,7 +94,7 @@
                     @endif
                     <div class="prod-author-about">
                         <div class="prod-author-name">
-                            <a href="{{route('users.show', $post->user)}}">
+                            <a href="{{route('users.show', $post->user)}}" class="not-ready orange">
                                 {{$post->user->name}}
                             </a>
                         </div>
@@ -115,7 +115,7 @@
                         @endauth
                     </div>
                 </div>
-                <a href="#" class="button button-light show-contacts">{{__('ui.showContacts')}}</a>
+                <a href="#" data-url="{{route('posts.contacts', $post)}}" class="button button-light show-contacts">{{__('ui.showContacts')}}</a>
                 @if ($currentUser && $post->user_id==$currentUser->id)
                     <br>
                     <a href="{{route('posts.edit', $post)}}" class="button button-light">{{__('ui.edit')}}</a>
@@ -164,6 +164,12 @@
                     <div class="prod-info-item">
                         <div class="prod-info-name">{{__('ui.manufacturer')}}</div>
                         <div class="prod-info-text">{{$post->manufacturer}}</div>
+                    </div>
+                @endif
+                @if ($post->manufacture_date)
+                    <div class="prod-info-item">
+                        <div class="prod-info-name">@lang('ui.manufactureDate')</div>
+                        <div class="prod-info-text">{{$post->manufacture_date}}</div>
                     </div>
                 @endif
                 @if ($post->manufactured_date)

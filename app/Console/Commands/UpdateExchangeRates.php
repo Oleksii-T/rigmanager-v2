@@ -60,7 +60,7 @@ class UpdateExchangeRates extends Command
 
             }
         } catch (\Throwable $th) {
-            Log::channel('commands')->error('[rates.update] Rates updating fails. '.$th->getMessage());
+            Log::channel('commands')->error("[$this->signature] " . $th->getMessage());
         }
     }
 }

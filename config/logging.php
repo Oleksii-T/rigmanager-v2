@@ -71,9 +71,10 @@ return [
         ],
 
         'emails' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/emails.log'),
             'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
         ],
 
         'commands' => [
@@ -83,7 +84,7 @@ return [
         ],
 
         'dev' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/dev.log'),
         ],
 

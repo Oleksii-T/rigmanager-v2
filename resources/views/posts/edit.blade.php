@@ -92,8 +92,8 @@
                                     <div data-input="manufacturer" class="form-error"></div>
 
                                     <label class="label">@lang('ui.chooseManufacturedDate')</label>
-                                    <input class="input" name="manufactured_date" type="text" value="{{$post->manufactured_date}}"/>
-                                    <div data-input="manufacture_data" class="form-error"></div>
+                                    <input class="input" name="manufacture_date" type="text" value="{{$post->manufacture_date}}"/>
+                                    <div data-input="manufacture_date" class="form-error"></div>
 
                                     <label class="label">@lang('ui.choosePartNum')</label>
                                     <input class="input" name="part_number" type="text" value="{{$post->part_number}}"/>
@@ -188,7 +188,7 @@
                             <div data-input="images" class="form-error"></div>
                             <label class="label">@lang('ui.chooseDoc')</label>
                             <div class="edit-doc-button">
-                                <input type="file" id="documents-multiple-input" type="file" class="hidden" multiple>
+                                <input type="file" id="documents-multiple-input" type="file" class="hidden" accept=".pdf,.xls,.xlsx,.xml,.doc,.docx" multiple>
                                 <label for="documents-multiple-input" class="edit-doc-label">@lang('ui.chooseFile')</label>
                             </div>
                             <div class="upload-documents_wrapper hidden clone">

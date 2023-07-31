@@ -46,7 +46,7 @@
                                 <form action="{{route('mailers.toggle', $m)}}" method="post" class="general-ajax-submit">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit">{{$m->is_active ? __('ui.deactivate') : __('ui.activete')}}</button>
+                                    <button type="submit" class="cabinet-line-link btn-as-link">{{$m->is_active ? __('ui.deactivate') : __('ui.activete')}}</button>
                                 </form>
                             </div>
                             <div class="mailing-info">

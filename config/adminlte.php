@@ -269,7 +269,7 @@ return [
         [
             'text' => 'Dashboard',
             'route'  => 'admin.index',
-            'icon' => 'fa fa-fw fa-tachometer',
+            'icon' => 'fa fa-fw fa-industry',
         ],
         'MAIN SECTIONS',
         [
@@ -302,7 +302,7 @@ return [
         [
             'text' => 'Imports',
             'route'  => 'admin.imports.index',
-            'icon' => 'fa fa-fw fa-file-excel-o',
+            'icon' => 'fa fa-fw fa-download',
         ],
         [
             'text' => 'Attachments',
@@ -340,12 +340,12 @@ return [
         [
             'text' => 'Mailer Logs',
             'route'  => 'admin.mailer-logs.index',
-            'icon' => 'fas fa-fw fa-navicon',
+            'icon' => 'fas fa-fw fa-print',
         ],
         [
             'text' => 'Logs',
             'url'  => '/admin/log-viewer',
-            'icon' => 'fa fa-fw fa-warning',
+            'icon' => 'fa fa-fw fa-bug',
         ],
         ' ',
         [

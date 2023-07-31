@@ -13,6 +13,12 @@ $(document).ready(function () {
 		$('.header').addClass('fixed');
 	}
 
+    //block not-ready links
+    $('.not-ready').click(function(e){
+        e.preventDefault();
+        showToast(window.Laravel.translations.messages_inProgress, false);
+    });
+
 	// mob nav
 	$(document).on('click','.mob-nav-icon',function(e){
 		e.preventDefault();

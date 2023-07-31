@@ -52,6 +52,7 @@ trait HasTranslations
                 );
             }
         }
+        $this->translations = $this->translations()->get();
     }
 
     public function purgeTranslations()

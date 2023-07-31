@@ -27,9 +27,14 @@ class ProfilePasswordRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'current_password' => ['required', 'string', 'max:255', new CurrentPassword()],
+        $rules = [
             'password' => $this->passwordRules()
         ];
+        
+        if (auth()->user()->password) {
+            $rules['current_password'] = ['required', 'string', 'max:255', new CurrentPassword()];
+        }
+
+        return $rules;
     }
 }

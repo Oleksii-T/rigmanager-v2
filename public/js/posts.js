@@ -10,11 +10,11 @@ $(document).ready(function() {
     /*************/
 
     //count views
-    let id = $('[page-data]').data('postid');
-    if (id) {
+    let postviewurl = $('[page-data]').data('viewurl');
+    if (postviewurl) {
         $.ajax({
             type: "POST",
-            url: `/posts/${id}/view`,
+            url: postviewurl,
             data: {
                 _method: 'PUT',
                 _token: $('meta[name=csrf-token]').attr('content')
@@ -35,16 +35,24 @@ $(document).ready(function() {
         button.addClass('loading');
         $.ajax({
             type: "get",
-            url: `/posts/${id}/contacts`,
+            url: button.data('url'),
             success: function(response) {
                 button.removeClass('loading');
                 let email = response.data.email;
                 let phone = response.data.phone;
                 swal.fire({
-                    html: `<p>Email: <b>${email}</b></p>` +  //! TRANSLATE
-                        `<p>Phone: <b>${phone}</b></p>`,
+                    html: '<p>' + 
+                        window.Laravel.translations.ui_email + 
+                        ': <b>' + 
+                        email + 
+                        '</b></p>' + 
+                        '<p>' +
+                        window.Laravel.translations.ui_phone +
+                        ': <b>' +
+                        phone +
+                        '</b></p>',
                     showConfirmButton: false,
-                    showCancelButton: false,
+                    showCancelButton: true,
                 });
             },
             error: function(response) {

@@ -129,7 +129,7 @@ class FaqSeeder extends Seeder
                     ],
                     'answer' => [
                         'en' => '<p>Our resource is only gaining popularity, therefore, all functionality is completely free.
-                        A list of future paid subscriptions is available <a href="https://rigmanager.com.ua/en/plans">here</a>.
+                        A list of future paid subscriptions is available <a href="https://rigmanagers.com/en/plans">here</a>.
                         We do not influence, control or participate in contracts concluding between our clients.
                         The list of paid functionality will grow, for example, providing analytics for your niche.</p>'
                     ],
@@ -142,7 +142,7 @@ class FaqSeeder extends Seeder
                         'en' => 'I need to buy equipment or find a service'
                     ],
                     'answer' => [
-                        'en' => '<p>You may use the <a class="link" href="https://rigmanager.com.ua/en/catalog">Catalog</a> of categories or use the search bar and you find what you looking for!
+                        'en' => '<p>You may use the <a class="link" href="https://rigmanagers.com/en/catalog">Catalog</a> of categories or use the search bar and you find what you looking for!
                         You could add a post to favourites list so that you won\'t lose it.
                         If you can not find proper equipment/service then subscribe for Mailer and you will always know when appropriate post is published.</p>'
                     ],
@@ -155,7 +155,7 @@ class FaqSeeder extends Seeder
                         'en' => 'I need to sell equipment or advertise my service'
                     ],
                     'answer' => [
-                        'en' => '<p>All you need to do, is <a class="link" href="https://rigmanager.com.ua/en/posts/create">create and publish your post</a>, by filling input fields and after just wait for your clients!</p>'
+                        'en' => '<p>All you need to do, is <a class="link" href="https://rigmanagers.com/en/posts/create">create and publish your post</a>, by filling input fields and after just wait for your clients!</p>'
                     ],
                 ]
             ],
@@ -181,9 +181,9 @@ class FaqSeeder extends Seeder
                     'answer' => [
                         'en' => '<p>New Mailer can be created from two pages.
                         First is page of exact post by clicking "Add author to Mailer" button.
-                        Second is any search page (e.g. <a class="link" href="https://rigmanager.com.ua/en/search?type=equipment-sell">Sell of drilling
-                        equipment</a> Or <a class="link" href="https://rigmanager.com.ua/en/burovye-truby">Drilling pipes</a>) by clicking "Add this request to Mailer" button below filters.
-                        After Mailer been created it can be reached and configured on its own page - <a href="https://rigmanager.com.ua/en/profile/mailer" class="link">Mailer</a></p>'
+                        Second is any search page (e.g. <a class="link" href="https://rigmanagers.com/en/search?type=equipment-sell">Sell of drilling
+                        equipment</a> Or <a class="link" href="https://rigmanagers.com/en/burovye-truby">Drilling pipes</a>) by clicking "Add this request to Mailer" button below filters.
+                        After Mailer been created it can be reached and configured on its own page - <a href="https://rigmanagers.com/en/profile/mailer" class="link">Mailer</a></p>'
                     ],
                 ]
             ],
@@ -215,10 +215,10 @@ class FaqSeeder extends Seeder
                         To solve such an issue we provide the Bulk posts import system.
                         All you need to do is fill the import file with according to the rules and submit it.
                         Available only for Pro users.
-                        <a href="https://rigmanager.com.ua/posts/create/import">Posts import</a>
-                        <a href="https://rigmanager.com.ua/import/rules">Posts import policy</a>
+                        <a href="https://rigmanagers.com/posts/create/import">Posts import</a>
+                        <a href="https://rigmanagers.com/import/rules">Posts import policy</a>
 
-                        In addition, our team can help you adapt and publish your equipment list for our platform. Contact us for more details <a href="https://rigmanager.com.ua/contact-us">here</a>.</p>'
+                        In addition, our team can help you adapt and publish your equipment list for our platform. Contact us for more details <a href="https://rigmanagers.com/contact-us">here</a>.</p>'
                     ],
                 ]
             ],
@@ -229,7 +229,7 @@ class FaqSeeder extends Seeder
                         'en' => 'What is an Affiliate Program?'
                     ],
                     'answer' => [
-                        'en' => '<p>The affiliate program with rigmanager.com.ua allows you to increase your base of potential customers.
+                        'en' => '<p>The affiliate program with rigmanagers.com allows you to increase your base of potential customers.
                         Partners are provided with:</p>
 						<ol>
 							<li>Place in the "Partners" block on the home page of the site;</li>
@@ -241,7 +241,7 @@ class FaqSeeder extends Seeder
 							<li>Priority for your posts;</li>
 							<li>Impact on the development of our resource.</li>
 						</ol>
-						<p>If you are interested or want more information, please contact us <a href="https://rigmanager.com.ua/en/contact-us">here</a>.</p>'
+						<p>If you are interested or want more information, please contact us <a href="https://rigmanagers.com/en/contact-us">here</a>.</p>'
                     ],
                 ]
             ],

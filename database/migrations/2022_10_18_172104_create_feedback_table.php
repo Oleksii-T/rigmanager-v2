@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('name');
             $table->string('subject');
-            $table->string('text');
+            $table->text('text');
             $table->boolean('is_read')->default(false);
             $table->timestamps();
         });

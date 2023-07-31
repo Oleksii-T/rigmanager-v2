@@ -97,8 +97,8 @@
                                     <div data-input="manufacturer" class="form-error"></div>
 
                                     <label class="label">@lang('ui.chooseManufacturedDate')</label>
-                                    <input class="input" name="manufactured_date" type="text"/>
-                                    <div data-input="manufacture_data" class="form-error"></div>
+                                    <input class="input" name="manufacture_date" type="text"/>
+                                    <div data-input="manufacture_date" class="form-error"></div>
 
                                     <label class="label">@lang('ui.choosePartNum')</label>
                                     <input class="input" name="part_number" type="text"/>
