@@ -114,7 +114,7 @@
                 </div>
 
             </div>
-            <div class="side-add">
+            <div class="side-add" id="add-to-mailer-ad">
                 <div class="side-add-text">@lang('ui.mailerSuggestText')</div>
                 <div class="side-add-icon"><img src="{{asset('icons/add-icon.svg')}}" alt=""></div>
                 <button data-url="{{route('mailers.store')}}" class="button add-request-to-mailer">@lang('ui.add')</button>

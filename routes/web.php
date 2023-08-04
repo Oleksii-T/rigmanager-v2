@@ -62,7 +62,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
     Route::middleware('auth')->group(function () {
 
-        // Route::middleware('verified')->group(function () {
+        Route::middleware('verified')->group(function () {
 
             Route::prefix('imports')->name('imports.')->group(function () {
                 Route::get('', [ImportController::class, 'index'])->name('index');
@@ -116,7 +116,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::put('clear-favs', [ProfileController::class, 'clearFavs'])->name('clear-favs');
             });
 
-        // });
+        });
 
     });
 

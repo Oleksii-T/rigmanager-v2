@@ -18,8 +18,7 @@ return [
     'maintenanceSoon' => 'soon',
     'home' => 'Home',
     'cabinet' => 'Profile',
-    'introduction' => 'Specialized platform for cooperation
-        of oil and gas companies of Ukraine',
+    'introduction' => 'Specialized platform for cooperation of oil and gas companies',
     'introSellEq' => 'Sell of drilling
         equipment',
     'introBuyEq' => 'Buy and loan
@@ -138,7 +137,7 @@ return [
         You subscription will be canceled.',
     'mailer' => 'Mailer',
     'setUpMailer' => 'Set up Mailer',
-    'noMailer' => 'Your Mailer is not configured',
+    'noMailer' => 'Your Mailer is not configured. You can add your first Mailer via search results page. For example: ',
     'whatIsMailer' => 'What is Mailer',
     'settingUpMailer' => 'Mailer configuration',
     'mailerTitle' => 'Mailer title',
@@ -574,7 +573,7 @@ return [
     'totalImported' => 'Total amount',
     'firstImported' => 'First post',
     'lastImported' => 'Last post',
-    'aboutUsIntro' => 'rigmanagers.com - the first specialized web platform for cooperation of oil and gas companies in Ukraine.',
+    'aboutUsIntro' => 'rigmanagers.com - the first specialized web platform for cooperation of oil and gas companies.',
     'aboutUsBody' => 'We present a convenient tool for commercial and consulting activities of representatives of the oil and gas market.
 
     Our online web service can help you:

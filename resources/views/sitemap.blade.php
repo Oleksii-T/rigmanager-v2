@@ -37,7 +37,6 @@
 				<li><a href="">{{__('ui.stAuth')}}</a>
 					<ul class="sitemap-sub">
 						<li><a href="{{route('login')}}">{{__('ui.signIn')}}</a></li>
-						<li><a href="{{route('auth.social', 'facebook')}}">{{__('ui.signInVia')}} Facebook</a></li>
 						<li><a href="{{route('auth.social', 'google')}}">{{__('ui.signInVia')}} Google</a></li>
 						<li><a href="{{route('register')}}">{{__('ui.signUp')}}</a></li>
 					</ul>
@@ -54,12 +53,12 @@
 				<li><a href="">{{__('ui.info')}}</a>
 					<ul class="sitemap-sub">
 						<li><a href="{{route('about')}}">{{__('ui.footerAbout')}}</a></li>
-						<li><a href="#">{{__('ui.footerBlog')}}</a></li>
+						<li><a class="not-ready" href="#">{{__('ui.footerBlog')}}</a></li>
 						<li><a href="{{route('terms')}}">{{__('ui.footerTerms')}}</a></li>
 						<li><a href="{{route('privacy')}}">{{__('ui.footerPrivacy')}}</a></li>
 						<li><a href="{{route('site-map')}}">{{__('ui.footerSiteMap')}}</a></li>
-						<li><a href="#">{{__('ui.footerSubscription')}}</a></li>
-						<li><a href="#">{{__('ui.footerContact')}}</a></li>
+						<li><a href="{{route('plans.index')}}">{{__('ui.footerSubscription')}}</a></li>
+						<li><a href="{{route('feedbacks.create')}}">{{__('ui.footerContact')}}</a></li>
 						<li><a href="{{route('import-rules')}}">{{__('postImportRules.title')}}</a></li>
 						<li><a href="{{route('faq')}}">FAQ</a></li>
 					</ul>

@@ -26,13 +26,17 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         $model = $this->route('category');
-
-        return [
+        $rules = [
             'name' => ['required', 'array'],
             'name.en' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'array', new ValidSlug(Category::class, $model->id??null)],
-            'image' => [$model ? 'nullable' : 'required', 'image', 'max:5000'],
             'category_id' => ['nullable', 'exists:categories,id'],
         ];
+
+        if (!$this->request->get('category_id')) {
+            $rules['image'] = [$model ? 'nullable' : 'required', 'image', 'max:5000'];
+        }
+
+        return $rules;
     }
 }

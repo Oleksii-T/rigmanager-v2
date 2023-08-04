@@ -142,6 +142,9 @@ p a, .article li a {color: #ff8d11;}
 .center {text-align: center;}
 .upper {text-transform: uppercase;}
 .button-holder {text-align: center;}
+:root {
+    scroll-behavior: smooth;
+  }
 .button {
 	position: relative;
 	display: inline-block;

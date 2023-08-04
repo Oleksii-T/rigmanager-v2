@@ -49,32 +49,43 @@ class PostsImport implements ShouldQueue
                 'status' => Import::STATUS_PROCESSING
             ]);
 
+            $this->log('Start');
+
             $pages = \Excel::toArray(new PostsImportExcel, $this->import->file->path);
             $rows = $pages[0]; // get first excel page
             $rows = array_slice($rows, 2); // remove the header from import file
             $rows = array_slice($rows, 0, 500); // remove all but first 500 rows
             $posts = [];
 
+            $this->log('Total rows: ' . count($rows), ' ');
+
             DB::transaction(function () use ($rows, &$posts) {
-                foreach ($rows as $row) {
+                foreach ($rows as $i => $row) {
                     if (!$row[1]) {
                         break;
                     }
+                    $this->log("Process row #$i", '  ');
                     $posts[] = $this->processRow($row);
                 }
             });
         } catch (\Throwable $th) {
+
+            $this->log('ERROR. see mail log for more info', ' ');
 
             \Log::error('PostsImport Job: ERROR', [
                 'import' => $this->import,
                 'error' => $th->getMessage(),
                 'trace' => substr($th->getTraceAsString(), 0, 600)
             ]);
-
+            
             $this->import->update([
                 'status' => Import::STATUS_FAILED
             ]);
+
+            return;
         }
+
+        $this->log('DONE', ' ');
 
         $this->import->update([
             'posts' => $posts,
@@ -82,9 +93,13 @@ class PostsImport implements ShouldQueue
         ]);
     }
 
+    private function log($text, $prefix='')
+    {
+        \Log::channel('importing')->info("$prefix Import #" . $this->import->id . ": $text");
+    }
+
     private function processRow($row)
     {
-        $disk = Storage::disk('aimages');
         $translator = new TranslationService();
         $textLocale = $translator->detectLanguage($row[1] . '. ' . $row[2]);
 
@@ -104,7 +119,6 @@ class PostsImport implements ShouldQueue
             'country' => $row[12] ? strtolower($row[12]) : $this->user->country,
             'duration' => strtolower($row[13]),
         ]);
-
 
         // save translations
         $post->saveTranslations([
@@ -129,46 +143,88 @@ class PostsImport implements ShouldQueue
         }
 
         // attach images from url
-        foreach (explode(' ', $row[4]) as $url) {
-            if (!$url) {
-                return;
-            }
-            $contents = file_get_contents($url);
-            $name = substr($url, strrpos($url, '/') + 1);
-            $ext = substr($name, strrpos($name, '.'));
-            $random_name = Str::random(40) . $ext;
-
-            $disk->put($random_name, $contents);
-
-            $size = $disk->size($random_name);
-            $mime = $disk->mimeType($random_name);
-
-            if (!in_array($mime, ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'])) {
-                $disk->delete($random_name);
-                continue;
-            }
-
-            Attachment::create([
-                'attachmentable_id' => $post->id,
-                'attachmentable_type' => Post::class,
-                'name' => $random_name,
-                'original_name' => $name,
-                'group' => 'images',
-                'type' => 'image',
-                'size' => $size
-            ]);
-        }
+        $this->storeImages($post, $row[4]);
 
         return $post->id;
+    }
+
+    private function storeImages($post, $imagesRaw)
+    {
+        if (!$imagesRaw) {
+            return;
+        }
+        $this->log("Store images", '   ');
+        $disk = Storage::disk('aimages');
+        $images = [];
+        //? use preg_split to split by two chars
+        foreach (explode(' ', $imagesRaw) as $i) {
+            $res = explode("\n", $i);
+            count($res) == 1 
+                ? $images[] = $i 
+                : $images = array_merge($images, $res);
+        }
+
+        foreach ($images as $url) {
+            if (!$url) {
+                continue;
+            }
+            $pattern = '/\s*/m';
+            $replace = '';
+            $url = preg_replace($pattern, $replace, $url);
+            $url = trim($url);
+
+            if (!$url) {
+                continue;
+            }
+            try {
+                $contents = file_get_contents($url);
+                $name = substr($url, strrpos($url, '/') + 1);
+                $ext = substr($name, strrpos($name, '.'));
+                $random_name = Str::random(40) . $ext;
+
+                $disk->put($random_name, $contents);
+
+                $size = $disk->size($random_name);
+                $mime = $disk->mimeType($random_name);
+
+                if (!in_array($mime, ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'])) {
+                    $disk->delete($random_name);
+                    continue;
+                }
+
+                Attachment::create([
+                    'attachmentable_id' => $post->id,
+                    'attachmentable_type' => Post::class,
+                    'name' => $random_name,
+                    'original_name' => $name,
+                    'group' => 'images',
+                    'type' => 'image',
+                    'size' => $size
+                ]);
+            } catch (\Throwable $th) {
+                $this->log('Image fail. see main log for details', '    ');
+                \Log::error("Can not download image from import file.", [
+                    'urltext' => $url,
+                    'user' => auth()->id() ?? '0',
+                    'error' => $th->getMessage(),
+                    'trace' => substr($th->getTraceAsString(), 0, 600)
+                ]);
+            }
+        }
     }
 
     private function category($val)
     {
         return Translation::query()
             ->where('translatable_type', Category::class)
-            ->where('field', 'slug')
             ->where('locale', 'en')
-            ->where('value', $val)
+            ->where(function ($q) use($val){
+                $q->where(function ($q2) use($val){
+                    $q2->where('field', 'slug')->where('value', 'like', "%$val%");
+                })->orWhere(function ($q2) use($val){
+                    $q2->where('field', 'name')->where('value', 'like', "%$val%");
+                });
+            })
             ->value('translatable_id');
     }
 }

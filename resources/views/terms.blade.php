@@ -21,17 +21,17 @@
 			<h1>{{__('ui.footerTerms')}}</h1>
             <div class="content-top-text">{{__('ui.content')}}:
 
-                1. <a href="#terms-p1">{{__('terms.P1')}}</a>
-                2. <a href="#terms-p2">{{__('terms.P2')}}</a>
-                3. <a href="#terms-p3">{{__('terms.P3')}}</a>
-                4. <a href="#terms-p4">{{__('terms.P4')}}</a>
-                5. <a href="#terms-p5">{{__('terms.P5')}}</a>
-                6. <a href="#terms-p6">{{__('terms.P6')}}</a>
-                7. <a href="#terms-p7">{{__('terms.P7')}}</a>
-                8. <a href="#terms-p8">{{__('terms.P8')}}</a>
-                9. <a href="#terms-p9">{{__('terms.P9')}}</a>
-                10. <a href="#terms-p10">{{__('terms.P10')}}</a>
-                11. <a href="#terms-p11">{{__('terms.P11')}}</a>
+                1. <a href="#terms-p1" class="scroll-to" data-trg="#terms-p1">{{__('terms.P1')}}</a>
+                2. <a href="#terms-p2" class="scroll-to" data-trg="#terms-p2">{{__('terms.P2')}}</a>
+                3. <a href="#terms-p3" class="scroll-to" data-trg="#terms-p3">{{__('terms.P3')}}</a>
+                4. <a href="#terms-p4" class="scroll-to" data-trg="#terms-p4">{{__('terms.P4')}}</a>
+                5. <a href="#terms-p5" class="scroll-to" data-trg="#terms-p5">{{__('terms.P5')}}</a>
+                6. <a href="#terms-p6" class="scroll-to" data-trg="#terms-p6">{{__('terms.P6')}}</a>
+                7. <a href="#terms-p7" class="scroll-to" data-trg="#terms-p7">{{__('terms.P7')}}</a>
+                8. <a href="#terms-p8" class="scroll-to" data-trg="#terms-p8">{{__('terms.P8')}}</a>
+                9. <a href="#terms-p9" class="scroll-to" data-trg="#terms-p9">{{__('terms.P9')}}</a>
+                10. <a href="#terms-p10" class="scroll-to" data-trg="#terms-p10">{{__('terms.P10')}}</a>
+                11. <a href="#terms-p11" class="scroll-to" data-trg="#terms-p11">{{__('terms.P11')}}</a>
             </div>
 			<article class="policy">
 				<ol class="policy-list">

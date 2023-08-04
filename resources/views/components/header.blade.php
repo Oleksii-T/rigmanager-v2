@@ -82,40 +82,38 @@
             <div class="mob-nav">
                 <div class="holder">
                     <ul class="mob-nav-list">
-                        <li><a href="#">@lang('ui.catalog')</a></li>
+                        <li><a href="{{route('search')}}">@lang('ui.catalog')</a></li>
                     </ul>
                     <ul class="mob-nav-list">
                         @auth
                             <li><a href="{{route('profile.index')}}">@lang('ui.cabinet')</a></li>
-                            <li><a href="#">@lang('ui.myPosts')</a></li>
-                            <li><a href="#">@lang('ui.favourites')</a></li>
+                            <li><a href="{{route('profile.posts')}}">@lang('ui.myPosts')</a></li>
+                            <li><a href="{{route('profile.favorites')}}">@lang('ui.favourites')</a></li>
                         @else
                             <li><a href="{{route('login')}}">@lang('ui.signIn')</a></li>
                         @endauth
-                        <li><a href="#">@lang('ui.addPost')</a></li>
+                        <li><a href="{{route('posts.create')}}">@lang('ui.addPost')</a></li>
                     </ul>
                     <ul class="mob-nav-list">
-                        <li><a href="#">@lang('ui.introSellEq')</a></li>
-                        <li><a href="#">@lang('ui.introBuyEq')</a></li>
-                        <li><a href="#">@lang('ui.introSe')</a></li>
-                        <li class="hidden"><a href="#">@lang('ui.introTender')</a></li>
+                        <li><a href="{{route('search', ['types'=>['sell', 'lease']])}}">@lang('ui.introSellEq')</a></li>
+                        <li><a href="{{route('search', ['types'=>['buy', 'rent']])}}">@lang('ui.introBuyEq')</a></li>
                     </ul>
                     <ul class="mob-nav-list">
-                        <li><a href="#">@lang('ui.footerAbout')</a></li>
-                        <li><a href="#">@lang('ui.footerBlog')</a></li>
-                        <li><a href="#">@lang('ui.footerSubscription')</a></li>
-                        <li><a href="#">@lang('ui.footerContact')</a></li>
-                        <li><a href="#">FAQ</a></li>
+                        <li><a href="{{route('about')}}">@lang('ui.footerAbout')</a></li>
+                        <li><a href="#" class="not-ready">@lang('ui.footerBlog')</a></li>
+                        <li><a href="{{route('plans.index')}}">@lang('ui.footerSubscription')</a></li>
+                        <li><a href="{{route('feedbacks.create')}}">@lang('ui.footerContact')</a></li>
+                        <li><a href="{{route('faq')}}">FAQ</a></li>
                     </ul>
                     <ul class="mob-nav-list">
                         @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
-                            <li><a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">{{ $properties['native'] }}</a></li>
+                            <li><a class="not-ready" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">{{ $properties['native'] }}</a></li>
                         @endforeach
                     </ul>
                     <ul class="mob-nav-list mob-nav-grey">
-                        <li><a href="#">@lang('ui.footerTerms')</a></li>
-                        <li><a href="#">@lang('ui.footerPrivacy')</a></li>
-                        <li><a href="#">@lang('ui.footerSiteMap')</a></li>
+                        <li><a href="{{route('terms')}}">@lang('ui.footerTerms')</a></li>
+                        <li><a href="{{route('privacy')}}">@lang('ui.footerPrivacy')</a></li>
+                        <li><a href="{{route('site-map')}}">@lang('ui.footerSiteMap')</a></li>
                     </ul>
                 </div>
             </div>

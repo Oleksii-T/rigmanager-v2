@@ -33,7 +33,7 @@
                             <th>№</th>
                             <th>{{__('ui.date')}}</th>
                             <th>{{__('ui.name')}}</th>
-                            <th>{{__('ui.stPosts')}}</th>
+                            <th>{{__('ui.stPost')}}</th>
                             <th>{{__('ui.status')}}</th>
                             <th></th>
                         </tr>

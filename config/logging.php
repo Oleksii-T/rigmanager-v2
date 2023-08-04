@@ -70,6 +70,13 @@ return [
             'days' => 14,
         ],
 
+        'importing' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/importing.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+        ],
+
         'emails' => [
             'driver' => 'daily',
             'path' => storage_path('logs/emails.log'),

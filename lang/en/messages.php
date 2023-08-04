@@ -68,10 +68,16 @@ return [
     'postImportError' => 'The error occurred while analyzing the import file',
     'postImportSuccess' => 'Posts published successfully',
     'import' => [
+        'import-started' => 'Your import file is pending processing',
         'example-file-name' => 'rigmanager-import-file.xlsx',
         'errors' => [
+            'category' => 'Invalid category detected',
+            'images' => 'Invalid image value',
+            'description-empty' => 'Description can not be empty',
+            'description-too-long' => 'Description too long',
             'AtPost' => 'An error occured at post #',
             'type' => 'Invalid "Type"',
+            'amount' => 'Invalid Amount',
         ],
     ],
     'importExtError' => 'Only xlsx files are allowed.',

@@ -22,7 +22,7 @@
 				<p class="aboutus-intro">{{__('ui.aboutUsIntro')}}</p>
 				<p class="aboutus-body">{{__('ui.aboutUsBody')}}</p>
 				<p class="aboutus-body">{{__('ui.aboutUsQ')}} <a href="{{route('faq')}}">{{__('ui.aboutUsQLink')}}</a>.</p>
-				<p class="aboutus-body">{{__('ui.aboutUsContact')}} <a href="#">{{__('ui.aboutUsContactLink')}}</a>.</p>
+				<p class="aboutus-body">{{__('ui.aboutUsContact')}} <a href="{{route('feedbacks.create')}}">{{__('ui.aboutUsContactLink')}}</a>.</p>
 				<p class="aboutus-body">{{__('ui.aboutUsSlg')}}</p>
 			</article>
 		</div>

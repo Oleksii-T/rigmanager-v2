@@ -46,7 +46,7 @@ class ImportController extends Controller
 
         PostsImportJob::dispatch($import);
 
-        flash(trans('messages.imports.import-started'));
+        flash(trans('messages.import.import-started'));
 
         return $this->jsonSuccess('', [
             'redirect' => route('imports.index')
@@ -85,7 +85,12 @@ class ImportController extends Controller
     {
         abort_if(auth()->id() != $import->user_id, 403);
 
-        Post::whereIn('id', $import->posts)->delete();
+        $posts = Post::whereIn('id', $import->posts)->get();
+
+        foreach ($posts as $post) {
+            $post->delete();
+        }
+
         $import->update([
             'posts' => []
         ]);

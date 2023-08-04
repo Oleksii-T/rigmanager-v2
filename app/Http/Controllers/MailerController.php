@@ -7,6 +7,7 @@ use App\Http\Requests\MailerRequest;
 use App\Models\Mailer;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Setting;
 
 class MailerController extends Controller
 {
@@ -14,8 +15,9 @@ class MailerController extends Controller
     {
         $user = auth()->user();
         $mailers = $user->mailers()->latest()->get();
+        $category = Category::find(Setting::get('post_id_in_empty_mailer_text'));
 
-        return view('mailers.index', compact('mailers'));
+        return view('mailers.index', compact('mailers', 'category'));
     }
 
     public function store(MailerRequest $request)

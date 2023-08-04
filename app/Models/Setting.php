@@ -22,6 +22,7 @@ class Setting extends Model
                 'hide_pending_posts' => 'Hide pending posts (1/0)',
                 'fake_autotranslation' => 'Fake auto-translation',
                 'detect_post_language' => 'Detect post original language',
+                'post_id_in_empty_mailer_text' => 'Post id in empty mailer text',
                 // 'sort_categories_by' => 'Categories sorting (alphabet/posts)',
                 // 'hide_empty_categories' => 'Hide empty categories (1/0)',
             ]

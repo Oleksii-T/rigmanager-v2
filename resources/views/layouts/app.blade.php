@@ -60,7 +60,9 @@
 						<ul class="footer-nav footer-langs">
                             @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
                                 @if ($currentLocale == $localeCode)
-                                    <span>{{ $localeCode }}</span>
+                                    <li>
+                                        <span>{{ $localeCode }}</span>
+                                    </li>
                                 @else
                                     <li class="active">
                                         <a class="not-ready" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">

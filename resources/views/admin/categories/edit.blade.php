@@ -4,7 +4,7 @@
 
 @section('content_header')
     <x-admin.title
-        text="Edit Category"
+        text="Edit Category #{{$category->id}}"
     />
 @stop
 

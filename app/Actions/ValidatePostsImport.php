@@ -62,19 +62,35 @@ class ValidatePostsImport
 
     public static function description($val)
     {
-        if (!$val || strlen($val) > 5000) {
-            abort(422, trans('messages.import.errors.description'));
+        if (!$val) {
+            abort(422, trans('messages.import.errors.description-empty'));
+        }
+
+        if (strlen($val) > 9000) {
+            abort(422, trans('messages.import.errors.description-too-long'));
         }
     }
 
     public static function category($val)
     {
-        $slugs = cache()->remember('posts-import.slugs', 1, function() {
+        if (!$val) {
+            abort(422, trans('messages.import.errors.category'));
+        }
+
+        $slugs = cache()->remember('posts-import.categs-slugs', 60, function() {
             return Translation::where('translatable_type', Category::class)->where('field', 'slug')->where('locale', 'en')->pluck('value');
         });
 
-        if (!$val || !$slugs->contains($val)) {
-            abort(422, trans('messages.import.errors.category'));
+        if ($slugs->contains($val)) {
+            return true;
+        }
+
+        $slugs = cache()->remember('posts-import.categs-titles', 60, function() {
+            return Translation::where('translatable_type', Category::class)->where('field', 'name')->where('locale', 'en')->pluck('value');
+        });
+
+        if (!$slugs->contains($val)) {
+            abort(422, trans('messages.import.errors.category') . $val);
         }
     }
 
@@ -87,8 +103,21 @@ class ValidatePostsImport
         $links = explode(' ', $val);
 
         foreach ($links as $link) {
+            if (!$link) {
+                continue;
+            }
+
+            $pattern = '/\s*/m';
+            $replace = '';
+            $link = preg_replace( $pattern, $replace, $link);
+            $link = trim($link);
+
+            if (!$link) {
+                continue;
+            }
+
             if (filter_var($link, FILTER_VALIDATE_URL) === FALSE) {
-                abort(422, trans('messages.import.errors.images'));
+                abort(422, trans('messages.import.errors.images') . " 1 '$link'");
             }
             if (
                 !str_ends_with($link, '.jpg') &&
@@ -96,7 +125,7 @@ class ValidatePostsImport
                 !str_ends_with($link, '.png') &&
                 !str_ends_with($link, '.webp')
             ) {
-                abort(422, trans('messages.import.errors.images'));
+                abort(422, trans('messages.import.errors.images') . ' 2');
             }
         }
     }
@@ -175,7 +204,7 @@ class ValidatePostsImport
         $val = substr($val, 1);
 
         if (!in_array($currency, $currencies) || $val != floatval($val)) {
-            abort(422, trans('messages.import.errors.cost'));
+            abort(422, trans('messages.import.errors.cost') . ' | ' . json_encode($currencies) . ' | ' . $currency . ' | ' . $val);
         }
     }
 

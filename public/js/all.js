@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $('.select2').select2();
+    let urlSearchParams = new URLSearchParams(window.location.search);
 
 	// scroll header
 	$(window).scroll( function(){
@@ -470,6 +471,13 @@ function showServerSuccess(response) {
     } else {
         showPopUp(null, response.message, false);
     }
+}
+
+// smooth scroll animation 
+function animatedScroll(el, base = $('html, body')) {
+    base.animate({
+        scrollTop: el.offset().top - 100
+    }, 500);
 }
 
 // faq dropdown

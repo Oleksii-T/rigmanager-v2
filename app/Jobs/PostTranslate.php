@@ -42,12 +42,12 @@ class PostTranslate implements ShouldQueue
             return;
         }
 
-        dlog(' PostTranslate@handle. START', [
-            'id' => $p->id,
-            'origin_lang' => $p->origin_lang,
-            'title' => $p->translated('title', $p->origin_lang),
-            'description' => $p->translated('description', $p->origin_lang)
-        ]); //!LOG
+        // dlog(' PostTranslate@handle. START', [
+        //     'id' => $p->id,
+        //     'origin_lang' => $p->origin_lang,
+        //     'title' => $p->translated('title', $p->origin_lang),
+        //     'description' => $p->translated('description', $p->origin_lang)
+        // ]); //!LOG
 
         $translator = new TranslationService();
         $toLocales = array_diff(LaravelLocalization::getSupportedLanguagesKeys(), [$p->origin_lang]);
@@ -59,7 +59,7 @@ class PostTranslate implements ShouldQueue
             $oldValue = $this->oldTrans[$translatable] ?? null;
             $origin = $p->translated($translatable, $p->origin_lang);
             if ($oldValue && $oldValue == $origin) {
-                dlog("  PostTranslate@handle. $translatable not changed - skip translation", ); //!LOG
+                // dlog("  PostTranslate@handle. $translatable not changed - skip translation", ); //!LOG
                 continue;
             }
             $translated = [];
@@ -74,7 +74,7 @@ class PostTranslate implements ShouldQueue
             $translations[$translatable] = $translated;
         }
 
-        dlog('  PostTranslate@handle. END', $translations); //!LOG
+        // dlog('  PostTranslate@handle. END', $translations); //!LOG
 
         $p->saveTranslations($translations);
     }

@@ -150,7 +150,12 @@
                     @endforeach
                 </div>
             @else
-                <p>{{__('ui.noMailer')}}</p>
+                <p>
+                    {{__('ui.noMailer')}}
+                    @if ($category)
+                        <a href="{{route('search.category', $category)}}#add-to-mailer-ad">{{$category->name}}</a>
+                    @endif
+                </p>
             @endif
         </div>
     </div>

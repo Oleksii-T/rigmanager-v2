@@ -32,7 +32,7 @@ class CategoryController extends Controller
         $input = $request->validated();
         $category = Category::create($input);
         $category->saveTranslations($input);
-        $category->addAttachment($input['image']);
+        $category->addAttachment($input['image']??null);
 
         return $this->jsonSuccess('Category created successfully', [
             'redirect' => route('admin.categories.index')

@@ -58,9 +58,13 @@ trait HasAttachments
 
     public function purgeAttachments()
     {
-        Attachment::query()
+        $as = Attachment::query()
             ->where('attachmentable_id', $this->id)
             ->where('attachmentable_type', self::class)
-            ->delete();
+            ->get();
+
+        foreach ($as as $a) {
+            $a->delete();
+        }
     }
 }
