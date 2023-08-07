@@ -29,6 +29,13 @@ Route::get('test', function () {
     // some testing code
     $d = [];
 
+    $posts = Post::all();
+    foreach ($posts as $p) {
+        $p->created_at = now()->subDays(rand(1,60));
+        $p->save();
+    }
+    dd('done');
+
     $val = '$20000';
     $currencies = array_values(currencies());
     $currency = $val[0];

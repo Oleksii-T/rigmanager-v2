@@ -38,7 +38,7 @@
                         <p>{{__('ui.importFileLastUpdate')}}: {{env('IMPORT_FILE_UPDATED')}}</p>
                     </div>
                     <a href="{{route('imports.download-example')}}" class="button button-blue">{{__('ui.postImportDownload')}}</a>
-                    <div class="warning">{{__('ui.postImportWarning')}}</div>
+                    {{-- <div class="warning">{{__('ui.postImportWarning')}}</div> --}}
                 </div>
             </div>
         </div>

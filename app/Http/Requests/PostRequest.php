@@ -29,7 +29,7 @@ class PostRequest extends FormRequest
 
         return [
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:5000'],
+            'description' => ['required', 'string', 'max:9000'],
             'category_id' => ['required', 'exists:categories,id'],
             'type' => ['required', 'string', Rule::in(Post::TYPES)],
             'condition' => ['nullable', 'string', Rule::in(Post::CONDITIONS)],

@@ -90,7 +90,7 @@ class ValidatePostsImport
         });
 
         if (!$slugs->contains($val)) {
-            abort(422, trans('messages.import.errors.category') . $val);
+            abort(422, trans('messages.import.errors.category'));
         }
     }
 
@@ -204,7 +204,7 @@ class ValidatePostsImport
         $val = substr($val, 1);
 
         if (!in_array($currency, $currencies) || $val != floatval($val)) {
-            abort(422, trans('messages.import.errors.cost') . ' | ' . json_encode($currencies) . ' | ' . $currency . ' | ' . $val);
+            abort(422, trans('messages.import.errors.cost'));
         }
     }
 

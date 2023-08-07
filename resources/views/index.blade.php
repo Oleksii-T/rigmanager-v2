@@ -65,7 +65,7 @@
                     {{-- $posts --}}
                     <x-home-items :posts="$newPosts" />
                     <div class="ad-col ad-col-more">
-                        <a href="#" class="ad-more">@lang('ui.morePosts')</a>
+                        <a href="{{route('search')}}" class="ad-more">@lang('ui.morePosts')</a>
                     </div>
                 </div>
             </div>
