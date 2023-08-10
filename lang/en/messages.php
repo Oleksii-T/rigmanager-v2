@@ -11,6 +11,8 @@ return [
     'success' => '',
     'error' => 'An error occured.',
     'info' => '',
+    'registerSuccess' => 'Happy to see you!',
+    'loginSuccess' => 'Welcome back',
     'authError' => 'You must be logged in to perform this action',
     'serverError' => 'Server error occurred',
     'accountActivated' => 'Your account has been verified!',

@@ -56,7 +56,7 @@
                 <div class="prod-photo">
                     @foreach ($post->images as $i => $image)
                         <div class="prod-photo-slide">
-                            <a href="{{$image->url}}" data-fancybox="prod">
+                            <a href="{{$image->url}}" data-fancybox="postsgallery">
                                 <img src="{{$image->url}}" alt="{{$post->title . ' - ' . trans('ui.seo-img-image-suffix'). ' ' . $i+1}}" title="{{$post->title . ' - ' . trans('ui.seo-img-image-suffix'). ' ' . $i+1}}">
                             </a>
                         </div>

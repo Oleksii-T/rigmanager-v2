@@ -227,21 +227,15 @@ return [
         phone, email, link, uppercase words (except abbreviation).
         Minimum 10 symbols.
         Maximum 70 symbols.',
-    'titleSeHelp' => 'Enter the service name.
-        Should not contain words and synonyms:
-        urgently, verified, rigmanager.
-        Should not contain:
-        phone, email, link, uppercase words (except abbreviation).
-        Minimum 10 symbols.
-        Maximum 70 symbols.',
+    'titleSeHelp' => 'Enter the service name. Should not contain: phone, email, link, uppercase words (except abbreviation). Minimum 10 symbols. Maximum 70 symbols.',
     'autoTranslateHeader' => 'Preferences of',
     'autoTranslate' => 'Auto-Translator',
     'AutoTranslateToUk' => 'Auto-Translate to Ukrainian',
     'AutoTranslateToRu' => 'Auto-Translate to Russian',
     'translationHelp' => 'Available languages suggested base on your interface language.
         Please choose the interface language in which you filling the original information.',
-    'amount' => 'Amount',
-    'chooseAmount' => 'Choose amount',
+    'amount' => 'Quantity',
+    'chooseAmount' => 'Quantity',
     'amountHelp' => 'Here you may specify the number of pieces you have.
         Example: "432 pcs."',
     'type' => 'Type',
@@ -271,8 +265,7 @@ return [
     'tags' => 'Categories',
     'tag' => 'Category',
     'tagsModalHelp' => 'Do not forget to submit chosen tags!',
-    'tagHelp' => 'Category is important for proper work of search engine.
-        Be sure that category is chosen correctly, so your post will be easy to find!',
+    'tagHelp' => 'Category is important for proper work of search engine. Be sure that category is chosen correctly, so your post will be easy to find!',
     'chosenTags' => 'Chosen category',
     'clearTagsFromPost' => 'Clear сhosen categories',
     'miscEqInfo' => 'Additional optional equipment/part information',
@@ -446,33 +439,9 @@ return [
     'stProfile' => 'User',
     'stMisc' => 'Details',
     'siteMapDesc' => '',
-    'regionOdessa' => 'Odessa region',
+    'images' => 'Images',
     'import' => 'Import',
     'imports' => 'Imports',
-    'regionDnipropetrovsk' => 'Dnipropetrovsk region',
-    'regionChernihiv' => 'Chernihiv region',
-    'regionKharkiv' => 'Kharkiv region',
-    'regionZhytomyr' => 'Zhytomyr region',
-    'regionPoltava' => 'Poltava region',
-    'regionKherson' => 'Kherson region',
-    'regionKiev' => 'Kiev region',
-    'regionZaporozhye' => 'Zaporozhye region',
-    'regionLuhansk' => 'Luhansk region',
-    'regionDonetsk' => 'Donetsk region',
-    'regionVinnytsia' => 'Vinnytsia region',
-    'regionCrimea' => 'Autonomous Republic of Crimea',
-    'regionMykolaiv' => 'Mykolaiv region',
-    'regionKirovograd' => 'Kirovograd region',
-    'regionSumy' => 'Sumy region',
-    'regionLviv' => 'Lviv region',
-    'regionCherkasy' => 'Cherkasy region',
-    'regionKhmelnytsky' => 'Khmelnytsky region',
-    'regionVolyn' => 'Volyn region',
-    'regionRivne' => 'Rivne region',
-    'regionIvano-Frankivsk' => 'Ivano-Frankivsk region',
-    'regionTernopil' => 'Ternopil region',
-    'regionCarpathian' => 'Carpathian region',
-    'regionChernivtsi' => 'Chernivtsi region',
     'fromUserTitle' => 'Got a question?',
     'fromUserEmail' => 'Email (for feedback)',
     'fromUserSubject' => 'Subject',

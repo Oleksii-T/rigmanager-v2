@@ -71,7 +71,7 @@ return [
 
             'user_id' => '',
 
-            'license_key' => '',
+            'license_key' => env('MAXMIND_LICENSE_KEY'),
 
             'options' => [
 

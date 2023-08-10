@@ -23,6 +23,7 @@
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/slick.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery-ui.css')}}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
 </head>
 <body>
 	<div id="wrapper">
@@ -92,7 +93,8 @@
 	<script type="text/javascript" src="{{ asset('js/jquery.validate.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.validate-additional.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/dropzone.min.js') }}"></script>
-	<script src="{{asset('js/jquery.fancybox.min.js')}}"></script>
+	{{-- <script src="{{asset('js/jquery.fancybox.min.js')}}"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 	<script src="{{asset('js/slick.min.js')}}"></script>
 	<script src="{{asset('js/jquery-ui-2.min.js')}}"></script>
 	<script src="{{asset('js/all.js')}}"></script>

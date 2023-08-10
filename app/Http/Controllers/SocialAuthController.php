@@ -44,6 +44,8 @@ class SocialAuthController extends Controller
 
         Auth::login($user);
 
+        flash(trans($user->wasRecentlyCreated ? 'messages.registerSuccess' : 'messages.loginSuccess'));
+
         return redirect()->route('index');
     }
 }

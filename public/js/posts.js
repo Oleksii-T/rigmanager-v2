@@ -22,6 +22,11 @@ $(document).ready(function() {
         });
     }
 
+    // init fancybox
+    Fancybox.bind("[data-fancybox='postsgallery']", {
+        // Your custom options
+    });
+
     //hide/show translated/origin title/description
     $('.post-translated-text-toggle a').click(function(e){
         e.preventDefault();

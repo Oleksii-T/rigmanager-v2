@@ -22,7 +22,7 @@
         "opcodesio/log-viewer": "^1.2",
         "psr/simple-cache": "^2.0",
         "spatie/laravel-sitemap": "^6.3",
-        "stevebauman/location": "^6.5",
+        "stevebauman/location": "^7.0",
         "yajra/laravel-datatables-oracle": "^10.1"
     },
     "require-dev": {

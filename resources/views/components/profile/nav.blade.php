@@ -1,5 +1,5 @@
 <aside class="side">
-    <a href="#side-block" data-fancybox class="side-mob">@lang('ui.cabinet')</a>
+    <a href="#side-block" data-fancybox="mobilemenu" class="side-mob">@lang('ui.cabinet')</a>
     <div class="side-block" id="side-block">
         <div class="side-title">@lang('ui.cabinet')</div>
         <ul class="side-list">

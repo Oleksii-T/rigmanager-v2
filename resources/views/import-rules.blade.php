@@ -36,7 +36,6 @@
                             <li>{{__('postImportRules.mainRules8')}}</li>
                             <li>{{__('postImportRules.mainRules9')}}</li>
                             <li>{{__('postImportRules.mainRules10')}}</li>
-                            <li>{{__('postImportRules.mainRules11')}}</li>
                         </ul>
                     </div>
                 </div>
@@ -48,15 +47,14 @@
                 <div class="article-part"> <!--description-->
                     <h3>{{__('ui.description')}}</h3>
                     <p><span class="white">{{__('postImportRules.required')}}: {{__('ui.yes')}}</span>
-                        {{__('postImportRules.titleRule')}}</p>
+                        {{__('postImportRules.titleRule')}}
+                    </p>
                 </div>
                 <div class="article-part"> <!--category-->
                     <h3>{{__('postImportRules.tag')}}</h3>
                     <p><span class="white">{{__('postImportRules.required')}}: {{__('ui.yes')}}</span>
-                        {{__('postImportRules.tagRule')}}</p>
-                    <div class="article-buttons">
-                        <button class="button button-blue show-all-categories-in-popup">{{__('postImportRules.tagRuleEqBtn')}}</button>
-                    </div>
+                        {!!__('postImportRules.tagRule')!!}
+                    </p>
                 </div>
                 <div class="article-part"> <!--images-->
                     <h3>{{__('ui.images')}}</h3>
@@ -71,33 +69,38 @@
                 <div class="article-part"> <!--condition-->
                     <h3>{{__('ui.condition')}}</h3>
                     <p><span class="yellow">{{__('postImportRules.required')}}: {{__('ui.no')}}</span>
-                        {{__('postImportRules.conditionRule')}}</p>
+                        {{__('postImportRules.conditionRule')}}
+                    </p>
                 </div>
                 <div class="article-part"> <!--amount-->
                     <h3>{{__('ui.amount')}}</h3>
                     <p><span class="yellow">{{__('postImportRules.required')}}: {{__('ui.no')}}</span>
-                        {{__('ui.amountHelp')}}</p>
+                        {{__('ui.amountHelp')}}
+                    </p>
                 </div>
                 <div class="article-part"> <!--manuf+manuf_date+pn-->
                     <h3>{{__('postImportRules.manufManufDatePN')}}</h3>
                     <p><span class="yellow">{{__('postImportRules.required')}}: {{__('ui.no')}}</span>
-                        {{__('postImportRules.manufManufDatePNRule')}}</p>
+                        {{__('postImportRules.manufManufDatePNRule')}}
+                    </p>
                 </div>
                 <div class="article-part"> <!--cost-->
                     <h3>{{__('postImportRules.cost')}}</h3>
                     <p><span class="yellow">{{__('postImportRules.required')}}: {{__('ui.no')}}</span>
-                        {{__('ui.costHelp')}}
-                        {{__('postImportRules.currencyRule')}}</p>
+                        {{__('postImportRules.currencyRule')}}
+                    </p>
                 </div>
                 <div class="article-part"> <!--region-->
                     <h3>{{__('ui.region')}}</h3>
                     <p><span class="yellow">{{__('postImportRules.required')}}: {{__('ui.no')}}</span>
-                        {{__('postImportRules.regionRule')}}</p>
+                        {{__('postImportRules.regionRule')}}
+                    </p>
                 </div>
                 <div class="article-part"> <!--lifetime-->
                     <h3>{{__('postImportRules.lifetime')}}</h3>
                     <p><span class="white">{{__('postImportRules.required')}}: {{__('ui.yes')}}</span>
-                        {{__('postImportRules.lifetimeRule')}}</p>
+                        {{__('postImportRules.lifetimeRule')}}
+                    </p>
                 </div>
             </article>
         </div>

@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('rates:update')->daily();
         $schedule->command('mailers:send')->daily();
+        $schedule->command('location:update')->weekly();
         $schedule->command('sitemap:generate')->everySixHours();
     }
 

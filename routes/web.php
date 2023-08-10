@@ -25,6 +25,10 @@ use App\Http\Controllers\ImportController;
 |
 */
 
+Route::get('blog', function () {
+    return 'in main project';
+});
+
 Route::get('auth/social/{provider}', [SocialAuthController::class, 'redirect'])->name('auth.social');
 Route::get('auth/callback/{provider}', [SocialAuthController::class, 'callback']);
 Route::get('catalog', [PageController::class, 'categories'])->name('categories');

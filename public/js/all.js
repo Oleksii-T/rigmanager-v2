@@ -14,6 +14,11 @@ $(document).ready(function () {
 		$('.header').addClass('fixed');
 	}
 
+    // init fancybox for profile and info meny
+    Fancybox.bind("[data-fancybox='mobilemenu']", {
+        mainClass: 'mobile-fancybox-wrapper'
+    });
+
     //block not-ready links
     $('.not-ready').click(function(e){
         e.preventDefault();

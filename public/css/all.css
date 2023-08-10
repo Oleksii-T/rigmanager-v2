@@ -543,6 +543,9 @@ textarea.form-error {
 	border-radius: 8px;
 	display: none;
 }
+.mobile-fancybox-wrapper .fancybox__content{
+    background-color: black;
+}
 .header-profile-preview {
 	display: -webkit-box;
 	display: -webkit-flex;
