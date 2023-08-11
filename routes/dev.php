@@ -29,7 +29,23 @@ Route::get('test', function () {
     // some testing code
     $d = [];
 
-    $d = \Stevebauman\Location\Facades\Location::get();
+    // $faker = \Faker\Factory::create();
+    // \App\Models\PostView::where('is_fake', true)->delete();
+    // foreach (Post::all() as $post) {
+    //     $views = [];
+    //     $maxDays = $post->created_at->diffInDays();
+    //     for ($i=0; $i < rand(10, 150); $i++) { 
+    //         $date = now()->subDays(rand(0, $maxDays));
+    //         $views[] = [
+    //             'ips' => json_encode([$faker->ipv4]),
+    //             'post_id' => $post->id,
+    //             'is_fake' => true,
+    //             'created_at' => $date,
+    //             'updated_at' => $date,
+    //         ];
+    //     }
+    //     \App\Models\PostView::insert($views);
+    // }
 
     dd($d);
 });

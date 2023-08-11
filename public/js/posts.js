@@ -116,6 +116,52 @@ $(document).ready(function() {
         });
     })
 
+    // categories select
+    $(document).on('selectmenuchange', '.categories-level-selects .cat-lev-1 select', function (e) {
+        console.log(`select new first categ`); //! LOG
+        let wrpr = $(this).closest('.categories-level-selects');
+        let val = $(this).val();
+        console.log(` new val is `, val); //! LOG
+        wrpr.find('input[name=category_id]').val(val);
+
+        // hide all second and third level categories
+        wrpr.find('.cat-lev-2 .select-block').addClass('d-none');
+        wrpr.find('.cat-lev-3 .select-block').addClass('d-none');
+
+        // show second level
+        wrpr.find(`.cat-lev-2 .select-block[data-parentcateg="${val}"]`).removeClass('d-none');
+    })
+    $(document).on('selectmenuchange', '.categories-level-selects .cat-lev-2 select', function (e) {
+        console.log(`select new second categ`); //! LOG
+        let wrpr = $(this).closest('.categories-level-selects');
+        let val = $(this).val();
+
+        if (!val) {
+            console.log(`empty val`); //! LOG
+            val = wrpr.find('.cat-lev-1 select').val();
+        }
+        console.log(` new val is `, val); //! LOG
+
+        wrpr.find('input[name=category_id]').val(val);
+
+        // hide all third level categories
+        wrpr.find('.cat-lev-3 .select-block').addClass('d-none');
+
+        // show third level
+        wrpr.find(`.cat-lev-3 .select-block[data-parentcateg="${val}"]`).removeClass('d-none');
+    })
+    $(document).on('selectmenuchange', '.categories-level-selects .cat-lev-3 select', function (e) {
+        console.log(`select new third categ`); //! LOG
+        let wrpr = $(this).closest('.categories-level-selects');
+        let val = $(this).val();
+        if (!val) {
+            console.log(`empty val`); //! LOG
+            val = wrpr.find('.cat-lev-2 .select-block:not(.d-none) select').val();
+        }
+        console.log(` new val is `, val); //! LOG
+        wrpr.find('input[name=category_id]').val(val);
+    })
+
     $('.upload-images').sortable({
         items: '> div:not(:last-child)',
         stop: function() {

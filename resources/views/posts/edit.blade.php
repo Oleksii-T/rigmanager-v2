@@ -33,29 +33,71 @@
                     @method('PUT')
                     <fieldset>
                         <div class="form-section"> <!--title+tag-->
-                            <label class="label">@lang('ui.title') <span class="orange">*</span></label>
+                            <label class="label" style="display: flex;justify-content:space-between">
+                                <span>
+                                    @lang('ui.title') 
+                                    <span class="orange">*</span>
+                                </span>
+
+                                <div class="check-block">
+                                    <div class="check-item">
+                                        <input type="checkbox" name="is_urgent" class="check-input" id="ch22" value="1" @checked($post->is_urgent)>
+                                        <label for="ch22" class="check-label" style="color: #ffc990">@lang('ui.makePostUrgent')</label>
+                                    </div>
+                                </div>
+                            </label>
                             <input class="input input-long" name="title" type="text" value="{{$post->original('title')}}" />
                             <div data-input="title" class="form-error"></div>
                             <div class="form-note lifetime-note-pre">@lang('ui.titleSeHelp')</div>
 
                             <label class="label">@lang('ui.chooseTag') <span class="orange">*</span></label>
-                            <div class="select-block">
-                                <select class="styled" name="category_id">
-                                    @foreach ($categories as $c)
-                                        <option value="{{$c->id}}" @selected($post->category_id == $c->id)>{{$c->name}}</option>
+                            <div class="categories-level-selects">
+                                <input type="hidden" name="category_id" value="{{$post->category_id}}">
+                                <div class="cat-lev-x cat-lev-1">
+                                    <div class="select-block">
+                                        <select class="styled">
+                                            <option value="">@lang('ui.chooseTag')</option>
+                                            @foreach ($categsFirstLevel as $c)
+                                                <option value="{{$c->id}}" @selected($activeLevels[0] == $c->id)>{{$c->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="cat-lev-x cat-lev-2">
+                                    @foreach ($categsSecondLevel as $parentId => $secondLevel)
+                                        <div class="select-block {{$activeLevels[0] == $parentId ? '' : 'd-none'}}" data-parentcateg="{{$parentId}}">
+                                            <select class="styled">
+                                                <option value="">@lang('ui.chooseNextTag')</option>
+                                                @foreach ($secondLevel as $c)
+                                                    <option value="{{$c->id}}" @selected(($activeLevels[1]??null) == $c->id)>{{$c->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     @endforeach
-                                </select>
+                                </div>
+                                <div class="cat-lev-x cat-lev-3">
+                                    @foreach ($categsThirdLevel as $parentId => $thirdLevel)
+                                        <div class="select-block  {{($activeLevels[1]??null) == $parentId ? '' : 'd-none'}}" data-parentcateg="{{$parentId}}">
+                                            <select class="styled">
+                                                <option value="">@lang('ui.chooseNextTag')</option>
+                                                @foreach ($thirdLevel as $c)
+                                                    <option value="{{$c->id}}" @selected(($activeLevels[2]??null) == $c->id)>{{$c->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
-                            <input type="text" name="tag_encoded" hidden/>
+                            <div data-input="category_id" class="form-error"></div>
                             <div class="form-note">@lang('ui.tagHelp')</div>
-                        </div>
-                        <div class="form-section"> <!--type+role+condition+optionals-->
+
+                            <!--type+role+condition+optionals-->
                             <div class="add-radio">
-                                <div class="add-radio-col">
-                                    <label class="label">@lang('ui.choosePostType')<span class="orange">*</span></label>
-                                    <div class="radio-block">
+                                <div class="add-radio-col" style="width: 100%">
+                                    <label class="label" style="display: inline-block;padding-right:10px">@lang('ui.choosePostType')<span class="orange">*</span>:</label>
+                                    <div class="radio-block" style="display: inline-block">
                                         @foreach (\App\Models\Post::TYPES as $item)
-                                            <div class="radio-item">
+                                            <div class="radio-item" style="display: inline-block">
                                                 <input type="radio" name="type" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($post->type == $item)>
                                                 <label for="{{$item}}" class="radio-label">{{\App\Models\Post::typeReadable($item)}}</label>
                                             </div>
@@ -111,10 +153,6 @@
                                     <label class="label">@lang('ui.chooseCondition')</label>
                                     <div class="select-block">
                                         <div class="radio-block">
-                                            <div class="radio-item">
-                                                <input type="radio" name="condition" class="radio-input" id="cond-none" value="" checked>
-                                                <label for="cond-none" class="radio-label">@lang('ui.none')</label> {{-- //! TRANSLATE --}}
-                                            </div>
                                             @foreach (\App\Models\Post::CONDITIONS as $item)
                                                 <div class="radio-item">
                                                     <input type="radio" name="condition" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($post->condition == $item)>
@@ -216,20 +254,10 @@
                                 </select>
                             </div>
                             <div data-input="duration" class="form-error"></div>
-
-                            <label class="label">@lang('ui.specialPostsStatus')</label>
-                            <div class="check-block">
-                                <div class="check-item">
-                                    <input type="checkbox" name="is_urgent" class="check-input" id="ch22" value="1" @checked($post->is_urgent)>
-                                    <label for="ch22" class="check-label">@lang('ui.makePostUrgent')</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-section"> <!--edit_translations-->
-                            <p><a href="{{route('posts.translations.edit', $post)}}">{{__('ui.editTrans')}}</a></p>
                         </div>
                         <div class="form-button-block">
                             <button type="submit" class="button">@lang('ui.update')</button>
+                            <a  href="{{route('posts.translations.edit', $post)}}" class="button">@lang('ui.editTrans')</a>
                         </div>
                     </fieldset>
                 </form>

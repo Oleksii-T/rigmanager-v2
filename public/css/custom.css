@@ -129,3 +129,22 @@
 .profile-remove-filters {
     color: red;
 }
+
+.categories-level-selects {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+.categories-level-selects .cat-lev-x{
+    -ms-flex: 0 0 33.333333%;
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+}
+@media screen and (max-width: 767px) {
+    .categories-level-selects .cat-lev-x{
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

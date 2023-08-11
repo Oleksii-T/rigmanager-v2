@@ -208,4 +208,33 @@ class Category extends Model
         }
         return $array;
     }
+
+    public static function getLevels()
+    {
+        $categs = self::active()->whereNull('category_id')->with('childs.childs')->get();
+
+        $first = [];
+        $second = [];
+        $third = [];
+
+        foreach ($categs as $firstC) {
+            $first[] = $firstC;
+            foreach ($firstC['childs']??[] as $secondC) {
+                if (isset($second[$firstC->id])) {
+                    $second[$firstC->id][] = $secondC;
+                } else {
+                    $second[$firstC->id] = [$secondC];
+                }
+                foreach ($secondC['childs']??[] as $thirdC) {
+                    if (isset($third[$secondC->id])) {
+                        $third[$secondC->id][] = $thirdC;
+                    } else {
+                        $third[$secondC->id] = [$thirdC];
+                    }
+                }
+            }
+        }
+
+        return [$first, $second, $third];
+    }
 }

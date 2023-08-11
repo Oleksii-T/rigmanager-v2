@@ -44,11 +44,11 @@
                 </a>
                 @if ($post->images->isNotEmpty())
                     <div class="prod-controls">
-                        <a href="" class="prod-arrow prod-prev"></a>
+                        <a href="#" class="prod-arrow prod-prev"></a>
                         <div class="prod-current"></div>
                         <div class="prod-divider"></div>
                         <div class="prod-all"></div>
-                        <a href="" class="prod-arrow prod-next"></a>
+                        <a href="#" class="prod-arrow prod-next"></a>
                     </div>
                 @endif
             </div>

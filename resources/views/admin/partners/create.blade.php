@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group show-uploaded-file-name show-uploaded-file-preview">
                             <label>Image</label>
                             <div class="custom-file">
@@ -25,14 +25,14 @@
                             <span data-input="image" class="input-error"></span>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Link</label>
                             <input name="link" type="text" class="form-control">
                             <span data-input="link" class="input-error"></span>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Order</label>
                             <input name="order" type="text" class="form-control">

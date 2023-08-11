@@ -52,9 +52,9 @@ class PostController extends Controller
 
     public function create()
     {
-        $categories = Category::active()->get();
+        list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels();
 
-        return view('posts.create', compact('categories'));
+        return view('posts.create', compact('categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel'));
     }
 
     public function store(PostRequest $request, TranslationService $translator)
@@ -163,13 +163,17 @@ class PostController extends Controller
 
     public function edit(Request $request, Post $post)
     {
-        $categories = Category::active()->get();
+        list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels();
+        $activeLevels = array_column($post->category->parents(true), 'id');
 
-        return view('posts.edit', compact('post', 'categories'));
+        return view('posts.edit', compact('post', 'categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'activeLevels'));
     }
 
     public function update(PostRequest $request, Post $post, TranslationService $translator)
     {
+        // $c = Category::find($request->category_id);
+        // return $this->jsonError("Selected category: " . $c->name);
+
         // dlog("PostController@update. START. post #$post->id", $request->all()); //! LOG
         $user = auth()->user();
         $input = $request->validated();

@@ -213,7 +213,7 @@ return [
     'postCreate' => 'Post creation',
     'postSettings' => 'Post settings',
     'postTransSettings' => 'Translations settings',
-    'editTrans' => 'View and edit the translated version of this post.',
+    'editTrans' => 'Edit translations',
     'showOptionals' => 'Show optional fields',
     'hideOptionals' => 'Hide optional fields',
     'optionalsHelp' => 'We advise fill in following details to simplify search and understanding of your proposition by viewers.',
@@ -262,6 +262,7 @@ return [
     'conditionSH' => 'Used',
     'conditionForParts' => 'For parts',
     'chooseTag' => 'Choose category',
+    'chooseNextTag' => 'Choose next',
     'tags' => 'Categories',
     'tag' => 'Category',
     'tagsModalHelp' => 'Do not forget to submit chosen tags!',
@@ -352,7 +353,7 @@ return [
     'deleteAllPosts' => 'Delete all posts',
     'deleteAllPostsSure?' => 'Are you sure you want to delete all posts?',
     'specialPostsStatus' => 'Special status for post',
-    'makePostUrgent' => 'Urgent',
+    'makePostUrgent' => 'Is urgent',
     'postUrgentStatusHelp' => 'The urgent posts will have an appropriate mark.
         Random 8 urgent posts are listed on home page.
         The number of urgent posts is limited to 100 for Standart users.
