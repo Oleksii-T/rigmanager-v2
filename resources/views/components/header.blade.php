@@ -33,7 +33,7 @@
                     @if ($currentLocale == $localeCode)
                         <span class="header-language">{{ $localeCode }}</span>
                     @else
-                        <a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" class="header-language not-ready">{{ $localeCode }}</a>
+                        <a href="#" class="header-language not-ready">{{ $localeCode }}</a> {{-- {{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }} --}}
                     @endif
                 @endforeach
                 <div class="header-cabinet">
@@ -107,7 +107,7 @@
                     </ul>
                     <ul class="mob-nav-list">
                         @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
-                            <li><a class="not-ready" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">{{ $properties['native'] }}</a></li>
+                            <li><a class="not-ready" href="#">{{ $properties['native'] }}</a></li>{{-- {{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }} --}}
                         @endforeach
                     </ul>
                     <ul class="mob-nav-list mob-nav-grey">

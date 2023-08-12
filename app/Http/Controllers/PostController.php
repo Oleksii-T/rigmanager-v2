@@ -52,9 +52,10 @@ class PostController extends Controller
 
     public function create()
     {
+        $categories = Category::all();
         list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels();
 
-        return view('posts.create', compact('categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel'));
+        return view('posts.create', compact('categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'categories'));
     }
 
     public function store(PostRequest $request, TranslationService $translator)

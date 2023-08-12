@@ -20,7 +20,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/all.css')}}" />
-	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}" />
+	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}?v={{time()}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/slick.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery-ui.css')}}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
@@ -66,7 +66,7 @@
                                     </li>
                                 @else
                                     <li class="active">
-                                        <a class="not-ready" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                        <a class="not-ready" href="#">{{-- {{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }} --}}
                                             {{ $localeCode }}
                                         </a>
                                     </li>

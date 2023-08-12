@@ -115,56 +115,76 @@
                                 <div class="faq-hidden">
                                     <p>@lang('ui.optionalsHelp')</p>
 
-                                    <label class="label">@lang('ui.chooseAmount')</label>
-                                    <input class="input" name="amount" type="text" value="{{$post->amount}}"/>
-                                    <div data-input="amount" class="form-error"></div>
-                                    <div class="form-note">@lang('ui.amountHelp')</div>
+                                    <div class="row">
 
-                                    <label class="label">@lang('ui.locationRegion')</label>
-                                    <div class="select-block">
-                                        <select class="select2" name="country">
-                                            @foreach (countries() as $key => $name)
-                                                <option value="{{$key}}" @selected($post->country == $key)>{{$name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <label class="label">@lang('ui.chooseManufacturer')</label>
-                                    <input class="input" name="manufacturer" type="text" value="{{$post->manufacturer}}"/>
-                                    <div data-input="manufacturer" class="form-error"></div>
-
-                                    <label class="label">@lang('ui.chooseManufacturedDate')</label>
-                                    <input class="input" name="manufacture_date" type="text" value="{{$post->manufacture_date}}"/>
-                                    <div data-input="manufacture_date" class="form-error"></div>
-
-                                    <label class="label">@lang('ui.choosePartNum')</label>
-                                    <input class="input" name="part_number" type="text" value="{{$post->part_number}}"/>
-                                    <div data-input="part_number" class="form-error"></div>
-
-                                    <label class="label">@lang('ui.currency')</label> {{-- //! TRANSLATE --}}
-                                    <div class="select-block">
-                                        <select class="styled" name="currency">
-                                            @foreach (currencies() as $key => $symbol)
-                                                <option value="{{$key}}" @selected($post->currency == $key)>{{strtoupper($key)}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <label class="label">@lang('ui.chooseCondition')</label>
-                                    <div class="select-block">
-                                        <div class="radio-block">
-                                            @foreach (\App\Models\Post::CONDITIONS as $item)
-                                                <div class="radio-item">
-                                                    <input type="radio" name="condition" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($post->condition == $item)>
-                                                    <label for="{{$item}}" class="radio-label">{{\App\Models\Post::conditionReadable($item)}}</label>
-                                                </div>
-                                            @endforeach
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.currency')</label> {{-- //! TRANSLATE --}}
+                                            <div class="select-block">
+                                                <select class="styled" name="currency">
+                                                    @foreach (currencies() as $key => $symbol)
+                                                        <option value="{{$key}}" @selected($post->currency == $key)>{{strtoupper($key)}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+    
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.cost')</label>
+                                            <input class="input format-cost" name="cost" type="text" placeholder="@lang('ui.cost')" value="{{$post->cost}}"/>
+                                            <div data-input="cost" class="form-error"></div>
+                                        </div>
 
-                                    <label class="label">@lang('ui.cost')</label>
-                                    <input class="input format-cost" name="cost" type="text" placeholder="@lang('ui.cost')}}" value="{{$post->cost}}"/>
-                                    <div data-input="cost" class="form-error"></div>
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.chooseManufacturer')</label>
+                                            <input class="input" name="manufacturer" type="text" value="{{$post->manufacturer}}"/>
+                                            <div data-input="manufacturer" class="form-error"></div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.chooseManufacturedDate')</label>
+                                            <input class="input" name="manufacture_date" type="text" value="{{$post->manufacture_date}}"/>
+                                            <div data-input="manufacture_date" class="form-error"></div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.chooseAmount')</label>
+                                            <input class="input" name="amount" type="text" value="{{$post->amount}}"/>
+                                            <div data-input="amount" class="form-error"></div>
+                                            <div class="form-note">@lang('ui.amountHelp')</div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.locationRegion')</label>
+                                            <div class="select-block">
+                                                <select class="select2" name="country" style="width: 100%">
+                                                    @foreach (countries() as $key => $name)
+                                                        <option value="{{$key}}" @selected($post->country == $key)>{{$name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.choosePartNum')</label>
+                                            <input class="input" name="part_number" type="text" value="{{$post->part_number}}"/>
+                                            <div data-input="part_number" class="form-error"></div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.chooseCondition')</label>
+                                            <div class="select-block">
+                                                <div class="radio-block">
+                                                    @foreach (\App\Models\Post::CONDITIONS as $item)
+                                                        <div class="radio-item">
+                                                            <input type="radio" name="condition" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($post->condition == $item)>
+                                                            <label for="{{$item}}" class="radio-label">{{\App\Models\Post::conditionReadable($item)}}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>

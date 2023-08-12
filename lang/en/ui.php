@@ -309,7 +309,7 @@ return [
     'doc' => 'Document',
     'chosen' => 'Chosen',
     'chooseDoc' => 'Choose document',
-    'postDocHelp' => 'You may upload one .pdf file such as technical specification of documentation.',
+    'postDocHelp' => 'You may upload documents (.pdf,.xls,.xlsx,.xml,.doc,.docx) such as technical specification or documentation.',
     'cost' => 'Cost',
     'costHelp' => 'If it is not obvious what the price is for, you can specify this information in the description.
         Enter cost in format: 0000.00.

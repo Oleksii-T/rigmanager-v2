@@ -100,58 +100,78 @@
                                     </svg>
                                     <span class="text-show">@lang('ui.showOptionals')</span>
                                 </a>
-                                <div class="faq-hidden">
+                                <div class="faq-hidden ">
                                     <p>@lang('ui.optionalsHelp')</p>
 
-                                    <label class="label">@lang('ui.chooseAmount')</label>
-                                    <input class="input" name="amount" type="text"/>
-                                    <div data-input="amount" class="form-error"></div>
-                                    <div class="form-note">@lang('ui.amountHelp')</div>
+                                    <div class="row">
 
-                                    <label class="label">@lang('ui.locationRegion')</label> {{-- //! TRANSLATE --}}
-                                    <div class="select-block">
-                                        <select class="select2" name="country">
-                                            @foreach (countries() as $key => $name)
-                                                <option value="{{$key}}" @selected($currentUser->country == $key)>{{$name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.currency')</label> {{-- //! TRANSLATE --}}
+                                            <div class="select-block">
+                                                <select class="styled" name="currency">
+                                                    @foreach (currencies() as $key => $symbol)
+                                                        <option value="{{$key}}" @selected($currentUser->lastCurrency() == $key)>{{strtoupper($key)}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                    <label class="label">@lang('ui.chooseCondition')</label>
-                                    <div class="select-block">
-                                        <div class="radio-block">
-                                            @foreach (\App\Models\Post::CONDITIONS as $item)
-                                                <div class="radio-item">
-                                                    <input type="radio" name="condition" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($item == 'new')>
-                                                    <label for="{{$item}}" class="radio-label">{{\App\Models\Post::conditionReadable($item)}}</label>
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.cost')</label>
+                                            <input class="input format-cost" name="cost" type="text"/>
+                                            <div data-input="cost" class="form-error"></div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.chooseManufacturer')</label>
+                                            <input class="input" name="manufacturer" type="text"/>
+                                            <div data-input="manufacturer" class="form-error"></div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.chooseManufacturedDate')</label>
+                                            <input class="input" name="manufacture_date" type="text"/>
+                                            <div data-input="manufacture_date" class="form-error"></div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.chooseAmount')</label>
+                                            <input class="input" name="amount" type="text"/>
+                                            <div data-input="amount" class="form-error"></div>
+                                            <div class="form-note">@lang('ui.amountHelp')</div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.locationRegion')</label> {{-- //! TRANSLATE --}}
+                                            <div class="select-block">
+                                                <select class="select2" name="country" style="width: 100%">
+                                                    @foreach (countries() as $key => $name)
+                                                        <option value="{{$key}}" @selected($currentUser->country == $key)>{{$name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.choosePartNum')</label>
+                                            <input class="input" name="part_number" type="text"/>
+                                            <div data-input="part_number" class="form-error"></div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="label">@lang('ui.chooseCondition')</label>
+                                            <div class="select-block">
+                                                <div class="radio-block">
+                                                    @foreach (\App\Models\Post::CONDITIONS as $item)
+                                                        <div class="radio-item">
+                                                            <input type="radio" name="condition" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($item == 'new')>
+                                                            <label for="{{$item}}" class="radio-label">{{\App\Models\Post::conditionReadable($item)}}</label>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
-                                            @endforeach
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <label class="label">@lang('ui.chooseManufacturer')</label>
-                                    <input class="input" name="manufacturer" type="text"/>
-                                    <div data-input="manufacturer" class="form-error"></div>
-
-                                    <label class="label">@lang('ui.chooseManufacturedDate')</label>
-                                    <input class="input" name="manufacture_date" type="text"/>
-                                    <div data-input="manufacture_date" class="form-error"></div>
-
-                                    <label class="label">@lang('ui.choosePartNum')</label>
-                                    <input class="input" name="part_number" type="text"/>
-                                    <div data-input="part_number" class="form-error"></div>
-
-                                    <label class="label">@lang('ui.currency')</label> {{-- //! TRANSLATE --}}
-                                    <div class="select-block">
-                                        <select class="styled" name="currency">
-                                            @foreach (currencies() as $key => $symbol)
-                                                <option value="{{$key}}" @selected($currentUser->lastCurrency() == $key)>{{strtoupper($key)}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <label class="label">@lang('ui.cost')</label>
-                                    <input class="input format-cost" name="cost" type="text"/>
-                                    <div data-input="cost" class="form-error"></div>
                                 </div>
                             </div>
                             <!--description-->
