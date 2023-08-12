@@ -24,12 +24,12 @@
 .full-loader img {
     position: fixed;
 }
-.upload-images {
+.upload-images_b {
     display: flex;
     flex-wrap: wrap;
     gap: 10px 20px;
 }
-.upload-images_wrapper {
+.upload-images_w {
     width: 159px;
     height: 120px;
     background-color: #282828;
@@ -38,7 +38,7 @@
     transition: all 0.3s linear;
     position: relative;
 }
-.upload-images_wrapper:hover {
+.upload-images_w:hover {
     background-color: #404040;
 }
 .upload-images_label {
@@ -52,16 +52,24 @@
     color: white;
     font-weight: 500;
 }
-/* .upload-images_wrapper:not(.clone) {
+/* .upload-images_w:not(.clone) {
     border: 2px solid red;
 }
-.upload-images_wrapper:not(.clone):first-child {
+.upload-images_w:not(.clone):first-child {
     border: 4px solid gold;
 } */
-.upload-images_wrapper:not(.clone):first-child .upload-images_label {
+.upload-images_w:not(.clone):first-child .upload-images_label {
     display: block;
 }
-.upload-images_empty {
+.upload-images_name {
+    position: absolute;
+    background-color: #1a1a1a;
+    width: 100%;
+    overflow: hidden;
+    padding: 0px 5px;
+    text-overflow: ellipsis;
+}
+.upload-images_e {
     width: 100%;
     height: 100%;
     display: flex;
@@ -88,7 +96,7 @@
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.326);
 }
-.upload-images_wrapper:hover .upload-images_image-overlay {
+.upload-images_w:hover .upload-images_image-overlay {
     display: flex;
 }
 .upload-images_image-overlay button {
@@ -113,19 +121,6 @@
 .upload-images_loading img{
     width: 50px;
 } */
-.upload-documents {
-    margin-bottom: 24px;
-}
-.upload-documents_wrapper {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #505050;
-    margin-bottom: 5px;
-}
-.upload-documents_remove {
-    color: red;
-    cursor: pointer;
-}
 .profile-remove-filters {
     color: red;
 }

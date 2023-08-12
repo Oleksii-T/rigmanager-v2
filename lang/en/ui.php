@@ -308,7 +308,7 @@ return [
     'attDoc' => 'Attached document',
     'doc' => 'Document',
     'chosen' => 'Chosen',
-    'chooseDoc' => 'Choose document',
+    'chooseDoc' => 'Choose documents',
     'postDocHelp' => 'You may upload documents (.pdf,.xls,.xlsx,.xml,.doc,.docx) such as technical specification or documentation.',
     'cost' => 'Cost',
     'costHelp' => 'If it is not obvious what the price is for, you can specify this information in the description.

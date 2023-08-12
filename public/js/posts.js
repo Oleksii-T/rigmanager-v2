@@ -297,6 +297,31 @@ $(document).ready(function() {
         });
     }
 
+    // load drag&drop images
+    $('.upload-docs_empty').on('drop dragdrop',function(e){
+        e.preventDefault();
+        let dt = e.originalEvent.dataTransfer;
+        if(!dt || !dt.files.length) {
+            return;
+        }
+        handleDocuments([...dt.files]);
+        showDocuments();
+    });
+    $('.upload-docs_empty').on('dragenter',function(e){
+        e.preventDefault();
+    })
+    $('.upload-docs_empty').on('dragleave',function(){
+    })
+    $('.upload-docs_empty').on('dragover',function(e){
+        e.preventDefault();
+    })
+
+    // simulate images input click
+    $('.upload-docs_empty').click(function(e) {
+        e.preventDefault();
+        $('#documents-multiple-input').trigger('click');
+    })
+
     // save selected documents
     $('#documents-multiple-input').change(function() {
         handleDocuments([...this.files]);
@@ -315,25 +340,6 @@ $(document).ready(function() {
         showDocuments();
     })
 
-    // load drag&drop documents
-    $('.edit-doc-button').on('drop dragdrop',function(e){
-        e.preventDefault();
-        let dt = e.originalEvent.dataTransfer;
-        if(!dt || !dt.files.length) {
-            return;
-        }
-        handleDocuments([...dt.files]);
-        showDocuments();
-    });
-    $('.edit-doc-button').on('dragenter',function(e){
-        e.preventDefault();
-    })
-    $('.edit-doc-button').on('dragleave',function(){
-    })
-    $('.edit-doc-button').on('dragover',function(e){
-        e.preventDefault();
-    })
-
     // save documents localy
     function handleDocuments(files) {
         files.forEach(file => {
@@ -350,14 +356,15 @@ $(document).ready(function() {
         let clone = $('.upload-documents_wrapper.clone');
         let wrpr = $('.upload-documents');
         let i = 0;
-        wrpr.empty();
+        wrpr.find('.upload-documents_wrapper.user-image').remove();
+        console.log(`documents`, documents); //! LOG
         documents.forEach(file => {
             clone.clone()
                 .removeClass('clone')
                 .removeClass('hidden')
                 .data('index', i)
                 .prependTo(wrpr)
-                .find('.doc-name')
+                .find('.upload-images_name')
                 .text(file.name);
             i++;
         });
