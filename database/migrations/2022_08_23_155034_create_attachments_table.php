@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('original_name');
             $table->string('type')->nullable();
             $table->double('size')->nullable();
+            $table->integer('order')->nullable();
             $table->string('group')->nullable();
             $table->timestamps();
         });

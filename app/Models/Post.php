@@ -104,7 +104,7 @@ class Post extends Model
 
     public function images()
     {
-        return $this->morphMany(Attachment::class, 'attachmentable')->where('group', 'images');
+        return $this->morphMany(Attachment::class, 'attachmentable')->where('group', 'images')->orderBy('order', 'asc');
     }
 
     public function costs()

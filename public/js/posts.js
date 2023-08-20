@@ -80,12 +80,14 @@ $(document).ready(function() {
         }
         button.addClass('cursor-wait');
         let formData = new FormData(this);
+        let i = 0;
         images.forEach(img => {
             if (img.id) {
-                formData.append('old_images[]', img.id);
+                formData.append(`old_images[${i}]`, img.id);
             } else {
-                formData.append('images[]', img.file);
+                formData.append(`images[${i}]`, img.file);
             }
+            i++;
         });
         removedImages.forEach(id => {
             formData.append('removed_images[]', id);
@@ -162,25 +164,25 @@ $(document).ready(function() {
         wrpr.find('input[name=category_id]').val(val);
     })
 
-    $('.upload-images').sortable({
-        items: '> div:not(:last-child)',
-        stop: function() {
+    new Sortable(document.getElementsByClassName('upload-images')[0], {
+        draggable: "> div:not(:last-child)",
+        chosenClass: 'transparent',
+        sort: true,
+        onChange: function(evt) {
             let sorted = [];
             $('.upload-images .upload-images_wrapper.user-image').each(function(i) {
                 let index = $(this).data('index')
                 sorted.unshift(images[index]);
             });
             images = sorted;
-            showImages();
         }
-    });
+    })
 
     // toggle auto-translation edit logic
     $('.post-auto-translate-toggle').change(function(e) {
         e.preventDefault();
         console.log(`checked`); //! LOG
         let is = $(this).is(':checked');
-        console.log(`now is`, is ? 'checked' : 'unchecked'); //! LOG
         if (is) {
 
         }
@@ -293,6 +295,7 @@ $(document).ready(function() {
                 .data('index', i)
                 .prependTo(wrpr);
             imageEl.find('img.preview').attr('src', image.url);
+            imageEl.find('.upload-images_remove').data('id', image.id);
             i++;
         });
     }
@@ -357,15 +360,15 @@ $(document).ready(function() {
         let wrpr = $('.upload-documents');
         let i = 0;
         wrpr.find('.upload-documents_wrapper.user-image').remove();
-        console.log(`documents`, documents); //! LOG
         documents.forEach(file => {
-            clone.clone()
+            let docEl = clone.clone()
                 .removeClass('clone')
                 .removeClass('hidden')
                 .data('index', i)
                 .prependTo(wrpr)
                 .find('.upload-images_name')
                 .text(file.name);
+                docEl.find('.upload-documents_remove').data('id', file.id);
             i++;
         });
     }

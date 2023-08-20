@@ -70,7 +70,7 @@ class PostsImport implements ShouldQueue
             });
         } catch (\Throwable $th) {
 
-            $this->log('ERROR. see mail log for more info', ' ');
+            $this->log('ERROR. see main log for more info', ' ');
 
             \Log::error('PostsImport Job: ERROR', [
                 'import' => $this->import,

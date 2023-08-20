@@ -16,36 +16,39 @@ use App\Mail\TmpMail;
  *
  * Temporary Dev Routes
  *
- * Notes:
- * \{\{ ?loc.*\)\) ?\}\}
- *
  */
 
-// if (config('app.env') == 'production') {
-//     return;
-// }
+$ip = request()->ip();
+$devs = [
+    '127.0.0.1',
+];
+
+if (!in_array($ip, $devs)) {
+    // return;
+}
 
 Route::get('test', function () {
     // some testing code
     $d = [];
 
-    // $faker = \Faker\Factory::create();
-    // \App\Models\PostView::where('is_fake', true)->delete();
-    // foreach (Post::all() as $post) {
-    //     $views = [];
-    //     $maxDays = $post->created_at->diffInDays();
-    //     for ($i=0; $i < rand(10, 150); $i++) { 
-    //         $date = now()->subDays(rand(0, $maxDays));
-    //         $views[] = [
-    //             'ips' => json_encode([$faker->ipv4]),
-    //             'post_id' => $post->id,
-    //             'is_fake' => true,
-    //             'created_at' => $date,
-    //             'updated_at' => $date,
-    //         ];
-    //     }
-    //     \App\Models\PostView::insert($views);
-    // }
+    $a = [
+        0 => 'zero',
+        2 => 'two'
+    ];
+    $b = [
+        1 => 'one'
+    ];
+
+    $d = $a + $b;
+
+    ksort($d);
+
+    dd($d);
+});
+
+Route::post('post', function () {
+    // some testing code
+    $d = request()->all();
 
     dd($d);
 });

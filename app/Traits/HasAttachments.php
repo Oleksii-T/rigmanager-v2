@@ -7,7 +7,7 @@ use App\Models\Attachment;
 
 trait HasAttachments
 {
-    public function addAttachment($attachment, string $group='')
+    public function addAttachment($attachment, string $group='', $toOrder=false)
     {
         if (!$attachment) {
             return;
@@ -16,6 +16,7 @@ trait HasAttachments
         if(is_array($attachment)) {
             $attachments = $attachment;
         } else {
+            // if it is 1 item, then we assume that only 1 item possible for this attachmentable, so delete previus attachment
             $attachments = [$attachment];
             Attachment::query()
                 ->where('attachmentable_id', $this->id)
@@ -24,7 +25,19 @@ trait HasAttachments
                 ->delete();
         }
 
-        foreach ($attachments as $attachment) {
+        foreach ($attachments as $i => $attachment) {
+            
+            if (is_string($attachment)) {
+                // this attachment already saved - skip
+                if ($toOrder) {
+                    // update order
+                    Attachment::find($attachment)->update([
+                        'order' => $i
+                    ]);
+                }
+                continue;
+            }
+
             $type = $this->determineType($attachment->extension());
             $disk = Attachment::disk($type);
             $path = $attachment->store('', $disk);
@@ -36,6 +49,7 @@ trait HasAttachments
                 'original_name' => $attachment->getClientOriginalName(),
                 'type' => $type,
                 'group' => $group,
+                'order' => $toOrder ? $i : null,
                 'size' => $attachment->getSize()
             ]);
         }

@@ -78,7 +78,7 @@ class PostController extends Controller
         $post = $user->posts()->create($input);
         $post->saveCosts($input);
         $post->saveTranslations($input);
-        $post->addAttachment($input['images']??[], 'images');
+        $post->addAttachment(array_reverse($input['images']??[]), 'images', true);
         $post->addAttachment($input['documents']??[], 'documents');
 
         $chain = [new PostTranslate($post)];
@@ -179,6 +179,10 @@ class PostController extends Controller
         $user = auth()->user();
         $input = $request->validated();
         $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
+        $oldImages = $input['old_images']??[];
+        $images = $input['images']??[];
+        $images = $images + $oldImages;
+        ksort($images);
         $input['origin_lang'] = $textLocale;
         $input['status'] = 'pending';
         $input['is_active']= true;
@@ -202,7 +206,7 @@ class PostController extends Controller
         $post->saveTranslations($input);
         $post->images()->whereIn('id', $request->removed_images??[])->delete();
         $post->documents()->whereIn('id', $request->removed_documents??[])->delete();
-        $post->addAttachment($input['images']??[], 'images');
+        $post->addAttachment(array_reverse($images), 'images', true);
         $post->addAttachment($input['documents']??[], 'documents');
         PostTranslate::dispatch($post, $oldTranslations);
 

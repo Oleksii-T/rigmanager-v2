@@ -21,6 +21,7 @@ class Attachment extends Model
         'original_name',
         'type',
         'size',
+        'order',
         'attachmentable_id',
         'attachmentable_type'
     ];

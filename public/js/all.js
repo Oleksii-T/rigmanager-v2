@@ -443,6 +443,7 @@ function showServerError(response) {
     if (response.status == 422) {
         swal.close();
         let r = response.responseJSON ?? JSON.parse(response.responseText)
+        let firstError = null;
         for ([field, value] of Object.entries(r.errors)) {
             let dotI = field.indexOf('.');
             if (dotI != -1) {
@@ -457,7 +458,15 @@ function showServerError(response) {
                 errorText = errorText ? errorText+'<br>'+error : error;
             }
             errorElement.html(errorText);
+
+            if (!firstError || errorElement.offset().top < firstError.offset().top) {
+                firstError = errorElement;
+            }
         }
+
+        let firstErrorField = firstError.data('input');
+        animatedScroll($(`[name=${firstErrorField}]`), 50);
+
     } else {
         let msg = response.responseJSON?.message;
         msg = msg ? msg : response.statusText;
@@ -479,10 +488,15 @@ function showServerSuccess(response) {
 }
 
 // smooth scroll animation 
-function animatedScroll(el, base = $('html, body')) {
-    base.animate({
-        scrollTop: el.offset().top - 100
-    }, 500);
+function animatedScroll(el, more=0) {
+    console.log(`animate to `, el); //! LOG
+    if (!el) {
+        return;
+    }
+
+    $('html, body').animate({
+        scrollTop: el.offset().top - 100 - more
+    }, 200);
 }
 
 // faq dropdown

@@ -44,6 +44,8 @@ class PostRequest extends FormRequest
             'currency' => ['nullable', 'required_with:cost'],
             'images' => ['nullable', 'array'],
             'images.*' => ['nullable', 'image', 'max:8000'], // .jpg, .jpeg, .png, .bmp, .gif, .svg, .webp
+            'old_images' => ['nullable', 'array'],
+            'old_images.*' => ['nullable', 'exists:attachments,id'],
             'documents' => ['nullable', 'array'],
             'documents.*' => [
                 'nullable',
