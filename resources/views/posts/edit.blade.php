@@ -338,6 +338,5 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="{{asset('js/posts.js')}}?v={{time()}}"></script>
 @endsection
