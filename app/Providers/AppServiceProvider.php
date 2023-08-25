@@ -53,7 +53,12 @@ class AppServiceProvider extends ServiceProvider
                 'translations' => [],
                 // some more public data to use in JS
             ];
-            $translationsForJs = ['messages.inProgress', 'ui.email', 'ui.phone'];
+            $translationsForJs = [
+                'messages.inProgress',
+                'ui.email',
+                'ui.phone',
+                'ui.tba_modal'
+            ];
             foreach ($translationsForJs as $t) {
                 $data['translations'][str_replace('.', '_', $t)] = trans($t);
             }

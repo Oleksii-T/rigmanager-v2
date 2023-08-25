@@ -34,6 +34,45 @@ $(document).ready(function() {
         $('.post-translated-text-toggle').toggleClass('d-none');
     });
 
+    $('.execute-tba').click(function(e) {
+        e.preventDefault();
+
+        let url = $(this).data('url');
+
+        swal.fire({
+            title: window.Laravel.translations.ui_tba_modal.title,
+            text: window.Laravel.translations.ui_tba_modal.text,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: window.Laravel.translations.ui_tba_modal.confirm,
+            cancelButtonText: window.Laravel.translations.ui_tba_modal.cancel
+        }).then((result) => {
+            if (!result.value) {
+                return;
+            }
+
+            fullLoader();
+
+            $.ajax({
+                url,
+                type: 'post',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: (response)=>{
+                    fullLoader(false);
+                    showServerSuccess(response);
+                },
+                error: function(response) {
+                    fullLoader(false);
+                    showServerError(response);
+                }
+            });
+        });
+        return;
+    })
+
     //show modal contacts
     $('.show-contacts').click(function(){
         var button = $(this);
@@ -46,11 +85,11 @@ $(document).ready(function() {
                 let email = response.data.email;
                 let phone = response.data.phone;
                 swal.fire({
-                    html: '<p>' + 
-                        window.Laravel.translations.ui_email + 
-                        ': <b>' + 
-                        email + 
-                        '</b></p>' + 
+                    html: '<p>' +
+                        window.Laravel.translations.ui_email +
+                        ': <b>' +
+                        email +
+                        '</b></p>' +
                         '<p>' +
                         window.Laravel.translations.ui_phone +
                         ': <b>' +
@@ -184,7 +223,6 @@ $(document).ready(function() {
     // toggle auto-translation edit logic
     $('.post-auto-translate-toggle').change(function(e) {
         e.preventDefault();
-        console.log(`checked`); //! LOG
         let is = $(this).is(':checked');
         if (is) {
 

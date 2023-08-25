@@ -24,6 +24,7 @@ class Post extends Model
         'condition',
         'duration',
         'auto_translate',
+        'is_tba',
         'is_active',
         'is_urgent',
         'amount',

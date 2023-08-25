@@ -35,7 +35,7 @@
                         <div class="form-section"> <!--title+tag-->
                             <label class="label" style="display: flex;justify-content:space-between">
                                 <span>
-                                    @lang('ui.title') 
+                                    @lang('ui.title')
                                     <span class="orange">*</span>
                                 </span>
 
@@ -127,7 +127,7 @@
                                                 </select>
                                             </div>
                                         </div>
-    
+
                                         <div class="col-6">
                                             <label class="label">@lang('ui.cost')</label>
                                             <input class="input format-cost" name="cost" type="text" placeholder="@lang('ui.cost')" value="{{$post->cost}}"/>
@@ -180,6 +180,15 @@
                                                             <label for="{{$item}}" class="radio-label">{{\App\Models\Post::conditionReadable($item)}}</label>
                                                         </div>
                                                     @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="check-block">
+                                                <div class="check-item">
+                                                    <input type="checkbox" name="is_tba" class="check-input" id="is_tba" value="1" @checked($post->is_tba)>
+                                                    <label for="is_tba" class="check-label">@lang('ui.TBAcost')</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -261,7 +270,7 @@
 
                                 {{-- file actual input --}}
                                 <input type="file" id="documents-multiple-input" type="file" class="hidden" accept=".pdf,.xls,.xlsx,.xml,.doc,.docx" multiple>
-                                
+
                                 {{-- invisible clone file preview --}}
                                 <div class="upload-images_w upload-documents_wrapper user-image clone hidden">
                                     <div class="upload-images_image">
@@ -299,7 +308,7 @@
                                                 <img class="preview" src="{{asset('icons/document-icon.png')}}" alt="">
                                             </div>
                                         </div>
-                                    @endforeach 
+                                    @endforeach
 
                                     {{-- file upload block - always visible --}}
                                     <div class="upload-images_w">

@@ -24,7 +24,7 @@
                         <div class="form-section"> <!--title+tag-->
                             <label class="label" style="display: flex;justify-content:space-between">
                                 <span>
-                                    @lang('ui.title') 
+                                    @lang('ui.title')
                                     <span class="orange">*</span>
                                 </span>
 
@@ -171,6 +171,15 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="col-6">
+                                            <div class="check-block">
+                                                <div class="check-item">
+                                                    <input type="checkbox" name="is_tba" class="check-input" id="is_tba" value="1">
+                                                    <label for="is_tba" class="check-label">@lang('ui.TBAcost')</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -230,7 +239,7 @@
 
                                 {{-- file actual input --}}
                                 <input type="file" id="documents-multiple-input" type="file" class="hidden" accept=".pdf,.xls,.xlsx,.xml,.doc,.docx" multiple>
-                                
+
                                 {{-- invisible clone file preview --}}
                                 <div class="upload-images_w upload-documents_wrapper user-image clone hidden">
                                     <div class="upload-images_image">

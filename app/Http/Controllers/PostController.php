@@ -14,11 +14,13 @@ use App\Jobs\PostTranslate;
 use App\Jobs\MailerProcessNewPost;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
     public function show(Request $request, Post $post)
     {
+        // return new \App\Mail\PostTba($post, auth()->user());
         $user = auth()->user();
 
         if (!$post->is_active && $post->user_id != $user->id) {
@@ -66,6 +68,7 @@ class PostController extends Controller
         $input['origin_lang'] = $textLocale;
         $input['status'] = 'pending';
         $input['is_active']= true;
+        $input['is_tba'] = $input['is_tba']??false;
         $input['slug'] = [
             $textLocale => makeSlug($input['title'], Post::allSlugs())
         ];
@@ -89,7 +92,7 @@ class PostController extends Controller
         }
 
         Bus::chain($chain)->dispatch();
-        
+
         flash(trans('messages.posts.created'));
 
         return $this->jsonSuccess('', [
@@ -185,6 +188,7 @@ class PostController extends Controller
         ksort($images);
         $input['origin_lang'] = $textLocale;
         $input['status'] = 'pending';
+        $input['is_tba'] = $input['is_tba']??false;
         $input['is_active']= true;
         $input['slug'] = [
             $textLocale => makeSlug($input['title'], Post::allSlugs($post->id))
@@ -211,7 +215,7 @@ class PostController extends Controller
         PostTranslate::dispatch($post, $oldTranslations);
 
         flash(trans('messages.posts.updated'));
-        
+
         // dlog(" PostController@update. END"); //! LOG
 
         return $this->jsonSuccess('', [
@@ -308,6 +312,29 @@ class PostController extends Controller
         $views = $post->views()->latest('updated_at')->get();
 
         return $this->jsonSuccess('', view('components.views', compact('views'))->render());
+    }
+
+    public function tba(Request $request, Post $post)
+    {
+        $from = auth()->user();
+        $author = $post->user;
+
+        if ($from->id == $author->id) {
+            return $this->jsonError(trans('messages.tba.canSendToSelf'));
+        }
+
+        Mail::to($post->user->email)->send(new \App\Mail\PostTba($post, $from));
+
+        \Log::info('TBA request sended', [
+            'post_id' => $post->id,
+            'post_title' => $post->title,
+            'author_id' => $author->id,
+            'author_email' => $author->email,
+            'from_id' => $from->id,
+            'from_email' => $from->email
+        ]);
+
+        return $this->jsonSuccess(trans('messages.tba.send'));
     }
 
     public function destroy(Request $request, Post $post)

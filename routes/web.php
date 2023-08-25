@@ -89,6 +89,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('{post}/translations', [PostController::class, 'translationsEdit'])->name('translations.edit');
                 Route::post('', [PostController::class, 'store'])->name('store');
                 Route::post('{post}/translations/report', [PostController::class, 'translationsReport'])->name('translations.report');
+                Route::post('{post}/tba', [PostController::class, 'tba'])->name('tba');
                 Route::put('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
                 Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle');
                 Route::put('{post}/translations', [PostController::class, 'translationsUpdate'])->name('translations.update');

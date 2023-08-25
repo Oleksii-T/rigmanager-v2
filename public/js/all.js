@@ -487,9 +487,8 @@ function showServerSuccess(response) {
     }
 }
 
-// smooth scroll animation 
+// smooth scroll animation
 function animatedScroll(el, more=0) {
-    console.log(`animate to `, el); //! LOG
     if (!el) {
         return;
     }

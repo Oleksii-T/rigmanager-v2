@@ -11,6 +11,10 @@ return [
     'success' => '',
     'error' => 'An error occured.',
     'info' => '',
+    'tba' => [
+        'send' => 'Price request send successfully!',
+        'canSendToSelf' => 'Price request can not be send to yourself!',
+    ],
     'registerSuccess' => 'Happy to see you!',
     'loginSuccess' => 'Welcome back',
     'authError' => 'You must be logged in to perform this action',

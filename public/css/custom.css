@@ -8,6 +8,9 @@
 .cursor-wait {
     cursor: wait;
 }
+.c-pointer {
+    cursor: pointer;
+}
 .d-none {
     display: none !important;
 }

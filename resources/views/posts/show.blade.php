@@ -190,10 +190,20 @@
                         <div class="prod-info-text">{{$post->country}}</div>
                     </div>
                 @endif
-                @if ($post->cost)
+                @if (!$post->is_tba && $post->cost)
                     <div class="prod-info-item">
                         <div class="prod-info-name">{{__('ui.cost')}}</div>
                         <div class="prod-info-text">{{$post->cost_readable}}</div>
+                    </div>
+                @endif
+                @if ($post->is_tba)
+                    <div class="prod-info-item">
+                        <div class="prod-info-name">@lang('ui.costIsTBA')</div>
+                        <div class="prod-info-text">
+                            <button class="orange execute-tba c-pointer" data-url="{{route('posts.tba', $post)}}">
+                                @lang('ui.askForCost')
+                            </button>
+                        </div>
                     </div>
                 @endif
                 <div class="prod-info-item">

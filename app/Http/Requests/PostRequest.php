@@ -41,6 +41,7 @@ class PostRequest extends FormRequest
             'manufacture_date' => ['nullable', 'string', 'max:70'],
             'part_number' => ['nullable', 'string', 'max:70'],
             'cost' => ['nullable', 'numeric', 'min:1', 'max:9999999'],
+            'is_tba' => ['nullable', 'boolean'],
             'currency' => ['nullable', 'required_with:cost'],
             'images' => ['nullable', 'array'],
             'images.*' => ['nullable', 'image', 'max:8000'], // .jpg, .jpeg, .png, .bmp, .gif, .svg, .webp
