@@ -15,10 +15,11 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-lg-2">
-                            <select class="table-filter form-control" name="is_read">
-                                <option value="">Not Read</option>
-                                <option value="read">Read</option>
-                                <option value="all">All</option>
+                            <select class="table-filter form-control" name="status">
+                                <option value="">Select status</option>
+                                @foreach (\App\Enums\FeedbackStatus::all() as $key => $value)
+                                    <option value="{{$key}}" @selected($key === 0)>{{$value}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

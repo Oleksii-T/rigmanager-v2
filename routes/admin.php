@@ -53,8 +53,7 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('faqs', FaqController::class)->except('show');
 
-    Route::get('feedbacks/{feedback}/read', [FeedbackController::class, 'read'])->name('feedbacks.read');
-    Route::resource('feedbacks', FeedbackController::class)->only('show', 'index', 'destroy');
+    Route::resource('feedbacks', FeedbackController::class)->only('show', 'index', 'destroy', 'update');
 
     Route::post('exchange-rates/sync-currencies', [ExchangeRateController::class, 'syncCurrencies'])->name('exchange-rates.sync-currencies');
     Route::post('exchange-rates/sync-rates', [ExchangeRateController::class, 'syncRates'])->name('exchange-rates.sync-rates');

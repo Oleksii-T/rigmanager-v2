@@ -33,6 +33,12 @@ if (!function_exists('userAvatar')) {
     }
 }
 
+if (!function_exists('isdev')) {
+    function isdev() {
+        return false;
+    }
+}
+
 // transform snake\kebab\camel case to user friendly string
 if (!function_exists('readable')) {
     function readable(string|null $s, $upperCaseEach=false) {

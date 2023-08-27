@@ -17,7 +17,7 @@ $(document).ready(function () {
         ]
     });
 
-    $(document).on('click', '#faqs-table .delete-resource', function (e) {
+    $(document).on('click', '#feedbacks-table .delete-resource', function (e) {
         e.preventDefault();
         deleteResource(table, $(this).data('link'));
     });

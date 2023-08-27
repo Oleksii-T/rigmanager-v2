@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('subject');
             $table->text('text');
-            $table->boolean('is_read')->default(false);
+            $table->smallInteger('status')->default(0);
+            $table->string('ip');
+            $table->string('user_agent');
             $table->timestamps();
         });
     }

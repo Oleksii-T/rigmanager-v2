@@ -4,7 +4,7 @@
 
 @section('content_header')
     <x-admin.title
-        text="Feedback Preview"
+        :text="'Feedback Preview #' . $feedback->id"
     />
 @stop
 
@@ -46,11 +46,35 @@
                         <textarea rows="3" class="form-control" disabled>{{$feedback->text}}</textarea>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <input type="text" class="form-control" value="{{$feedback->status->readable()}}" disabled>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>IP</label>
+                        <input type="text" class="form-control" value="{{$feedback->ip}}" disabled>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>User Agent</label>
+                        <input type="text" class="form-control" value="{{$feedback->user_agent}}" disabled>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    @if (!$feedback->is_read)
-        <a href="{{route('admin.feedbacks.read', $feedback)}}" type="submit" class="btn btn-success min-w-100">Mark as Read</a>
-    @endif
+    @foreach (\App\Enums\FeedbackStatus::all() as $key => $value)
+        <form action="{{route('admin.feedbacks.update', $feedback)}}" method="post" style="display: inline-block">
+            @csrf
+            @method('PUT')
+            @if ($feedback->status->value != $key)
+                <button type="submit" name="status" value="{{$key}}" class="btn btn-warning min-w-100">Mark as {{$value}}</button>
+            @endif
+        </form>
+    @endforeach
     <a href="{{route('admin.feedbacks.index')}}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
 @endsection

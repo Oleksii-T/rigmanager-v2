@@ -41,7 +41,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => isdev() ? true : (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------

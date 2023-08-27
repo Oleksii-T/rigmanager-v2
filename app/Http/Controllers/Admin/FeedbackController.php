@@ -15,14 +15,9 @@ class FeedbackController extends Controller
             return view('admin.feedbacks.index');
         }
 
-        $feedbacks = Feedback::query();
-        $read = $request->is_read ? $request->is_read : 'not-read';
-
-        if ($read == 'read') {
-            $feedbacks->where('is_read', true);
-        } else if ($read == 'not-read') {
-            $feedbacks->where('is_read', false);
-        }
+        $feedbacks = Feedback::when($request->status !== null, function ($q) {
+            $q->where('status', request()->status);
+        });
 
         return Feedback::dataTable($feedbacks);
     }
@@ -30,6 +25,17 @@ class FeedbackController extends Controller
     public function show(Request $request, Feedback $feedback)
     {
         return view('admin.feedbacks.show', compact('feedback'));
+    }
+
+    public function update(Request $request, Feedback $feedback)
+    {
+        $data = $request->validate([
+            'status' => ['required']
+        ]);
+
+        $feedback->update($data);
+
+        return redirect()->back();
     }
 
     public function read(Request $request, Feedback $feedback)

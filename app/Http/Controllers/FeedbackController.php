@@ -15,8 +15,14 @@ class FeedbackController extends Controller
 
     public function store(FeedbackRequest $request)
     {
+        if ($request->ip() == '176.111.174.153') {
+            abort(429);
+        }
+
         $input = $request->validated();
         $input['user_id'] = auth()->id();
+        $input['ip'] = $request->ip();
+        $input['user_agent'] = $request->userAgent();;
 
         Feedback::create($input);
 

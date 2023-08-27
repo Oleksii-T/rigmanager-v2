@@ -13,8 +13,14 @@ class Feedback extends Model
         'email',
         'name',
         'subject',
+        'status',
+        'ip',
+        'user_agent',
         'text',
-        'is_read',
+    ];
+    
+    protected $casts = [
+        'status' => \App\Enums\FeedbackStatus::class
     ];
 
     public function user()

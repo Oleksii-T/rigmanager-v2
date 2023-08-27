@@ -107,7 +107,7 @@ class AppServiceProvider extends ServiceProvider
             }
             if (($menu['route']??null) == 'admin.feedbacks.index') {
                 try {
-                    $count = Feedback::where('is_read', false)->count();
+                    $count = Feedback::where('status', \App\Enums\FeedbackStatus::PENDING)->count();
                     if ($count) {
                         $menu['label'] = $count;
                     }
