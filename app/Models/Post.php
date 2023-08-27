@@ -374,8 +374,7 @@ class Post extends Model
     {
         $conditions = $filters['conditions']??[];
         $types = $filters['types']??[];
-        $urgent = $filters['is_urgent'][0]??null;
-        $import = $filters['is_import'][0]??null;
+        $urgent = count($filters['is_urgent']??[]) > 1 ? null : $filters['is_urgent'][0]??null;
         $sort = $filters['sorting']??null;
         $country = $filters['country']??null;
         $search = $filters['search']??null;
@@ -438,10 +437,6 @@ class Post extends Model
 
         if ($urgent !== null) {
             $posts->where('is_urgent', $urgent);
-        }
-
-        if ($import !== null) {
-            $posts->where('is_import', $import);
         }
 
         switch ($sort) {

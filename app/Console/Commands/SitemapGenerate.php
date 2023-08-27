@@ -104,7 +104,7 @@ class SitemapGenerate extends Command
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
                     ->setPriority(0.7))
                 ->writeToFile(public_path('sitemap.xml'));
-                
+
             // posts sitemap
             $sm = Sitemap::create();
             foreach (Post::visible()->get() as $p) {
@@ -118,7 +118,7 @@ class SitemapGenerate extends Command
             // categories sitemap
             $sm = Sitemap::create();
             foreach (Category::active()->get() as $c) {
-                $sm->add(Url::create(route('search.category', $c))
+                $sm->add(Url::create($c->getUrl())
                     ->setLastModificationDate(now())
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
                     ->setPriority(0.8));

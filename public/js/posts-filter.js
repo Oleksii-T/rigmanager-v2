@@ -14,6 +14,7 @@ let params = {
 $(document).ready(function () {
     let request;
     let timeout;
+    fullLoader();
 
     $('.filter-block input').keyup(function (e) {
         let name = $(this).attr('name');
@@ -52,10 +53,12 @@ $(document).ready(function () {
     });
 
     $('.filter-block select').on('selectmenuchange', function() {
+        // console.log(`event: selectmenuchange`); //! LOG
         let name = $(this).attr('name');
         if (!name) {
             return;
         }
+        // console.log(` name: ` + name + ' val: ', val); //! LOG
         let val = $(this).val();
         params[name] = val;
         checkCurrency(name, val);
@@ -111,7 +114,6 @@ $(document).ready(function () {
     }
 
     function filter() {
-        console.log('filter'); //! LOG
         clearTimeout(timeout);
         fullLoader();
 
@@ -119,13 +121,16 @@ $(document).ready(function () {
             request.abort();
         }
         request = $.ajax({
+            url: window.location.origin + window.location.pathname,
             type: 'get',
             data: params,
             success: (response)=>{
                 request = null;
-                $('.searched-content').empty().append(response.data.view);
-                $(document).trigger('posts:filtered');
+                $('.searched-content').empty().append(response.data.posts);
+                $('.searched-categories-content').empty().append(response.data.categories);
                 $('.searched-amount').text(response.data.total);
+                $(document).trigger('posts:filtered');
+                pushState();
                 fullLoader(false);
             },
             error: function(response) {
@@ -141,7 +146,7 @@ $(document).ready(function () {
     }
 
     function checkCurrency(name, val) {
-        console.log('checkCurrency', name, val, params.currency); //! LOG
+        // console.log('checkCurrency', name, val, params.currency); //! LOG
         if ((name == 'cost_from' || name == 'cost_from') && val && !params.currency) {
             showToast('Cost filter require currency', false); //! TRANSLATE
         } else if (name == 'currency' && !val && (params.cost_from || params.cost_to)) {
@@ -162,5 +167,62 @@ $(document).ready(function () {
         }
     }
 
+    function pushState() {
+        let url = new URL(window.location.href);
+        let oldHref = url.href;
+
+        for (const key in params) {
+            let val = params[key];
+            if (Array.isArray(val)) {
+                url.searchParams.delete(key+'[]');
+                url.searchParams.delete(key+'[0]');
+                url.searchParams.delete(key+'[1]');
+                url.searchParams.delete(key+'[2]');
+                url.searchParams.delete(key+'[3]');
+                url.searchParams.delete(key+'[4]');
+                val.forEach(v => {
+                    url.searchParams.append(key+'[]', v);
+                });
+            } else if (key == 'page') {
+                if (val != 1) {
+                    url.searchParams.set(key, val);
+                } else {
+                    url.searchParams.delete(key);
+                }
+            } else if (key == 'sorting') {
+                if (val != 'latest') {
+                    url.searchParams.set(key, val);
+                } else {
+                    url.searchParams.delete(key);
+                }
+            } else if (val) {
+                url.searchParams.set(key, val);
+            } else {
+                url.searchParams.delete(key);
+            }
+        }
+
+        if (oldHref == url.href) {
+            return;
+        }
+
+        $('.dynamic-url-params').each(function(index) {
+            // console.log(`change link`); //! LOG
+            let href = $(this).attr('href');
+
+            // console.log(`  from ` + href); //! LOG
+            href = new URL(href);
+            href.search = url.search;
+            href = href.href;
+            // console.log(`  to ` + href); //! LOG
+            $(this).attr('href', href);
+        });
+
+        url = url.href;
+
+        window.history.pushState({path:url},'',url);
+    }
+
     setItialParams();
+    filter();
 });

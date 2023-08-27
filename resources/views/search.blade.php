@@ -6,25 +6,29 @@
 
 @section('bc')
     @if (isset($category))
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a itemprop="item" href="{{route('search')}}"><span itemprop="name">@lang('ui.catalog')</span></a>
-            <meta itemprop="position" content="2" />
-        </li>
+        <x-bci :text="trans('ui.catalog')" :href="route('search')" i="2" />
+        @if (isset($filters['search']))
+            <x-bci text="'{{$filters['search']}}'" :href="route('search', ['search'=>$filters['search']])" i="3" />
+        @endif
+        @if (isset($filters['author']))
+            <x-bci :text="$filters['author_name']" :href="route('search', ['author'=>$filters['author']])" i="3" />
+        @endif
         @foreach ($category->parents(true) as $category)
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                @if ($loop->last)
-                    <span itemprop="name">{{$category->name}}</span>
-                @else
-                    <a itemprop="item" href="{{route('search.category', $category)}}"><span itemprop="name">{{$category->name}}</span></a>
-                @endif
-                <meta itemprop="position" content="{{$loop->index + 2}}" />
-            </li>
+            <x-bci
+                :text="$category->name"
+                :href="$category->getUrl()"
+                :i="$loop->index + (isset($filters['author']) || isset($filters['search']) ? 4 : 3)"
+                :islast="$loop->last"
+            />
         @endforeach
     @else
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <span itemprop="name">@lang('ui.catalog')</span>
-            <meta itemprop="position" content="2" />
-        </li>
+        <x-bci :text="trans('ui.catalog')" :href="route('search')" i="2" :islast="!isset($filters['author']) && !isset($filters['search'])" />
+        @if (isset($filters['author']))
+            <x-bci :text="$filters['author_name']" :href="$filters['author']" i="3" islast="1" />
+        @endif
+        @if (isset($filters['search']))
+            <x-bci text="'{{$filters['search']}}'" :href="$filters['search']" i="3" islast="1" />
+        @endif
     @endif
 @endsection
 
@@ -43,7 +47,7 @@
                     <select class="styled" name="currency">
                         <option value="">{{__('ui.notSpecified')}}</option>
                         @foreach (currencies() as $key => $symbol)
-                            <option value="{{$key}}">{{strtoupper($key)}}</option>
+                            <option value="{{$key}}" @selected(request()->currency == $key)>{{strtoupper($key)}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -51,9 +55,9 @@
                 <!--cost-->
                 <label class="label">@lang('ui.cost')</label>
                 <div class="price-input">
-                    <input type="text" class="input" name="cost_from" placeholder="@lang('ui.from')">
+                    <input type="text" class="input" name="cost_from" placeholder="@lang('ui.from')" value="{{request()->cost_from}}">
                     <span class="price-input-divider">-</span>
-                    <input type="text" class="input" name="cost_to" placeholder="@lang('ui.to')">
+                    <input type="text" class="input" name="cost_to" placeholder="@lang('ui.to')" value="{{request()->cost_to}}">
                 </div>
 
                 <!--country-->
@@ -93,11 +97,11 @@
                 <label class="label">@lang('ui.urgent')</label>
                 <div id="urgent" class="check-block">
                     <div class="check-item">
-                        <input type="checkbox" class="check-input" name="is_urgent" id="is-urgent-1" value="1" @checked(in_array($item, request()->is_urgent??[]))>
+                        <input type="checkbox" class="check-input" name="is_urgent" id="is-urgent-1" value="1" @checked(in_array(1, request()->is_urgent??[]))>
                         <label for="is-urgent-1" class="check-label">@lang('ui.yes')</label>
                     </div>
                     <div class="check-item">
-                        <input type="checkbox" class="check-input"  name="is_urgent" id="is-urgent-0" value="0" @checked(in_array($item, request()->is_urgent??[]))>
+                        <input type="checkbox" class="check-input"  name="is_urgent" id="is-urgent-0" value="0" @checked(in_array(0, request()->is_urgent??[]))>
                         <label for="is-urgent-0" class="check-label">@lang('ui.no')</label>
                     </div>
                 </div>
@@ -122,23 +126,19 @@
         </aside>
         <div class="content">
             <h1>
-                @if (isset($category))
+                @if (isset($filters['author']))
+                    {{$filters['author_name']}}
+                @elseif (isset($filters['search']))
+                    "{{$filters['search']}}"
+                @elseif (isset($category))
                     {{$category->name}}
                 @else
                     @lang('ui.catalog')
                 @endif
-                (<span class="orange searched-amount">{{$posts->total()}}</span>)
+                (<span class="orange searched-amount">_</span>)
             </h1>
-            @if ($posts->isEmpty())
-                <div class="searched-empty">
-                    <p>@lang('ui.searchFail'). <a href="{{url()->previous()}}">@lang('ui.serverErrorGoBack')</a></p>
-                </div>
-            @else
-                <x-search.categories :categories="isset($category) ? $category->childs()->active() : \App\Models\Category::active()->whereNull('category_id')"/>
-                <div class="searched-content">
-                    <x-search.items :posts="$posts"/>
-                </div>
-            @endif
+            <div class="searched-categories-content"></div>
+            <div class="searched-content"></div>
             <div class="searched-loading hidden">
                 <img src="{{asset('icons/loading.svg')}}" alt="">
             </div>

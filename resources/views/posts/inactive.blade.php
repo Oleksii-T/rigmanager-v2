@@ -13,7 +13,7 @@
     </li>
     @foreach ($post->category->parents(true) as $category)
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a itemprop="item" href="{{route('search.category', $category)}}"><span itemprop="name">{{$category->name}}</span></a>
+            <a itemprop="item" href="{{$category->getUrl()}}"><span itemprop="name">{{$category->name}}</span></a>
             <meta itemprop="position" content="{{$loop->index+3}}" />
         </li>
         @if ($loop->last)

@@ -31,7 +31,6 @@ Route::get('blog', function () {
 
 Route::get('auth/social/{provider}', [SocialAuthController::class, 'redirect'])->name('auth.social');
 Route::get('auth/callback/{provider}', [SocialAuthController::class, 'callback']);
-Route::get('catalog', [PageController::class, 'categories'])->name('categories');
 
 Route::get('logout', function () {
     auth()->logout();
@@ -48,8 +47,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('site-map', [PageController::class, 'siteMap'])->name('site-map');
     Route::get('categories', [PageController::class, 'categories'])->name('categories');
     Route::get('import/rules', [PageController::class, 'importRules'])->name('import-rules');
-    Route::get('catalog', [SearchController::class, 'index'])->name('search');
-    Route::get('catalog/{category}', [SearchController::class, 'category'])->name('search.category');
+    Route::get('catalog/{slug1?}/{slug2?}/{slug3?}', [SearchController::class, 'index'])->name('search');
 
     Route::get('plans', [SubscriptionPlanController::class, 'index'])->name('plans.index');
     Route::get('plans/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.subscribe');

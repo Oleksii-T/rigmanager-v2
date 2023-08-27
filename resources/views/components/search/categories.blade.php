@@ -1,13 +1,13 @@
 <div class="sorting">
     @foreach ($categories->get() as $category)
         @php
-            $count = $category->postsAll()->visible()->count();
+            $count = $category->postsAll()->visible()->filter($filters)->count();
         @endphp
         @if (!$count)
             @continue
         @endif
         <div class="sorting-col">
-            <a href="{{route('search.category', $category)}}" class="sorting-item">
+            <a href="{{$category->getUrl(true)}}" class="sorting-item dynamic-url-params">
                 {{$category->name}}
                 <span class="sorting-num">{{$count}}</span>
             </a>

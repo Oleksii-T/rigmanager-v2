@@ -195,7 +195,7 @@ return [
     'choosedFromTags' => 'Browsing in categories',
     'other' => 'Other',
     'searchSuccess' => 'That is what we found',
-    'searchFail' => 'Sorry, we can not find posts for your request',
+    'searchFail' => 'Sorry, we can not find posts for your request. Try other category remove filters.',
     'filters' => 'Filters',
     'from' => 'From',
     'to' => 'To',

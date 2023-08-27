@@ -57,6 +57,19 @@ if (!function_exists('readable')) {
     }
 }
 
+// route with appended current query params
+if (!function_exists('qroute')) {
+    function qroute($route, $data=null) {
+        $route = $data ? route($route, $data) : route($route);
+        $params = $_GET;
+        $q = http_build_query($_GET);
+        $route .= '?';
+        $route .= $q;
+
+        return $route;
+    }
+}
+
 // print some message to separate log file
 if (!function_exists('dlog')) {
     function dlog(string $text, array $array=[]) {

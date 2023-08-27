@@ -61,7 +61,7 @@
                                         <div class="mailing-info-name">{{__('ui.tag')}}:</div>
                                         <div class="mailing-info-text">
                                             <ul class="form-category-list">
-                                                <li><a href="{{route('search.category', $m->getFilter('category', true))}}">{{$m->getFilter('category', true)->name}}</a></li>
+                                                <li><a href="{{$m->getFilter('category', true)->getUrl()}}">{{$m->getFilter('category', true)->name}}</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -153,7 +153,7 @@
                 <p>
                     {{__('ui.noMailer')}}
                     @if ($category)
-                        <a href="{{route('search.category', $category)}}#add-to-mailer-ad">{{$category->name}}</a>
+                        <a href="{{$category->getUrl()}}#add-to-mailer-ad">{{$category->name}}</a>
                     @endif
                 </p>
             @endif

@@ -10,32 +10,42 @@ use App\Models\User;
 
 class SearchController extends Controller
 {
-    public function category(Request $request, Category $category)
+    public function index(Request $request, $slug1=null, $slug2=null, $slug3=null)
     {
+        $category = $slug3 ?? $slug2 ?? $slug1;
         $filters = $request->all();
-        $filters['category'] = $category;
-        $posts = Post::visible()->withCount('views')->filter($filters)->paginate(Post::PER_PAGE);
 
-        if (!$request->ajax()) {
-            return view('search', compact('posts', 'category'));
+        if ($category) {
+            $category = Category::getBySlug($category);
+            abort_if(!$category, 404);
+            $filters['category'] = $category;
         }
 
-        return $this->jsonSuccess('', [
-            'view' => view('components.search.items', ['posts' => $posts])->render(),
-            'total' => $posts->total()
-        ]);
-    }
-
-    public function index(Request $request)
-    {
-        $posts = Post::visible()->withCount('views')->filter($request->all())->paginate(Post::PER_PAGE);
-
-        if (!$request->ajax()) {
-            return view('search', compact('posts'));
+        if ($filters['author']??null) {
+            $filters['author_name'] = User::where('slug', $filters['author'])->value('name');
         }
 
+        if (!$request->ajax()) {
+            return view('search', compact('category', 'filters'));
+        }
+
+        $posts = Post::query()
+            ->visible()
+            ->withCount('views')
+            ->filter($filters)
+            ->paginate(Post::PER_PAGE);
+
+        $categories = $category
+            ? $category->childs()->active()
+            : Category::active()->whereNull('category_id');
+
+        $postView = $posts->count()
+            ? view('components.search.items', ['posts' => $posts])->render()
+            : view('components.search.empty-result')->render();
+
         return $this->jsonSuccess('', [
-            'view' => view('components.search.items', ['posts' => $posts])->render(),
+            'posts' => $postView,
+            'categories' => view('components.search.categories', compact('categories', 'filters'))->render(),
             'total' => $posts->total()
         ]);
     }

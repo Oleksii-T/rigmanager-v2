@@ -31,18 +31,6 @@ Route::get('test', function () {
     // some testing code
     $d = [];
 
-    $a = [
-        0 => 'zero',
-        2 => 'two'
-    ];
-    $b = [
-        1 => 'one'
-    ];
-
-    $d = $a + $b;
-
-    ksort($d);
-
     dd($d);
 });
 

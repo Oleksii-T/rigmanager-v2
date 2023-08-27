@@ -87,6 +87,13 @@ class Category extends Model
         return $get ? $res->get() : $res;
     }
 
+    public function getUrl($keepParams=false)
+    {
+        $r = 'search';
+        $d = $this->parents(true);
+        return $keepParams ? qroute($r, $d) : route($r, $d);
+    }
+
     /**
      * get current categories and all parents as an array
      */
