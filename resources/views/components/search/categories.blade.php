@@ -1,5 +1,5 @@
 <div class="sorting">
-    @foreach ($categories->get() as $category)
+    @foreach ($categories as $category)
         @php
             $count = $category->postsAll()->visible()->filter($filters)->count();
         @endphp

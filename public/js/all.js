@@ -516,7 +516,7 @@ function toggleFaqText(item) {
 }
 
 //user adds post to favourites
-$('.add-to-fav').click(function(e) {
+$(document).on('click', '.add-to-fav', function (e) {
     e.preventDefault();
     let button = $(this);
     if (button.hasClass('loading')) {

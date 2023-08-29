@@ -36,8 +36,8 @@ class SearchController extends Controller
             ->paginate(Post::PER_PAGE);
 
         $categories = $category
-            ? $category->childs()->active()
-            : Category::active()->whereNull('category_id');
+            ? $category->childs()->active()->get()
+            : Category::active()->whereNull('category_id')->get();
 
         $postView = $posts->count()
             ? view('components.search.items', ['posts' => $posts])->render()

@@ -41,21 +41,32 @@ class ProfileController extends Controller
         return $this->jsonSuccess(trans('messages.profile.updated-password'));
     }
 
-    public function posts(Request $request, Category $category=null)
+    public function posts(Request $request, $slug1=null, $slug2=null, $slug3=null)
     {
-        $user = auth()->user();
+        $category = $slug3 ?? $slug2 ?? $slug1;
         $filters = $request->all();
-        $filters['category'] = $category;
-        $query = $user->posts()->with(['views', 'images'])->filter($filters);
-        $categories = $this->getPostsCategories($query, $category);
-        $posts = $query->paginate(20);
 
-        if (!$request->ajax()) {
-            return view('profile.posts', compact('posts', 'categories', 'category'));
+        if ($category) {
+            $category = Category::getBySlug($category);
+            abort_if(!$category, 404);
+            $filters['category'] = $category;
         }
 
+        if (!$request->ajax()) {
+            return view('profile.posts', compact('category'));
+        }
+
+        $posts = auth()->user()->posts()->withCount('views')->filter($filters);
+        $categories = $this->getPostsCategories($posts, $category);
+        $posts = $posts->paginate(20);
+        $categRoute = 'profile.posts';
+        $postView = $posts->count()
+            ? view('components.profile.items', ['posts' => $posts])->render()
+            : view('components.search.empty-result')->render();
+
         return $this->jsonSuccess('', [
-            'view' => view('components.profile.items', compact('posts'))->render(),
+            'posts' => $postView,
+            'categories' => view('components.profile.categories', compact('categories', 'filters', 'categRoute'))->render(),
             'total' => $posts->total()
         ]);
     }
@@ -103,22 +114,33 @@ class ProfileController extends Controller
         return $this->jsonSuccess($message);
     }
 
-    public function favorites(Request $request, Category $category=null)
+    public function favorites(Request $request, $slug1=null, $slug2=null, $slug3=null)
     {
-        $user = auth()->user();
-        $filters = $request->all();
-        $filters['category'] = $category;
-        $query = $user->favorites()->visible()->with(['views', 'images']);
-        $query = Post::applyFilters($query, $filters);
-        $categories = $this->getPostsCategories($query, $category);
-        $posts = $query->paginate(20);
 
-        if (!$request->ajax()) {
-            return view('profile.favorites', compact('posts', 'categories', 'category'));
+        $category = $slug3 ?? $slug2 ?? $slug1;
+        $filters = $request->all();
+
+        if ($category) {
+            $category = Category::getBySlug($category);
+            abort_if(!$category, 404);
+            $filters['category'] = $category;
         }
 
+        if (!$request->ajax()) {
+            return view('profile.posts', compact('category'));
+        }
+
+        $posts = auth()->user()->favorites()->visible()->withCount('views')->filter($filters);
+        $categories = $this->getPostsCategories($posts, $category);
+        $posts = $posts->paginate(20);
+        $categRoute = 'profile.favorites';
+        $postView = $posts->count()
+            ? view('components.profile.favorites', ['posts' => $posts])->render()
+            : view('components.search.empty-result')->render();
+
         return $this->jsonSuccess('', [
-            'view' => view('components.profile.favorites', compact('posts'))->render(),
+            'posts' => $postView,
+            'categories' => view('components.profile.categories', compact('categories', 'filters', 'categRoute'))->render(),
             'total' => $posts->total()
         ]);
     }
