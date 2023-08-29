@@ -10,10 +10,11 @@ use App\Traits\HasAttachments;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Events\PostCreated;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    use HasFactory, HasTranslations, HasAttachments;
+    use HasFactory, HasTranslations, HasAttachments, SoftDeletes;
 
     protected $fillable = [
         'user_id',

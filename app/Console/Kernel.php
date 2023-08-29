@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('mailers:send')->daily();
         $schedule->command('location:update')->weekly();
         $schedule->command('sitemap:generate')->everySixHours();
+        $schedule->command('posts:truncate-deleted')->daily();
     }
 
     /**
