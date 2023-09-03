@@ -25,6 +25,8 @@ class Blog extends Model
 
     protected $fillable = [
         'status',
+        'source_name',
+        'source_link',
         'country',
         'tags',
         'posted_at'
@@ -55,12 +57,17 @@ class Blog extends Model
 
     public function images()
     {
-        return $this->morphMany(Attachment::class, 'attachmentable')->where('group', 'images')->orderBy('order', 'asc');
+        return $this->morphMany(Attachment::class, 'attachmentable')->where('group', __FUNCTION__)->orderBy('order', 'asc');
+    }
+
+    public function thumbnail()
+    {
+        return $this->morphOne(Attachment::class, 'attachmentable')->where('group', __FUNCTION__);
     }
 
     public function documents()
     {
-        return $this->morphMany(Attachment::class, 'documents')->where('group', 'documents')->orderBy('order', 'asc');
+        return $this->morphMany(Attachment::class, 'attachmentable')->where('group', __FUNCTION__)->orderBy('order', 'asc');
     }
 
     public function slug(): Attribute
@@ -78,16 +85,19 @@ class Blog extends Model
         return $this->getTranslatedAttr(__FUNCTION__);
     }
 
-    public function sub_title(): Attribute
+    public function subTitle(): Attribute
     {
-        return $this->getTranslatedAttr(__FUNCTION__);
+        return $this->getTranslatedAttr('sub_title');
     }
 
-    public function thumbnail()
+    public function metaTitle(): Attribute
     {
-        $img = $this->images->first();
+        return $this->getTranslatedAttr('meta_title');
+    }
 
-        return $img;
+    public function metaDescription(): Attribute
+    {
+        return $this->getTranslatedAttr('meta_description');
     }
 
     public static function dataTable($query)
@@ -95,7 +105,7 @@ class Blog extends Model
         $query->withCount('views');
         return DataTables::of($query)
             ->addColumn('thumbnail', function ($model) {
-                return '<img src="'.$model->thumbnail()->url.'" />';
+                return '<img src="'.$model->thumbnail->url.'" />';
             })
             ->addColumn('title', function ($model) {
                 return $model->title;

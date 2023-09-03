@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -44,6 +45,9 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('categories', [PageController::class, 'categories'])->name('categories');
     Route::get('import/rules', [PageController::class, 'importRules'])->name('import-rules');
     Route::get('catalog/{slug1?}/{slug2?}/{slug3?}', [SearchController::class, 'index'])->name('search');
+
+    Route::get('blog', [BlogController::class, 'index'])->name('blog.index');
+    Route::get('blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
 
     Route::get('plans', [SubscriptionPlanController::class, 'index'])->name('plans.index');
     Route::get('plans/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.subscribe');

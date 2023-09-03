@@ -91,7 +91,7 @@ return [
         ],
 
         'dev' => [
-            'driver' => 'daily',
+            'driver' => 'single',
             'path' => storage_path('logs/dev.log'),
         ],
 

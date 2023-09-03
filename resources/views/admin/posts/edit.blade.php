@@ -272,6 +272,22 @@
                             </div>
                         </div>
                     </div>
+                    @foreach ($post->documents as $document)
+                        <div class="col-md-4 file-input">
+                            <div class="form-group show-uploaded-file-name">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="images[]">
+                                        <label class="custom-file-label">{{$document->original_name}}</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <a href="{{$document->url}}" class="input-group-text bg-info" download="{{$document->original_name}}">Download</a>
+                                        <span class="input-group-text delete-file-input bg-warning">Remove</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                     <span data-input="documents" class="input-error"></span>
                 </div>
             </div>

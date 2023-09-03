@@ -62,6 +62,20 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Source Name</label>
+                            <input type="text" class="form-control" name="source_name">
+                            <span data-input="source_name" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Source Link</label>
+                            <input type="text" class="form-control" name="source_link">
+                            <span data-input="source_link" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Tags</label>
                             <div class="select-block">
                                 <select class="form-control select2-tags" name="tags[]" style="width: 100%" multiple>
@@ -118,6 +132,29 @@
         <div class="card card-secondary">
             <div class="card-header">
                 <h3 class="card-title">
+                    <span class="mr-2">Thumbnail</span>
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 file-input">
+                        <div class="form-group show-uploaded-file-name show-uploaded-file-preview">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="thumbnail">
+                                    <label class="custom-file-label">Choose image</label>
+                                </div>
+                            </div>
+                            <img src="" alt="" class="custom-file-preview">
+                        </div>
+                    </div>
+                    <span data-input="thumbnail" class="input-error"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">
                     <span class="mr-2">Images</span>
                     <button type="button" class="btn btn-success add-file-input auto-add">Add</button>
                 </h3>
@@ -139,6 +176,32 @@
                         </div>
                     </div>
                     <span data-input="images" class="input-error"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <span class="mr-2">Documents</span>
+                    <button type="button" class="btn btn-success add-file-input auto-add">Add</button>
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 file-input d-none clone">
+                        <div class="form-group show-uploaded-file-name">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="documents[]">
+                                    <label class="custom-file-label">Choose document</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text delete-file-input bg-warning">Remove</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span data-input="documents" class="input-error"></span>
                 </div>
             </div>
         </div>

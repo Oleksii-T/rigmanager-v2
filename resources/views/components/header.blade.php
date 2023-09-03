@@ -100,7 +100,7 @@
                     </ul>
                     <ul class="mob-nav-list">
                         <li><a href="{{route('about')}}">@lang('ui.footerAbout')</a></li>
-                        <li><a href="#" class="not-ready">@lang('ui.footerBlog')</a></li>
+                        <li><a href="{{route('blog.index')}}">@lang('ui.footerBlog')</a></li>
                         <li><a href="{{route('plans.index')}}">@lang('ui.footerSubscription')</a></li>
                         <li><a href="{{route('feedbacks.create')}}">@lang('ui.footerContact')</a></li>
                         <li><a href="{{route('faq')}}">FAQ</a></li>

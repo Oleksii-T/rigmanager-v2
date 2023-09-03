@@ -63,11 +63,25 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Source Name</label>
+                            <input type="text" class="form-control" name="source_name" value="{{$blog->source_name}}">
+                            <span data-input="source_name" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Source Link</label>
+                            <input type="text" class="form-control" name="source_link" value="{{$blog->source_link}}">
+                            <span data-input="source_link" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Tags</label>
                             <div class="select-block">
                                 <select class="form-control select2-tags" name="tags[]" style="width: 100%" multiple>
                                     @foreach ($tags as $tag)
-                                        <option value="{{$tag}}" @selected(in_array($tag, $blog->tags))>{{$tag}}</option>
+                                        <option value="{{$tag}}" @selected(in_array($tag, $blog->tags??[]))>{{$tag}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -126,6 +140,32 @@
         <div class="card card-secondary">
             <div class="card-header">
                 <h3 class="card-title">
+                    <span class="mr-2">Thumbnail</span>
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 file-input">
+                        <div class="form-group show-uploaded-file-name show-uploaded-file-preview">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="thumbnail">
+                                    <label class="custom-file-label">{{$blog->thumbnail->original_name}}</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text delete-file-input bg-warning">Remove</span>
+                                </div>
+                            </div>
+                            <img src="{{$blog->thumbnail->url}}" alt="" class="custom-file-preview">
+                        </div>
+                    </div>
+                    <span data-input="thumbnail" class="input-error"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">
                     <span class="mr-2">Images</span>
                     <button type="button" class="btn btn-success add-file-input">Add</button>
                 </h3>
@@ -163,6 +203,48 @@
                         </div>
                     @endforeach
                     <span data-input="images" class="input-error"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <span class="mr-2">Documents</span>
+                    <button type="button" class="btn btn-success add-file-input">Add</button>
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 file-input d-none clone">
+                        <div class="form-group show-uploaded-file-name">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="documents[]">
+                                    <label class="custom-file-label">Choose document</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text delete-file-input bg-warning">Remove</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @foreach ($blog->documents as $document)
+                        <div class="col-md-4 file-input">
+                            <div class="form-group show-uploaded-file-name">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="images[]">
+                                        <label class="custom-file-label">{{$document->original_name}}</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <a href="{{$document->url}}" class="input-group-text bg-info" download="{{$document->original_name}}">Download</a>
+                                        <span class="input-group-text delete-file-input bg-warning">Remove</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                    <span data-input="documents" class="input-error"></span>
                 </div>
             </div>
         </div>

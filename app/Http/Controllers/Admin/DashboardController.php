@@ -9,7 +9,7 @@ use App\Models\Post;
 use App\Models\Import;
 use App\Models\Mailer;
 use App\Models\Feedback;
-use App\Models\PostView;
+use App\Models\View;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -138,7 +138,7 @@ class DashboardController extends Controller
 
     private function getPostViewsNumbers()
     {
-        $models = PostView::where('is_fake', false)->get();
+        $models = View::where('is_fake', false)->where('viewable_type', 'App\Models\Post')->get();
         $data = $this->getDataByCreatedAt($models);
         // $data['online'] = $models->where('last_active_at', '>=', now()->subMinutes(User::ONLINE_MINUTES))->count();
         $data['total'] = $models->count();

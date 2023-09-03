@@ -18,7 +18,7 @@ class BlogController extends Controller
         }
 
         $blogs = Blog::query()
-            ->orderBy('posted_at')
+            ->latest('posted_at')
             ->when($request->status !== null, function ($q) {
                 $q->where('status', request()->status);
             });
@@ -41,9 +41,10 @@ class BlogController extends Controller
         $blog->saveTranslations($input);
         $blog->addAttachment($input['images']??[], 'images');
         $blog->addAttachment($input['documents']??[], 'documents');
+        $blog->addAttachment($input['thumbnail'], 'thumbnail');
 
         return $this->jsonSuccess('Blog created successfully', [
-            'redirect' => route('admin.blogs.index')
+            // 'redirect' => route('admin.blogs.index')
         ]);
     }
 
@@ -62,6 +63,7 @@ class BlogController extends Controller
         $blog->saveTranslations($input);
         $blog->addAttachment($input['images']??[], 'images');
         $blog->addAttachment($input['documents']??[], 'documents');
+        $blog->addAttachment($input['thumbnail']??null, 'thumbnail');
 
         return $this->jsonSuccess('Blog updated successfully', [
             'redirect' => route('admin.blogs.index')
@@ -72,6 +74,6 @@ class BlogController extends Controller
     {
         $blog->delete();
 
-        return $this->jsonSuccess('Blog updated successfully');
+        return $this->jsonSuccess('Blog deleted successfully');
     }
 }
