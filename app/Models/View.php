@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PostView extends Model
+class View extends Model
 {
     protected $fillable = [
         'user_id',
-        'post_id',
+        'viewable_type',
+        'viewable_id',
         'count',
         'ips'
     ];
@@ -23,8 +24,8 @@ class PostView extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function post()
+    public function viewable()
     {
-        return $this-belongsTo(Post::class);
+        return $this->morphTo('viewable');
     }
 }

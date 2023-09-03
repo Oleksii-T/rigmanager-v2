@@ -1,6 +1,9 @@
 $(document).ready(function () {
     $('.summernote').summernote();
     $('.select2').select2();
+    $('.select2-tags').select2({
+        tags: true
+    });
     $('.daterangepicker').daterangepicker();
     $('.daterangepicker-single').daterangepicker({
         singleDatePicker: true,

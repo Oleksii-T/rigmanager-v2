@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTranslations;
 use App\Traits\HasAttachments;
+use App\Traits\Viewable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Yajra\DataTables\DataTables;
 use App\Enums\BlogStatus;
 
 class Blog extends Model
 {
-    use HasTranslations, HasAttachments;
+    use HasTranslations, HasAttachments, Viewable;
 
     const TRANSLATABLES = [
         'title',
@@ -24,11 +25,14 @@ class Blog extends Model
 
     protected $fillable = [
         'status',
+        'country',
+        'tags',
         'posted_at'
     ];
 
     protected $casts = [
         'status' => BlogStatus::class,
+        'tags' => 'array',
         'posted_at' => 'datetime'
     ];
 
@@ -86,18 +90,9 @@ class Blog extends Model
         return $img;
     }
 
-    // public static function allSlugs($ignore=null)
-    // {
-    //     return Translation::query()
-    //         ->where('translatable_type', self::class)
-    //         ->where('translatable_id', '!=', $ignore)
-    //         ->where('field', 'slug')
-    //         ->pluck('value')
-    //         ->toArray();
-    // }
-
     public static function dataTable($query)
     {
+        $query->withCount('views');
         return DataTables::of($query)
             ->addColumn('thumbnail', function ($model) {
                 return '<img src="'.$model->thumbnail()->url.'" />';

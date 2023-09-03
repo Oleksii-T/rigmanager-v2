@@ -13,6 +13,7 @@ $(document).ready(function () {
             { data: 'thumbnail', name: 'thumbnail'},
             { data: 'title', name: 'title'},
             { data: 'status', name: 'status'},
+            { data: 'views_count', name: 'views_count'},
             { data: 'posted_at', name: 'posted_at'},
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ]

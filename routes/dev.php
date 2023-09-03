@@ -31,10 +31,6 @@ Route::get('test', function () {
     // some testing code
     $d = [];
 
-    $d[] = \App\Enums\BlogStatus::all();
-    $d[] = \App\Enums\BlogStatus::values();
-    $d[] = \App\Enums\BlogStatus::readables();
-
     dd($d);
 });
 

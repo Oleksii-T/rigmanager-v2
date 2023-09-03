@@ -256,36 +256,7 @@ class PostController extends Controller
 
     public function view(Request $request, Post $post)
     {
-        $user = auth()->user();
-
-        if ($user && $user->id == $post->user_id) {
-            return;
-        }
-
-        $ip = $request->ip();
-        $view = $post->views()->whereJsonContains('ips', $ip)->first();
-
-        if ($view && !$view->user_id && $user) {
-            $view->update([
-                'user_id' => $user->id
-            ]);
-        }
-
-        if (!$view && $user) {
-            $view = $post->views()->where('user_id', $user->id)->first();
-        }
-
-        if ($view) {
-            $view->increment('count');
-            return;
-        }
-
-        $post->views()->create([
-            'user_id' => $user->id??null,
-            'ips' => [$ip]
-        ]);
-
-        return;
+        $post->saveView();
     }
 
     public function toggle(Request $request, Post $post)

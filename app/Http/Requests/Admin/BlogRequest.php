@@ -37,6 +37,8 @@ class BlogRequest extends FormRequest
             'sub_title.en' => ['required', 'string', 'max:1000'],
             'body' => ['required', 'array'],
             'body.en' => ['required', 'string', 'max:5000'],
+            'country' => ['nullable', 'string'],
+            'tags' => ['nullable', 'array'],
             'status' => ['required', 'string', Rule::in(BlogStatus::values())],
             'images' => ['required', 'array'],
             // .jpg, .jpeg, .png, .bmp, .gif, .svg, .webp

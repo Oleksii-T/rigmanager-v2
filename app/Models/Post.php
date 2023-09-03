@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\DataTables;
 use App\Traits\HasTranslations;
 use App\Traits\HasAttachments;
+use App\Traits\Viewable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Events\PostCreated;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    use HasFactory, HasTranslations, HasAttachments, SoftDeletes;
+    use HasFactory, HasTranslations, HasAttachments, SoftDeletes, Viewable;
 
     protected $fillable = [
         'user_id',
@@ -92,11 +93,6 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function views()
-    {
-        return $this->hasMany(PostView::class);
     }
 
     public function category()

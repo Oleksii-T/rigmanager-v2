@@ -28,7 +28,9 @@ class BlogController extends Controller
 
     public function create(Request $request)
     {
-        return view('admin.blogs.create');
+        $tags = Blog::pluck('tags')->flatten();
+
+        return view('admin.blogs.create', compact('tags'));
     }
 
     public function store(BlogRequest $request)
@@ -47,7 +49,9 @@ class BlogController extends Controller
 
     public function edit(Request $request, Blog $blog)
     {
-        return view('admin.blogs.edit', compact('blog'));
+        $tags = Blog::pluck('tags')->flatten();
+
+        return view('admin.blogs.edit', compact('blog', 'tags'));
     }
 
     public function update(BlogRequest $request, Blog $blog)

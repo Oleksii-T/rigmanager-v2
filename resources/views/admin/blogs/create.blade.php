@@ -46,6 +46,33 @@
                             <span data-input="status" class="input-error"></span>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Country</label>
+                            <div class="select-block">
+                                <select class="form-control select2" name="country" style="width: 100%">
+                                    <option value="">Select country</option>
+                                    @foreach (countries() as $key => $value)
+                                        <option value="{{$key}}">{{$value}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span data-input="country" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tags</label>
+                            <div class="select-block">
+                                <select class="form-control select2-tags" name="tags[]" style="width: 100%" multiple>
+                                    @foreach ($tags as $tag)
+                                        <option value="{{$tag}}">{{$tag}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span data-input="country" class="input-error"></span>
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Sub Title</label>

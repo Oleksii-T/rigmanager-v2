@@ -49,6 +49,33 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Country</label>
+                            <div class="select-block">
+                                <select class="form-control select2" name="country" style="width: 100%">
+                                    <option value="">Select country</option>
+                                    @foreach (countries() as $key => $value)
+                                        <option value="{{$key}}" @selected($blog->country == $key)>{{$value}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span data-input="country" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tags</label>
+                            <div class="select-block">
+                                <select class="form-control select2-tags" name="tags[]" style="width: 100%" multiple>
+                                    @foreach ($tags as $tag)
+                                        <option value="{{$tag}}" @selected(in_array($tag, $blog->tags))>{{$tag}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span data-input="country" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Posted At</label>
                             <input type="text" name="posted_at" class="form-control daterangepicker-single">
                             <span data-input="posted_at" class="input-error"></span>

@@ -33,6 +33,7 @@
                                 <th>Thumbnail</th>
                                 <th>Title</th>
                                 <th>Status</th>
+                                <th>Unique Views</th>
                                 <th>Posted at</th>
                                 <th class="actions-column-2">Actions</th>
                             </tr>
