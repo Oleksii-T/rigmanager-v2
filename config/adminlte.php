@@ -315,6 +315,12 @@ return [
             'label_color' => 'warning',
             'icon' => 'fa fa-fw fa-paper-plane',
         ],
+        [
+            'text' => 'Blog',
+            'route'  => 'admin.blogs.index',
+            'label_color' => 'warning',
+            'icon' => 'fa fa-fw fa-bold',
+        ],
         'EXTRA',
         [
             'text' => 'FAQs',

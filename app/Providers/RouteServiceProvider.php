@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
+use App\Models\Blog;
 use App\Models\Category;
 
 class RouteServiceProvider extends ServiceProvider
@@ -36,6 +37,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('category', function ($value) {
             return Category::getBySlug($value);
+        });
+
+        Route::bind('blog', function ($value) {
+            return Blog::getBySlug($value);
         });
 
         $this->routes(function () {

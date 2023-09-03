@@ -46,13 +46,19 @@
                         <textarea rows="3" class="form-control" disabled>{{$feedback->text}}</textarea>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Status</label>
                         <input type="text" class="form-control" value="{{$feedback->status->readable()}}" disabled>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Created At</label>
+                        <input type="text" class="form-control" value="{{$feedback->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}" disabled>
+                    </div>
+                </div>
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>IP</label>
                         <input type="text" class="form-control" value="{{$feedback->ip}}" disabled>

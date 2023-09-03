@@ -67,6 +67,16 @@ trait HasTranslations
         );
     }
 
+    public function initTranslations()
+    {
+        $translatables = self::TRANSLATABLES;
+        foreach ($translatables as $translatable) {
+            $this->$translatable = function() use($translatable) {
+                return $model->getTranslatedAttr($translatable);
+            };
+        }
+    }
+
     public static function getBySlug($slug)
     {
         return Translation::query()

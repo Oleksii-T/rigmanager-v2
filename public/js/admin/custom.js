@@ -2,6 +2,17 @@ $(document).ready(function () {
     $('.summernote').summernote();
     $('.select2').select2();
     $('.daterangepicker').daterangepicker();
+    $('.daterangepicker-single').daterangepicker({
+        singleDatePicker: true,
+        timePicker: true,
+        timePicker24Hour: true,
+        showDropdowns: true,
+        minYear: 2023,
+        maxYear: parseInt(moment().format('YYYY'),10),
+        locale: {
+            format: 'YYYY-MM-DD HH:mm'
+        }
+    });
 
     // general logic of ajax form submit (supports files)
     $('form.general-ajax-submit').submit(function(e){
