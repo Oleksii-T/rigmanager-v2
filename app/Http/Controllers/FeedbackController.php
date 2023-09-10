@@ -15,9 +15,13 @@ class FeedbackController extends Controller
 
     public function store(FeedbackRequest $request)
     {
-        if ($request->ip() == '176.111.174.153') {
-            abort(429);
-        }
+        $spammers = [
+            '185.234.216.114',
+            '176.111.174.153',
+            '62.122.184.194',
+            'Robertsmoth'
+        ];
+        abort_if(in_array($request->ip(), $spammers) || in_array($request->name, $spammers), 429);
 
         $input = $request->validated();
         $input['user_id'] = auth()->id();

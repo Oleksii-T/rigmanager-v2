@@ -1,6 +1,6 @@
 <div class="catalog blog">
     @foreach ($blogs as $b)
-        <div class="catalog-item">
+        <article class="catalog-item">
             <a href="{{route('blog.show', $b)}}" class="catalog-img">
                 <img src="{{$b->thumbnail->url}}" alt="Blog thumbnail">
             </a>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="catalog-text">{{$b->sub_title}}</div>
             </div>
-        </div>
+        </article>
     @endforeach
 </div>
 <div class="pagination-field">
