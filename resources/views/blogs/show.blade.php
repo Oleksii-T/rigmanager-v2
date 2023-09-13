@@ -37,7 +37,7 @@
                 <p class="blog-paragraph">{!!$blog->body!!}</p>
 
                 <!--imgs-->
-                @if ($blog->images)
+                @if ($blog->images->isNotEmpty())
                     <p class="blog-sub-header">{{__('ui.attachedImgs')}}</p>
                     <div class="blog-slideshow">
                         <a href="" class="prod-arrow prod-prev"></a>
@@ -55,7 +55,7 @@
                 @endif
 
                 <!--docs-->
-                @if ($blog->documents)
+                @if ($blog->documents->isNotEmpty())
                     <p class="blog-sub-header">{{__('ui.attachedDocs')}}</p>
                     <div class="blog-docs">
                         <ul>
@@ -78,9 +78,6 @@
                         </ul>
                     </div>
                 @endif
-
-                <!--slg-->
-                <p class="blog-paragraph">{{__('ui.blogSlg', ['name'=>'Rigmanager Team'])}}</p>
             </article>
         </div>
 	</div>

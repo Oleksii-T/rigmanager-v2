@@ -12,19 +12,18 @@ use App\Mail\MailerPostFound;
 use App\Mail\PasswordReset;
 use App\Mail\TmpMail;
 
-/*
- *
- * Temporary Dev Routes
- *
- */
+Route::get('ip', function () {
+    return 'Your ip is: ' . request()->ip();
+});
 
-$ip = request()->ip();
-$devs = [
-    '127.0.0.1',
-];
+Route::get('public', function () {
+    $d = [];
 
-if (!in_array($ip, $devs)) {
-    // return;
+    dd('RESULT DUMP', $d);
+});
+
+if (!isdev()) {
+    return;
 }
 
 Route::get('test', function () {

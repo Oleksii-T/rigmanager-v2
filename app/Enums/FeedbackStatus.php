@@ -19,7 +19,7 @@ enum FeedbackStatus:int
             self::PENDING => 'Pending',
             self::CLIENT => 'Client',
             self::TRASH => 'Trash',
-            self::ADV => 'Advertisement',
+            self::ADV => 'Ad',
         };
     }
 

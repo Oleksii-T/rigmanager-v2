@@ -38,6 +38,15 @@ class Feedback extends Model
                 }
                 return '<a href="'.route('admin.users.edit', $user).'">'.$user->name.'</a>';
             })
+            ->editColumn('text', function ($model) {
+                return strlen($model->text) > 250
+                    ? (substr($model->text, 0, 250) . '...')
+                    : $model->text;
+            })
+            ->editColumn('ip', function ($model) {
+                $count = self::where('ip', $model->ip)->count() - 1;
+                return "$model->ip ($count)";
+            })
             ->addColumn('action', function ($model) {
                 return view('admin.feedbacks.actions', compact('model'))->render();
             })

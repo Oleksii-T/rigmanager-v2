@@ -9,6 +9,7 @@ use Spatie\Sitemap\Tags\Url;
 use Spatie\Sitemap\Sitemap;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Blog;
 
 class SitemapGenerate extends Command
 {
@@ -59,6 +60,10 @@ class SitemapGenerate extends Command
                     ->setLastModificationDate(now())
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
                     ->setPriority(0.9))
+                ->add(Url::create('/sitemap-blogs.xml')
+                    ->setLastModificationDate(now())
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                    ->setPriority(0.6))
                 ->add(Url::create(route('search'))
                     ->setLastModificationDate(now())
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
@@ -83,10 +88,10 @@ class SitemapGenerate extends Command
                     ->setLastModificationDate(now())
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
                     ->setPriority(0.8))
-                // ->add(Url::create('/blog')
-                //     ->setLastModificationDate(now())
-                //     ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                //     ->setPriority(0.8))
+                ->add(Url::create('/blog')
+                    ->setLastModificationDate(now())
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                    ->setPriority(0.8))
                 ->add(Url::create(route('feedbacks.create'))
                     ->setLastModificationDate(now())
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
@@ -124,6 +129,16 @@ class SitemapGenerate extends Command
                     ->setPriority(0.8));
             }
             $sm->writeToFile(public_path('sitemap-categories.xml'));
+
+            // blogs sitemap
+            $sm = Sitemap::create();
+            foreach (Blog::published()->get() as $b) {
+                $sm->add(Url::create(route('blog.show', $b))
+                    ->setLastModificationDate(now())
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                    ->setPriority(0.6));
+            }
+            $sm->writeToFile(public_path('sitemap-blogs.xml'));
 
         } catch (\Throwable $th) {
             Log::channel('commands')->error("[$this->signature] " . $th->getMessage(), [

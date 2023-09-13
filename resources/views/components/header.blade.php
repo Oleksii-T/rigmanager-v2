@@ -29,13 +29,6 @@
                 </div>
             </div>
             <div class="header-right">
-                @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
-                    @if ($currentLocale == $localeCode)
-                        <span class="header-language">{{ $localeCode }}</span>
-                    @else
-                        <a href="#" class="header-language not-ready">{{ $localeCode }}</a> {{-- {{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }} --}}
-                    @endif
-                @endforeach
                 <div class="header-cabinet">
                     @auth
                         <a href="{{route('profile.index')}}">@lang('ui.cabinet')</a>
