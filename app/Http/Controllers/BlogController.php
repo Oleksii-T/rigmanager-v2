@@ -19,7 +19,7 @@ class BlogController extends Controller
 
         $blogs = Blog::query()
             ->latest('posted_at')
-            ->where('status', BlogStatus::PUBLISHED)
+            ->published()
             ->withCount('views')
             ->when($request->tag, function ($q) {
                 $q->whereJsonContains('tags', request()->tag);

@@ -55,7 +55,7 @@ class DashboardController extends Controller
             ],
             [
                 'label' => 'Post Views',
-                'data' => $this->constructChartData(PostView::where('is_fake', false))
+                'data' => $this->constructChartData(View::where('viewable_type', Post::class)->where('is_fake', false))
             ],
         ];
 
@@ -65,6 +65,7 @@ class DashboardController extends Controller
     private function constructChartData($query)
     {
         $from = request()->from ?? now()->subMonth();
+        $result = [];
         $to = request()->to ?? now();
         $models = $query
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
@@ -83,7 +84,7 @@ class DashboardController extends Controller
 
         usort($result, fn ($a, $b) => $a['x'] <=> $b['x']);
 
-        return $result??[];
+        return $result;
     }
 
     private function getFeedbacksNumbers()

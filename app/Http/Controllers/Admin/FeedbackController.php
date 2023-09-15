@@ -35,6 +35,10 @@ class FeedbackController extends Controller
 
         $feedback->update($data);
 
+        if ($request->ajax()) {
+            return $this->jsonSuccess('Feedback updated successfully!');
+        }
+
         return redirect()->back();
     }
 

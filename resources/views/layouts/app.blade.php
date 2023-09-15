@@ -58,20 +58,9 @@
 						</ul>
 					</div>
 					<div class="footer-col">
-						<ul class="footer-nav footer-langs">
-                            @foreach(LaravelLocalization::getLocalesOrder() as $localeCode => $properties)
-                                @if ($currentLocale == $localeCode)
-                                    <li>
-                                        <span>{{ $localeCode }}</span>
-                                    </li>
-                                @else
-                                    <li class="active">
-                                        <a class="not-ready" href="#">{{-- {{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }} --}}
-                                            {{ $localeCode }}
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach
+						<ul class="footer-nav">
+							<li><a href="https://www.linkedin.com/company/rigmanagers-com/about">LinedIn</a></li>
+							<li><a href="https://www.facebook.com/rigmanagerscom">Facebook</a></li>
 						</ul>
 					</div>
 				</div>

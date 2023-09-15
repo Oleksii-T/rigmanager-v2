@@ -9,6 +9,7 @@ use App\Traits\Viewable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Yajra\DataTables\DataTables;
 use App\Enums\BlogStatus;
+use Illuminate\Database\Eloquent\Builder;
 
 class Blog extends Model
 {
@@ -98,6 +99,11 @@ class Blog extends Model
     public function metaDescription(): Attribute
     {
         return $this->getTranslatedAttr('meta_description');
+    }
+
+    public function scopePublished(Builder $query)
+    {
+        return $query->where('status', BlogStatus::PUBLISHED);
     }
 
     public static function dataTable($query)
