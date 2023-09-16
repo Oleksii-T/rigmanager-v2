@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FeedbackController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\PartnerController;
@@ -56,7 +57,9 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('feedbacks', FeedbackController::class)->only('show', 'index', 'destroy', 'update');
 
-    Route::resource('blogs', BlogController::class)->except('show');
+    Route::resource('notifications', NotificationController::class)->except('show');
+
+    Route::resource('blogs', BlogController::class)->except(['show', 'edit', 'update']);
 
     Route::post('exchange-rates/sync-currencies', [ExchangeRateController::class, 'syncCurrencies'])->name('exchange-rates.sync-currencies');
     Route::post('exchange-rates/sync-rates', [ExchangeRateController::class, 'syncRates'])->name('exchange-rates.sync-rates');

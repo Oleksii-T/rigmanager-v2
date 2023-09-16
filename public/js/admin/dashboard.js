@@ -118,6 +118,8 @@ function drawChart(chartItem) {
                     '#2d1de1', // blue
                     '#e1371d', // red
                     '#1de1de', // cyan
+                    '#a300ff', // purple
+                    '#ff8a00', // orange
                 ];
 
                 for (const key in data) {

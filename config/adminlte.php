@@ -269,7 +269,7 @@ return [
         [
             'text' => 'Dashboard',
             'route'  => 'admin.index',
-            'icon' => 'fa fa-fw fa-industry',
+            'icon' => 'fa fa-fw fa-tachometer',
         ],
         'MAIN SECTIONS',
         [
@@ -314,6 +314,11 @@ return [
             'route'  => 'admin.feedbacks.index',
             'label_color' => 'warning',
             'icon' => 'fa fa-fw fa-paper-plane',
+        ],
+        [
+            'text' => 'Notifications',
+            'route'  => 'admin.notifications.index',
+            'icon' => 'fa fa-fw fa-bell',
         ],
         [
             'text' => 'Blog',

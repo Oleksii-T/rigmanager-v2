@@ -11,6 +11,7 @@ use App\Models\Mailer;
 use App\Models\Blog;
 use App\Models\Feedback;
 use App\Models\View;
+use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -27,6 +28,7 @@ class DashboardController extends Controller
             'mailersNumbers' => $this->getMailersNumbers(),
             'postViewsNumbers' => $this->getPostViewsNumbers(),
             'blogViewsNumbers' => $this->getBlogViewsNumbers(),
+            'notificationViewsNumbers' => $this->getNotificationViewsNumbers(),
         ];
 
         return view('admin.index', $data);
@@ -58,6 +60,14 @@ class DashboardController extends Controller
             [
                 'label' => 'Post Views',
                 'data' => $this->constructChartData(View::where('viewable_type', Post::class)->where('is_fake', false))
+            ],
+            [
+                'label' => 'Blog Views',
+                'data' => $this->constructChartData(View::where('viewable_type', Blog::class)->where('is_fake', false))
+            ],
+            [
+                'label' => 'Notifications',
+                'data' => $this->constructChartData(Notification::query())
             ],
         ];
 
@@ -151,6 +161,15 @@ class DashboardController extends Controller
     private function getPostViewsNumbers()
     {
         $models = View::where('is_fake', false)->where('viewable_type', Post::class)->get();
+        $data = $this->getDataByCreatedAt($models);
+        $data['total'] = $models->count();
+
+        return $data;
+    }
+
+    private function getNotificationViewsNumbers()
+    {
+        $models = Notification::all();
         $data = $this->getDataByCreatedAt($models);
         $data['total'] = $models->count();
 

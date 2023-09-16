@@ -1192,6 +1192,41 @@
         <div class="col-lg-3 col-sm-6">
             <div class="small-box" style="background: linear-gradient(94.79deg, #1DE183 1.91%, #5CECA7 95.64%);">
                 <div class="inner">
+                    <h3>Notifications: {{$notificationViewsNumbers['total']}}</h3>
+                    <p>-</p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$notificationViewsNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$notificationViewsNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$notificationViewsNumbers['2w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$notificationViewsNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$notificationViewsNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$notificationViewsNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #1DE183 1.91%, #5CECA7 95.64%);">
+                <div class="inner">
                     <h3>Posts: {{$postsNumbers['total']}}</h3>
                     <p>Inactive: <b>{{$postsNumbers['inactive']}}</b></p>
                     <div class="row">
@@ -1441,7 +1476,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Models Created</h3>
-                    <div class="card-tools" style="width: 265px">
+                    <div class="card-tools" style="width: 185px">
                         <div class="input-group">
                             <input type="text" name="period" class="form-control daterangepicker-mult">
                         </div>
