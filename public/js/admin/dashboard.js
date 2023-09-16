@@ -22,6 +22,26 @@ $(document).ready(function () {
 
         drawChart(charts[key]);
     }
+
+    $('[name="chart_data"]').change(function(e) {
+        let date = $(this).val().split(' - ');
+        console.log(` date`, date); //! LOG
+        let url = $(this).closest('.card').find('canvas').data('url');
+        console.log(` url `, url); //! LOG
+        $.ajax({
+            url,
+            data: {
+                from: date[0],
+                to: date[1],
+            },
+            success: (response)=>{
+                console.log(response);
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    })
 });
 
 function getChartTimeOptions() {
@@ -78,13 +98,13 @@ function makeLineChart(elem) {
 }
 
 function drawChart(chartItem) {
-    let period = chartItem.elem.closest('.card').find('input[name=period]').val();
-    console.log(`period`, period); //! LOG
+    let period = chartItem.elem.closest('.card').find('input[name=period]').val().split(' - ');
     $.ajax({
         url: chartItem.elem.data('url'),
         type: 'get',
         data: {
-            period: period
+            from: period[0],
+            to: period[1]
         },
         success: (response)=>{
             let data = response.data;

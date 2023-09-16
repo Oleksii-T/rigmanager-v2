@@ -12,6 +12,7 @@
 @endsection
 
 @section('content')
+    <span page-data data-viewurl="{{route('blog.view', $blog)}}"></span>
 	<div class="main-block">
 		<x-informations-nav active='blog'/>
         <div class="content">

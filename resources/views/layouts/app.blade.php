@@ -24,6 +24,7 @@
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/slick.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery-ui.css')}}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+	@yield('style')
 </head>
 <body>
 	<div id="wrapper">

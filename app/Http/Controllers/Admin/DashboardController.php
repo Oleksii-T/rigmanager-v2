@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Import;
 use App\Models\Mailer;
+use App\Models\Blog;
 use App\Models\Feedback;
 use App\Models\View;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ class DashboardController extends Controller
             'feedbacksNumbers' => $this->getFeedbacksNumbers(),
             'mailersNumbers' => $this->getMailersNumbers(),
             'postViewsNumbers' => $this->getPostViewsNumbers(),
+            'blogViewsNumbers' => $this->getBlogViewsNumbers(),
         ];
 
         return view('admin.index', $data);
@@ -137,11 +139,19 @@ class DashboardController extends Controller
         return $data;
     }
 
+    private function getBlogViewsNumbers()
+    {
+        $models = View::where('is_fake', false)->where('viewable_type', Blog::class)->get();
+        $data = $this->getDataByCreatedAt($models);
+        $data['total'] = $models->count();
+
+        return $data;
+    }
+
     private function getPostViewsNumbers()
     {
-        $models = View::where('is_fake', false)->where('viewable_type', 'App\Models\Post')->get();
+        $models = View::where('is_fake', false)->where('viewable_type', Post::class)->get();
         $data = $this->getDataByCreatedAt($models);
-        // $data['online'] = $models->where('last_active_at', '>=', now()->subMinutes(User::ONLINE_MINUTES))->count();
         $data['total'] = $models->count();
 
         return $data;

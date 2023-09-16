@@ -7,10 +7,8 @@
 @endsection
 
 @section('bc')
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a itemprop="item" href="{{route('search')}}"><span itemprop="name">{{__('ui.catalog')}}</span></a>
-        <meta itemprop="position" content="2" />
-    </li>
+    <x-bci :text="trans('ui.catalog')" :href="route('search')" i="2" />
+    <x-bci :text="$user->name" i="3" islast="1"/>
 @endsection
 
 @section('content')

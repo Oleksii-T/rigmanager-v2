@@ -47,4 +47,13 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    protected function unauthenticated($request, $exception)
+    {
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json(['message' => 'Please login to use this functionality'], 401);
+        }
+
+        return redirect()->route('login');
+    }
 }

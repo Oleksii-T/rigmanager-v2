@@ -22,7 +22,7 @@ class PageController extends Controller
             $categoriesColumns[] = $categoriesAll->skip($skip)->take($take);
             $skip += $take;
         }
-        $newPosts = Post::visible()->latest()->limit(3)->get();
+        $newPosts = Post::visible()->latest()->limit(7)->get();
         $urgentPosts = Post::visible()->latest()->where('is_urgent', true)->limit(3)->get();
         $partners = cache()->remember('partners', 60*10, function () {
             return Partner::orderBy('order')->get();

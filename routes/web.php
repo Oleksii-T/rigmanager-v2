@@ -48,6 +48,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
     Route::get('blog', [BlogController::class, 'index'])->name('blog.index');
     Route::get('blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
+    Route::put('blog/{blog}/view', [BlogController::class, 'view'])->name('blog.view');
 
     Route::get('plans', [SubscriptionPlanController::class, 'index'])->name('plans.index');
     Route::get('plans/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.subscribe');
