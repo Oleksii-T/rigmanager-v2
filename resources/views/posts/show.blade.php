@@ -85,7 +85,7 @@
                     @endif
                     <div class="prod-author-about">
                         <div class="prod-author-name">
-                            <a href="{{route('users.show', $post->user)}}" class="not-ready orange">
+                            <a href="{{route('users.show', $post->user)}}" class="orange">
                                 {{$post->user->name}}
                             </a>
                         </div>

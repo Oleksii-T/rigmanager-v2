@@ -9,6 +9,10 @@ class UserController extends Controller
 {
     public function show(Request $request, User $user)
     {
-        return view('users.show', compact('user'));
+        $posts = $user->posts()->latest()->limit(11)->get();
+        $totalPosts = $user->posts()->count();
+        $categories = [];
+
+        return view('users.show', compact('user', 'posts', 'categories', 'totalPosts'));
     }
 }
