@@ -21,6 +21,11 @@ class ProfileController extends Controller
         return view('profile.edit');
     }
 
+    public function chat()
+    {
+        return view('profile.chat');
+    }
+
     public function update(ProfileRequest $request)
     {
         $input = $request->validated();

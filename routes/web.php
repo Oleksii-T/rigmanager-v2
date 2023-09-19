@@ -114,6 +114,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('posts/{slug1?}/{slug2?}/{slug3?}', [ProfileController::class, 'posts'])->name('posts');
                 Route::get('favorites/{slug1?}/{slug2?}/{slug3?}', [ProfileController::class, 'favorites'])->name('favorites');
                 Route::get('subscription', [ProfileController::class, 'subscription'])->name('subscription');
+                Route::get('chat', [ProfileController::class, 'chat'])->name('chat');
                 Route::post('posts/action', [ProfileController::class, 'action']);
                 Route::put('/', [ProfileController::class, 'update'])->name('update');
                 Route::put('password', [ProfileController::class, 'password'])->name('password');
