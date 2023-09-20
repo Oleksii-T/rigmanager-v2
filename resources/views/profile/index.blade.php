@@ -20,7 +20,7 @@
             <h1>@lang('ui.profileInfo')</h1>
             <div class="profile">
                 <div class="profile-side">
-                    <div class="profile-ava" style="background-image:url({{$currentUser->avatar->url ?? asset('icons/emptyAva.svg')}})"></div>
+                    <div class="profile-ava" style="background-image:url({{userAvatar()}})"></div>
                     <br>
                     <a href="{{route('profile.edit')}}" class="profile-edit-link">@lang('ui.edit')<br>@lang('ui.profile')</a>
                 </div>

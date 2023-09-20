@@ -12,6 +12,9 @@
 
 @section('style')
     <style>
+        .profile {
+            min-height: 400px;
+        }
         .chat-list {
             padding: 10px;
         }
@@ -29,7 +32,14 @@
             background-color: rgb(40,40,40);
         }
         .chat-avatar {
-            width: 70px;
+            display: inline-block;
+            width: 67px;
+            height: 50px;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            background-color: rgb(40,40,40);
         }
         .chat-main-info-wrpr {
             text-align: left;
@@ -49,6 +59,9 @@
         .chat-wraper {
 
         }
+        .profile-content {
+            padding: 15px 0px 15px 25px;
+        }
         .chat-m {
             display: flex;
         }
@@ -59,6 +72,16 @@
             background-color: #00000075;
             left: 0px;
             top: 0px;
+        }
+        .chat-loading-messages div{
+            display: flex;
+            justify-content: center;
+            justify-items: center;
+            width: 100%;
+            height: 100%;
+        }
+        .chat-loading-messages img{
+            width: 100px;
         }
         .chat-messages {
             max-height: 50vh;
@@ -72,10 +95,32 @@
         }
         .chat-m-user {
             margin-bottom: 0px;
+            display: flex;
+            justify-items: center;
+            padding-bottom: 5px;
+        }
+        .chat-m-user-avatar {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            background-color: rgb(40,40,40);
+        }
+        .chat-m-user-name {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        .chat-m-me .chat-m-wrpr{
+            margin-left: auto;
+            padding-right: 25px;
         }
         .chat-m-me .chat-m-user {
             text-align: right;
             font-size: 85%;
+            justify-content: end;
         }
         .chat-m-text {
             background-color: rgb(40,40,40);
@@ -89,21 +134,30 @@
         .chat-m-me .chat-m-date {
             text-align: right
         }
-        .chat-send-form {
+        .chat-send-form{
+            padding-right: 25px;
+        }
+        .chat-send-form > div{
             display: flex;
             justify-content: space-between;
             width: 100%;
             padding: 5px 5px 5px 10px;
             border: 1px solid #505050;
             border-radius: 8px;
+            margin-right: 25px;
         }
         .chat-send-form textarea{
             color: white;
             width: 100%;
             padding-right: 5px;
+            resize: none;
         }
         .loading-el .loading-el-l{
             display: none;
+            width: 34px;
+        }
+        .loading-el .loading-el-l img{
+            height: 24px;
         }
         .loading-el:disabled .loading-el-l{
             display: inline-block;
@@ -118,7 +172,7 @@
     <div class="main-block">
         <x-profile.nav active='chat'/>
         <div class="content">
-            <h1>@lang('ui.profileInfo')</h1>
+            <h1>@lang('ui.chat')</h1>
             @livewire('chat')
         </div>
     </div>
@@ -126,13 +180,4 @@
 
 @section('scripts')
     @vite('resources/js/app.js')
-    {{-- @livewireScripts --}}
-    <script>
-        // setTimeout(() => {
-        //     console.log(`subscribe for echo events...`); //! LOG
-        //     window.Echo.channel('chat.9').listen('MessageCreated', e => {
-        //         console.log(` EVENT recieved:`, e)
-        //     })
-        // }, 1000);
-    </script>
 @endsection

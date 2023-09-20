@@ -16,7 +16,7 @@ class Chat extends Component
     #[Rule('required')]
     public $message;
 
-    public $selected;
+    public $selected=7;
 
     public function render()
     {
@@ -52,7 +52,8 @@ class Chat extends Component
             } else {
                 $chats[$chatWith->id] = [
                     'user' => [
-                        'name' => $chatWith->name
+                        'name' => $chatWith->name,
+                        'avatar' => userAvatar($chatWith)
                     ],
                     // 'messages' => [$message],
                     'unread' => $forUser ? ($message->is_seen ? 0 : 1) : 0

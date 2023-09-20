@@ -78,11 +78,7 @@
         <div class="prod-side">
             <div class="prod-author">
                 <div class="prod-author-info">
-                    @if ($post->user->avatar)
-                        <img class="prod-author-ava" src="{{$post->user->avatar->url}}" alt="{{$post->user->avatar->alt}}">
-                    @else
-                        <img class="prod-author-ava" src="{{asset('icons/emptyAva.svg')}}" alt="">
-                    @endif
+                    <img class="prod-author-ava" src="{{userAvatar()}}" alt="{{$post->user->avatar->alt??''}}">
                     <div class="prod-author-about">
                         <div class="prod-author-name">
                             <a href="{{route('users.show', $post->user)}}" class="not-ready orange">

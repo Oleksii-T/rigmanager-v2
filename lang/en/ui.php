@@ -145,6 +145,10 @@ return [
         All your mailers will be deleted.
         You subscription will be canceled.',
     'mailer' => 'Mailer',
+    'chat' => 'Messages',
+    'chatEmpty' => 'You have no messages',
+    'chatSelectUser' => 'Please select chat',
+    'chatSend' => 'Send',
     'setUpMailer' => 'Set up Mailer',
     'noMailer' => 'Your Mailer is not configured. You can add your first Mailer via search results page. For example: ',
     'whatIsMailer' => 'What is Mailer',
