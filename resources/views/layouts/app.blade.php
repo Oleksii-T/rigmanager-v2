@@ -87,18 +87,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 	<script src="{{asset('js/slick.min.js')}}"></script>
 	<script src="{{asset('js/jquery-ui-2.min.js')}}"></script>
+	{{-- <script src="{{asset('js/popper.min.js')}}"></script> --}}
 	<script src="{{asset('js/all.js')}}?v={{time()}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9RPT79VDXE"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    @if (app('env') != 'local')
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-      gtag('config', 'G-9RPT79VDXE');
-    </script>
+            gtag('config', 'G-9RPT79VDXE');
+        </script>
+    @endif
 
 	<script type="text/javascript">
         window.Laravel = {!!$LaravelDataForJS!!};

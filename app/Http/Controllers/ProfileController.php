@@ -26,6 +26,23 @@ class ProfileController extends Controller
         return view('profile.chat');
     }
 
+    public function message(Request $request, \App\Models\User $user)
+    {
+        $request->validate([
+            'message' => ['required', 'string']
+        ]);
+
+        // \App\Models\Message::create([
+        //     'user_id' => auth()->id(),
+        //     'reciever_id' => $user->id,
+        //     'message' => $request->message
+        // ]);
+
+        return $this->jsonSuccess('Message send successfully!', [
+            'chat_url' => route('profile.chat') . '?chat_with=' . $user->id
+        ]);
+    }
+
     public function update(ProfileRequest $request)
     {
         $input = $request->validated();

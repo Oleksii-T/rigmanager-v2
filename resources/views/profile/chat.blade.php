@@ -24,9 +24,11 @@
             padding: 5px 10px;
             border-radius: 8px;
             border: 1px;
+            cursor: pointer;
         }
         .chat-el.active {
             border: 1px solid #ff8d12;
+            cursor: default;
         }
         .chat-el:hover  {
             background-color: rgb(40,40,40);
@@ -51,7 +53,23 @@
             justify-content: space-between;
         }
         .chat-user-name {
-
+            text-wrap: nowrap;
+            max-width: 125px;
+            overflow: hidden;
+        }
+        .chat-new-messages {
+            background-color: #ff8d12;
+            padding: 0px 7px;
+            font-size: 85%;
+            line-height: 20px;
+            border-radius: 50%;
+            color: white;
+            max-height: 20px;
+            margin-top: 4px;
+        }
+        .chat-rreaded-messages {
+            width: 20px;
+            padding-top: 4px;
         }
         .chat-date {
             font-size: 70%;
@@ -180,4 +198,13 @@
 
 @section('scripts')
     @vite('resources/js/app.js')
+    <script>
+        $( document ).tooltip({
+            position: {
+                my: 'center bottom-5',
+                at: 'center top',
+                collision: 'flipfit'
+            }
+        });
+    </script>
 @endsection

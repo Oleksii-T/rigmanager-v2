@@ -106,8 +106,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function messages()
     {
         $messages = Message::query()
-            ->where('reciever_id', $this->id)
-            ->orWhere('user_id', $this->id)
+            ->where(function ($q) {
+                $q
+                    ->where('reciever_id', $this->id)
+                    ->orWhere('user_id', $this->id);
+            })
             ->latest();
 
         return $messages;

@@ -16,52 +16,27 @@ class Chat extends Component
     #[Rule('required')]
     public $message;
 
-    public $selected=7;
+    public $chatWith;
 
     public function render()
     {
-        $this->log("Render. selected: $this->selected");
+        $this->log("Render. chatting with: $this->chatWith");
 
-        if ($this->selected) {
+        if ($this->chatWith) {
             $this->markAsReaded();
             $this->composeChatMessages();
         }
+        $this->chats = $this->getChats();
 
         return view('livewire.chat');
     }
 
     public function mount()
     {
-        $user = auth()->user();
+        $this->log('MOUNT');
 
-        dlog("Chat@mount for $user->id"); //! LOG
-
-        $messages = $user->messages()->get();
-        $chats = [];
-
-        foreach ($messages as $message) {
-            $chatWith = $user->id == $message->user_id
-                ? $message->reciever
-                : $message->user;
-            $forUser = $message->reciever_id == $user->id;
-            if (array_key_exists($chatWith->id, $chats)) {
-                // $chats[$chatWith->id]['messages'][] = $message;
-                if ($forUser && !$message->is_seen) {
-                    $chats[$chatWith->id]['unread']++;
-                }
-            } else {
-                $chats[$chatWith->id] = [
-                    'user' => [
-                        'name' => $chatWith->name,
-                        'avatar' => userAvatar($chatWith)
-                    ],
-                    // 'messages' => [$message],
-                    'unread' => $forUser ? ($message->is_seen ? 0 : 1) : 0
-                ];
-            }
-        }
-
-        $this->chats = $chats;
+        $this->chatWith = request()->chat_with;
+        $this->chats = $this->getChats();
         $this->messages = null;
     }
 
@@ -81,7 +56,7 @@ class Chat extends Component
         }
         Message::create([
             'user_id' => auth()->id(),
-            'reciever_id' => $this->selected,
+            'reciever_id' => $this->chatWith,
             'message' => $this->message
         ]);
         $this->message = '';
@@ -106,10 +81,45 @@ class Chat extends Component
         // will be auto-discovered by render() method
     }
 
+    private function getChats()
+    {
+        $user = auth()->user();
+        $messages = $user->messages()->latest()->get();
+        $chats = [];
+
+        foreach ($messages as $message) {
+            $chatWith = $user->id == $message->user_id
+                ? $message->reciever
+                : $message->user;
+            $incomming = $message->reciever_id == $user->id;
+            if (array_key_exists($chatWith->id, $chats)) {
+                // $chats[$chatWith->id]['messages'][] = $message;
+                if ($incomming && !$message->is_seen) {
+                    $chats[$chatWith->id]['unread']++;
+                }
+            } else {
+                $unread = $messages->where('reciever_id', $chatWith->id)->where('is_seen', false)->count();
+                $this->log(" unred by $chatWith->id: $unread");
+                $chats[$chatWith->id] = [
+                    'user' => [
+                        'name' => $chatWith->name,
+                        'avatar' => userAvatar($chatWith),
+                        'id' => $chatWith->id,
+                    ],
+                    'last_at' => $message->created_at->diffForHumans(),
+                    'reciever_seen' => !$unread,
+                    'unread' => $incomming ? ($message->is_seen ? 0 : 1) : 0
+                ];
+            }
+        }
+
+        return $chats;
+    }
+
     private function composeChatMessages()
     {
-        $this->log("composeChatMessages. Selected: $this->selected");
-        $users = [auth()->id(), $this->selected];
+        $this->log("composeChatMessages. Selected: $this->chatWith");
+        $users = [auth()->id(), $this->chatWith];
 
         $this->messages = Message::query()
             // ->select('user_id', 'reciever_id', 'created_at', 'message')
@@ -121,8 +131,13 @@ class Chat extends Component
 
     private function markAsReaded()
     {
-        Message::query()
+        if (!$this->chatWith) {
+            return;
+        }
+
+        $messages = Message::query()
             ->where('reciever_id', auth()->id())
+            ->where('user_id', $this->chatWith)
             ->where('is_seen', false)
             ->update(['is_seen' => true]);
     }

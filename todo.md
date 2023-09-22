@@ -7,13 +7,19 @@
  + sending animation
  + user avatar on chat
  + user avatar on messages
- - scroll to bottom
- - chat last date
- - messages layout
- - click to chat to view messages
- - number of unread messages
- - readed mark on chat
- - reade\unreaded mark on message
- - sort chats by latest
+ + scroll to bottom
+ + chat last date
+ + number of unread messages
+ + messages layout
+ + readed mark on chat
+ + click to chat to view messages
+ + sort chats by latest
+ + make toltips
+ + create first message
+ - move styles to css file
+ - layout bug if 1 message
  - admin side
- - files send
+
+ ? files send
+ ? live update read\unread chat status
+ ? reade\unreaded mark on message
