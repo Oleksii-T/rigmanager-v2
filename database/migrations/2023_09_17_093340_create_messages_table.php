@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('reciever_id')->constrained('users');
             $table->text('message');
-            $table->boolean('is_seen')->default(0);
+            $table->boolean('is_read')->default(0);
             $table->timestamps();
         });
     }

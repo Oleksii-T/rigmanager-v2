@@ -67,9 +67,9 @@ class Chat extends Component
     {
         // dlog("Chat@see: $message->id"); //! LOG
 
-        if ($message->reciever_id == auth()->id() && !$message->is_seen) {
+        if ($message->reciever_id == auth()->id() && !$message->is_read) {
             $message->update([
-                'is_seen' => true
+                'is_read' => true
             ]);
         }
         $this->skipRender();
@@ -94,11 +94,11 @@ class Chat extends Component
             $incomming = $message->reciever_id == $user->id;
             if (array_key_exists($chatWith->id, $chats)) {
                 // $chats[$chatWith->id]['messages'][] = $message;
-                if ($incomming && !$message->is_seen) {
+                if ($incomming && !$message->is_read) {
                     $chats[$chatWith->id]['unread']++;
                 }
             } else {
-                $unread = $messages->where('reciever_id', $chatWith->id)->where('is_seen', false)->count();
+                $unread = $messages->where('reciever_id', $chatWith->id)->where('is_read', false)->count();
                 $this->log(" unred by $chatWith->id: $unread");
                 $chats[$chatWith->id] = [
                     'user' => [
@@ -108,7 +108,7 @@ class Chat extends Component
                     ],
                     'last_at' => $message->created_at->diffForHumans(),
                     'reciever_seen' => !$unread,
-                    'unread' => $incomming ? ($message->is_seen ? 0 : 1) : 0
+                    'unread' => $incomming ? ($message->is_read ? 0 : 1) : 0
                 ];
             }
         }
@@ -138,8 +138,8 @@ class Chat extends Component
         $messages = Message::query()
             ->where('reciever_id', auth()->id())
             ->where('user_id', $this->chatWith)
-            ->where('is_seen', false)
-            ->update(['is_seen' => true]);
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
     }
 
     private function log($text)

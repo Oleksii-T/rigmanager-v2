@@ -316,6 +316,11 @@ return [
             'icon' => 'fa fa-fw fa-paper-plane',
         ],
         [
+            'text' => 'Chats',
+            'route'  => 'admin.messages.index',
+            'icon' => 'fa fa-fw fa-comments',
+        ],
+        [
             'text' => 'Notifications',
             'route'  => 'admin.notifications.index',
             'icon' => 'fa fa-fw fa-bell',

@@ -10,6 +10,7 @@ use App\Models\Import;
 use App\Models\Mailer;
 use App\Models\Blog;
 use App\Models\Feedback;
+use App\Models\Message;
 use App\Models\View;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ class DashboardController extends Controller
             'mailersNumbers' => $this->getMailersNumbers(),
             'postsNumbers' => $this->getPostsNumbers(),
             'feedbacksNumbers' => $this->getFeedbacksNumbers(),
+            'messagesNumbers' => $this->getMessagesNumbers(),
             'mailersNumbers' => $this->getMailersNumbers(),
             'postViewsNumbers' => $this->getPostViewsNumbers(),
             'blogViewsNumbers' => $this->getBlogViewsNumbers(),
@@ -68,6 +70,10 @@ class DashboardController extends Controller
             [
                 'label' => 'Notifications',
                 'data' => $this->constructChartData(Notification::query())
+            ],
+            [
+                'label' => 'Messages',
+                'data' => $this->constructChartData(Message::query())
             ],
         ];
 
@@ -170,6 +176,15 @@ class DashboardController extends Controller
     private function getNotificationViewsNumbers()
     {
         $models = Notification::all();
+        $data = $this->getDataByCreatedAt($models);
+        $data['total'] = $models->count();
+
+        return $data;
+    }
+
+    private function getMessagesNumbers()
+    {
+        $models = Message::all();
         $data = $this->getDataByCreatedAt($models);
         $data['total'] = $models->count();
 
