@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordReset;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Traits\HasAttachments;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -29,6 +30,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'country',
         'phone',
         'bio',
+        'website',
+        'facebook',
+        'linkedin',
         'last_active_at',
     ];
 
@@ -91,6 +95,45 @@ class User extends Authenticatable implements MustVerifyEmail
     public function avatar()
     {
         return $this->morphOne(Attachment::class, 'attachmentable');
+    }
+
+    public function facebookName(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                try {
+                    $res = parse_url($this->facebook)['path'];
+                    $res = explode('/', $res);
+                    $res = end($res);
+                    abort_if(!$res, 500);
+                } catch (\Throwable $th) {
+                    $res = $this->facebook;
+                }
+
+                return $res;
+            },
+        );
+    }
+
+    public function linkedinName(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                try {
+                    $res = parse_url($this->linkedin)['path'];
+                    $resA = explode('/', $res);
+                    $res = end($resA);
+                    abort_if(!$res, 500);
+                    if ($res == 'about') {
+                        $res = $resA[count($resA)-2];
+                    }
+                } catch (\Throwable $th) {
+                    $res = $this->linkedin;
+                }
+
+                return $res;
+            },
+        );
     }
 
     public function scopeOnline($query, bool $is=true)

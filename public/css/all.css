@@ -2058,12 +2058,16 @@ textarea.form-error {
 }
 .profile-name {
 	margin: 0 0 29px;
+    display: flex;
+    justify-content: space-between;
+}
+.profile-name span{
 	color: #fff;
 	font-size: 25px;
 }
-.profile-name a {
+.view-as-member-btn {
 	color: #999999;
-	font-size: 19px;
+    font-size: 85%;
 }
 .profile-info {
 	margin: 0 0 20px;

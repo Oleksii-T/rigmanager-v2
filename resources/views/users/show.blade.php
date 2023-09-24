@@ -97,10 +97,12 @@
 
             {{-- buttons --}}
             <div>
-                <button class="header-button">Chat</button>
-                <button class="header-button">Contacts</button>
+                <button class="header-button not-ready">Chat</button>
+                <button data-url="{{route('users.contacts', $user)}}" class="header-button show-contacts">
+                    @lang('ui.showContacts')
+                </button>
                 @if ($currentUser->id == $user->id)
-                    <button class="header-button">Edit</button>
+                    <a href="{{route('profile.edit')}}" class="header-button">@lang('ui.edit')</a>
                 @endif
             </div>
         </div>
@@ -108,13 +110,13 @@
         {{-- categories --}}
         <div class="main-categs-cotainer">
             <p>
-                Top categories:
-                <a href="#">Drill Pipes</a>,
-                <a href="#">DHM</a>,
-                <a href="#">Mud Pumps</a>
+                @lang('ui.topCategories'):
+                @foreach ($categories as $category)
+                    <a href="{{$category->getUrl()}}?author={{$user->slug}}">{{$category->name}}</a>@if(!$loop->last),@endif
+                @endforeach
             </p>
             <p>
-                Total publications:
+                @lang('ui.totalPublications'):
                 <span style="color: white">{{$totalPosts}}</span>
             </p>
         </div>
@@ -131,13 +133,13 @@
         <div class="prod-side">
             <div class="prod-info">
                 <div class="prod-info-item">
-                    <div class="prod-info-name">Website</div>
+                    <div class="prod-info-name">@lang('ui.website')</div>
                     <div class="prod-info-text">
                         <a target="_blank" href="{{$user->website}}">{{$user->website}}</a>
                     </div>
                 </div>
                 <div class="prod-info-item">
-                    <div class="prod-info-name">Location</div>
+                    <div class="prod-info-name">@lang('ui.location')</div>
                     <div class="prod-info-text">
                         {{countries()[$user->country]}}
                     </div>
@@ -145,13 +147,13 @@
                 <div class="prod-info-item">
                     <div class="prod-info-name">Facebook</div>
                     <div class="prod-info-text">
-                        <a target="_blank" href="{{$user->facebook}}">Facebook.com</a>
+                        <a target="_blank" href="{{$user->facebook}}">{{$user->facebook_name}}</a>
                     </div>
                 </div>
                 <div class="prod-info-item">
                     <div class="prod-info-name">LinkedIn</div>
                     <div class="prod-info-text">
-                        <a target="_blank" href="{{$user->linkedin}}">LinkedIn.com</a>
+                        <a target="_blank" href="{{$user->linkedin}}">{{$user->linkedin_name}}</a>
                     </div>
                 </div>
             </div>
@@ -159,11 +161,11 @@
     </section>
 
     <div class="ad-section">
-        <h2>Latest posts by {{$user->name}}</h2>
+        <h2>@lang('ui.latestPostsBy') {{$user->name}}</h2>
         <div class="ad-list">
             <x-home-items :posts="$posts" />
             <div class="ad-col ad-col-more">
-                <a href="{{route('search')}}" class="ad-more">@lang('ui.morePosts')</a>
+                <a href="{{route('search', ['author'=>$user->slug])}}" class="ad-more">@lang('ui.morePosts')</a>
             </div>
         </div>
     </div>

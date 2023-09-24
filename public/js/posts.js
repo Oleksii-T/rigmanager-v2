@@ -73,39 +73,6 @@ $(document).ready(function() {
         return;
     })
 
-    //show modal contacts
-    $('.show-contacts').click(function(){
-        var button = $(this);
-        button.addClass('loading');
-        $.ajax({
-            type: "get",
-            url: button.data('url'),
-            success: function(response) {
-                button.removeClass('loading');
-                let email = response.data.email;
-                let phone = response.data.phone;
-                swal.fire({
-                    html: '<p>' +
-                        window.Laravel.translations.ui_email +
-                        ': <b>' +
-                        email +
-                        '</b></p>' +
-                        '<p>' +
-                        window.Laravel.translations.ui_phone +
-                        ': <b>' +
-                        phone +
-                        '</b></p>',
-                    showConfirmButton: false,
-                    showCancelButton: true,
-                });
-            },
-            error: function(response) {
-                button.removeClass('loading');
-                showToast(response.responseJSON.message, false);
-            }
-        });
-    });
-
     /* create\edit page */
     /********************/
 

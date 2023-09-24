@@ -55,7 +55,7 @@
                             </select>
                             <div data-input="country" class="form-error"></div>
 
-                            {{-- 
+                            {{--
                             <label class="label">@lang('ui.bio')</label>
                             <textarea maxlength="2000" name="bio" class="textarea" placeholder="Describe your business" style="height: 194px;">{{$currentUser->bio}}</textarea>
                             <div data-input="country" class="form-error"></div>

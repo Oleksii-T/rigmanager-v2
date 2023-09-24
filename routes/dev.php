@@ -23,7 +23,7 @@ Route::get('public', function () {
 });
 
 if (!isdev()) {
-    return;
+    // return;
 }
 
 Route::get('test', function () {

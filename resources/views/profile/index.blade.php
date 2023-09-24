@@ -25,7 +25,9 @@
                     <a href="{{route('profile.edit')}}" class="profile-edit-link">@lang('ui.edit')<br>@lang('ui.profile')</a>
                 </div>
                 <div class="profile-content">
-                    <div class="profile-name">{{$currentUser->name}}
+                    <div class="profile-name">
+                        <span>{{$currentUser->name}}</span>
+                        <a href="{{route('users.show', $currentUser)}}" class="view-as-member-btn">@lang('ui.viewAsmember')</a>
                     </div>
                     <div class="profile-info">
                         <div class="profile-info-title">@lang('ui.phone')</div>

@@ -67,6 +67,10 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
         Route::middleware('verified')->group(function () {
 
+            Route::prefix('users')->name('users.')->group(function () {
+                Route::get('{user}/contacts', [UserController::class, 'contacts'])->name('contacts');
+            });
+
             Route::prefix('imports')->name('imports.')->group(function () {
                 Route::get('', [ImportController::class, 'index'])->name('index');
                 Route::get('create', [ImportController::class, 'create'])->name('create');
