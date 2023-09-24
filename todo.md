@@ -16,10 +16,10 @@
  + sort chats by latest
  + make toltips
  + create first message
- - admin side
- - move styles to css file
- - layout bug if 1 message
- - mobile styling
+ + admin side
+ + move styles to css file
+ + layout bug if 1 message
+ + mobile styling
 
  ? files send
  ? live update of read\unread chat status

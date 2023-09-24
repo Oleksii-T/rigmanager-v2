@@ -120,6 +120,7 @@ function drawChart(chartItem) {
                     '#1de1de', // cyan
                     '#a300ff', // purple
                     '#ff8a00', // orange
+                    '#ff00a3', // pink
                 ];
 
                 for (const key in data) {

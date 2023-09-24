@@ -2,6 +2,15 @@ $(document).ready(function () {
     $('.select2').select2();
     let urlSearchParams = new URLSearchParams(window.location.search);
 
+    // init user friendly title tooltips
+    $( document ).tooltip({
+        position: {
+            my: 'center bottom-5',
+            at: 'center top',
+            collision: 'flipfit'
+        }
+    });
+
 	// scroll header
 	$(window).scroll( function(){
 		if ($(this).scrollTop() > 50){

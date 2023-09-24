@@ -10,7 +10,6 @@
                             <div class="chat-main-info">
                                 <div class="chat-user-name">
                                     {{$chat['user']['name']}}
-                                    <small>({{$chat['user']['id']}})</small>
                                 </div>
                                 @if ($chat['unread'])
                                     <div class="chat-new-messages" title="@lang('ui.chatYouHaveUnded')">
