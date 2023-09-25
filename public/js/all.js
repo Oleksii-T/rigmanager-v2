@@ -293,7 +293,11 @@ $(document).ready(function () {
         if (file) {
             let el = $(this).closest('.show-uploaded-file-preview').find('.custom-file-preview');
             el.removeClass('d-none');
-            el.attr('src', URL.createObjectURL(file));
+            let url = URL.createObjectURL(file);
+
+            el.is('img')
+                ? el.attr('src', url)
+                : el.css('background-image', `url(${url})`);
         }
     })
 

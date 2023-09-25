@@ -2,7 +2,7 @@
 
 @section('meta')
 	<title>{{$user->name}}</title>
-	<meta name="description" content="{{$user->name}}">
+	<meta name="description" content="{{$user->bio ?? 'User page'}} | {{$user->name}}">
     <meta name="robots" content="index, follow">
 @endsection
 
@@ -81,7 +81,7 @@
 
         {{-- top image --}}
         <div class="top-image">
-            <img src="/icons/main-about-bg.jpg" alt="">
+            <img src="{{$user->banner->url ?? asset('icons/main-about-bg.jpg')}}" alt="{{$user->banner->alt ?? 'User banner'}}">
         </div>
 
         {{-- avatar, name and buttons --}}
@@ -102,7 +102,7 @@
                     @lang('ui.showContacts')
                 </button>
                 @if ($currentUser->id == $user->id)
-                    <a href="{{route('profile.edit')}}" class="header-button">@lang('ui.edit')</a>
+                    <a href="{{route('profile.index')}}" class="header-button">@lang('ui.edit')</a>
                 @endif
             </div>
         </div>
@@ -111,9 +111,11 @@
         <div class="main-categs-cotainer">
             <p>
                 @lang('ui.topCategories'):
-                @foreach ($categories as $category)
+                @forelse ($categories as $category)
                     <a href="{{$category->getUrl()}}?author={{$user->slug}}">{{$category->name}}</a>@if(!$loop->last),@endif
-                @endforeach
+                @empty
+                    -
+                @endforelse
             </p>
             <p>
                 @lang('ui.totalPublications'):
@@ -132,41 +134,54 @@
         {{-- sidebar --}}
         <div class="prod-side">
             <div class="prod-info">
-                <div class="prod-info-item">
-                    <div class="prod-info-name">@lang('ui.website')</div>
-                    <div class="prod-info-text">
-                        <a target="_blank" href="{{$user->website}}">{{$user->website}}</a>
+                @if ($user->website)
+                    <div class="prod-info-item">
+                        <div class="prod-info-name">@lang('ui.website')</div>
+                        <div class="prod-info-text">
+                            <a target="_blank" href="{{$user->website}}">{{$user->website}}</a>
+                        </div>
                     </div>
-                </div>
+                @endif
+
                 <div class="prod-info-item">
                     <div class="prod-info-name">@lang('ui.location')</div>
                     <div class="prod-info-text">
                         {{countries()[$user->country]}}
                     </div>
                 </div>
-                <div class="prod-info-item">
-                    <div class="prod-info-name">Facebook</div>
-                    <div class="prod-info-text">
-                        <a target="_blank" href="{{$user->facebook}}">{{$user->facebook_name}}</a>
+
+                @if ($user->facebook)
+                    <div class="prod-info-item">
+                        <div class="prod-info-name">Facebook</div>
+                        <div class="prod-info-text">
+                            <a target="_blank" href="{{$user->facebook}}">{{$user->facebook_name}}</a>
+                        </div>
                     </div>
-                </div>
-                <div class="prod-info-item">
-                    <div class="prod-info-name">LinkedIn</div>
-                    <div class="prod-info-text">
-                        <a target="_blank" href="{{$user->linkedin}}">{{$user->linkedin_name}}</a>
+                @endif
+
+                @if ($user->linkedin)
+                    <div class="prod-info-item">
+                        <div class="prod-info-name">LinkedIn</div>
+                        <div class="prod-info-text">
+                            <a target="_blank" href="{{$user->linkedin}}">{{$user->linkedin_name}}</a>
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>
 
     <div class="ad-section">
-        <h2>@lang('ui.latestPostsBy') {{$user->name}}</h2>
-        <div class="ad-list">
-            <x-home-items :posts="$posts" />
-            <div class="ad-col ad-col-more">
-                <a href="{{route('search', ['author'=>$user->slug])}}" class="ad-more">@lang('ui.morePosts')</a>
+        @if ($totalPosts)
+            <h2>@lang('ui.latestPostsBy') {{$user->name}}</h2>
+            <div class="ad-list">
+                <x-home-items :posts="$posts" />
+                <div class="ad-col ad-col-more">
+                    <a href="{{route('search', ['author'=>$user->slug])}}" class="ad-more">@lang('ui.morePosts')</a>
+                </div>
             </div>
-        </div>
+        @else
+            <h2>@lang('ui.noLatestPostsBy')</h2>
+        @endif
     </div>
 @endsection

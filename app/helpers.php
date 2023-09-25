@@ -24,12 +24,14 @@ if (!function_exists('makeSlug')) {
 // get user avatar with fallback image
 if (!function_exists('userAvatar')) {
     function userAvatar($user=null) {
-        $default = asset('img/empty-avatar.jpeg');
+        $user ??= auth()->user();
+        $default = asset('icons/emptyAva.svg');
+
         if (!$user) {
             return $default;
         }
 
-        return $user->avatar ? $user->avatar : $default;
+        return $user->avatar ? $user->avatar->url : $default;
     }
 }
 

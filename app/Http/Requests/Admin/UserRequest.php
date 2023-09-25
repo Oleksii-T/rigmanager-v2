@@ -36,10 +36,15 @@ class UserRequest extends FormRequest
             'email' => ['required', 'email', 'max:255'],
             'country' => ['required', 'string', 'max:5'],
             'avatar' => ['nullable', 'image', 'max:5000'],
+            'banner' => ['nullable', 'image', 'max:5000'],
+            'phone' => ['nullable', 'string'],
+            'website' => ['nullable', 'string'],
+            'facebook' => ['nullable', 'string'],
+            'linkedin' => ['nullable', 'string'],
             'bio' => ['nullable', 'string', 'max:5000'],
             'password' =>  $this->passwordRules(!$model),
-            'roles' => ['required', 'array'],
-            'roles.*' => ['required', 'exists:roles,id'],
+            'roles' => ['nullable', 'array'],
+            'roles.*' => ['nullable', 'exists:roles,id'],
         ];
     }
 }

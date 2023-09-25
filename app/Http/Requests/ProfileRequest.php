@@ -30,13 +30,17 @@ class ProfileRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'country' => ['required', 'string', 'max:5'],
+            'website' => ['nullable', 'string', 'max:255'],
+            'facebook' => ['nullable', 'string', 'max:255'],
+            'linkedin' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:5000'],
             'email' => [
                 'required',
                 Rule::unique(User::class, 'email')->ignore($model->id)
             ],
             'phone' => ['nullable', 'string', 'max:40'],
-            'avatar' => ['nullable', 'image', 'max:5000']
+            'avatar' => ['nullable', 'image', 'max:5000'],
+            'banner' => ['nullable', 'image', 'max:5000']
         ];
     }
 }

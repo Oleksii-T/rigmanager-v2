@@ -42,7 +42,8 @@ class UserController extends Controller
         $input = $request->validated();
         $input['password'] = Hash::make($input['password']);
         $user = User::create($input);
-        $user->addAttachment($input['avatar']);
+        $user->addAttachment($input['avatar'], 'avatar');
+        $user->addAttachment($input['banner'], 'banner');
         $user->roles()->attach($input['roles']);
 
         return $this->jsonSuccess('User created successfully', [
@@ -66,8 +67,9 @@ class UserController extends Controller
         }
 
         $user->update($input);
-        $user->addAttachment($input['avatar']??null);
-        $user->roles()->sync($input['roles']);
+        $user->addAttachment($input['avatar']??null, 'avatar');
+        $user->addAttachment($input['banner']??null, 'banner');
+        $user->roles()->sync($input['roles']??[]);
 
         return $this->jsonSuccess('User updated successfully');
     }

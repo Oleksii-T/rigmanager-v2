@@ -22,10 +22,21 @@
                             <label>Avatar</label>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" name="avatar">
-                                <label class="custom-file-label">Choose document</label>
+                                <label class="custom-file-label">Choose File</label>
                             </div>
                             <img src="" alt="" class="custom-file-preview">
                             <span data-input="avatar" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group show-uploaded-file-name show-uploaded-file-preview">
+                            <label>Banner</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="banner">
+                                <label class="custom-file-label">Choose File</label>
+                            </div>
+                            <img src="" alt="" class="custom-file-preview">
+                            <span data-input="banner" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -47,6 +58,34 @@
                             <label>Email Address</label>
                             <input type="email" name="email" class="form-control">
                             <span data-input="email" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" name="phone" class="form-control">
+                            <span data-input="phone" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="text" name="website" class="form-control">
+                            <span data-input="website" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Facebook</label>
+                            <input type="text" name="facebook" class="form-control">
+                            <span data-input="facebook" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>LinkedIn</label>
+                            <input type="text" name="linkedin" class="form-control">
+                            <span data-input="linkedin" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">

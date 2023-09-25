@@ -27,6 +27,17 @@
                         </div>
                     </div>
                     <div class="col-md-6">
+                        <div class="form-group show-uploaded-file-name show-uploaded-file-preview">
+                            <label>Banner</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="banner">
+                                <label class="custom-file-label">{{$user->banner->original_name ?? 'Choose File'}}</label>
+                            </div>
+                            <img src="{{$user->banner->url??''}}" alt="" class="custom-file-preview">
+                            <span data-input="banner" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Name</label>
                             <input name="name" type="text" class="form-control" value="{{$user->name}}">
@@ -45,6 +56,34 @@
                             <label>Email Address</label>
                             <input type="email" name="email" class="form-control" value="{{$user->email}}">
                             <span data-input="email" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" name="phone" class="form-control" value="{{$user->phone}}">
+                            <span data-input="phone" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="text" name="website" class="form-control" value="{{$user->website}}">
+                            <span data-input="website" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Facebook</label>
+                            <input type="text" name="facebook" class="form-control" value="{{$user->facebook}}">
+                            <span data-input="facebook" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>LinkedIn</label>
+                            <input type="text" name="linkedin" class="form-control" value="{{$user->linkedin}}">
+                            <span data-input="linkedin" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">

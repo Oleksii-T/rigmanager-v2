@@ -16,19 +16,20 @@ class ProfileController extends Controller
         return view('profile.index');
     }
 
-    public function edit()
-    {
-        return view('profile.edit');
-    }
-
     public function update(ProfileRequest $request)
     {
         $input = $request->validated();
         $user = auth()->user();
         $user->update($input);
         $user->addAttachment($input['avatar']??null, 'avatar');
+        $user->addAttachment($input['banner']??null, 'banner');
 
         return $this->jsonSuccess(trans('messages.profile.updated'));
+    }
+
+    public function passwordForm()
+    {
+        return view('profile.password');
     }
 
     public function password(ProfilePasswordRequest $request)

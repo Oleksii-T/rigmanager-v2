@@ -11,7 +11,7 @@ return [
         'user' => [
             'password' => 'Password recovery | rigmanger.com.ua',
             'info' => 'My profile | rigmanger.com.ua',
-            'edit' => 'Edit profile | rigmanger.com.ua',
+            'edit-password' => 'Edit user Password | rigmanger.com.ua',
             'verify' => 'Account verification | rigmanger.com.ua',
             'post' => [
                 'posts' => 'My posts | rigmanger.com.ua',
@@ -64,7 +64,7 @@ return [
         'user' => [
             'password' => 'Password recovery. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',
             'info' => 'My profile. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',
-            'edit' => 'Edit profile. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',
+            'edit-password' => 'Edit user password. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',
             'verify' => 'Account verification. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',
             'post' => [
                 'posts' => 'My posts. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',

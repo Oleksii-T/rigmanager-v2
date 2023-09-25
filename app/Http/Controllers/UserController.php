@@ -10,8 +10,8 @@ class UserController extends Controller
 {
     public function show(Request $request, User $user)
     {
-        $posts = $user->posts()->latest()->limit(11)->get();
-        $totalPosts = $user->posts()->count();
+        $posts = $user->posts()->visible()->latest()->limit(11)->get();
+        $totalPosts = $user->posts()->visible()->count();
 
         $categories = Category::query()
             ->whereRelation('posts', 'user_id', $user->id)

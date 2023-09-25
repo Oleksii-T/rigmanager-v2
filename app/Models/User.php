@@ -94,7 +94,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function avatar()
     {
-        return $this->morphOne(Attachment::class, 'attachmentable');
+        return $this->morphOne(Attachment::class, 'attachmentable')->where('group', 'avatar');
+    }
+
+    public function banner()
+    {
+        return $this->morphOne(Attachment::class, 'attachmentable')->where('group', 'banner');
     }
 
     public function facebookName(): Attribute
