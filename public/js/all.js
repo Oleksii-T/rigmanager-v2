@@ -324,6 +324,11 @@ $(document).ready(function () {
         $(this).closest('form').trigger('submit');
     })
 
+    // trigger element by click manuly
+    $('[data-trigger]').click(function() {
+        $($(this).data('trigger')).trigger('click');
+    })
+
     // shoa all imported posts
     $('.see-import-posts').click(function(e) {
         e.preventDefault();

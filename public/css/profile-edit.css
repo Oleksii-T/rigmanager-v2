@@ -1,0 +1,233 @@
+.profile {
+    display: block;
+    padding: 25px;
+}
+.profile .form-error{
+    margin-top: -20px;
+}
+
+/* top section */
+.u-p-section {
+    margin-bottom: 25px;
+}
+.top-image {
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    display: block;
+    cursor: pointer;
+    position: relative;
+}
+.top-image:hover svg path{
+    fill: #ff8d11;
+}
+.top-image img{
+    width: 100%;
+    object-fit: cover;
+}
+.main-info-cotainer {
+    padding: 0px 20px;
+    display: flex;
+    justify-content: space-between;
+    height: 45px;
+    margin-bottom: 40px;
+}
+.avatar-name-container {
+    display: flex;
+}
+.profile-ava{
+    margin-top: -110px;
+    z-index: 2;
+    position: relative;
+    cursor: pointer;
+}
+.profile-ava:hover svg path{
+    fill: #ff8d11;
+}
+.name-container {
+    padding-left: 20px;
+}
+.name-container input{
+    color: white;
+    font-size: 110%;
+}
+.view-as-member {
+    color: #505050;
+    transition: all 0.3s linear;
+}
+.view-as-member:hover {
+    color: #ff8d11;
+}
+
+/* edit img btn */
+.img-edit-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #1f1f1f;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}
+.img-edit-btn svg{
+    width: 20px;
+}
+.img-edit-btn svg path{
+    transition: all 0.3s linear;
+}
+.img-edit-btn svg path{
+    fill: #505050;
+}
+.img-edit-btn:hover svg path{
+    fill: #ff8d11;
+}
+
+/* login and phone block */
+.creads-section {
+    display: flex;
+}
+.creads-section > div{
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.creads-section > div:last-child{
+    padding-left: 5px;
+}
+.creads-section > div:first-child{
+    padding-right: 5px;
+}
+
+/* bio and other info block */
+.bio-section {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+.bio-container {
+    flex: 0 0 70%;
+    max-width: 70%;
+    margin-right: 20px;
+}
+.bio-header{
+    color: white;
+    font-size: 120%;
+}
+.bio-container textarea {
+    width: 100%;
+    color: white;
+    resize: none;
+    padding: 15px 15px 15px 15px;
+    border: 1px solid #505050;
+    border-radius: 8px;
+    min-height: 240px;
+    transition: all 0.3s linear;
+}
+.bio-container textarea:hover, .bio-container textarea:focus {
+    border-color: #ff8d11
+}
+.prod-side {
+    width: 100%;
+    min-width: auto;
+    margin: 0px;
+}
+.prod-info {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    border-radius: 0;
+}
+.prod-info .input{
+    font-size: 85%;
+    height: 35px;
+    padding: 0px 10px;
+}
+
+/* country select2 */
+.select2-container {
+    width: 100% !important;
+}
+.select2-container .select2-selection {
+    height: 35px;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 35px;
+    font-size: 88%;
+}
+.select2-container .select2-selection .select2-selection__arrow {
+    height: 32px;
+}
+
+@media screen and (max-width: 767px) {
+    .label {
+        margin-bottom: 0px;
+    }
+    .input {
+        margin-bottom: 0px;
+    }
+    .img-edit-btn {
+        width: 30px;
+        height: 30px;
+    }
+    .img-edit-btn svg{
+        width: 15px;
+    }
+    .u-p-section {
+        margin-bottom: 10px;
+    }
+    .main-info-cotainer {
+        display: block;
+    }
+    .avatar-name-container {
+        justify-items: left;
+    }
+    .main-info-cotainer {
+        margin-block: 25px;
+    }
+    .top-image {
+        height: 160px;
+    }
+    .profile-ava {
+        width: 100px;
+        height: 100px;
+        margin-top: -55px;
+    }
+    .view-as-member {
+        text-align: right;
+        margin-top: -29px;
+    }
+    .bio-container {
+        flex: 0 0 50%;
+    }
+    .bio-header {
+        margin-bottom: 0px;
+    }
+    .bio-container textarea {
+        min-height: 210px;
+    }
+    .prod-info-item {
+        margin-bottom: 7px;
+    }
+    .creads-section > div {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .creads-section > div {
+        margin-bottom: 5px;
+    }
+    .creads-section {
+        flex-direction: column;
+    }
+    .creads-section div {
+        padding: 0px !important;
+        width: 100%;
+    }
+}

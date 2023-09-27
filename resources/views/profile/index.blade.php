@@ -11,175 +11,7 @@
 @endsection
 
 @section('style')
-    <style>
-        .profile {
-            display: block;
-            padding: 25px;
-        }
-        .profile .form-error{
-            margin-top: -20px;
-        }
-
-        /* top section */
-        .u-p-section {
-            margin-bottom: 25px;
-        }
-        .top-image {
-            border-radius: 8px;
-            overflow: hidden;
-            width: 100%;
-            height: 220px;
-            overflow: hidden;
-            margin-bottom: 10px;
-            display: block;
-            cursor: pointer;
-            position: relative;
-        }
-        .top-image:hover svg path{
-            fill: #ff8d11;
-        }
-        .top-image img{
-            width: 100%;
-            object-fit: cover;
-        }
-        .main-info-cotainer {
-            padding: 0px 20px;
-            display: flex;
-            justify-content: space-between;
-            height: 45px;
-            margin-bottom: 40px;
-        }
-        .avatar-name-container {
-            display: flex;
-        }
-        .profile-ava{
-            margin-top: -110px;
-            z-index: 2;
-            position: relative;
-            cursor: pointer;
-        }
-        .profile-ava:hover svg path{
-            fill: #ff8d11;
-        }
-        .name-container {
-            padding-left: 20px;
-        }
-        .name-container input{
-            color: white;
-            font-size: 110%;
-        }
-        .view-as-member {
-            color: #505050;
-            transition: all 0.3s linear;
-        }
-        .view-as-member:hover {
-            color: #ff8d11;
-        }
-
-        /* edit img btn */
-        .img-edit-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #1f1f1f;
-            display: flex;
-            justify-content: center;
-            justify-items: center;
-        }
-        .img-edit-btn svg{
-            width: 20px;
-        }
-        .img-edit-btn svg path{
-            transition: all 0.3s linear;
-        }
-        .img-edit-btn svg path{
-            fill: #505050;
-        }
-        .img-edit-btn:hover svg path{
-            fill: #ff8d11;
-        }
-
-        /* login and phone block */
-        .creads-section {
-            display: flex;
-        }
-        .creads-section > div{
-            flex: 0 0 50%;
-            max-width: 50%;
-        }
-        .creads-section > div:last-child{
-            padding-left: 5px;
-        }
-        .creads-section > div:first-child{
-            padding-right: 5px;
-        }
-
-        /* bio and other info block */
-        .bio-section {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 40px;
-        }
-        .bio-container {
-            flex: 0 0 70%;
-            max-width: 70%;
-            margin-right: 20px;
-        }
-        .bio-header{
-            color: white;
-            font-size: 120%;
-        }
-        .bio-container textarea {
-            width: 100%;
-            color: white;
-            resize: none;
-            padding: 15px 15px 15px 15px;
-            border: 1px solid #505050;
-            border-radius: 8px;
-            min-height: 240px;
-            transition: all 0.3s linear;
-        }
-        .bio-container textarea:hover, .bio-container textarea:focus {
-            border-color: #ff8d11
-        }
-        .prod-side {
-            width: 100%;
-            min-width: auto;
-            margin: 0px;
-        }
-        .prod-info {
-            padding: 0px;
-            margin: 0px;
-            border: none;
-            border-radius: 0;
-        }
-        .prod-info .input{
-            font-size: 85%;
-            height: 35px;
-            padding: 0px 10px;
-        }
-
-        /* country select2 */
-        .select2-container {
-            width: 100% !important;
-        }
-        .select2-container .select2-selection {
-            height: 35px;
-        }
-        .select2-container .select2-selection--single .select2-selection__rendered {
-            line-height: 35px;
-            font-size: 88%;
-        }
-        .select2-container .select2-selection .select2-selection__arrow {
-            height: 32px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{asset('css/profile-edit.css')}}" />
 @endsection
 
 @section('content')
@@ -190,10 +22,12 @@
             <form action="{{route('profile.update')}}" method="POST" class="profile general-ajax-submit">
                 @csrf
                 @method('PUT')
+                <input type="file" id="avatar-input" name="avatar" class="d-none">
+                <input type="file" id="banner-input" name="banner" class="d-none">
 
                 <section class="u-p-section main-u-section">
                     {{-- top image --}}
-                    <label class="top-image show-uploaded-file-preview" for="banner-input">
+                    <div class="top-image show-uploaded-file-preview" data-trigger="#banner-input">
                         <img src="{{$currentUser->banner->url ?? asset('icons/main-about-bg.jpg')}}" alt="{{$currentUser->banner->alt ?? 'User banner'}}" class="custom-file-preview">
                         <div class="img-edit-btn">
                             <svg viewBox="0 0 401 398.99" xmlns="http://www.w3.org/2000/svg">
@@ -201,13 +35,12 @@
                                 <path transform="translate(0)" d="M376.14,13.16a45,45,0,0,0-63.56,0L134.41,191.34a10,10,0,0,0-2.57,4.39l-23.43,84.59a10,10,0,0,0,12.29,12.3l84.59-23.44a10,10,0,0,0,4.4-2.56L387.86,88.44a45,45,0,0,0,0-63.56Zm-220,184.67L302,52l47,47L203.19,244.86Zm-9.4,18.85,37.58,37.58-52,14.39Zm227-142.36-10.6,10.59-47-47,10.6-10.59a25,25,0,0,1,35.3,0L373.74,39a25,25,0,0,1,0,35.31"></path>
                             </svg>
                         </div>
-                        <input type="file" id="banner-input" name="banner" class="d-none">
-                    </label>
+                    </div>
 
                     {{-- avatar, name and buttons --}}
                     <div class="main-info-cotainer">
                         {{-- avatar and name --}}
-                        <label class="avatar-name-container show-uploaded-file-preview" for="avatar-input">
+                        <div class="avatar-name-container show-uploaded-file-preview" data-trigger="#avatar-input">
                             <div class="profile-ava custom-file-preview" style="background-image:url({{userAvatar()}})">
                                 <div class="img-edit-btn">
                                     <svg viewBox="0 0 401 398.99" xmlns="http://www.w3.org/2000/svg">
@@ -220,8 +53,7 @@
                                 <input type="text" class="input" name="name" value="{{$currentUser->name}}">
                                 <div data-input="name" class="form-error"></div>
                             </div>
-                            <input type="file" id="avatar-input" name="avatar" class="d-none">
-                        </label>
+                        </div>
                         <div>
                             <a href="{{route('users.show', $currentUser)}}" class="view-as-member" style="display: block">
                                 @lang('ui.viewAsmember')
