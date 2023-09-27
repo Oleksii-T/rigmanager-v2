@@ -27,6 +27,7 @@ class PostController extends Controller
             return view('posts.inactive', compact('post'));
         }
 
+        $hasChat = !!$user?->messages()->where('user_id', $post->user_id)->orWhere('reciever_id', $post->user_id)->count();
         $authorPosts = Post::query()
             ->where('user_id', $post->user_id)
             ->visible()
@@ -47,6 +48,7 @@ class PostController extends Controller
             'post' => $post,
             'authorPosts' => $authorPosts,
             'simPosts' => $simPosts,
+            'hasChat' => $hasChat
         ];
 
         return view('posts.show', $data);

@@ -57,7 +57,10 @@ class AppServiceProvider extends ServiceProvider
                 'messages.inProgress',
                 'ui.email',
                 'ui.phone',
-                'ui.tba_modal'
+                'ui.tba_modal',
+                'ui.sendMessagePopupTitle',
+                'ui.sendMessagePopupSendBtn',
+                'ui.sendMessagePopupGotToChat',
             ];
             foreach ($translationsForJs as $t) {
                 $data['translations'][str_replace('.', '_', $t)] = trans($t);

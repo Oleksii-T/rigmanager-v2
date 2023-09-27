@@ -235,3 +235,17 @@
         max-width: 100%;
     }
 }
+.ui-tooltip {
+    background-color: rgb(40,40,40) ;
+    border-radius: 8px;
+    border: 1px solid #505050;
+    box-shadow: none;
+    padding: 2px 8px;
+    position: absolute;
+    z-index: 99999;
+    max-width: 300px;
+}
+.ui-tooltip-content {
+    color: white;
+    font-size: 80%;
+}

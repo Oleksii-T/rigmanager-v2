@@ -151,6 +151,19 @@ class User extends Authenticatable implements MustVerifyEmail
         return (bool)$this->roles()->where('name', 'admin')->count();
     }
 
+    public function messages()
+    {
+        $messages = Message::query()
+            ->where(function ($q) {
+                $q
+                    ->where('reciever_id', $this->id)
+                    ->orWhere('user_id', $this->id);
+            })
+            ->latest();
+
+        return $messages;
+    }
+
     public function sendPasswordResetNotification($token)
     {
         $url = route('password.reset', ['token'=>$token, 'email'=>$this->email]);

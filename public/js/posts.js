@@ -73,6 +73,53 @@ $(document).ready(function() {
         return;
     })
 
+    // send message
+    $('.send-message').click(function(){
+        let url = $(this).data('url');
+        let name = $(this).data('user');
+        swal.fire({
+            title: window.Laravel.translations.ui_sendMessagePopupTitle + name,
+            input: 'textarea',
+            confirmButtonText: window.Laravel.translations.ui_sendMessagePopupSendBtn,
+            showConfirmButton: true,
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            preConfirm: (message) => {
+                let response = $.ajax({
+                    async: false,
+                    url: url,
+                    type: 'post',
+                    data: {
+                        message,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                });
+
+                if (response.status == 422 || !response.responseJSON.success) {
+                    Swal.showValidationMessage(response.responseJSON.message);
+                    return false;
+                }
+
+                return response.responseJSON;
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log(`result`, result.value); //! LOG
+                Swal.fire({
+                    title: result.value.message,
+                    showConfirmButton: true,
+                    confirmButtonText: window.Laravel.translations.ui_sendMessagePopupGotToChat,
+                    showCancelButton: true,
+                }).then((result2) => {
+                    if (result2.isConfirmed) {
+                        window.location.href = result.value.data.chat_url;
+                    }
+                })
+            }
+        });
+    });
+
     /* create\edit page */
     /********************/
 
