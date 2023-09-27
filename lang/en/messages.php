@@ -15,6 +15,7 @@ return [
         'send' => 'Price request send successfully!',
         'canSendToSelf' => 'Price request can not be send to yourself!',
     ],
+    'canNotChatToSelf' => 'Can not send message to self',
     'registerSuccess' => 'Happy to see you!',
     'loginSuccess' => 'Welcome back',
     'authError' => 'You must be logged in to perform this action',

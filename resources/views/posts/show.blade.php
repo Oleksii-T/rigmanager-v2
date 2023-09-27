@@ -103,10 +103,12 @@
                     </div>
                 </div>
                 <a href="#" data-url="{{route('posts.contacts', $post)}}" class="button button-light show-contacts">{{__('ui.showContacts')}}</a>
-                @if ($currentUser?->id != $post->user_id)
-                    <br>
+                <br>
+                @if ($currentUser?->id == $post->user_id)
+                    <button class="button button-light send-message-to-self">{{__('ui.sendMessage')}}</button>
+                @else
                     @if ($hasChat)
-                        <a href="{{route('profile.chat')}}?chat_with={{$post->user_id}}" class="button button-light show-contacts">{{__('ui.openChat')}}</a>
+                        <a href="{{route('profile.chat')}}?chat_with={{$post->user_id}}" class="button button-light">{{__('ui.openChat')}}</a>
                     @else
                         <a href="#" data-url="{{route('profile.chat.store', $post->user->slug)}}" data-user="{{$post->user->name}}" class="button button-light send-message">{{__('ui.sendMessage')}}</a>
                     @endif

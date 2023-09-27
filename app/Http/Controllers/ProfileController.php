@@ -16,11 +16,6 @@ class ProfileController extends Controller
         return view('profile.index');
     }
 
-    public function edit()
-    {
-        return view('profile.edit');
-    }
-
     public function chat()
     {
         return view('profile.chat');

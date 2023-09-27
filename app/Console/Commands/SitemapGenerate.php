@@ -10,6 +10,7 @@ use Spatie\Sitemap\Sitemap;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Blog;
+use App\Models\User;
 
 class SitemapGenerate extends Command
 {
@@ -61,6 +62,10 @@ class SitemapGenerate extends Command
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
                     ->setPriority(0.9))
                 ->add(Url::create('/sitemap-blogs.xml')
+                    ->setLastModificationDate(now())
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                    ->setPriority(0.6))
+                ->add(Url::create('/sitemap-users.xml')
                     ->setLastModificationDate(now())
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
                     ->setPriority(0.6))
@@ -139,6 +144,16 @@ class SitemapGenerate extends Command
                     ->setPriority(0.6));
             }
             $sm->writeToFile(public_path('sitemap-blogs.xml'));
+
+            // users sitemap
+            $sm = Sitemap::create();
+            foreach (User::all() as $u) {
+                $sm->add(Url::create(route('users.show', $u))
+                    ->setLastModificationDate(now())
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                    ->setPriority(0.6));
+            }
+            $sm->writeToFile(public_path('sitemap-users.xml'));
 
         } catch (\Throwable $th) {
             Log::channel('commands')->error("[$this->signature] " . $th->getMessage(), [

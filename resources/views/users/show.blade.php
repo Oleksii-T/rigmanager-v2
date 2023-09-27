@@ -37,7 +37,15 @@
 
             {{-- buttons --}}
             <div>
-                <button class="header-button not-ready">Chat</button>
+                @if ($currentUser?->id == $user->id)
+                    <button class="header-button send-message-to-self">{{__('ui.sendMessage')}}</button>
+                @else
+                    @if ($hasChat)
+                        <a href="{{route('profile.chat')}}?chat_with={{$user->id}}" class="header-button">{{__('ui.openChat')}}</a>
+                    @else
+                        <button data-url="{{route('profile.chat.store', $user->slug)}}" data-user="{{$user->name}}" class="header-button send-message">{{__('ui.sendMessage')}}</button>
+                    @endif
+                @endif
                 <button data-url="{{route('users.contacts', $user)}}" class="header-button show-contacts">
                     @lang('ui.showContacts')
                 </button>

@@ -10,6 +10,8 @@ class UserController extends Controller
 {
     public function show(Request $request, User $user)
     {
+        $currentUser = auth()->user();
+        $hasChat = !!$currentUser?->messages()->where('user_id', $user->id)->orWhere('reciever_id', $user->id)->count();
         $posts = $user->posts()->visible()->latest()->limit(11)->get();
         $totalPosts = $user->posts()->visible()->count();
 
