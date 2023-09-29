@@ -31,7 +31,7 @@ $(document).ready(function () {
     //block not-ready links
     $('.not-ready').click(function(e){
         e.preventDefault();
-        showToast(window.Laravel.translations.messages_inProgress, false);
+        showToast(trans('messages_inProgress'), false);
     });
 
 	// mob nav
@@ -393,16 +393,8 @@ $(document).ready(function () {
                 let email = response.data.email;
                 let phone = response.data.phone;
                 swal.fire({
-                    html: '<p>' +
-                        window.Laravel.translations.ui_email +
-                        ': <b>' +
-                        email +
-                        '</b></p>' +
-                        '<p>' +
-                        window.Laravel.translations.ui_phone +
-                        ': <b>' +
-                        phone +
-                        '</b></p>',
+                    html: `<p>${trans('ui_email')}: <b>${email}</b></p>
+                        <p>${trans('ui_phone')}: <b>${phone}</b></p>`,
                     showConfirmButton: false,
                     showCancelButton: true,
                 });
@@ -419,16 +411,16 @@ $(document).ready(function () {
         let url = $(this).data('url');
         let name = $(this).data('user');
         swal.fire({
-            title: window.Laravel.translations.ui_sendMessagePopupTitle + name,
+            title: trans('ui_sendMessagePopupTitle') + name,
             input: 'textarea',
-            confirmButtonText: window.Laravel.translations.ui_sendMessagePopupSendBtn,
+            confirmButtonText: trans('ui_sendMessagePopupSendBtn'),
             showConfirmButton: true,
             showCancelButton: true,
             showLoaderOnConfirm: true,
             preConfirm: (message) => {
                 let response = $.ajax({
                     async: false,
-                    url: url,
+                    url,
                     type: 'post',
                     data: {
                         message,
@@ -446,11 +438,10 @@ $(document).ready(function () {
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log(`result`, result.value); //! LOG
                 Swal.fire({
                     title: result.value.message,
                     showConfirmButton: true,
-                    confirmButtonText: window.Laravel.translations.ui_sendMessagePopupGotToChat,
+                    confirmButtonText: trans('ui_sendMessagePopupGotToChat'),
                     showCancelButton: true,
                 }).then((result2) => {
                     if (result2.isConfirmed) {

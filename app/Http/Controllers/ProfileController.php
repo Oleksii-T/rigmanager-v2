@@ -27,11 +27,11 @@ class ProfileController extends Controller
             'message' => ['required', 'string']
         ]);
 
-        // \App\Models\Message::create([
-        //     'user_id' => auth()->id(),
-        //     'reciever_id' => $user->id,
-        //     'message' => $request->message
-        // ]);
+        \App\Models\Message::create([
+            'user_id' => auth()->id(),
+            'reciever_id' => $user->id,
+            'message' => $request->message
+        ]);
 
         return $this->jsonSuccess('Message send successfully!', [
             'chat_url' => route('profile.chat') . '?chat_with=' . $user->id

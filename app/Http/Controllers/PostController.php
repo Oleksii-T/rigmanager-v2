@@ -27,7 +27,7 @@ class PostController extends Controller
             return view('posts.inactive', compact('post'));
         }
 
-        $hasChat = !!$user?->messages()->where('user_id', $post->user_id)->orWhere('reciever_id', $post->user_id)->count();
+        $hasChat = $user?->hasChatWith($post->user_id);
         $authorPosts = Post::query()
             ->where('user_id', $post->user_id)
             ->visible()

@@ -153,15 +153,28 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function messages()
     {
+        $id = $this->id;
         $messages = Message::query()
-            ->where(function ($q) {
+            ->where(function ($q) use ($id){
                 $q
-                    ->where('reciever_id', $this->id)
-                    ->orWhere('user_id', $this->id);
+                    ->where('reciever_id', $id)
+                    ->orWhere('user_id', $id);
             })
             ->latest();
 
         return $messages;
+    }
+
+    public function hasChatWith($uid)
+    {
+        $id = $this->id;
+        return !!$this->messages()
+            ->where(function ($q) use ($id){
+                $q
+                    ->where('user_id', $id)
+                    ->orWhere('reciever_id', $id);
+            })
+            ->count();
     }
 
     public function sendPasswordResetNotification($token)

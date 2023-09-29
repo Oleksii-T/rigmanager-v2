@@ -34,7 +34,7 @@
                         <a href="{{route('profile.index')}}">@lang('ui.cabinet')</a>
                         <ul>
                             <li class="header-profile-preview">
-                                <div class="profile-ava" style="background-image:url({{$currentUser->avatar->url ?? asset('icons/emptyAva.svg')}})"></div>
+                                <div class="profile-ava" style="background-image:url({{userAvatar()}})"></div>
                                 <span>{{$currentUser->name}}</span>
                             </li>
                             <li><a href="{{route('profile.posts')}}">

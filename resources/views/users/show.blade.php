@@ -28,7 +28,7 @@
         <div class="main-info-cotainer">
             {{-- avatar and name --}}
             <div class="avatar-name-container">
-                <div class="profile-ava" style="background-image:url({{$user->avatar->url ?? asset('icons/emptyAva.svg')}})">
+                <div class="profile-ava" style="background-image:url({{userAvatar()}})">
                 </div>
                 <div class="name-container">
                     <h2>{{$user->name}}</h2>
@@ -49,7 +49,7 @@
                 <button data-url="{{route('users.contacts', $user)}}" class="header-button show-contacts">
                     @lang('ui.showContacts')
                 </button>
-                @if ($currentUser->id == $user->id)
+                @if ($currentUser?->id == $user->id)
                     <a href="{{route('profile.index')}}" class="header-button">@lang('ui.edit')</a>
                 @endif
             </div>

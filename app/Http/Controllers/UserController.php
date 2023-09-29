@@ -11,7 +11,7 @@ class UserController extends Controller
     public function show(Request $request, User $user)
     {
         $currentUser = auth()->user();
-        $hasChat = !!$currentUser?->messages()->where('user_id', $user->id)->orWhere('reciever_id', $user->id)->count();
+        $hasChat = $currentUser?->hasChatWith($user->id);
         $posts = $user->posts()->visible()->latest()->limit(11)->get();
         $totalPosts = $user->posts()->visible()->count();
 
@@ -24,7 +24,7 @@ class UserController extends Controller
             ->limit(3)
             ->get();
 
-        return view('users.show', compact('user', 'posts', 'categories', 'totalPosts'));
+        return view('users.show', compact('user', 'posts', 'categories', 'totalPosts', 'hasChat'));
     }
 
     public function contacts(Request $request, User $user)
