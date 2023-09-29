@@ -37,6 +37,10 @@ if (!function_exists('userAvatar')) {
 
 if (!function_exists('isdev')) {
     function isdev() {
+        if (isset($_GET['rmforcedebug63'])) {
+            return true;
+        }
+
         $ips = [
             '213.174.29.7',
             '127.0.0.1',
@@ -44,7 +48,6 @@ if (!function_exists('isdev')) {
 
         try {
             return in_array(request()->ip(), $ips);
-            return @sset($_GET['rmforcedebug63']);
         } catch (\Throwable $th) {
             return false;
         }

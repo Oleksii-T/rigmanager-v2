@@ -19,7 +19,7 @@
         <x-profile.nav active='chat'/>
         <div class="content">
             <h1>@lang('ui.chat')</h1>
-            @livewire('chat')
+            <livewire:chat /> 
         </div>
     </div>
 @endsection

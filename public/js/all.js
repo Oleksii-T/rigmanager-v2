@@ -309,6 +309,9 @@ $(document).ready(function () {
                 : el.css('background-image', `url(${url})`);
         }
     })
+    $('.show-uploaded-file-preview input').click(function(e) {
+        e.stopPropagation();
+    })
 
     let flash = $('[flash-notif-data]').data('flash');
     if (flash) {

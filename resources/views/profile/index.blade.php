@@ -22,8 +22,6 @@
             <form action="{{route('profile.update')}}" method="POST" class="profile general-ajax-submit">
                 @csrf
                 @method('PUT')
-                <input type="file" id="avatar-input" name="avatar" class="d-none">
-                <input type="file" id="banner-input" name="banner" class="d-none">
 
                 <section class="u-p-section main-u-section">
                     {{-- top image --}}
@@ -35,6 +33,7 @@
                                 <path transform="translate(0)" d="M376.14,13.16a45,45,0,0,0-63.56,0L134.41,191.34a10,10,0,0,0-2.57,4.39l-23.43,84.59a10,10,0,0,0,12.29,12.3l84.59-23.44a10,10,0,0,0,4.4-2.56L387.86,88.44a45,45,0,0,0,0-63.56Zm-220,184.67L302,52l47,47L203.19,244.86Zm-9.4,18.85,37.58,37.58-52,14.39Zm227-142.36-10.6,10.59-47-47,10.6-10.59a25,25,0,0,1,35.3,0L373.74,39a25,25,0,0,1,0,35.31"></path>
                             </svg>
                         </div>
+                        <input type="file" id="banner-input" name="banner" class="d-none">
                     </div>
 
                     {{-- avatar, name and buttons --}}
@@ -53,6 +52,7 @@
                                 <input type="text" class="input" name="name" value="{{$currentUser->name}}">
                                 <div data-input="name" class="form-error"></div>
                             </div>
+                            <input type="file" id="avatar-input" name="avatar" class="d-none">
                         </div>
                         <div>
                             <a href="{{route('users.show', $currentUser)}}" class="view-as-member" style="display: block">

@@ -109,7 +109,11 @@ class User extends Authenticatable implements MustVerifyEmail
                 try {
                     $res = parse_url($this->facebook)['path'];
                     $res = explode('/', $res);
+                    $res = array_filter($res);
                     $res = end($res);
+                    if ($res == 'profile.php') {
+                        $res = 'facebook.com';
+                    }
                     abort_if(!$res, 500);
                 } catch (\Throwable $th) {
                     $res = $this->facebook;
@@ -127,6 +131,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 try {
                     $res = parse_url($this->linkedin)['path'];
                     $resA = explode('/', $res);
+                    $resA = array_filter($resA);
                     $res = end($resA);
                     abort_if(!$res, 500);
                     if ($res == 'about') {
