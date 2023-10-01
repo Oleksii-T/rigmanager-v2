@@ -1,6 +1,22 @@
 <?php
 
 return [
+    'notifications' => [
+        'DAILY_POSTS_VIEWS' => 'Your posts have been viewed :VAR times within past day',
+        'DAILY_CONTACS_SHOWS' => 'Your contacts been requested :VAR times within past day',
+        'WEEKLY_POSTS_VIEWS' => 'Your posts have been viewed :VAR times within past week',
+        'WEEKLY_CONTACS_SHOWS' => 'Your contacts been requested :VAR times within past week',
+        'MAILER_SEND' => 'Mailer \':VAR\' found :VAR posts, see your inbox',
+        'IMPORT_SUCCESS' => 'Import :VAR finished successfully',
+        'IMPORT_FAIL' => 'Import :VAR failed',
+        'POST_APPROVED' => 'Post \':VAR\' been approved',
+        'POST_REJECTED' => 'Post \':VAR\' been rejected',
+        'SUB_CREATED' => 'Subscription successfully created',
+        'SUB_CANCELED' => 'Subscription successfully canceled',
+        'SUB_END_SOON' => 'Subscription expire soon',
+        'SUB_ENDED' => 'Subscription expired',
+        'SUB_EXTENDED' => 'Subscription extended successfully',
+    ],
     'profile' => [
         'invalid-curr-pass' => 'The provided password does not match your current password',
         'updated' => 'Profile updated successfully!',

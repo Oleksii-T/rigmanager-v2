@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Enums\NotificationType;
+use App\Enums\NotificationGroup;
 
 class NotificationRequest extends FormRequest
 {
@@ -28,8 +29,11 @@ class NotificationRequest extends FormRequest
         $rules = [
             'user_id' => ['required', 'exists:users,id'],
             'text' => ['required', 'array'],
-            'type' => ['required', 'string', Rule::in(NotificationType::values())],
             'text.en' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'string', Rule::in(NotificationType::values())],
+            'group' => ['required', 'string', Rule::in(NotificationGroup::values())],
+            'notifiable_id' => ['nullable', 'integer'],
+            'notifiable_type' => ['nullable', 'string', 'max:255'],
         ];
 
         return $rules;

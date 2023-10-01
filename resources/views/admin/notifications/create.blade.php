@@ -35,6 +35,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Text</label>
+                            <x-admin.multi-lang-input name="text" />
+                            <span data-input="text" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Type</label>
                             <div class="select-block">
                                 <select class="form-control" name="type">
@@ -43,14 +50,34 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <span data-input="user_id" class="input-error"></span>
+                            <span data-input="type" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Text</label>
-                            <x-admin.multi-lang-input name="text" />
-                            <span data-input="text" class="input-error"></span>
+                            <label>Group</label>
+                            <div class="select-block">
+                                <select class="form-control" name="group">
+                                    @foreach (\App\Enums\NotificationGroup::all() as $key => $value)
+                                        <option value="{{$key}}">{{$value}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span data-input="group" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Resource Class</label>
+                            <input type="text" class="form-control" name="notifiable_type">
+                            <span data-input="notifiable_type" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Resource ID</label>
+                            <input type="text" class="form-control" name="notifiable_id">
+                            <span data-input="notifiable_id" class="input-error"></span>
                         </div>
                     </div>
                 </div>

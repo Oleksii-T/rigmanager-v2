@@ -32,6 +32,10 @@ Route::get('test', function () {
 
     try {
 
+        \App\Models\Notification::query()->update([
+            'is_read' => false
+        ]);
+
     } catch (\Throwable $th) {
         dd('ERROR', $th);
     }

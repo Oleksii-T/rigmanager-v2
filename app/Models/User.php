@@ -87,6 +87,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Mailer::class);
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     public function imports()
     {
         return $this->hasMany(Import::class);
@@ -195,6 +200,20 @@ class User extends Authenticatable implements MustVerifyEmail
         $c = $this->posts()->whereHas('costs')->latest()->first()?->costs()->where('is_default', true)->value('currency');
 
         return $c ?? 'usd';
+    }
+
+    public function makeNotif($resource=null, $group=null, $type=null, $data=[])
+    {
+        $group ??= \App\Enums\NotificationGroup::MANUAL;
+        $type ??= Notification::groupToType($group);
+
+        return $this->notifications()->crete([
+            'notifiable_id' => $resource->id??null,
+            'notifiable_type' => $resource ? get_class($resource) : null,
+            'group' => $group,
+            'type' => $type,
+            'data' => $data,
+        ]);
     }
 
     public static function dataTable($query)

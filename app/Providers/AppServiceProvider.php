@@ -85,6 +85,21 @@ class AppServiceProvider extends ServiceProvider
             return Str::replaceArray('?', $bindings, $this->toSql());
         });
 
+        \Blade::directive('svg', function($arguments) {
+            // Funky madness to accept multiple arguments into the directive
+            list($path, $class) = array_pad(explode(',', trim($arguments, "() ")), 2, '');
+            $path = trim($path, "' ");
+            $class = trim($class, "' ");
+
+            // Create the dom document as per the other answers
+            $svg = new \DOMDocument();
+            $svg->load(public_path($path));
+            $svg->documentElement->setAttribute("class", $class);
+            $output = $svg->saveXML($svg->documentElement);
+
+            return $output;
+        });
+
         // load config values from db
         config(['services.google.client_id'=> Setting::get('google_client_id')]);
         config(['services.google.client_secret'=> Setting::get('google_client_secret')]);

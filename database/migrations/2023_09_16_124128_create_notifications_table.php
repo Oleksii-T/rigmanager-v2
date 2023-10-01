@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('notifiable_type')->nullable();
             $table->unsignedBigInteger('notifiable_id')->nullable();
             $table->smallInteger('type');
+            $table->smallInteger('group');
             $table->boolean('is_read')->default(false);
             $table->json('data')->nullable();
             $table->timestamps();
