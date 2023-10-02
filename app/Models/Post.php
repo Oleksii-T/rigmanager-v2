@@ -44,7 +44,7 @@ class Post extends Model
         'approved',
         'pending',
         'draft',
-        'banned'
+        'rejected'
     ];
 
     const DURATIONS = [

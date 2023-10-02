@@ -14,10 +14,6 @@ class Notification extends Model
 {
     use HasTranslations;
 
-    const TRANSLATABLES = [
-        'text',
-    ];
-
     protected $fillable = [
         'user_id',
         'notifiable_type',
@@ -56,53 +52,35 @@ class Notification extends Model
 
     public function text(): Attribute
     {
-        return $this->getTranslatedAttr(__FUNCTION__);
+        return new Attribute(
+            get: fn () => trans("messages.notifications.{$this->group->name}", $this->data['vars']??[])
+        );
     }
 
-    // get default type for group
-    public static function groupToType($group)
+    public static function make($uId, $group=null, $data=null, $resource=null, $type=null)
     {
-        $map = [
-            NotificationGroup::MANUAL => NotificationType::INFO,
-            NotificationGroup::DAILY_POSTS_VIEWS => NotificationType::INFO,
-            NotificationGroup::DAILY_CONTACS_SHOWS => NotificationType::INFO,
-            NotificationGroup::WEEKLY_POSTS_VIEWS => NotificationType::INFO,
-            NotificationGroup::WEEKLY_CONTACS_SHOWS => NotificationType::INFO,
-            NotificationGroup::MAILER_SEND => NotificationType::INFO,
-            NotificationGroup::IMPORT_SUCCESS => NotificationType::SUCCESS,
-            NotificationGroup::IMPORT_FAIL => NotificationType::DANGER,
-            NotificationGroup::POST_APPROVED => NotificationType::SUCCESS,
-            NotificationGroup::POST_REJECTED => NotificationType::DANGER,
-            NotificationGroup::SUB_CREATED => NotificationType::SUCCESS,
-            NotificationGroup::SUB_CANCELED => NotificationType::DANGER,
-            NotificationGroup::SUB_END_SOON => NotificationType::WARNING,
-            NotificationGroup::SUB_ENDED => NotificationType::DANGER,
-            NotificationGroup::SUB_EXTENDED => NotificationType::SUCCESS,
-        ];
+        $group ??= NotificationGroup::MANUAL;
+        $type ??= match ($group->value) {
+            NotificationGroup::IMPORT_SUCCESS->value => NotificationType::SUCCESS,
+            NotificationGroup::IMPORT_FAIL->value => NotificationType::DANGER,
+            NotificationGroup::POST_APPROVED->value => NotificationType::SUCCESS,
+            NotificationGroup::POST_REJECTED->value => NotificationType::DANGER,
+            NotificationGroup::SUB_CREATED->value => NotificationType::SUCCESS,
+            NotificationGroup::SUB_CANCELED->value => NotificationType::DANGER,
+            NotificationGroup::SUB_END_SOON->value => NotificationType::WARNING,
+            NotificationGroup::SUB_ENDED->value => NotificationType::DANGER,
+            NotificationGroup::SUB_EXTENDED->value => NotificationType::SUCCESS,
+            default => NotificationType::INFO
+        };
 
-        return $map[$group];
-    }
-
-    public static function groupText($group)
-    {
-        $map = [
-            NotificationGroup::DAILY_POSTS_VIEWS => trans('messages.notifications.'),
-            NotificationGroup::DAILY_CONTACS_SHOWS => trans('messages.notifications.'),
-            NotificationGroup::WEEKLY_POSTS_VIEWS => trans('messages.notifications.'),
-            NotificationGroup::WEEKLY_CONTACS_SHOWS => trans('messages.notifications.'),
-            NotificationGroup::MAILER_SEND => trans('messages.notifications.'),
-            NotificationGroup::IMPORT_SUCCESS => trans('messages.notifications.'),
-            NotificationGroup::IMPORT_FAIL => trans('messages.notifications.'),
-            NotificationGroup::POST_APPROVED => trans('messages.notifications.'),
-            NotificationGroup::POST_REJECTED => trans('messages.notifications.'),
-            NotificationGroup::SUB_CREATED => trans('messages.notifications.'),
-            NotificationGroup::SUB_CANCELED => trans('messages.notifications.'),
-            NotificationGroup::SUB_END_SOON => trans('messages.notifications.'),
-            NotificationGroup::SUB_ENDED => trans('messages.notifications.'),
-            NotificationGroup::SUB_EXTENDED => trans('messages.notifications.'),
-        ];
-
-        return $map[$group];
+        return self::create([
+            'user_id' => $uId,
+            'notifiable_id' => $resource->id??null,
+            'notifiable_type' => $resource ? get_class($resource) : null,
+            'group' => $group,
+            'type' => $type,
+            'data' => $data,
+        ]);
     }
 
     public static function dataTable($query)

@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Enums\NotificationGroup;
+use App\Models\Notification;
 use App\Models\Mailer;
 use App\Models\Post;
 use Illuminate\Support\Facades\Mail;
@@ -51,6 +53,13 @@ class MailerSendNotifs extends Command
                 }
 
                 Mail::to($mailer->user)->send(new MailerPostFound($mailer, $posts));
+
+                Notification::make($mailer->user->id, NotificationGroup::MAILER_SEND, [
+                    'vars' => [
+                        'name' => $mailer->title,
+                        'posts' => $posts->count()
+                    ]
+                ], $mailer);
 
                 $postsIds = $posts->pluck('id')->toArray();
 

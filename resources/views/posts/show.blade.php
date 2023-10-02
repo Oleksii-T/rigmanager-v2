@@ -102,7 +102,7 @@
                         @endauth
                     </div>
                 </div>
-                <a href="#" data-url="{{route('posts.contacts', $post)}}" class="button button-light show-contacts">{{__('ui.showContacts')}}</a>
+                <a href="#" data-url="{{route('users.contacts', $post->user)}}" class="button button-light show-contacts">{{__('ui.showContacts')}}</a>
                 <br>
                 @if ($currentUser?->id == $post->user_id)
                     <button class="button button-light send-message-to-self">{{__('ui.sendMessage')}}</button>

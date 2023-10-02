@@ -28,12 +28,11 @@ class NotificationRequest extends FormRequest
     {
         $rules = [
             'user_id' => ['required', 'exists:users,id'],
-            'text' => ['required', 'array'],
-            'text.en' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', Rule::in(NotificationType::values())],
             'group' => ['required', 'string', Rule::in(NotificationGroup::values())],
             'notifiable_id' => ['nullable', 'integer'],
             'notifiable_type' => ['nullable', 'string', 'max:255'],
+            'data' => ['nullable', 'string'],
         ];
 
         return $rules;

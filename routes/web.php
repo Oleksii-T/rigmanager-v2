@@ -58,6 +58,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
     Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');
     Route::put('posts/{post}/view', [PostController::class, 'view'])->name('posts.view');
+    Route::put('users/{user}/view', [UserController::class, 'view'])->name('users.view');
 
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('{user}', [UserController::class, 'show'])->name('show');
@@ -87,7 +88,6 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
             Route::prefix('posts')->name('posts.')->group(function () {
                 Route::get('create', [PostController::class, 'create'])->name('create');
                 Route::get('{post}/edit', [PostController::class, 'edit'])->name('edit');
-                Route::get('{post}/contacts', [PostController::class, 'contacts'])->name('contacts');
                 Route::get('{post}/views', [PostController::class, 'views'])->name('views');
                 Route::get('{post}/translations', [PostController::class, 'translationsEdit'])->name('translations.edit');
                 Route::post('', [PostController::class, 'store'])->name('store');

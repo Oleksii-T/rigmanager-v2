@@ -243,19 +243,6 @@ class PostController extends Controller
         return $this->jsonSuccess(trans('messages.postAddedFav'));
     }
 
-    public function contacts($post)
-    {
-        $user = auth()->user();
-        if (!$user) {
-            return $this->jsonError(trans('messages.authError'));
-        }
-
-        return $this->jsonSuccess('', [
-            'phone' => $post->user->phone ?? trans('ui.notSpecified'),
-            'email' => $post->user->email ?? trans('ui.notSpecified')
-        ]);
-    }
-
     public function view(Request $request, Post $post)
     {
         $post->saveView();

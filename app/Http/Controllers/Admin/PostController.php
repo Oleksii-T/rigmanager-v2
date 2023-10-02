@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Enums\NotificationGroup;
+use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Setting;
@@ -94,7 +96,18 @@ class PostController extends Controller
 
         $hidePending = Setting::get('hide_pending_posts', true, true);
         if ($oldStatus == 'pending' && $post->status == 'approved' && $hidePending) {
+            Notification::make($post->user_id, NotificationGroup::POST_APPROVED, [
+                'vars' => [
+                    'title' => $post->title
+                ]
+            ], $post);
             MailerProcessNewPost::dispatch($post);
+        } else if ($oldStatus == 'pending' && $post->status == 'rejected' && $hidePending) {
+            Notification::make($post->user_id, NotificationGroup::POST_REJECTED, [
+                'vars' => [
+                    'title' => $post->title
+                ]
+            ], $post);
         }
 
         return $this->jsonSuccess('Post updated successfully');

@@ -18,8 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('viewable_type');
             $table->unsignedBigInteger('viewable_id');
-            $table->unsignedInteger('count')->default(1);
-            $table->json('ips')->nullable();
+            $table->string('ip');
             $table->timestamps();
         });
     }

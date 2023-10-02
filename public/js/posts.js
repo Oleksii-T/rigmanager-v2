@@ -9,19 +9,6 @@ $(document).ready(function() {
     /* show page */
     /*************/
 
-    //count views
-    let postviewurl = $('[page-data]').data('viewurl');
-    if (postviewurl) {
-        $.ajax({
-            type: "POST",
-            url: postviewurl,
-            data: {
-                _method: 'PUT',
-                _token: $('meta[name=csrf-token]').attr('content')
-            },
-        });
-    }
-
     // init fancybox
     Fancybox.bind("[data-fancybox='postsgallery']", {
         // Your custom options

@@ -215,7 +215,7 @@ function showServerError(response) {
             errorElement.html(errorText);
         }
     } else {
-        swal.fire('Error!', 'Server error', 'error');
+        swal.fire('Error!', response.responseJSON.message, 'error');
     }
 }
 

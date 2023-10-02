@@ -106,6 +106,7 @@ class Notifications extends Component
 
     private function log($text)
     {
+        return;
         $id = auth()->id();
         dlog("Chat log user #$id: $text"); //! LOG
     }

@@ -9,6 +9,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Imports\PostsImport as PostsImportExcel;
+use App\Enums\NotificationGroup;
+use App\Models\Notification;
 use App\Models\Import;
 use App\Models\Translation;
 use App\Models\Post;
@@ -77,7 +79,13 @@ class PostsImport implements ShouldQueue
                 'error' => $th->getMessage(),
                 'trace' => substr($th->getTraceAsString(), 0, 600)
             ]);
-            
+
+            Notification::make($this->user->id, NotificationGroup::IMPORT_FAIL, [
+                'vars' => [
+                    'id' => $this->import->id
+                ]
+            ], $this->import);
+
             $this->import->update([
                 'status' => Import::STATUS_FAILED
             ]);
@@ -86,6 +94,12 @@ class PostsImport implements ShouldQueue
         }
 
         $this->log('DONE', ' ');
+
+        Notification::make($this->user->id, NotificationGroup::IMPORT_SUCCESS, [
+            'vars' => [
+                'id' => $this->import->id
+            ]
+        ], $this->import);
 
         $this->import->update([
             'posts' => $posts,
@@ -159,8 +173,8 @@ class PostsImport implements ShouldQueue
         //? use preg_split to split by two chars
         foreach (explode(' ', $imagesRaw) as $i) {
             $res = explode("\n", $i);
-            count($res) == 1 
-                ? $images[] = $i 
+            count($res) == 1
+                ? $images[] = $i
                 : $images = array_merge($images, $res);
         }
 

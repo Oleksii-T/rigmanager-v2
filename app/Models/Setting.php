@@ -34,6 +34,17 @@ class Setting extends Model
             ]
         ],
         [
+            'name' => 'Notifications',
+            'settings' => [
+                'notif_daily_posts_views_min' => 'Minimum daily post views to notify',
+                'notif_daily_contacts_views_min' => 'Minimum daily contacts views to notify',
+                'notif_daily_profile_views_min' => 'Minimum daily profile views to notify',
+                'notif_weekly_posts_views_min' => 'Minimum weekly post views to notify',
+                'notif_weekly_contacts_views_min' => 'Minimum weekly contacts views to notify',
+                'notif_weekly_profile_views_min' => 'Minimum weekly profile views to notify',
+            ]
+        ],
+        [
             'name' => 'GCP',
             'settings' => [
                 'gcp_project' => 'GCP project',

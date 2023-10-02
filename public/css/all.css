@@ -647,6 +647,9 @@ textarea.form-error {
     margin-bottom: 0px;
     color: white;
 }
+.notif-text p{
+    margin: 0px;
+}
 .notif-text svg{
     width: 20px !important;
     height: 20px !important;

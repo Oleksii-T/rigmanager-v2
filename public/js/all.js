@@ -459,6 +459,19 @@ $(document).ready(function () {
     $('.send-message-to-self').click(function(){
         showToast(trans('messages_canNotChatToSelf'), false);
     });
+
+    //count views
+    let postviewurl = $('[page-data]').data('viewurl');
+    if (postviewurl) {
+        $.ajax({
+            type: "POST",
+            url: postviewurl,
+            data: {
+                _method: 'PUT',
+                _token: $('meta[name=csrf-token]').attr('content')
+            },
+        });
+    }
 });
 
 function trans(key) {

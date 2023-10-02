@@ -11,12 +11,7 @@ class View extends Model
         'user_id',
         'viewable_type',
         'viewable_id',
-        'count',
-        'ips'
-    ];
-
-    protected $casts = [
-        'ips' => 'array'
+        'ip'
     ];
 
     public function user()
@@ -27,5 +22,28 @@ class View extends Model
     public function viewable()
     {
         return $this->morphTo('viewable');
+    }
+
+    public static function make($resourceType, $resourceId, $uId=null)
+    {
+        $user = auth()->user();
+        $vQ = self::query()
+            ->where('viewable_type', $resourceType)
+            ->where('viewable_id', $resourceId);
+
+        if ($user && $uId && $user->id == $uId) {
+            // do not log views of itself
+            return;
+        }
+
+        // create view record
+        View::create([
+            'viewable_type' => $resourceType,
+            'viewable_id' => $resourceId,
+            'user_id' => $user->id??null,
+            'ip' =>request()->ip()
+        ]);
+
+        return;
     }
 }

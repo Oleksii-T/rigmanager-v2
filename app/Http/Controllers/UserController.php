@@ -29,9 +29,16 @@ class UserController extends Controller
 
     public function contacts(Request $request, User $user)
     {
+        \App\Models\View::make('UserContacts', $user->id, $user->id);
+
         return $this->jsonSuccess('', [
             'phone' => $user->phone ?? trans('ui.notSpecified'),
             'email' => $user->email ?? trans('ui.notSpecified')
         ]);
+    }
+
+    public function view(Request $request, User $user)
+    {
+        $user->saveView();
     }
 }

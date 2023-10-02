@@ -20,6 +20,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('location:update')->weekly();
         $schedule->command('sitemap:generate')->everySixHours();
         $schedule->command('posts:truncate-deleted')->daily();
+
+        $schedule->command('notifications:daily-check')->daily();
+        $schedule->command('notifications:weekly-check')->weekly();
     }
 
     /**

@@ -36,10 +36,30 @@ class NotificationController extends Controller
     public function store(NotificationRequest $request)
     {
         $input = $request->validated();
+        $input['data'] = json_decode($input['data'], true);
+        abort_if(!$input['data'], 401, 'Invalid data json');
         $notification = Notification::create($input);
-        $notification->saveTranslations($input);
 
         return $this->jsonSuccess('Notification created successfully', [
+            'redirect' => route('admin.notifications.index')
+        ]);
+    }
+
+    public function edit(Request $request, Notification $notification)
+    {
+        $users = User::latest()->get();
+
+        return view('admin.notifications.edit', compact('users', 'notification'));
+    }
+
+    public function update(NotificationRequest $request, Notification $notification)
+    {
+        $input = $request->validated();
+        $input['data'] = json_decode($input['data'], true);
+        abort_if(!$input['data'], 401, 'Invalid data json');
+        $notification->update($input);
+
+        return $this->jsonSuccess('Notification updated successfully', [
             'redirect' => route('admin.notifications.index')
         ]);
     }

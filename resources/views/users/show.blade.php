@@ -16,6 +16,7 @@
 @endsection
 
 @section('content')
+    <span page-data data-viewurl="{{route('users.view', $user)}}"></span>
     {{-- top section with image --}}
     <section class="main-u-section">
 
