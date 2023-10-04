@@ -5,8 +5,7 @@
     @foreach ($views as $view)
         <div class="view-item">
             <p>{{$view->user->name ?? __('ui.guest')}}:</p>
-            <p>@lang('ui.views'): {{$view->count}}</p>
-            <p>@lang('ui.lastView'):  {{$view->updated_at->format('Y M, d')}}</p>
+            <p>@lang('ui.lastView'):  {{$view->created_at->format('Y M, d')}}</p>
         </div>
     @endforeach
 </div>

@@ -18,7 +18,10 @@
                         <!--country-->
                         <div class="catalog-lable catalog-region">{{$post->country_readable}}</div>
                         <!--views-->
-                        <div class="catalog-lable"><a href="{{route('posts.views', $post)}}" class="show-post-views">{{__('ui.views') . ': ' . $post->views->count()}}</a></div>
+                        <div class="catalog-lable">
+                            {{__('ui.views') . ': ' . $post->views->count()}}
+                            {{-- <a href="{{route('posts.views', $post)}}" class="show-post-views">{{__('ui.views') . ': ' . $post->views->count()}}</a> --}}
+                        </div>
                         <!--date-->
                         <div class="catalog-date">{{$post->created_at->diffForHumans()}}</div>
                     </div>
