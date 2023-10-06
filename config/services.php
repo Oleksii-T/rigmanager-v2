@@ -25,6 +25,12 @@ return [
         'token' => env('POSTMARK_TOKEN'),
     ],
 
+    'recaptcha' => [
+        'public_key' => env('RECAPTCHA_PUBLIC_KEY'),
+        'private_key' => env('RECAPTCHA_PRIVATE_KEY'),
+        'threshold' => env('RECAPTCHA_V3_THRESHOLD'),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),

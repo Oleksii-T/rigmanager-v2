@@ -24,7 +24,7 @@
 				{{env('MAIL_TO_ADDRESS')}}
 				{{env('CONTACT_PHONE')}}</div>
 			<div class="form-block">
-				<form id="form-contact" method="POST" action="{{route('feedbacks.store')}}" class="general-ajax-submit">
+				<form id="form-contact" method="POST" action="{{route('feedbacks.store')}}" class="general-ajax-submit with-recaptcha">
 					@csrf
                     <fieldset>
 						<label class="label">{{__('ui.userName')}} <span class="orange">*</span></label>

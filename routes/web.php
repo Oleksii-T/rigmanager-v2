@@ -54,7 +54,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('plans/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.subscribe');
 
     Route::get('contact-us', [FeedbackController::class, 'create'])->name('feedbacks.create');
-    Route::post('contact-us', [FeedbackController::class, 'store'])->middleware('throttle:feedbacks')->name('feedbacks.store');
+    Route::post('contact-us', [FeedbackController::class, 'store'])->middleware('throttle:feedbacks', 'recaptcha')->name('feedbacks.store');
 
     Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');
     Route::put('posts/{post}/view', [PostController::class, 'view'])->name('posts.view');

@@ -257,13 +257,19 @@ $(document).ready(function () {
 	});
 
     // general logic of ajax form submit (supports files)
-    $('form.general-ajax-submit').submit(function(e){
+    $('form.general-ajax-submit').submit(async function(e){
         e.preventDefault();
         let form = $(this);
         let button = $(this).find('button[type=submit]');
         let formData = new FormData(this);
         if (button.hasClass('cursor-wait')) {
             return;
+        }
+
+        if (form.hasClass('with-recaptcha')) {
+            // grecaptcha.ready(function() {});
+            let token = await grecaptcha.execute(window.Laravel.recaptcha_key, {action: 'submit'});
+            formData.append('g-recaptcha-response', token);
         }
 
         if (form.hasClass('show-full-loader')) {
@@ -478,7 +484,7 @@ function trans(key) {
     return window.Laravel.translations[key];
 }
 
-function ajaxSubmit(form, formData, button) {
+async function ajaxSubmit(form, formData, button) {
     $('.form-error').empty();
     button.addClass('cursor-wait');
     $.ajax({

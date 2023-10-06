@@ -90,6 +90,7 @@
 	{{-- <script src="{{asset('js/popper.min.js')}}"></script> --}}
 	<script src="{{asset('js/all.js')}}?v={{time()}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render={{config('services.recaptcha.public_key')}}"></script>
     @vite('resources/js/app.js')
 
     <!-- Google tag (gtag.js) -->

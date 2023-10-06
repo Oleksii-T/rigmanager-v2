@@ -51,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
                 'csrf' => csrf_token(),
                 'route_name' => \Route::currentRouteName(),
                 'translations' => [],
+                'recaptcha_key' => config('services.recaptcha.public_key')
                 // some more public data to use in JS
             ];
             $translationsForJs = [

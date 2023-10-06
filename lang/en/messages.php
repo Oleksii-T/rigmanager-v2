@@ -19,6 +19,7 @@ return [
         'SUB_ENDED' => 'Subscription expired',
         'SUB_EXTENDED' => 'Subscription extended successfully',
     ],
+    'invalid-recaptcha' => 'Invalid recaptcha',
     'profile' => [
         'invalid-curr-pass' => 'The provided password does not match your current password',
         'updated' => 'Profile updated successfully!',

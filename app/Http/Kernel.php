@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'is-admin' => \App\Http\Middleware\isAdmin::class,
         'save-activity' => \App\Http\Middleware\SaveActivity::class,
+        'recaptcha' => \App\Http\Middleware\Recaptcha::class,
 
         'localize'                => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
         'localizationRedirect'    => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
