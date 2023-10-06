@@ -13,7 +13,9 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        return view('profile.index');
+        $info = auth()->user()->info;
+
+        return view('profile.index', compact('info'));
     }
 
     public function chat()
@@ -43,15 +45,17 @@ class ProfileController extends Controller
         $input = $request->validated();
         $user = auth()->user();
         $user->update($input);
+        $input['info']['emails'] = array_filter($input['info']['emails']);
+        $user->info()->update($input['info']);
         $user->addAttachment($input['avatar']??null, 'avatar');
         $user->addAttachment($input['banner']??null, 'banner');
 
         return $this->jsonSuccess(trans('messages.profile.updated'));
     }
 
-    public function passwordForm()
+    public function credentials()
     {
-        return view('profile.password');
+        return view('profile.credentials');
     }
 
     public function password(ProfilePasswordRequest $request)
@@ -62,6 +66,21 @@ class ProfileController extends Controller
         ]);
 
         return $this->jsonSuccess(trans('messages.profile.updated-password'));
+    }
+
+    public function login(Request $request)
+    {
+        $user = auth()->user();
+
+        $data = $request->validate([
+            'email' => ['required', 'email', "unique:users,email,$user->id"]
+        ]);
+
+        $user->update([
+            'email' => $data['email']
+        ]);
+
+        return $this->jsonSuccess(trans('messages.profile.updated-login'));
     }
 
     public function posts(Request $request, $slug1=null, $slug2=null, $slug3=null)

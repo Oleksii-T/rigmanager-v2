@@ -225,6 +225,10 @@
     flex: 0 0 50%;
     max-width: 50%;
 }
+.col-4 {
+    flex: 0 0 33.3%;
+    max-width: 33.3%;
+}
 .col-12 {
     flex: 0 0 100%;
     max-width: 100%;

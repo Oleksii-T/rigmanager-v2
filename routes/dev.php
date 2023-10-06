@@ -30,6 +30,28 @@ Route::get('test', function () {
     // some testing code
     $d = [];
 
+    $a = '+1231-123-412';
+
+    $d = preg_match('/^[\+\d\-\ \(\)]{8,}$/', $a);
+    dd($d);
+
+    $users = User::all();
+
+    foreach ($users as $u) {
+        \App\Models\UserInformation::updateOrCreate(
+            [
+                'user_id' => $u->id
+            ],
+            [
+                'bio' => $u->bio,
+                'website' => $u->website,
+                'facebook' => $u->facebook,
+                'linkedin' => $u->linkedin,
+                'phones' => [$u->phone]
+            ]
+        );
+    }
+
     try {
 
     } catch (\Throwable $th) {

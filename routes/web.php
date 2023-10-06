@@ -114,7 +114,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
             Route::prefix('profile')->name('profile.')->group(function () {
                 Route::get('/', [ProfileController::class, 'index'])->name('index');
-                Route::get('password', [ProfileController::class, 'passwordForm'])->name('password-form');
+                Route::get('credentials', [ProfileController::class, 'credentials'])->name('credentials');
                 Route::get('posts/{slug1?}/{slug2?}/{slug3?}', [ProfileController::class, 'posts'])->name('posts');
                 Route::get('favorites/{slug1?}/{slug2?}/{slug3?}', [ProfileController::class, 'favorites'])->name('favorites');
                 Route::get('subscription', [ProfileController::class, 'subscription'])->name('subscription');
@@ -123,6 +123,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::post('posts/action', [ProfileController::class, 'action']);
                 Route::put('/', [ProfileController::class, 'update'])->name('update');
                 Route::put('password', [ProfileController::class, 'password'])->name('password');
+                Route::put('login', [ProfileController::class, 'login'])->name('login');
                 Route::put('clear-favs', [ProfileController::class, 'clearFavs'])->name('clear-favs');
             });
 

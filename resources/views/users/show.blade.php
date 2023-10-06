@@ -77,17 +77,17 @@
         {{-- bio --}}
         <div class="prod-content bio-container">
             <p class="bio-header">{{$user->name}}</p>
-            <p class="bio-content">{{$user->bio}}</p>
+            <p class="bio-content">{{$info->bio}}</p>
         </div>
 
         {{-- sidebar --}}
         <div class="prod-side">
             <div class="prod-info">
-                @if ($user->website)
+                @if ($info->website)
                     <div class="prod-info-item">
                         <div class="prod-info-name">@lang('ui.website')</div>
                         <div class="prod-info-text">
-                            <a target="_blank" href="{{$user->website}}">{{$user->website}}</a>
+                            <a target="_blank" href="{{$info->website}}">{{$info->website}}</a>
                         </div>
                     </div>
                 @endif
@@ -99,20 +99,29 @@
                     </div>
                 </div>
 
-                @if ($user->facebook)
+                @if ($info->facebook)
                     <div class="prod-info-item">
                         <div class="prod-info-name">Facebook</div>
                         <div class="prod-info-text">
-                            <a target="_blank" href="{{$user->facebook}}">{{$user->facebook_name}}</a>
+                            <a target="_blank" href="{{$info->facebook}}">{{$info->facebook_name}}</a>
                         </div>
                     </div>
                 @endif
 
-                @if ($user->linkedin)
+                @if ($info->linkedin)
                     <div class="prod-info-item">
                         <div class="prod-info-name">LinkedIn</div>
                         <div class="prod-info-text">
-                            <a target="_blank" href="{{$user->linkedin}}">{{$user->linkedin_name}}</a>
+                            <a target="_blank" href="{{$info->linkedin}}">{{$info->linkedin_name}}</a>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($info->whatsapp)
+                    <div class="prod-info-item">
+                        <div class="prod-info-name">WhatsApp</div>
+                        <div class="prod-info-text">
+                            <a target="_blank" href="{{$info->whatsapp}}">{{$info->whatsapp}}</a>
                         </div>
                     </div>
                 @endif

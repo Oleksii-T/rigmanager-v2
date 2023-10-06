@@ -62,27 +62,12 @@
                     </div>
                 </section>
 
-                <section class="u-p-section creads-section">
-                    <div>
-                        <label class="label">
-                            Login
-                            <span class="orange">*</span>
-                        </label>
-                        <input type="email" name="email" class="input" value="{{$currentUser->email}}">
-                        <div data-input="email" class="form-error"></div>
-                    </div>
-                    <div>
-                        <label class="label">Phone</label>
-                        <input type="text" name="phone" class="input" value="{{$currentUser->phone}}">
-                        <div data-input="phone" class="form-error"></div>
-                    </div>
-                </section>
-
                 <section class="u-p-section bio-section">
                     {{-- bio --}}
                     <div class="bio-container">
                         <p class="bio-header">@lang('ui.bio')</p>
-                        <textarea name="bio" class="bio-content" placeholder="@lang('ui.bioPh')">{{$currentUser->bio}}</textarea>
+                        <textarea name="info[bio]" class="bio-content" placeholder="@lang('ui.bioPh')">{{$info->bio}}</textarea>
+                        <div data-input="info.bio" class="form-error"></div>
                     </div>
 
                     {{-- sidebar --}}
@@ -91,7 +76,8 @@
                             <div class="prod-info-item">
                                 <div class="prod-info-name">@lang('ui.website')</div>
                                 <div class="prod-info-text">
-                                    <input type="text" name="website" class="input" placeholder="@lang('ui.websitePh')" value="{{$currentUser->website}}">
+                                    <input type="text" name="info[website]" class="input" placeholder="@lang('ui.websitePh')" value="{{$info->website}}">
+                                    <div data-input="info.website" class="form-error"></div>
                                 </div>
                             </div>
 
@@ -105,21 +91,83 @@
                                     </select>
                                 </div>
                             </div>
+                            <div data-input="country" class="form-error"></div>
 
                             <div class="prod-info-item">
                                 <div class="prod-info-name">Facebook</div>
                                 <div class="prod-info-text">
-                                    <input type="text" name="facebook" class="input" placeholder="@lang('ui.facebookPh')" value="{{$currentUser->facebook}}">
+                                    <input type="text" name="info[facebook]" class="input" placeholder="@lang('ui.facebookPh')" value="{{$info->facebook}}">
+                                    <div data-input="info.facebook" class="form-error"></div>
                                 </div>
                             </div>
 
                             <div class="prod-info-item">
                                 <div class="prod-info-name">LinkedIn</div>
                                 <div class="prod-info-text">
-                                    <input type="text" name="linkedin" class="input" placeholder="@lang('ui.linkedinPh')" value="{{$currentUser->linkedin}}">
+                                    <input type="text" name="info[linkedin]" class="input" placeholder="@lang('ui.linkedinPh')" value="{{$info->linkedin}}">
+                                    <div data-input="info.linkedin" class="form-error"></div>
                                 </div>
                             </div>
+
+                            {{--
+                            <div class="prod-info-item">
+                                <div class="prod-info-name">WhatsApp</div>
+                                <div class="prod-info-text">
+                                    <input type="text" name="info[whatsapp]" class="input" placeholder="@lang('ui.whatsAppPh')" value="{{$info->whatsapp}}">
+                                    <div data-input="info.whatsapp" class="form-error"></div>
+                                </div>
+                            </div>
+                            --}}
                         </div>
+                    </div>
+                </section>
+
+                <section class="u-p-section cts-section cts-email-section">
+                    <p class="cts-header">
+                        @lang('ui.contactEmails')
+                        <button type="button" class="header-button" id="add-cts-email">@lang('ui.add')+</button>
+                    </p>
+                    <div class="row" id="cts-email-inputs" data-defaultph="{{$currentUser->email}}">
+                        @forelse ($info->emails??[] as $i => $email)
+                            <div class="col-4 cts-el">
+                                <div class="cts-input">
+                                    <input type="text" class="input" name="info[emails][]" value="{{$email}}">
+                                    <button type="button" class="delete-cts-email">
+                                        @svg('icons/trash.svg')
+                                    </button>
+                                </div>
+                                <div data-input="info.emails.{{$i}}" class="form-error"></div>
+                            </div>
+                        @empty
+                            <div class="col-4 cts-el">
+                                <div class="cts-input">
+                                    <input type="text" class="input" name="info[emails][]" placeholder="{{$currentUser->email}}">
+                                    <button type="button" class="delete-cts-email">
+                                        @svg('icons/trash.svg')
+                                    </button>
+                                </div>
+                                <div data-input="info.emails.0" class="form-error"></div>
+                            </div>
+                        @endforelse
+                    </div>
+                </section>
+                <section class="u-p-section cts-section cts-phone-section">
+                    <p class="cts-header">
+                        @lang('ui.contactPhones')
+                        <button type="button" class="header-button" id="add-cts-phone">@lang('ui.add')+</button>
+                    </p>
+                    <div class="row" id="cts-phone-inputs" data-defaultph="+0-000-000-000">
+                        @foreach ($info->phones as $i => $phone)
+                            <div class="col-4 cts-el">
+                                <div class="cts-input">
+                                    <input type="text" class="input" name="info[phones][]" placeholder="{{$loop->first ? '+0-000-000-000' : ''}}" value="{{$phone}}">
+                                    <button type="button" class="delete-cts-phone">
+                                        @svg('icons/trash.svg')
+                                    </button>
+                                </div>
+                                <div data-input="info.phones.{{$i}}" class="form-error"></div>
+                            </div>
+                        @endforeach
                     </div>
                 </section>
 
@@ -128,10 +176,14 @@
                         <button type="submit" class="button">@lang('ui.save')</button>
                     </div>
                     <div>
-                        <a href="{{route('profile.password-form')}}" class="button" style="display: block">@lang('ui.editPassword')</a>
+                        <a href="{{route('profile.credentials')}}" class="button" style="display: block">@lang('ui.editCredentials')</a>
                     </div>
                 </section>
             </form>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script src="{{asset('js/profile.js')}}"></script>
 @endsection

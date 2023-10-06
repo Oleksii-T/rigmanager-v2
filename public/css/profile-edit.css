@@ -5,6 +5,10 @@
 .profile .form-error{
     margin-top: -20px;
 }
+.form-error {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
 
 /* top section */
 .u-p-section {
@@ -33,7 +37,6 @@
     display: flex;
     justify-content: space-between;
     height: 45px;
-    margin-bottom: 40px;
 }
 .avatar-name-container {
     display: flex;
@@ -110,7 +113,6 @@
     display: -ms-flexbox;
     display: flex;
     align-items: flex-start;
-    margin-bottom: 40px;
 }
 .bio-container {
     flex: 0 0 70%;
@@ -120,6 +122,7 @@
 .bio-header{
     color: white;
     font-size: 120%;
+    margin-bottom: 10px;
 }
 .bio-container textarea {
     width: 100%;
@@ -128,7 +131,7 @@
     padding: 15px 15px 15px 15px;
     border: 1px solid #505050;
     border-radius: 8px;
-    min-height: 240px;
+    min-height: 197px;
     transition: all 0.3s linear;
 }
 .bio-container textarea:hover, .bio-container textarea:focus {
@@ -145,10 +148,68 @@
     border: none;
     border-radius: 0;
 }
+.prod-info-item {
+    margin-bottom: 10px;
+}
+.prod-info-name {
+    margin: 0 0 2px;
+}
 .prod-info .input{
     font-size: 85%;
     height: 35px;
     padding: 0px 10px;
+    margin-bottom: 0px !important;
+}
+
+/* contacts emails block */
+.cts-section {
+
+}
+.cts-header {
+    color: white;
+    margin-bottom: 10px;
+}
+.cts-header button {
+    white-space: nowrap;
+    padding: 2px 10px;
+    color: #fff;
+    font-weight: 500;
+    line-height: 20px;
+    text-decoration: none;
+    background: #ff8d12;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.cts-section .col-4 {
+    padding-right: 5px;
+}
+.cts-section input{
+    margin-bottom: 0px;
+}
+.cts-input {
+    position: relative;
+}
+.cts-input input{
+    padding-right: 15px;
+}
+.cts-input button{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    color: red;
+    cursor: pointer;
+    height: 100%;
+    width: 30px;
+}
+.cts-input button svg{
+    width: 17px;
+}
+.cts-input button svg path{
+    fill: white;
+    transition: all .3s linear;
+}
+.cts-input button:hover svg path{
+    fill: #ff8d12;
 }
 
 /* country select2 */
@@ -185,12 +246,10 @@
     }
     .main-info-cotainer {
         display: block;
+        margin-block: 25px;
     }
     .avatar-name-container {
         justify-items: left;
-    }
-    .main-info-cotainer {
-        margin-block: 25px;
     }
     .top-image {
         height: 160px;

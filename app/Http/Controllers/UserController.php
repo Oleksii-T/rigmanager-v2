@@ -11,6 +11,7 @@ class UserController extends Controller
     public function show(Request $request, User $user)
     {
         $currentUser = auth()->user();
+        $info = $currentUser->info;
         $hasChat = $currentUser?->hasChatWith($user->id);
         $posts = $user->posts()->visible()->latest()->limit(11)->get();
         $totalPosts = $user->posts()->visible()->count();
@@ -24,16 +25,23 @@ class UserController extends Controller
             ->limit(3)
             ->get();
 
-        return view('users.show', compact('user', 'posts', 'categories', 'totalPosts', 'hasChat'));
+        return view('users.show', compact('user', 'info', 'posts', 'categories', 'totalPosts', 'hasChat'));
     }
 
     public function contacts(Request $request, User $user)
     {
         \App\Models\View::make('UserContacts', $user->id, $user->id);
+        $phones = $user->info->phones;
+        $phones = array_filter($phones);
+        $emails = $user->info->emails;
+        $emails = array_filter($emails);
+        if (!$emails) {
+            $emails = [$user->email];
+        }
 
         return $this->jsonSuccess('', [
-            'phone' => $user->phone ?? trans('ui.notSpecified'),
-            'email' => $user->email ?? trans('ui.notSpecified')
+            'emails' => $emails,
+            'phones' => $phones ? $phones : trans('ui.notSpecified'),
         ]);
     }
 

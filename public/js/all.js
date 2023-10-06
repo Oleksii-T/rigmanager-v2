@@ -393,11 +393,11 @@ $(document).ready(function () {
             url: button.data('url'),
             success: function(response) {
                 button.removeClass('loading');
-                let email = response.data.email;
-                let phone = response.data.phone;
+                let emails = response.data.emails.join(', ');
+                let phones = response.data.phones.join(', ');
                 swal.fire({
-                    html: `<p>${trans('ui_email')}: <b>${email}</b></p>
-                        <p>${trans('ui_phone')}: <b>${phone}</b></p>`,
+                    html: `<p>${trans('ui_email')}: <b>${emails}</b></p>
+                        <p>${trans('ui_phone')}: <b>${phones}</b></p>`,
                     showConfirmButton: false,
                     showCancelButton: true,
                 });
@@ -558,14 +558,21 @@ function showServerError(response) {
         let firstError = null;
         for ([field, value] of Object.entries(r.errors)) {
             let dotI = field.indexOf('.');
-            if (dotI != -1) {
-                field = field.slice(0, dotI);
-            }
+            // if (dotI != -1) {
+            //     field = field.slice(0, dotI);
+            // }
+            field = field.replaceAll('.', '\\.');
             let errorText = '';
             let errorElement = $(`.form-error[data-input=${field}]`);
             errorElement = errorElement.length ? errorElement : $(`.form-error[data-input="${field}[]"]`);
             errorElement = errorElement.length ? errorElement : $(`[name=${field}]`).closest('.form-group').find('.form-error');
             errorElement = errorElement.length ? errorElement : $(`[name="${field}[]"]`).closest('.form-group').find('.form-error');
+
+            if (!errorElement.length) {
+                console.log(`ERROR: element for ${field} no found`); //! LOG
+                continue;
+            }
+
             for (const [key, error] of Object.entries(value)) {
                 errorText = errorText ? errorText+'<br>'+error : error;
             }
@@ -576,8 +583,14 @@ function showServerError(response) {
             }
         }
 
-        let firstErrorField = firstError.data('input');
-        animatedScroll($(`[name=${firstErrorField}]`), 50);
+        let firstErrorField = firstError.data('input').replaceAll('.', '\\.');
+        let input = $(`[name=${firstErrorField}]`);
+
+        //TODO: add check is in viewport
+        if (input.length) {
+            animatedScroll(input, 50);
+        }
+
 
     } else {
         let msg = response.responseJSON?.message;

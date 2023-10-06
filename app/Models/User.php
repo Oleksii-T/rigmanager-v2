@@ -8,7 +8,6 @@ use Illuminate\Notifications\Notifiable;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordReset;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Traits\HasAttachments;
 use App\Traits\Viewable;
 
@@ -29,11 +28,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'country',
-        'phone',
-        'bio',
-        'website',
-        'facebook',
-        'linkedin',
         'last_active_at',
     ];
 
@@ -57,6 +51,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_active_at' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($model) {
+            $model->info()->create([]);
+        });
+    }
+
     // Get the route key for the model.
     public function getRouteKeyName()
     {
@@ -66,6 +69,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function socials()
     {
         return $this->hasMany(UserSocial::class);
+    }
+
+    public function info()
+    {
+        return $this->hasOne(UserInformation::class);
     }
 
     public function roles()
@@ -106,50 +114,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function banner()
     {
         return $this->morphOne(Attachment::class, 'attachmentable')->where('group', 'banner');
-    }
-
-    public function facebookName(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                try {
-                    $res = parse_url($this->facebook)['path'];
-                    $res = explode('/', $res);
-                    $res = array_filter($res);
-                    $res = end($res);
-                    if ($res == 'profile.php') {
-                        $res = 'facebook.com';
-                    }
-                    abort_if(!$res, 500);
-                } catch (\Throwable $th) {
-                    $res = $this->facebook;
-                }
-
-                return $res;
-            },
-        );
-    }
-
-    public function linkedinName(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                try {
-                    $res = parse_url($this->linkedin)['path'];
-                    $resA = explode('/', $res);
-                    $resA = array_filter($resA);
-                    $res = end($resA);
-                    abort_if(!$res, 500);
-                    if ($res == 'about') {
-                        $res = $resA[count($resA)-2];
-                    }
-                } catch (\Throwable $th) {
-                    $res = $this->linkedin;
-                }
-
-                return $res;
-            },
-        );
     }
 
     public function scopeOnline($query, bool $is=true)

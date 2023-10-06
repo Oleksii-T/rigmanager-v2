@@ -23,7 +23,9 @@ return [
         'invalid-curr-pass' => 'The provided password does not match your current password',
         'updated' => 'Profile updated successfully!',
         'updated-password' => 'Password updated successfully!',
+        'updated-login' => 'Login updated successfully!',
         'image-deleted' => 'Profile picture was deleted successfully!',
+        'canNotDeleteLastEmailContact' => 'One email contact is required'
     ],
     'inProgress' => 'Functionality is not ready yet',
     'success' => '',

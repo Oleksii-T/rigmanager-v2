@@ -56,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
             $translationsForJs = [
                 'messages.inProgress',
                 'messages.canNotChatToSelf',
+                'messages.profile.canNotDeleteLastEmailContact',
                 'ui.email',
                 'ui.phone',
                 'ui.tba_modal',

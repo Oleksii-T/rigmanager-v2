@@ -18,6 +18,26 @@
             <h1>@lang('ui.profileEditing')</h1>
             <div class="profile-edit">
                 <div class="profile-edit-column">
+                    <form action="{{route('profile.login')}}" method="POST" class="general-ajax-submit">
+                        @csrf
+                        @method('PUT')
+                        <fieldset>
+                            <div class="form-title">
+                                @lang('ui.login')
+                            </div>
+
+                            <label class="label">@lang('ui.login') <span class="orange">*</span></label>
+                            <input type="email" name="email" class="input" value="{{$currentUser->email}}">
+                            <div data-input="email" class="form-error"></div>
+                            <div class="form-note">@lang('ui.loginHelp')</div>
+
+                            <div class="form-button">
+                                <button type="submit" class="button">@lang('ui.changeLogin')</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="profile-edit-column">
                     <form action="{{route('profile.password')}}" method="POST" class="general-ajax-submit">
                         @csrf
                         @method('PUT')
