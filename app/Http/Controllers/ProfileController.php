@@ -144,11 +144,17 @@ class ProfileController extends Controller
                     'is_active' => false
                 ]);
                 break;
-            case 'delete':
-                $message = "$count posts deleted";//! TRANSLATE
-                foreach ($query->get() as $p) {
-                    $p->delete();
-                }
+            case 'trash':
+                $message = "$count posts trashed";//! TRANSLATE
+                $query->update([
+                    'is_trashed' => true
+                ]);
+                break;
+            case 'recover':
+                $message = "$count posts recovered";//! TRANSLATE
+                $query->update([
+                    'is_trashed' => false
+                ]);
                 break;
             default:
                 return $this->jsonError('Invalid action');//! TRANSLATE
@@ -159,7 +165,6 @@ class ProfileController extends Controller
 
     public function favorites(Request $request, $slug1=null, $slug2=null, $slug3=null)
     {
-
         $category = $slug3 ?? $slug2 ?? $slug1;
         $filters = $request->all();
 
@@ -170,7 +175,7 @@ class ProfileController extends Controller
         }
 
         if (!$request->ajax()) {
-            return view('profile.posts', compact('category'));
+            return view('profile.favorites', compact('category'));
         }
 
         $posts = auth()->user()->favorites()->visible()->withCount('views')->filter($filters);

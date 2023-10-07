@@ -1687,6 +1687,7 @@ textarea.form-error {
 .bar-edit svg {width: 19px;}
 .bar-view svg {width: 20px;}
 .bar-delete svg {width: 15px;}
+.bar-recover svg {width: 22px;}
 .bar-icons path {
 	fill: #999999;
 	transition: all 0.3s linear;

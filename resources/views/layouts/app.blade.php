@@ -10,11 +10,6 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="#1f1f1f">
 	<meta name="csrf-token" content="{{csrf_token()}}">
 	@yield('meta')
-	{{-- <link rel="canonical" href="{{url()->full()}}">
-	<link rel="alternate" href="{{hreflang_url(url()->full(), 'uk')}}" hreflang="x-default">
-	<link rel="alternate" href="{{hreflang_url(url()->full(), 'uk')}}" hreflang="uk">
-	<link rel="alternate" href="{{hreflang_url(url()->full(), 'ru')}}" hreflang="ru">
-	<link rel="alternate" href="{{hreflang_url(url()->full(), 'en')}}" hreflang="en"> --}}
 	<link rel="icon" href="{{asset('icons/favicon.ico')}}">
 	<meta property="og:image" content="{{asset('icons/og-favicon.png')}}" />
 

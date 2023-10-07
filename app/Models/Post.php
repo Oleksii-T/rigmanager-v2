@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Yajra\DataTables\DataTables;
-use App\Traits\HasTranslations;
-use App\Traits\HasAttachments;
 use App\Traits\Viewable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use App\Events\PostCreated;
+use App\Traits\HasAttachments;
+use App\Traits\HasTranslations;
+use Yajra\DataTables\DataTables;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class Post extends Model
 {
@@ -28,6 +27,7 @@ class Post extends Model
         'auto_translate',
         'is_tba',
         'is_active',
+        'is_trashed',
         'is_urgent',
         'amount',
         'country',
@@ -124,6 +124,7 @@ class Post extends Model
     {
         $hidePending = Setting::get('hide_pending_posts', true, true);
         $query->where('is_active', true);
+        $query->where('is_trashed', false);
 
         if ($hidePending) {
             return $query->where('status', 'approved');
@@ -380,6 +381,39 @@ class Post extends Model
         $costTo = $filters['cost_to']??null;
         $author = $filters['author']??null;
         $category = $filters['category']??null;
+        $status = $filters['status']??null;
+        $hidePending = Setting::get('hide_pending_posts', true, true);
+
+        if ($status && request()->route()->getName() != 'profile.posts') {
+            $status = null;
+        }
+
+        if ($status == 'active') {
+            $posts->where('is_active', true);
+            if ($hidePending) {
+                $posts->where('status', 'approved');
+            }
+        }
+        if ($status == 'hidden') {
+            $posts->where('is_active', false);
+            if ($hidePending) {
+                $posts->where('status', 'approved');
+            }
+        }
+        if ($status == 'pending') {
+            if ($hidePending) {
+                $posts->where('status', 'pending');
+            } else {
+                $posts->where('id', 0);
+            }
+        }
+        if ($status == 'rejected') {
+            $posts->where('status', 'rejected');
+        }
+        if ($status == 'trashed') {
+            $posts->where('is_trashed', true);
+        }
+
         if (!($category instanceof Category)) {
             $category = Category::find($category);
         }

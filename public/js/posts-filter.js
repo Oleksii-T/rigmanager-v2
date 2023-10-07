@@ -7,6 +7,7 @@ let params = {
     conditions: [],
     types: [],
     is_urgent: [],
+    status: '',
     search: '',
     sorting: 'latest'
 };
@@ -62,6 +63,7 @@ $(document).ready(function () {
         let val = $(this).val();
         params[name] = val;
         checkCurrency(name, val);
+        params.page = 1;
         filter();
     });
 

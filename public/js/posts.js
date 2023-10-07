@@ -474,17 +474,27 @@ $(document).ready(function() {
         });
     })
 
+    // delete post
     $(document).on('click', '.bar-delete', async function (e) {
         e.preventDefault();
         let url = $(this).attr('href');
+        let title = $(this).hasClass('only-trash')
+            ?  'Move post to Trash?'
+            : 'Are you sure?';//! TRANSLATE
+        let text = $(this).hasClass('only-trash')
+            ? 'Trashed posts wll be automatically deleted after one week.'
+            : "You won't be able to revert this!";//! TRANSLATE
+        let confirmButtonText = $(this).hasClass('only-trash')
+            ? 'Yes, move to trash!'
+            : 'Yes, delete it!';//! TRANSLATE
 
         let res = await swal.fire({
-            title: 'Are you sure?',//! TRANSLATE
-            text: "You won't be able to revert this!",//! TRANSLATE
+            title,
+            text,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'//! TRANSLATE
+            confirmButtonText
         });
 
         if (!res.isConfirmed) {
@@ -498,6 +508,30 @@ $(document).ready(function() {
             type: 'post',
             data: {
                 _method: 'DELETE',
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: (response)=>{
+                showToast(response.message);
+                $(document).trigger('posts:filter');
+            },
+            error: function(response) {
+                showServerError(response);
+            }
+        });
+    })
+
+    // recover post
+    $(document).on('click', '.bar-recover', async function (e) {
+        e.preventDefault();
+        let url = $(this).attr('href');
+
+        fullLoader();
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                _method: 'PUT',
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: (response)=>{

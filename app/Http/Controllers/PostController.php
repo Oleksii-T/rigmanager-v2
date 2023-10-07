@@ -297,6 +297,32 @@ class PostController extends Controller
         return $this->jsonSuccess(trans('messages.tba.send'));
     }
 
+    public function recover(Request $request, Post $post)
+    {
+        $user = auth()->user();
+
+        abort_if($post->user_id != $user->id, 403);
+
+        $post->update([
+            'is_trashed' => false
+        ]);
+
+        return $this->jsonSuccess('Post recovered'); //! TRANSLATE
+    }
+
+    public function trash(Request $request, Post $post)
+    {
+        $user = auth()->user();
+
+        abort_if($post->user_id != $user->id, 403);
+
+        $post->update([
+            'is_trashed' => true
+        ]);
+
+        return $this->jsonSuccess('Post trashed'); //! TRANSLATE
+    }
+
     public function destroy(Request $request, Post $post)
     {
         $user = auth()->user();

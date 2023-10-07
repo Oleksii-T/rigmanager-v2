@@ -97,6 +97,8 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle');
                 Route::put('{post}/translations', [PostController::class, 'translationsUpdate'])->name('translations.update');
                 Route::put('{post}', [PostController::class, 'update'])->name('update');
+                Route::put('{post}/recover', [PostController::class, 'recover'])->name('recover');
+                Route::delete('{post}/trash', [PostController::class, 'trash'])->name('trash');
                 Route::delete('{post}', [PostController::class, 'destroy'])->name('destroy');
             });
 

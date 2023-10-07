@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('condition')->nullable();
             $table->string('duration');
             $table->boolean('auto_translate')->default(true);
-            $table->boolean('is_active')->default(false);
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_trashed')->default(false);
             $table->boolean('is_urgent')->default(false);
             $table->boolean('is_import')->default(false);
             $table->unsignedInteger('amount')->nullable();
