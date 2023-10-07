@@ -25,6 +25,8 @@ return [
         'updated' => 'Profile updated successfully!',
         'updated-password' => 'Password updated successfully!',
         'updated-login' => 'Login updated successfully!',
+        'maxContactEmails' => 'Maximum 6 emails',
+        'maxContactPhones' => 'Maximum 6 phones',
         'image-deleted' => 'Profile picture was deleted successfully!',
         'canNotDeleteLastEmailContact' => 'One email contact is required'
     ],

@@ -150,6 +150,7 @@
                             </div>
                         @endforelse
                     </div>
+                    <div data-input="info.emails" class="form-error"></div>
                 </section>
                 <section class="u-p-section cts-section cts-phone-section">
                     <p class="cts-header">
@@ -169,6 +170,7 @@
                             </div>
                         @endforeach
                     </div>
+                    <div data-input="info.phones" class="form-error"></div>
                 </section>
 
                 <section class="creads-section">
@@ -186,4 +188,25 @@
 
 @section('scripts')
     <script src="{{asset('js/profile.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#test-show-toastp').click(function(e) {
+                e.preventDefault();
+                showToast('Test Text here Lorep Ipsum some more text', true);
+            });
+            $('#test-show-toastn').click(function(e) {
+                e.preventDefault();
+                showToast('Test Text here Lorep Ipsum', false);
+            });
+
+            $('#test-show-modalp').click(function(e) {
+                e.preventDefault();
+                showPopUp(null, null, true);
+            });
+            $('#test-show-modaln').click(function(e) {
+                e.preventDefault();
+                showPopUp(null, null, false);
+            });
+        });
+    </script>
 @endsection

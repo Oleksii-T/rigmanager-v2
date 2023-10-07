@@ -2,6 +2,10 @@ $(document).ready(function() {
     $('#add-cts-email').click(function(e) {
         e.preventDefault();
         let wraper = $('#cts-email-inputs');
+        if (wraper.children().length >= 6) {
+            showToast(trans('messages_profile_maxContactEmails'), false);
+            return;
+        }
         let element = wraper.children().first();
         let clone = element.clone();
         clone.find('input').removeAttr('placeholder').val('');
@@ -32,6 +36,10 @@ $(document).ready(function() {
     $('#add-cts-phone').click(function(e) {
         e.preventDefault();
         let wraper = $('#cts-phone-inputs');
+        if (wraper.children().length >= 6) {
+            showToast(trans('messages_profile_maxContactPhones'), false);
+            return;
+        }
         let element = wraper.children().first();
         if (element.hasClass('d-none')) {
             element.removeClass('d-none');

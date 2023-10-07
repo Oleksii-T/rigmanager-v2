@@ -58,6 +58,8 @@ class AppServiceProvider extends ServiceProvider
                 'messages.inProgress',
                 'messages.canNotChatToSelf',
                 'messages.profile.canNotDeleteLastEmailContact',
+                'messages.profile.maxContactEmails',
+                'messages.profile.maxContactPhones',
                 'ui.email',
                 'ui.phone',
                 'ui.tba_modal',

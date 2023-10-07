@@ -78,7 +78,7 @@
         <div class="prod-side">
             <div class="prod-author">
                 <div class="prod-author-info">
-                    <img class="prod-author-ava" src="{{userAvatar()}}" alt="{{$post->user->avatar->alt??''}}">
+                    <img class="prod-author-ava" src="{{userAvatar($post->user)}}" alt="{{$post->user->avatar->alt??''}}">
                     <div class="prod-author-about">
                         <div class="prod-author-name">
                             <a href="{{route('users.show', $post->user)}}" class="orange">

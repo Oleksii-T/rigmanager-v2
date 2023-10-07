@@ -30,29 +30,42 @@ Route::get('test', function () {
     // some testing code
     $d = [];
 
-    $a = '+1231-123-412';
-
-    $d = preg_match('/^[\+\d\-\ \(\)]{8,}$/', $a);
-    dd($d);
-
-    $users = User::all();
-
-    foreach ($users as $u) {
-        \App\Models\UserInformation::updateOrCreate(
-            [
-                'user_id' => $u->id
-            ],
-            [
-                'bio' => $u->bio,
-                'website' => $u->website,
-                'facebook' => $u->facebook,
-                'linkedin' => $u->linkedin,
-                'phones' => [$u->phone]
-            ]
-        );
-    }
 
     try {
+
+        $user = User::find(9);
+        $id = $user->id;
+        $messages = \App\Models\Message::query()
+            ->where(function ($q) use ($id){
+                $q
+                    ->where('reciever_id', $id)
+                    ->orWhere('user_id', $id);
+            })
+            ->get();
+
+        $d['messages'] = [];
+        foreach ($messages as $m) {
+            $d['messages'][$m->id] = "$m->user_id -> $m->reciever_id | $m->created_at";
+        }
+
+        $tId = 14;
+        $messages = \App\Models\Message::query()
+            ->where(function ($q) use ($id){
+                $q
+                    ->where('reciever_id', $id)
+                    ->orWhere('user_id', $id);
+            })
+            ->where(function ($q) use ($tId){
+                $q
+                    ->where('user_id', $tId)
+                    ->orWhere('reciever_id', $tId);
+            })
+            ->get();
+
+        $d['messages-to-trg'] = [];
+        foreach ($messages as $m) {
+            $d['messages-to-trg'][$m->id] = "$m->user_id -> $m->reciever_id | $m->created_at";
+        }
 
     } catch (\Throwable $th) {
         dd('ERROR', $th);

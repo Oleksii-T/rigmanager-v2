@@ -37,9 +37,9 @@ class ProfileRequest extends FormRequest
             'info.linkedin' => ['nullable', 'string', 'max:255'],
             'info.whatsapp' => ['nullable', 'string', 'max:255'],
             'info.bio' => ['nullable', 'string', 'max:5000'],
-            'info.phones' => ['nullable', 'array'],
+            'info.phones' => ['nullable', 'array', 'max:6'],
             'info.phones.*' => ['nullable', 'string', 'max:30', 'regex:/^[\+\d\-\ \(\)]{8,}$/'],
-            'info.emails' => ['nullable', 'array'],
+            'info.emails' => ['nullable', 'array', 'max:6'],
             'info.emails.*' => ['nullable', 'email', 'max:255'],
         ];
     }

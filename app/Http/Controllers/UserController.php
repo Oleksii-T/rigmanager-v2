@@ -30,10 +30,9 @@ class UserController extends Controller
 
     public function contacts(Request $request, User $user)
     {
-        \App\Models\View::make('UserContacts', $user->id, $user->id);
-        $phones = $user->info->phones;
+        $phones = $user->info->phones??[];
         $phones = array_filter($phones);
-        $emails = $user->info->emails;
+        $emails = $user->info->emails??[];
         $emails = array_filter($emails);
         if (!$emails) {
             $emails = [$user->email];
