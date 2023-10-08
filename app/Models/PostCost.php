@@ -10,6 +10,7 @@ class PostCost extends Model
         'post_id',
         'is_default',
         'currency',
+        'type',
         'cost'
     ];
 

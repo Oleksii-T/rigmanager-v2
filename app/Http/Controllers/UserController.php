@@ -30,13 +30,8 @@ class UserController extends Controller
 
     public function contacts(Request $request, User $user)
     {
-        $phones = $user->info->phones??[];
-        $phones = array_filter($phones);
-        $emails = $user->info->emails??[];
-        $emails = array_filter($emails);
-        if (!$emails) {
-            $emails = [$user->email];
-        }
+        $phones = array_filter($user->info->phones??[]);
+        $emails = $user->getEmails();
 
         return $this->jsonSuccess('', [
             'emails' => $emails,

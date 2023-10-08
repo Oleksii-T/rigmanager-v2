@@ -11,9 +11,6 @@
 .c-pointer {
     cursor: pointer;
 }
-.d-none {
-    display: none !important;
-}
 .transparent {
     opacity: 0;
 }
@@ -214,7 +211,28 @@
 .select2-search--dropdown .select2-search__field {
     padding: 8px;
 }
+.ui-tooltip {
+    background-color: rgb(40,40,40) ;
+    border-radius: 8px;
+    border: 1px solid #505050;
+    box-shadow: none;
+    padding: 2px 8px;
+    position: absolute;
+    z-index: 99999;
+    max-width: 300px;
+}
+.ui-tooltip-content {
+    color: white;
+    font-size: 80%;
+}
 
+/* bootstrap-ish  */
+.d-none {
+    display: none !important;
+}
+.d-inline-block {
+    display: inline-block !important;
+}
 .row {
     display: -ms-flexbox;
     display: flex;
@@ -238,18 +256,4 @@
         flex: 0 0 100%;
         max-width: 100%;
     }
-}
-.ui-tooltip {
-    background-color: rgb(40,40,40) ;
-    border-radius: 8px;
-    border: 1px solid #505050;
-    box-shadow: none;
-    padding: 2px 8px;
-    position: absolute;
-    z-index: 99999;
-    max-width: 300px;
-}
-.ui-tooltip-content {
-    color: white;
-    font-size: 80%;
 }

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Models\Post;
-use App\Models\Attachment;
-use App\Models\Feedback;
-use App\Models\Category;
 use App\Models\Setting;
-use App\Http\Requests\PostRequest;
+use App\Models\Category;
+use App\Models\Feedback;
 use App\Jobs\PostTranslate;
+use App\Models\Notification;
+use Illuminate\Http\Request;
+use App\Enums\NotificationGroup;
+use App\Http\Requests\PostRequest;
 use App\Jobs\MailerProcessNewPost;
-use App\Services\TranslationService;
 use Illuminate\Support\Facades\Bus;
+use App\Services\TranslationService;
 use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
@@ -67,6 +67,13 @@ class PostController extends Controller
         $user = auth()->user();
         $input = $request->validated();
         $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
+        if (($input['cost_to']??false) && !($input['cost_from']??false)) {
+            $input['cost'] = $input['cost_to'];
+        }
+        if (!($input['cost_to']??false) && ($input['cost_from']??false)) {
+            $input['cost'] = $input['cost_from'];
+        }
+        $input['duration'] = 'unlim';
         $input['origin_lang'] = $textLocale;
         $input['status'] = 'pending';
         $input['is_active']= true;
@@ -280,10 +287,18 @@ class PostController extends Controller
         $author = $post->user;
 
         if ($from->id == $author->id) {
-            return $this->jsonError(trans('messages.tba.canSendToSelf'));
+            // return $this->jsonError(trans('messages.tba.canSendToSelf'));
         }
 
-        Mail::to($post->user->email)->send(new \App\Mail\PostTba($post, $from));
+        $emails = $author->getEmails();
+        $mail = Mail::to($emails[0]);
+        array_shift($emails);
+
+        foreach ($emails as $e) {
+            $mail->cc($e);
+        }
+
+        $mail->send(new \App\Mail\PostTba($post, $from));
 
         \Log::info('TBA request sended', [
             'post_id' => $post->id,
@@ -293,6 +308,14 @@ class PostController extends Controller
             'from_id' => $from->id,
             'from_email' => $from->email
         ]);
+
+        Notification::make($author->id, NotificationGroup::PRICE_REQ_RECIEVED, [
+            'vars' => [
+                'userName' => $from->name,
+                'userEmail' => $from->getEmails()[0],
+                'postTitle' => $post->title
+            ]
+        ], $post);
 
         return $this->jsonSuccess(trans('messages.tba.send'));
     }

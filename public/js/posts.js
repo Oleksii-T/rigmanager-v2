@@ -520,6 +520,19 @@ $(document).ready(function() {
         });
     })
 
+    // toggle double post cost
+    $('[name=is_double_cost]').click(function(e) {
+        if ($(this).is(':checked')) {
+            console.log(`show double cost`); //! LOG
+            $('[data-singlecost]').addClass('d-none');
+            $('[data-doublcost]').removeClass('d-none');
+        } else {
+            console.log(`hide double cost`); //! LOG
+            $('[data-singlecost]').removeClass('d-none');
+            $('[data-doublcost]').addClass('d-none');
+        }
+    })
+
     // recover post
     $(document).on('click', '.bar-recover', async function (e) {
         e.preventDefault();

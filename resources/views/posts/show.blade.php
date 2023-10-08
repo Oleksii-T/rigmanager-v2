@@ -113,6 +113,12 @@
                         <a href="#" data-url="{{route('profile.chat.store', $post->user->slug)}}" data-user="{{$post->user->name}}" class="button button-light send-message">{{__('ui.sendMessage')}}</a>
                     @endif
                 @endif
+                @if ($post->is_tba)
+                    <br>
+                    <button class="button execute-tba button-light" data-url="{{route('posts.tba', $post)}}">
+                        @lang('ui.askForCost')
+                    </button>
+                @endif
                 @if ($currentUser && $post->user_id==$currentUser->id)
                     <br>
                     <a href="{{route('posts.edit', $post)}}" class="button button-light">{{__('ui.edit')}}</a>
@@ -187,20 +193,10 @@
                         <div class="prod-info-text">{{$post->country}}</div>
                     </div>
                 @endif
-                @if (!$post->is_tba && $post->cost)
+                @if ($post->cost_readable)
                     <div class="prod-info-item">
                         <div class="prod-info-name">{{__('ui.cost')}}</div>
                         <div class="prod-info-text">{{$post->cost_readable}}</div>
-                    </div>
-                @endif
-                @if ($post->is_tba)
-                    <div class="prod-info-item">
-                        <div class="prod-info-name">@lang('ui.costIsTBA')</div>
-                        <div class="prod-info-text">
-                            <button class="orange execute-tba c-pointer" data-url="{{route('posts.tba', $post)}}">
-                                @lang('ui.askForCost')
-                            </button>
-                        </div>
                     </div>
                 @endif
                 <div class="prod-info-item">

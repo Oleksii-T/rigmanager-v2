@@ -32,7 +32,7 @@ class PostTba extends Mailable
     {
         return new Envelope(
             subject: 'Your Post recieved Price Request! | Rigmangers.com',
-            replyTo: $this->user->email
+            replyTo: $this->user->getEmails()[0]
         );
     }
 

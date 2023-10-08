@@ -593,16 +593,25 @@ function showServerError(response) {
         let input = $(`[name=${firstErrorField}]`);
 
         //TODO: add check is in viewport
-        if (input.length) {
+        if (input.length && !isScrolledIntoView(input)) {
             animatedScroll(input, 50);
         }
-
-
     } else {
         let msg = response.responseJSON?.message;
         msg = msg ? msg : response.statusText;
         showPopUp(null, msg ? msg : null, false);
     }
+}
+
+// check is element in user`s viewport
+function isScrolledIntoView(elem) {
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
 }
 
 // general success logic, after ajax form submit been processed

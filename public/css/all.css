@@ -263,7 +263,8 @@ button.button {width: 100%;}
 .form-note,
 .form-note-import,
 div.form-error {
-	margin: -14px 0 24px;
+    margin-top: -14px;
+	margin-bottom: 24px;
 	font-size: 12px;
 	line-height: 14px;
 	white-space: pre-line;

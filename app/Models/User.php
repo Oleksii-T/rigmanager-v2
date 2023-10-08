@@ -160,6 +160,17 @@ class User extends Authenticatable implements MustVerifyEmail
         Mail::to($this)->send(new PasswordReset($url));
     }
 
+    public function getEmails()
+    {
+        $emails = $this->info->emails??[];
+        $emails = array_filter($emails);
+        if (!$emails) {
+            $emails = [$this->email];
+        }
+
+        return $emails;
+    }
+
     public function lastCurrency()
     {
         // $c = $this->posts()->whereNotNull('currency')->latest()->select('currency')->first();

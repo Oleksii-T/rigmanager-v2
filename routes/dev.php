@@ -29,49 +29,138 @@ if (!isdev()) {
 Route::get('test', function () {
     // some testing code
     $d = [];
+    \DB::enableQueryLog();
 
 
     try {
 
-        $user = User::find(9);
-        $id = $user->id;
-        $messages = \App\Models\Message::query()
-            ->where(function ($q) use ($id){
-                $q
-                    ->where('reciever_id', $id)
-                    ->orWhere('user_id', $id);
-            })
-            ->get();
+        // \App\Models\PostCost::query()->update([
+        //     'type' => 'eq'
+        // ]);
+        // dd('done');
 
-        $d['messages'] = [];
-        foreach ($messages as $m) {
-            $d['messages'][$m->id] = "$m->user_id -> $m->reciever_id | $m->created_at";
+        $costFrom = 3000;
+        $costFrom = 1500;
+        $costTo = 2000;
+        // $costTo = null;
+        // $costFrom = null;
+        $currency = 'usd';
+
+
+        $posts = Post::query()
+            ;
+
+        if ($costFrom || $costTo) {
+            $posts->whereHas('costs');
         }
 
-        $tId = 14;
-        $messages = \App\Models\Message::query()
-            ->where(function ($q) use ($id){
-                $q
-                    ->where('reciever_id', $id)
-                    ->orWhere('user_id', $id);
-            })
-            ->where(function ($q) use ($tId){
-                $q
-                    ->where('user_id', $tId)
-                    ->orWhere('reciever_id', $tId);
-            })
-            ->get();
-
-        $d['messages-to-trg'] = [];
-        foreach ($messages as $m) {
-            $d['messages-to-trg'][$m->id] = "$m->user_id -> $m->reciever_id | $m->created_at";
+        if ($costFrom) {
+            $posts->where(function ($q) use($currency, $costFrom) {
+                $q->whereHas('costs', fn ($q1) =>
+                    $q1
+                        ->where('currency', $currency)
+                        ->where('type', 'el')
+                        ->where('cost', '>=', $costFrom
+                ))
+                ->orWhereHas('costs', fn ($q1) =>
+                    $q1
+                        ->where('currency', $currency)
+                        ->where('type', 'to')
+                        ->where('cost', '>=', $costFrom
+                ));
+            });
         }
+
+        if ($costTo) {
+            $posts->where(function ($q) use($currency, $costTo) {
+                $q->whereHas('costs', fn ($q1) =>
+                    $q1
+                        ->where('currency', $currency)
+                        ->where('type', 'el')
+                        ->where('cost', '<=', $costTo
+                ))
+                ->orWhereHas('costs', fn ($q1) =>
+                    $q1
+                        ->where('currency', $currency)
+                        ->where('type', 'from')
+                        ->where('cost', '<=', $costTo
+                ));
+            });
+        }
+
+        $posts->where('posts.id', 695);
+
+        $d[] = $posts->toRawSql();
+        $d[] = $posts->get()->first();
+
+        /*
+            select *
+            from `posts`
+            inner join `post_costs` on `posts`.`id` = `post_costs`.`post_id`
+            where `posts`.`is_double_cost` = 1
+            and `post_costs`.`currency` = 'usd'
+            and `post_costs`.`type` = 'to'
+            and `post_costs`.`cost` >= 1500
+            and `posts`.`is_double_cost` = 1
+            and `post_costs`.`currency` = 'usd'
+            and `post_costs`.`type` = 'from'
+            and `post_costs`.`cost` <= 2000
+            and `posts`.`id` = 695
+            and `posts`.`deleted_at`
+            is null
+
+
+
+
+            select *
+            from `posts`
+            inner join `post_costs` on `posts`.`id` = `post_costs`.`post_id`
+            where (
+                (
+                    `posts`.`is_double_cost` = 0 and
+                    `post_costs`.`currency` = 'usd' and
+                    `post_costs`.`type` = 'eq' and
+                    `post_costs`.`cost` >= 1500
+                )
+                or (
+                    `posts`.`is_double_cost` = 1 and
+                    `post_costs`.`currency` = 'usd' and
+                    `post_costs`.`type` = 'to' and
+                    `post_costs`.`cost` >= 1500
+                )
+            )
+            and (
+                (
+                    `posts`.`is_double_cost` = 0 and
+                    `post_costs`.`currency` = 'usd' and
+                    `post_costs`.`type` = 'eq' and
+                    `post_costs`.`cost` <= 2000
+                )
+                or (
+                    `posts`.`is_double_cost` = 1 and
+                    `post_costs`.`currency` = 'usd' and
+                    `post_costs`.`type` = 'from' and
+                    `post_costs`.`cost` <= 2000
+                )
+            )
+            and `posts`.`id` = 695
+            and `posts`.`deleted_at`
+            is null
+
+
+        */
+
+        // $posts->where(function ($q) use($costFrom){
+        //     $q->where('post_costs.cost_from', '>=', $costFrom)
+        //         ->orWhere('post_costs.cost_to', '<=', $costFrom);
+        // });
 
     } catch (\Throwable $th) {
-        dd('ERROR', $th);
+        dump('ERROR', $th);
     }
 
-    dd($d);
+    dump('QUERY LOG', \DB::getQueryLog());
+    dd('RESULT', $d);
 });
 
 Route::post('post', function () {

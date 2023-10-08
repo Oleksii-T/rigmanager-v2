@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
             $table->boolean('is_default')->default(false);
             $table->string('currency');
+            $table->string('type');
             $table->decimal('cost', 20, 2);
             $table->timestamps();
         });

@@ -22,7 +22,9 @@ return new class extends Migration
             $table->string('type');
             $table->string('condition')->nullable();
             $table->string('duration');
+            $table->string('cost_per')->nullable();
             $table->boolean('auto_translate')->default(true);
+            $table->boolean('is_double_cost')->default(false);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_trashed')->default(false);
             $table->boolean('is_urgent')->default(false);

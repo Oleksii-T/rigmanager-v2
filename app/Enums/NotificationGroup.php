@@ -25,6 +25,7 @@ enum NotificationGroup:int
     case SUB_END_SOON = 14;
     case SUB_ENDED = 15;
     case SUB_EXTENDED = 16;
+    case PRICE_REQ_RECIEVED = 17;
 
     public static function getReadable($val)
     {
@@ -46,6 +47,7 @@ enum NotificationGroup:int
             self::SUB_END_SOON => 'Sub end soon',
             self::SUB_ENDED => 'Sub ended',
             self::SUB_EXTENDED => 'Sub extended',
+            self::PRICE_REQ_RECIEVED => 'Price request recieved',
         };
     }
 

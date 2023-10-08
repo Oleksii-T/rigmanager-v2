@@ -18,6 +18,7 @@ return [
         'SUB_END_SOON' => 'Subscription expire soon',
         'SUB_ENDED' => 'Subscription expired',
         'SUB_EXTENDED' => 'Subscription extended successfully',
+        'PRICE_REQ_RECIEVED' => 'You have recived price request from :userName (:userEmail) for your ":postTitle" post',
     ],
     'invalid-recaptcha' => 'Invalid recaptcha',
     'profile' => [

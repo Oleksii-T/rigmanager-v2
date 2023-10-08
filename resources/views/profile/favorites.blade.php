@@ -24,29 +24,6 @@
 
 @section('style')
     <style>
-        /* bulk actions block */
-        .posts-header-block {
-            justify-content: space-between;
-        }
-        .selected-block {
-            margin-right: 10px;
-            margin-top: 3px;
-        }
-        .selected-el {
-            font-size: 85%;
-            padding-left: 32px;
-            margin-top: -10px;
-        }
-        .selected-el span{
-            color: white;
-        }
-        .selected-all-el {
-            align-items: center;
-        }
-        .header-actions .check-item {
-            margin: 0px;
-        }
-
         /* filters */
         .form-block {
             background: transparent;

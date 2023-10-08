@@ -24,7 +24,9 @@ class Post extends Model
         'type',
         'condition',
         'duration',
+        'cost_per',
         'auto_translate',
+        'is_double_cost',
         'is_tba',
         'is_active',
         'is_trashed',
@@ -87,7 +89,11 @@ class Post extends Model
     // overload laravel`s method for route key generation
     public function getRouteKey()
     {
-        return $this->slug;
+        $s = $this->slug;
+        if (!$s) {
+            \Log::error("Slug for post $this->id not found");
+        }
+        return $s;
     }
 
     public function user()
@@ -175,18 +181,53 @@ class Post extends Model
     public function cost(): Attribute
     {
         return new Attribute(
-            get: fn () => $this->getCost(false)
+            get: fn () => $this->getCost('eq', false)
+        );
+    }
+
+    public function costFrom(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->getCost('from', false)
+        );
+    }
+
+    public function costTo(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->getCost('to', false)
         );
     }
 
     public function costReadable(): Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getCost(true)
+            get: function () {
+                if (!$this->is_double_cost) {
+                    return $this->getCost('eq',true);
+                }
+
+                $cost = $this->cost_from ? $this->getCost('from',true) : null;
+
+                if ($this->cost_to) {
+                    $cost = $cost ? "$cost - " : "__ - ";
+                    $cost .= $this->getCost('to',true);
+                }
+
+                if (!$cost) {
+                    return '';
+                }
+
+                if ($this->cost_per) {
+                    $cost .= " per $this->cost_per";
+                }
+
+                return $cost;
+            }
         );
     }
 
-    public function getCost($readable, $currency=null)
+    public function getCost($type, $readable, $currency=null)
     {
         if (!$currency) {
             $requestedCurr = request()->currency;
@@ -196,8 +237,8 @@ class Post extends Model
         }
 
         $costM = $currency
-            ? $this->costs->where('currency', $currency)->first()
-            : $this->costs->where('is_default', true)->first();
+            ? $this->costs->where('type', $type)->where('currency', $currency)->first()
+            : $this->costs->where('type', $type)->where('is_default', true)->first();
 
         if (!$costM) {
             return null;
@@ -263,27 +304,40 @@ class Post extends Model
 
     public function saveCosts($input)
     {
-        $cost = $input['cost']??null;
+        if ($input['is_double_cost']??false) {
+            $costs = [
+                'eq' => null,
+                'from' => $input['cost_from']??null,
+                'to' => $input['cost_to']??null,
+            ];
+        } else {
+            $costs = [
+                'eq' => $input['cost']??null,
+                'from' => null,
+                'to' => null,
+            ];
+        }
         $baseCurrency = $input['currency'];
 
-        if (!$cost) {
-            $this->costs()->delete();
-            return;
-        }
+        foreach ($costs as $type => $cost) {
+            if (!$cost) {
+                $this->costs()->where('type', $type)->delete();
+                return;
+            }
 
-        foreach (currencies() as $currency => $symbol) {
-            PostCost::updateOrCreate(
-                [
-                    'post_id' => $this->id,
-                    'currency' => $currency
-                ],
-                [
-                    'post_id' => $this->id,
-                    'currency' => $currency,
-                    'cost' => ExchangeRate::convert($baseCurrency, $currency, $input['cost']),
-                    'is_default' => $currency == $baseCurrency
-                ]
-            );
+            foreach (currencies() as $currency => $symbol) {
+                PostCost::updateOrCreate(
+                    [
+                        'post_id' => $this->id,
+                        'type' => $type,
+                        'currency' => $currency
+                    ],
+                    [
+                        'cost' => ExchangeRate::convert($baseCurrency, $currency, $cost),
+                        'is_default' => $currency == $baseCurrency
+                    ]
+                );
+            }
         }
     }
 
@@ -385,6 +439,7 @@ class Post extends Model
         $hidePending = Setting::get('hide_pending_posts', true, true);
 
         if ($status && request()->route()->getName() != 'profile.posts') {
+            // status filter allowed only for personal posts
             $status = null;
         }
 
@@ -427,19 +482,54 @@ class Post extends Model
 
         // append cost to query if cost filteting\sorting is used
         if (($currency && ($costFrom || $costTo)) || $sort == 'expensive' || $sort == 'cheap') {
-            $posts->whereHas('costs')->leftJoin('post_costs', function ($join) use ($currency) {
+            $posts->whereHas('costs');
+        }
+
+        if ($sort == 'expensive' || $sort == 'cheap') {
+            // add cost to query to make sorting possible.
+            // select smalles (and eq) cost if 'cheap' sorting selected
+            // select biggest (and eq) cost if 'expensive' sorting selected
+            $posts->leftJoin('post_costs', function ($join) use ($currency, $sort) {
                 $c = $currency ?? 'usd'; // user may select sorting but not currency
+                $types = $sort == 'expensive' ? ['to'] : ['from'];
+                $types[] = 'eq';
                 $join->on('posts.id', '=', 'post_costs.post_id');
                 $join->on('currency', '=', \DB::raw("'$c'"));
+                $join->whereIn('post_costs.type', $types);
             });
         }
 
         if ($currency && $costFrom) {
-            $posts->where('post_costs.cost', '>=', $costFrom);
+            // do not check 'posts.is_double_cost' because
+            // we may only have cost with type 'eq' for single cost posts
+            // and only costs with type 'to'+'from' for double cost posts
+            $posts->where(function ($q) use($currency, $costFrom) {
+                $q->whereHas('costs', fn ($q1) => $q1 // for single cost
+                    ->where('currency', $currency)
+                    ->where('type', 'eq')
+                    ->where('cost', '>=', $costFrom)
+                )
+                ->orWhereHas('costs', fn ($q1) => $q1 // for double cost
+                    ->where('currency', $currency)
+                    ->where('type', 'to') // 'from' check is useless
+                    ->where('cost', '>=', $costFrom
+                ));
+            });
         }
 
         if ($currency && $costTo) {
-            $posts->where('post_costs.cost', '<=', $costFrom);
+            $posts->where(function ($q) use($currency, $costTo) {
+                $q->whereHas('costs', fn ($q1) => $q1 // for single cost
+                    ->where('currency', $currency)
+                    ->where('type', 'eq')
+                    ->where('cost', '<=', $costTo)
+                )
+                ->orWhereHas('costs', fn ($q1) => $q1 // for double cost
+                    ->where('currency', $currency)
+                    ->where('type', 'from') // 'to' check is useless
+                    ->where('cost', '<=', $costTo)
+                );
+            });
         }
 
         if ($category) {
