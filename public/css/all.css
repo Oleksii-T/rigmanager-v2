@@ -1611,7 +1611,6 @@ textarea.form-error {
 	margin: 0 0 8px;
 	font-size: 12px;
 	line-height: 22px;
-	white-space: pre-line;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
