@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\ProfileRequest;
-use App\Http\Requests\ProfilePasswordRequest;
-use Illuminate\Support\Facades\Hash;
 use App\Models\Post;
 use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use App\Http\Requests\ProfileRequest;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\ProfilePasswordRequest;
+use App\Actions\Fortify\PasswordValidationRules;
 
 class ProfileController extends Controller
 {
+    use PasswordValidationRules;
+
     public function index()
     {
         $info = auth()->user()->info;
@@ -111,6 +115,45 @@ class ProfileController extends Controller
             'posts' => $postView,
             'categories' => view('components.profile.categories', compact('categories', 'filters', 'categRoute'))->render(),
             'total' => $posts->total()
+        ]);
+    }
+
+    public function registerSimpleForm(Request $request)
+    {
+        $submitUrl = URL::temporarySignedRoute('profile.register-simple', now()->addHour());
+        $user = \App\Models\User::query()
+            ->where('email', $request->email)
+            ->whereRelation('info', 'is_registered', false)
+            ->firstOrFail();
+
+        return view('auth.register-simple', compact('user', 'submitUrl'));
+    }
+
+    public function registerSimple(Request $request)
+    {
+        $input = $request->validate([
+            'password' =>  $this->passwordRules(),
+            'email' =>  ['required', 'exists:users'],
+            'agreement' => ['required', 'accepted']
+        ]);
+
+        $user = \App\Models\User::query()
+            ->where('email', $input['email'])
+            ->whereRelation('info', 'is_registered', false)
+            ->firstOrFail();
+
+        $user->update([
+            'password' => Hash::make($input['password'])
+        ]);
+
+        $user->info()->update([
+            'is_registered' => true
+        ]);
+
+        auth()->login($user);
+
+        return $this->jsonSuccess(trans('messages.registerSuccess'), [
+            'redirect' => route('index')
         ]);
     }
 

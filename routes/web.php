@@ -31,6 +31,9 @@ Route::any('dev/{action}', [\App\Http\Controllers\DevController::class, 'action'
 Route::get('auth/social/{provider}', [SocialAuthController::class, 'redirect'])->name('auth.social');
 Route::get('auth/callback/{provider}', [SocialAuthController::class, 'callback']);
 
+Route::get('register-simple', [ProfileController::class, 'registerSimpleForm'])->name('profile.register-simple-form')->middleware('signed');
+Route::post('register-simple', [ProfileController::class, 'registerSimple'])->name('profile.register-simple')->middleware('signed');
+
 Route::get('logout', function () {
     auth()->logout();
     return redirect()->route('index');

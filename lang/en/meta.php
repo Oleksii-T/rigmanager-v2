@@ -7,6 +7,7 @@ return [
         'auth' => [
             'login' => 'Sign in | rigmanger.com.ua',
             'reg' => 'Sign up | rigmanger.com.ua',
+            'reg-simple' => 'Simplified Sign up | rigmanger.com.ua',
         ],
         'user' => [
             'password' => 'Password recovery | rigmanger.com.ua',
@@ -60,6 +61,7 @@ return [
         'auth' => [
             'login' => 'Sign in. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',
             'reg' => 'Sign up. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',
+            'reg-simple' => 'Sign up. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',
         ],
         'user' => [
             'password' => 'Password recovery. rigmanagers.com - specialized bulletin board for participants in the oil and gas market.',
@@ -113,6 +115,7 @@ return [
         'auth' => [
             'login' => '',
             'reg' => '',
+            'reg-simple' => '',
         ],
         'user' => [
             'password' => '',

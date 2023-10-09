@@ -287,7 +287,7 @@ class PostController extends Controller
         $author = $post->user;
 
         if ($from->id == $author->id) {
-            // return $this->jsonError(trans('messages.tba.canSendToSelf'));
+            return $this->jsonError(trans('messages.tba.canSendToSelf'));
         }
 
         $emails = $author->getEmails();
@@ -298,16 +298,13 @@ class PostController extends Controller
             $mail->cc($e);
         }
 
-        $mail->send(new \App\Mail\PostTba($post, $from));
-
-        \Log::info('TBA request sended', [
-            'post_id' => $post->id,
-            'post_title' => $post->title,
-            'author_id' => $author->id,
-            'author_email' => $author->email,
-            'from_id' => $from->id,
-            'from_email' => $from->email
-        ]);
+        if (!$author->info->is_registered) {
+            if (Setting::get('non_reg_send_price_req', true, true)) {
+                $mail->send(new \App\Mail\PostTbaForNonReg($post, $from));
+            }
+        } else {
+            $mail->send(new \App\Mail\PostTba($post, $from));
+        }
 
         Notification::make($author->id, NotificationGroup::PRICE_REQ_RECIEVED, [
             'vars' => [

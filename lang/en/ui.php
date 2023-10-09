@@ -5,6 +5,14 @@ return [
     'faq' => [
         'intro' => 'We have collected frequently asked questions for you. If you still have questions or suggestions - you always can',
     ],
+    'registerSimple' => [
+        'signUpSimple' => 'Simplified Sign Up',
+        'help' => 'Account already been created for you!
+        Set account password to get the access.
+        Your Email and Name can be changed later in profile settings.',
+        'loginHelp' => '',
+        'userNameHelp' => '',
+    ],
     'workInProgress' => 'Work in progress',
     'development' => 'The site is at a late development stage. Coming soon.',
     'tagsCodesNotReady' => 'The list of categories is not ready. See list of categories in import file.',

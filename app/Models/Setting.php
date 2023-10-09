@@ -34,6 +34,12 @@ class Setting extends Model
             ]
         ],
         [
+            'name' => 'Emails to non-registered users',
+            'settings' => [
+                'non_reg_send_price_req' => 'Send price requests',
+            ]
+        ],
+        [
             'name' => 'Notifications',
             'settings' => [
                 'notif_daily_posts_views_min' => 'Minimum daily post views to notify',
@@ -108,9 +114,7 @@ class Setting extends Model
             $setting = self::where('key', $key)->first();
             $setting = $onlyValue ? $setting->data['value'] : $setting->data;
 
-            if ($cache) {
-                cache()->put($cKey, $setting, 60);
-            }
+            cache()->put($cKey, $setting, 60);
 
             return $setting;
         } catch (\Exception $e) {

@@ -64,7 +64,9 @@ class DevController extends Controller
 
     private function test()
     {
-        //
+        Post::query()->update([
+            'is_tba' => true
+        ]);
     }
 
     // dummy method
@@ -102,7 +104,7 @@ class DevController extends Controller
     }
 
     // test emails
-    private function email()
+    private function emails()
     {
         $t = request()->type;
         $email = request()->email;
@@ -119,6 +121,11 @@ class DevController extends Controller
             $posts = Post::inRandomOrder()->limit(4)->get();
             $mailer = \App\Models\Mailer::first();
             $mail = new \App\Mail\MailerPostFound($mailer, $posts);
+        };
+        if ($t == 'tba-non-reg') {
+            $user = User::find(12);
+            $post = Post::find(371);
+            $mail = new \App\Mail\PostTbaForNonReg($post, $user);
         };
 
         // other emails test here...

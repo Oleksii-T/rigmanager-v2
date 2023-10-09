@@ -21,7 +21,7 @@ enum FeedbackStatus:int
             self::CLIENT => 'Client',
             self::TRASH => 'Trash',
             self::ADV => 'Ad',
-            self::OFFER => 'OFFER',
+            self::OFFER => 'Offer',
         };
     }
 

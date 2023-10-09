@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('facebook')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('whatsapp')->nullable();
+            $table->boolean('is_registered')->default(1);
             $table->json('phones')->nullable();
             $table->json('emails')->nullable();
             $table->timestamps();

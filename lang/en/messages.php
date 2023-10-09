@@ -1,6 +1,8 @@
 <?php
 
 return [
+    '419' => 'The page is expired, please reload.',
+    '401' => 'Please login to use this functionality',
     'notifications' => [
         'DAILY_POSTS_VIEWS' => 'Your posts have viewed <span class="orange">:count</span> times within past day',
         'DAILY_CONTACS_VIEWS' => 'Your contacts requested <span class="orange">:count</span> times within past day',

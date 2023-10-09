@@ -27,7 +27,7 @@ class PostRequest extends FormRequest
     {
         $model = $this->route('post');
 
-        return [
+        $rules = [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:9000'],
             'category_id' => ['required', 'exists:categories,id'],
@@ -41,10 +41,6 @@ class PostRequest extends FormRequest
             'part_number' => ['nullable', 'string', 'max:70'],
             'cost_per' => ['nullable', 'string', 'max:255'],
             'is_double_cost' => ['nullable', 'boolean'],
-            'cost_from' => ['nullable', 'required_with:cost_to', 'numeric', 'min:1', 'max:9999999'],
-            'cost_to' => ['nullable', 'required_with:cost_from', 'numeric', 'min:1', 'max:9999999'],
-            //!TODO: check cost_from < cost_to
-            'cost' => ['nullable', 'numeric', 'min:1', 'max:9999999'],
             'is_tba' => ['nullable', 'boolean'],
             'currency' => ['nullable', 'required_with:cost'],
             'images' => ['nullable', 'array'],
@@ -59,5 +55,14 @@ class PostRequest extends FormRequest
                 'max:8000'
             ] // .pdf, .xls, .xlsx, .xml, .doc, .docx
         ];
+
+        if ($this->is_double_cost) {
+            $rules['cost_from'] = ['nullable', 'required_with:cost_to', 'numeric', 'min:1', 'max:9999999', 'lt:cost_to'];
+            $rules['cost_to'] = ['nullable', 'required_with:cost_from', 'numeric', 'min:1', 'max:9999999', 'gt:cost_from'];
+        } else {
+            $rules['cost'] = ['nullable', 'numeric', 'min:1', 'max:9999999'];
+        }
+
+        return $rules;
     }
 }
