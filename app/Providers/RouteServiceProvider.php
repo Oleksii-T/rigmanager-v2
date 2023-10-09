@@ -55,11 +55,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('admin')
                 ->as('admin.')
                 ->group(base_path('routes/admin.php'));
-
-            Route::middleware(['web'])
-                ->prefix('dev')
-                ->as('dev.')
-                ->group(base_path('routes/dev.php'));
         });
     }
 
