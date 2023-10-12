@@ -20,6 +20,8 @@
                                 <th>Name</th>
                                 <th>Preview</th>
                                 <th>Resource</th>
+                                <th>Group</th>
+                                <th>Size</th>
                                 <th>Created At</th>
                                 <th class="actions-column-2">Actions</th>
                             </tr>

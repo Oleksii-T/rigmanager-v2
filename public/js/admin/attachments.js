@@ -10,6 +10,8 @@ $(document).ready(function () {
             { data: 'original_name', name: 'original_name' },
             { data: 'preview', name: 'preview', orderable: false, searchable: false  },
             { data: 'resource', name: 'resource'},
+            { data: 'group', name: 'group'},
+            { data: 'size', name: 'size'},
             { data: 'created_at', name: 'created_at', searchable: false},
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ]

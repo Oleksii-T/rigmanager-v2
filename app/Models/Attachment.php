@@ -50,7 +50,7 @@ class Attachment extends Model
             Storage::disk($disk)->delete($model->name);
 
             // delete resized images
-            $resizes = self::POST_IMG_RESIZES + self::AVATAR_RESIZES + self::USER_BANNER_RESIZES;
+            $resizes = self::getAllResize();
             foreach ($resizes as $w => $h) {
                 $path = $model->compressed($w, $h, true);
                 if (file_exists($path)) {
@@ -125,6 +125,9 @@ class Attachment extends Model
             ->editColumn('created_at', function ($model) {
                 return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
             })
+            ->editColumn('size', function ($model) {
+                return $model->getSize();
+            })
             ->addColumn('action', function ($model) {
                 return view('components.admin.actions', [
                     'model' => $model,
@@ -144,5 +147,10 @@ class Attachment extends Model
             'document' => 'adocuments',
             default => 'attachments',
         };
+    }
+
+    public static function getAllResize()
+    {
+        return self::POST_IMG_RESIZES + self::AVATAR_RESIZES + self::USER_BANNER_RESIZES;
     }
 }

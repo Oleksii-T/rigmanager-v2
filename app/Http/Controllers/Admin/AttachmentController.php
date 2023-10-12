@@ -28,7 +28,20 @@ class AttachmentController extends Controller
 
     public function edit(Attachment $attachment)
     {
-        return view('admin.attachments.edit', compact('attachment'));
+        $resizes = Attachment::getAllResize();
+        $resized = [];
+        foreach ($resizes as $w => $h) {
+            $path = $attachment->compressed($w, $h, true);
+            $url = $attachment->compressed($w, $h);
+            if (file_exists($path)) {
+                $resized[] = [
+                    'url' => $url,
+                    'path' => $path
+                ];
+            }
+        }
+
+        return view('admin.attachments.edit', compact('attachment', 'resized'));
     }
 
     public function update(AttachmentRequest $request, Attachment $attachment)
