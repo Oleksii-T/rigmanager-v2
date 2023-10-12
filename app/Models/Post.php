@@ -108,7 +108,7 @@ class Post extends Model
 
     public function images()
     {
-        return $this->morphMany(Attachment::class, 'attachmentable')->where('group', 'images')->orderBy('order', 'asc');
+        return $this->morphMany(Attachment::class, 'attachmentable')->where('group', __FUNCTION__)->orderBy('order', 'asc');
     }
 
     public function costs()
@@ -118,7 +118,7 @@ class Post extends Model
 
     public function documents()
     {
-        return $this->morphMany(Attachment::class, 'attachmentable')->where('group', 'documents');
+        return $this->morphMany(Attachment::class, 'attachmentable')->where('group', __FUNCTION__);
     }
 
     public function scopeActive($query, bool $is=true)

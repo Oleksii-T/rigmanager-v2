@@ -64,9 +64,14 @@ class DevController extends Controller
 
     private function test()
     {
-        Post::query()->update([
-            'is_tba' => true
-        ]);
+        $a = [
+            300 => 300
+        ];
+        $b = [
+            1500 => 390
+        ];
+
+        $this->d($a+$b);
     }
 
     // dummy method

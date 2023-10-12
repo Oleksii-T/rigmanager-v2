@@ -22,7 +22,7 @@
 
         {{-- top image --}}
         <div class="top-image">
-            <img src="{{$user->banner->url ?? asset('icons/main-about-bg.jpg')}}" alt="{{$user->banner->alt ?? 'User banner'}}">
+            <img src="{{$user->banner?->compressed(1500, 390) ?? asset('icons/main-about-bg.jpg')}}" alt="{{$user->banner->alt ?? 'User banner'}}">
         </div>
 
         {{-- avatar, name and buttons --}}

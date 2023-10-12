@@ -60,7 +60,7 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('notifications', NotificationController::class)->except('show');
 
-    Route::resource('blogs', BlogController::class)->except(['show', 'edit', 'update']);
+    Route::resource('blogs', BlogController::class)->except(['show']);
 
     Route::resource('messages', MessageController::class)->only('index', 'store', 'destroy');
     Route::get('messages/{u1}/{u2}', [MessageController::class, 'show'])->name('messages.show');

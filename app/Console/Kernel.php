@@ -15,15 +15,28 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // update exchange rates
         $schedule->command('rates:update')->daily();
+
+        // send emails about posts found by mailers
         $schedule->command('mailers:send')->daily();
+
+        // update ip-to-country database
         $schedule->command('location:update')->weekly();
+
+        // generate sitemap
         $schedule->command('sitemap:generate')->everySixHours();
 
+        // delete posts with status 'trashed'
         $schedule->command('posts:delete-trashed')->daily();
+
+        // permanently delete deleted posts
         $schedule->command('posts:truncate-deleted')->daily();
 
+        // create notifications on daily basis
         $schedule->command('notifications:daily-check')->daily();
+
+        // create notifications on weekly basis
         $schedule->command('notifications:weekly-check')->weekly();
     }
 

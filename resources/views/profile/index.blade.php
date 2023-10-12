@@ -26,7 +26,7 @@
                 <section class="u-p-section main-u-section">
                     {{-- top image --}}
                     <div class="top-image show-uploaded-file-preview" data-trigger="#banner-input">
-                        <img src="{{$currentUser->banner->url ?? asset('icons/main-about-bg.jpg')}}" alt="{{$currentUser->banner->alt ?? 'User banner'}}" class="custom-file-preview">
+                        <img src="{{$currentUser->banner?->compressed(1500, 390) ?? asset('icons/main-about-bg.jpg')}}" alt="{{$currentUser->banner->alt ?? 'User banner'}}" class="custom-file-preview">
                         <div class="img-edit-btn">
                             <svg viewBox="0 0 401 398.99" xmlns="http://www.w3.org/2000/svg">
                                 <path transform="translate(0)" d="M370.11,250.39a10,10,0,0,0-10,10v88.68a30,30,0,0,1-30,30H49.94a30,30,0,0,1-30-30V88.8a30,30,0,0,1,30-30h88.67a10,10,0,1,0,0-20H49.94A50,50,0,0,0,0,88.8V349.05A50,50,0,0,0,49.94,399H330.16a50,50,0,0,0,49.93-49.94V260.37a10,10,0,0,0-10-10"></path>

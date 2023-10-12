@@ -9,6 +9,7 @@ use App\Models\Feedback;
 use App\Jobs\PostTranslate;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Jobs\ProcessPostImages;
 use App\Enums\NotificationGroup;
 use App\Http\Requests\PostRequest;
 use App\Jobs\MailerProcessNewPost;
@@ -90,17 +91,17 @@ class PostController extends Controller
         $post = $user->posts()->create($input);
         $post->saveCosts($input);
         $post->saveTranslations($input);
-        $post->addAttachment(array_reverse($input['images']??[]), 'images', true);
+        $images = $post->addAttachment(array_reverse($input['images']??[]), 'images', true);
         $post->addAttachment($input['documents']??[], 'documents');
 
         $chain = [new PostTranslate($post)];
-        $hidePending = Setting::get('hide_pending_posts', true, true);
 
-        if (!$hidePending) {
+        if (!Setting::get('hide_pending_posts', true, true)) {
             $chain[] = new MailerProcessNewPost($post);
         }
 
         Bus::chain($chain)->dispatch();
+        ProcessPostImages::dispatch($images);
 
         flash(trans('messages.posts.created'));
 
@@ -184,10 +185,8 @@ class PostController extends Controller
 
     public function update(PostRequest $request, Post $post, TranslationService $translator)
     {
-        // $c = Category::find($request->category_id);
-        // return $this->jsonError("Selected category: " . $c->name);
-
         // dlog("PostController@update. START. post #$post->id", $request->all()); //! LOG
+
         $user = auth()->user();
         $input = $request->validated();
         $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
@@ -213,15 +212,19 @@ class PostController extends Controller
         $input['description'] = [
             $textLocale => $input['description']
         ];
+
         // dlog(" PostController@update. input", $input); //! LOG
+
         $post->update($input);
         $post->saveCosts($input);
         $post->saveTranslations($input);
         $post->images()->whereIn('id', $request->removed_images??[])->delete();
         $post->documents()->whereIn('id', $request->removed_documents??[])->delete();
-        $post->addAttachment(array_reverse($images), 'images', true);
+        $images = $post->addAttachment(array_reverse($images), 'images', true);
         $post->addAttachment($input['documents']??[], 'documents');
+
         PostTranslate::dispatch($post, $oldTranslations);
+        ProcessPostImages::dispatch($images);
 
         flash(trans('messages.posts.updated'));
 

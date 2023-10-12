@@ -3,6 +3,7 @@
 /public/hot
 /public/storage
 /public/sitemap*.xml
+/public/icons/watermarks/watermark-*.png
 /storage/*.key
 /vendor
 .env

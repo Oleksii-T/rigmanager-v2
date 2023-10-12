@@ -13,20 +13,29 @@ trait HasAttachments
             return;
         }
 
+        $isMultiple = false;
+
         if(is_array($attachment)) {
+            $isMultiple = true;
             $attachments = $attachment;
         } else {
             // if it is 1 item, then we assume that only 1 item possible for this attachmentable, so delete previus attachment
             $attachments = [$attachment];
-            Attachment::query()
+            dlog(" add one attachment $group"); //! LOG
+            $toDel = Attachment::query()
                 ->where('attachmentable_id', $this->id)
                 ->where('attachmentable_type', self::class)
                 ->where('group', $group)
-                ->delete();
+                ->get();
+            foreach ($toDel as $td) {
+                $td->delete();
+            }
         }
 
+        $result = [];
+
         foreach ($attachments as $i => $attachment) {
-            
+
             if (is_string($attachment)) {
                 // this attachment already saved - skip
                 if ($toOrder) {
@@ -42,7 +51,7 @@ trait HasAttachments
             $disk = Attachment::disk($type);
             $path = $attachment->store('', $disk);
 
-            Attachment::create([
+            $result[] = Attachment::create([
                 'attachmentable_id' => $this->id,
                 'attachmentable_type' => self::class,
                 'name' => $path,
@@ -53,6 +62,12 @@ trait HasAttachments
                 'size' => $attachment->getSize()
             ]);
         }
+
+        if ($isMultiple) {
+            return $result;
+        }
+
+        return $result[0]??null;
     }
 
     private function determineType($ext)

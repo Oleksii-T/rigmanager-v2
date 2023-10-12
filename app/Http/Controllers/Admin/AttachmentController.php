@@ -33,12 +33,7 @@ class AttachmentController extends Controller
 
     public function update(AttachmentRequest $request, Attachment $attachment)
     {
-        $input = $request->validated();
-
-        $attachment->update($input);
-        $attachment->addAttachment($input['image']??null);
-
-        return $this->jsonSuccess('Attachment updated successfully');
+        //TODO
     }
 
     public function destroy(Request $request, Attachment $attachment)

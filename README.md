@@ -33,7 +33,7 @@ Also, our resource can act as a tool for analyzing the market, available offers 
 - Blog
 - Admin Panel
 
-> For more information read [About us](https://rigmanagers.com/about-us) and [FAQ](https://rigmanagers.com/faq) pages.
+> For more information read [About us](https://rigmanagers.com/about) and [FAQ](https://rigmanagers.com/faq) pages.
 
 ### Versions
 - Laravel `^10.0` 

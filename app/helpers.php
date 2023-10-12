@@ -31,7 +31,7 @@ if (!function_exists('userAvatar')) {
             return $default;
         }
 
-        return $user->avatar ? $user->avatar->url : $default;
+        return $user->avatar ? $user->avatar->compressed(200, 200) : $default;
     }
 }
 

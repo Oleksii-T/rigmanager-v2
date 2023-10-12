@@ -3,7 +3,7 @@
         <div class="ad-item">
             <div class="ad-img">
                 <a href="{{route('posts.show', $post)}}">
-                    <img src="{{$post->thumbnail()->url ?? asset('icons/no-image.svg')}}" alt="{{$post->thumbnail()->alt??''}}">
+                    <img src="{{$post->thumbnail()?->compressed(300) ?? asset('icons/no-image.svg')}}" alt="{{$post->thumbnail()->alt??''}}">
                 </a>
                 <a href="{{route('posts.add-to-fav', $post)}}" class="catalog-fav add-to-fav {{($currentUser && $currentUser->favorites->contains($post)) ? 'active' : ''}}">
                     <svg viewBox="0 0 464 424" xmlns="http://www.w3.org/2000/svg" class="">

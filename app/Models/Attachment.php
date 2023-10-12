@@ -2,15 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Yajra\DataTables\DataTables;
+use App\Services\ProcessImageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Yajra\DataTables\DataTables;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Attachment extends Model
 {
     use HasFactory;
+
+    const POST_IMG_RESIZES = [
+        300 => 300
+    ];
+    const AVATAR_RESIZES = [
+        200 => 200
+    ];
+    const USER_BANNER_RESIZES = [
+        1500 => 390
+    ];
 
     /**
      * @var array
@@ -37,6 +48,15 @@ class Attachment extends Model
         static::deleting(function ($model) {
             $disk = self::disk($model->type);
             Storage::disk($disk)->delete($model->name);
+
+            // delete resized images
+            $resizes = self::POST_IMG_RESIZES + self::AVATAR_RESIZES + self::USER_BANNER_RESIZES;
+            foreach ($resizes as $w => $h) {
+                $path = $model->compressed($w, $h, true);
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
         });
     }
 
@@ -53,10 +73,12 @@ class Attachment extends Model
      */
     public function getSize()
     {
-        if ($this->size > 1024) {
-            return number_format($this->size / 1024, 2) . ' Mb';
+        if ($this->size > 1000000) {
+            return number_format($this->size / 1000000, 2) . ' Mb';
+        } elseif ($this->size > 1024) {
+            return number_format($this->size / 1000, 2) . ' Kb';
         } else {
-            return $this->size . ' Kb';
+            return $this->size . ' b';
         }
     }
 
@@ -72,6 +94,23 @@ class Attachment extends Model
         return new Attribute(
             get: fn ($value) => Storage::disk(self::disk($this->type))->path($this->name),
         );
+    }
+
+    // get path or url of compressed image
+    public function compressed($w, $h=null, $asPath=false)
+    {
+        $h ??= $w;
+        $path = ProcessImageService::getCompressedName($w, $h, $this->path);
+
+        if ($asPath) {
+            return $path;
+        }
+
+        if (!file_exists($path)) {
+            return $this->url;
+        }
+
+        return ProcessImageService::getCompressedName($w, $h, $this->url);;
     }
 
     public static function dataTable($query)

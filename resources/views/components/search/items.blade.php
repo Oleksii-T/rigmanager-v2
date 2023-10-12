@@ -3,7 +3,7 @@
         <div class="catalog-item">
             <!--post-image-->
             <a href="{{route('posts.show', $post)}}" class="catalog-img">
-                <img src="{{$post->thumbnail()->url ?? asset('icons/no-image.svg')}}" alt="{{$post->title}}" title="{{$post->title}}">
+                <img src="{{$post->thumbnail()?->compressed(300) ?? asset('icons/no-image.svg')}}" alt="{{$post->title}}" title="{{$post->title}}">
             </a>
             <!--all post preview but image-->
             <div class="catalog-content">

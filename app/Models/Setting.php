@@ -28,6 +28,16 @@ class Setting extends Model
             ]
         ],
         [
+            'name' => 'Image Processing',
+            'settings' => [
+                'convert_uploaded_post_images_to_webp' => 'Convert uploaded post images to .webp',
+                'add_water_mark_to_uploaded_post_images' => 'Add water mark to uploaded post images',
+                'resize_uploaded_post_images' => 'Generate resized versions of post images',
+                'optimize_user_avatar' => 'Optimize user avatar (.webp + resize)',
+                'optimize_user_banner' => 'Optimize user banner (.webp + resize)',
+            ]
+        ],
+        [
             'name' => 'Open Exchange Rates',
             'settings' => [
                 'openexchangerates_app_id' => 'App ID',
@@ -114,7 +124,9 @@ class Setting extends Model
             $setting = self::where('key', $key)->first();
             $setting = $onlyValue ? $setting->data['value'] : $setting->data;
 
-            cache()->put($cKey, $setting, 60);
+            if ($cache) {
+                cache()->put($cKey, $setting, 60);
+            }
 
             return $setting;
         } catch (\Exception $e) {

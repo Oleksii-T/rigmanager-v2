@@ -4,7 +4,7 @@
 
 @section('content_header')
     <x-admin.title
-        text="Create Attachment"
+        text="Edit Attachment #{{$attachment->id}}"
     />
 @stop
 
@@ -29,8 +29,14 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Resource</label>
+                            <input type="text" class="form-control" value="{{$attachment->attachmentable_type}} #{{$attachment->attachmentable_id}}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Size</label>
-                            <input type="text" class="form-control" value="{{$attachment->getSize()}}" disabled>
+                            <input type="text" class="form-control" value="{{$attachment->getSize()}} ({{$attachment->size}} b)" disabled>
                         </div>
                     </div>
                     <div class="col-md-6">

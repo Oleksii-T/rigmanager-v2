@@ -50,10 +50,11 @@ class ProfileController extends Controller
         $user = auth()->user();
         $user->update($input);
         $input['info']['emails'] = array_filter($input['info']['emails']);
-        $input['info']['phones'] = array_filter($input['info']['phones']);
+        $input['info']['phones'] = array_filter($input['info']['phones']??[]);
         $user->info()->update($input['info']);
-        $user->addAttachment($input['avatar']??null, 'avatar');
-        $user->addAttachment($input['banner']??null, 'banner');
+        $avatar = $user->addAttachment($input['avatar']??null, 'avatar');
+        $banner = $user->addAttachment($input['banner']??null, 'banner');
+        \App\Jobs\ProcessUserImages::dispatch($avatar, $banner);
 
         return $this->jsonSuccess(trans('messages.profile.updated'));
     }
