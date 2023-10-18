@@ -33,17 +33,32 @@
                 @foreach ($categories as $category)
                     <div class="category-col">
                         <div class="category-item">
-                            <div class="category-img"><a href="{{$category->getUrl()}}"><img src="{{$category->image->url}}" alt="{{$category->image->alt}}"></a></div>
-                            <div class="category-name"><a href="{{$category->getUrl()}}">{{$category->name}}</a> (<span class="orange">{{$category->postsAll()->visible()->count()}}</span>)</div>
+                            <div class="category-img">
+                                <a href="{{$category->getUrl()}}">
+                                    <img src="{{$category->image->url}}" alt="{{$category->image->alt}}">
+                                </a>
+                            </div>
+                            <div class="category-name" {{request()->show_codes ? "title=$category->slug" : ''}}>
+                                <a href="{{$category->getUrl()}}">
+                                    {{$category->name}}
+                                </a>
+                                (<span class="orange">{{$category->postsAll()->visible()->count()}}</span>)
+                            </div>
                             @if ($category->childs->isNotEmpty())
                                 <ul class="category-list">
                                     @foreach ($category->childs as $childCat)
                                         <li>
-                                            <a href="{{$childCat->getUrl()}}">{{$childCat->name}}</a>
+                                            <a href="{{$childCat->getUrl()}}" {{request()->show_codes ? "title=$childCat->slug" : ''}}>
+                                                {{$childCat->name}}
+                                            </a>
                                             @if ($childCat->childs->isNotEmpty())
                                                 @foreach ($childCat->childs as $childChildCat)
                                                     <ul class="category-sublist">
-                                                        <li><a href="{{$childChildCat->getUrl()}}">{{$childChildCat->name}}</a></li>
+                                                        <li>
+                                                            <a href="{{$childChildCat->getUrl()}}" {{request()->show_codes ? "title=$childChildCat->slug" : ''}}>
+                                                                {{$childChildCat->name}}
+                                                            </a>
+                                                        </li>
                                                     </ul>
                                                 @endforeach
                                             @endif

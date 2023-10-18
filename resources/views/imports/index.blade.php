@@ -7,10 +7,7 @@
 @endsection
 
 @section('bc')
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name">{{__('ui.imports')}}</span>
-        <meta itemprop="position" content="2" />
-    </li>
+    <x-bci :text="trans('ui.imports')" i="2"  islast="1" />
 @endsection
 
 @section('content')
@@ -37,7 +34,7 @@
                             <th>{{__('ui.status')}}</th>
                             <th></th>
                         </tr>
-                        @foreach ($imports as $i => $import)
+                        @forelse ($imports as $i => $import)
                             <tr>
                                 <td>{{$imports->count() - $i}}</td>
                                 <td>
@@ -71,7 +68,13 @@
                                     @endif
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="5">
+                                    No imports found
+                                </td>
+                            </tr>
+                        @endforelse
                     </table>
                 </div>
             </div>

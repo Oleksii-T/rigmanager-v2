@@ -35,6 +35,19 @@ if (!function_exists('userAvatar')) {
     }
 }
 
+// get alphabet representation of integer
+if (!function_exists('intToAlphabet')) {
+    function intToAlphabet($number) {
+        $result = '';
+        while ($number > 0) {
+            $remainder = ($number - 1) % 26;
+            $result = chr(65 + $remainder) . $result; // 65 is the ASCII code for 'A'
+            $number = ($number - $remainder - 1) / 26;
+        }
+        return $result;
+    }
+}
+
 if (!function_exists('isdev')) {
     function isdev() {
         if (isset($_GET['rmforcedebug63'])) {

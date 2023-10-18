@@ -29,7 +29,7 @@ return new class extends Migration
             $table->boolean('is_trashed')->default(false);
             $table->boolean('is_urgent')->default(false);
             $table->boolean('is_import')->default(false);
-            $table->unsignedInteger('amount')->nullable();
+            $table->string('amount')->nullable();
             $table->string('country')->nullable();
             $table->string('manufacturer')->nullable();
             $table->string('manufacture_date')->nullable();

@@ -574,19 +574,19 @@ return [
     'history' => 'History',
     'expired' => 'Expired',
     'postImport' => 'Posts import',
-    'postImportTitle' => 'Here you can import a number ofposts at once.
-        Only equipment posts. Service posts must be published manually.
-        The post from import file are always considered as new.
-        You can not update already existing posts via import file.',
-    'postImportDownload' => 'Download import file template',
+    'postImportTitle' => 'Please select .xlsx file to start importing',
+    'importFileExample' => 'Import file example',
     'postImportUpload' => 'Upload filled import file',
     'importHow?' => 'How it is works?',
-    'postImportHow' => 'After you download the excel import file and fill it due to the rules, you can upload it above.
-        Then our algorithm analyze the submitted file.
-        If there are no errors, all posts from the file become public on our website.',
-    'postImportRules' => 'Please, read the rules before filling the form.',
-    'importFileLastUpdate' => 'Last update of import file template',
-    'postImportWarning' => 'Currently, we are not supporting image uploading via excel import file, so after all posts been published, you may upload photos for each one individually.',
+    'postImportHow' => 'After .xlsx file has been uploaded, basic validation is executed.
+        If file format is valid, Start row and End row must be specified along with columns for available post fields.
+        When submitted, algorithm analyzes file due to selected values.
+        In case of malformatted cell, readable error will be displayed.
+        If there are no errors, file will be queued for importing.
+        Status of import can be found on personal Imports page.
+        When import finishes all posts become visible on personal Posts page.
+        Bulk deactivation, activation and deletion of imported posts will become availalble as well.',
+    'downloadExampleImportFile' => 'You can download example of .xlsx file here: ',
     'importErrorAfter' => 'None of yourpost been published.
         Please fix the error and submit the import file again.',
     'fileImporting' => 'Your file is being processed, please wait.',
@@ -614,7 +614,8 @@ return [
     'date' => 'Date',
     'name' => 'Name',
     'update' => 'Update',
-    'selectFileAndPublish' => 'Select file and publish',
+    'selectFile' => 'Select file',
+    'startImport' => 'Start Import',
     'manufactureDate' => 'Manufacture Date',
     'posts' => [
         'my-translations-is-invalid' => 'My translations is not valid',

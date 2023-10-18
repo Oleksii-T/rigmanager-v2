@@ -16,10 +16,12 @@ class Import extends Model
         'user_id',
         'status',
         'posts',
+        'settings',
     ];
 
     protected $casts = [
-        'posts' => 'array'
+        'posts' => 'array',
+        'settings' => 'array'
     ];
 
     const STATUS_PENDING = 'pending';

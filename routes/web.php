@@ -48,7 +48,6 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('terms', [PageController::class, 'terms'])->name('terms');
     Route::get('site-map', [PageController::class, 'siteMap'])->name('site-map');
     Route::get('categories', [PageController::class, 'categories'])->name('categories');
-    Route::get('import/rules', [PageController::class, 'importRules'])->name('import-rules');
     Route::get('catalog/{slug1?}/{slug2?}/{slug3?}', [SearchController::class, 'index'])->name('search');
 
     Route::get('blog', [BlogController::class, 'index'])->name('blog.index');
@@ -80,13 +79,13 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
             Route::prefix('imports')->name('imports.')->group(function () {
                 Route::get('', [ImportController::class, 'index'])->name('index');
                 Route::get('create', [ImportController::class, 'create'])->name('create');
-                Route::get('store', [ImportController::class, 'store'])->name('store');
                 Route::get('downloads', [ImportController::class, 'downloadExample'])->name('download-example');
                 Route::get('{import}/posts', [ImportController::class, 'posts'])->name('posts');
                 Route::get('{import}/download', [ImportController::class, 'download'])->name('download');
                 Route::post('{import}/posts/delete', [ImportController::class, 'postsDelete'])->name('posts.delete');
                 Route::post('{import}/posts/deactivate', [ImportController::class, 'postsDeactivate'])->name('posts.deactivate');
                 Route::post('{import}/posts/activate', [ImportController::class, 'postsActivate'])->name('posts.activate');
+                Route::post('prep', [ImportController::class, 'prepareStore'])->name('prep-store');
                 Route::post('', [ImportController::class, 'store'])->name('store');
             });
 

@@ -71,14 +71,4 @@ class PageController extends Controller
     {
         return view('privacy');
     }
-
-    public function importRules()
-    {
-        $categoriesAll = Category::all();
-        foreach ($categoriesAll as $c) {
-            $categories[$c->name] = $c->translated('slug', 'en');
-        }
-
-        return view('import-rules', compact('categories'));
-    }
 }

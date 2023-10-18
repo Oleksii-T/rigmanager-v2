@@ -59,7 +59,6 @@
 						<li><a href="{{route('site-map')}}">{{__('ui.footerSiteMap')}}</a></li>
 						<li><a href="{{route('plans.index')}}">{{__('ui.footerSubscription')}}</a></li>
 						<li><a href="{{route('feedbacks.create')}}">{{__('ui.footerContact')}}</a></li>
-						<li><a href="{{route('import-rules')}}">{{__('postImportRules.title')}}</a></li>
 						<li><a href="{{route('faq')}}">FAQ</a></li>
 					</ul>
 				</li>

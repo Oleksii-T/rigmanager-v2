@@ -2,24 +2,25 @@
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use App\Imports\PostsImport as PostsImportExcel;
-use App\Enums\NotificationGroup;
-use App\Models\Notification;
-use App\Models\Import;
-use App\Models\Translation;
 use App\Models\Post;
+use App\Models\Import;
 use App\Models\Category;
 use App\Models\Attachment;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Translation;
 use Illuminate\Support\Str;
+use App\Models\Notification;
+use Illuminate\Bus\Queueable;
+use App\Enums\NotificationGroup;
 use Illuminate\Support\Facades\DB;
 use App\Services\TranslationService;
+use App\Services\ProcessImageService;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Imports\PostsImport as PostsImportExcel;
 
 class PostsImport implements ShouldQueue
 {
@@ -27,6 +28,9 @@ class PostsImport implements ShouldQueue
 
     protected $import;
     protected $user;
+    protected $startRow;
+    protected $endRow;
+    protected $userColumns;
 
     /**
      * Create a new job instance.
@@ -36,6 +40,10 @@ class PostsImport implements ShouldQueue
     public function __construct($import)
     {
         $this->import = $import;
+        $s = $import->settings;
+        $this->startRow = $s['start_row'];
+        $this->endRow = $s['end_row'];
+        $this->userColumns = $s['columns'];
         $this->user = $import->user;
     }
 
@@ -55,8 +63,8 @@ class PostsImport implements ShouldQueue
 
             $pages = \Excel::toArray(new PostsImportExcel, $this->import->file->path);
             $rows = $pages[0]; // get first excel page
-            $rows = array_slice($rows, 2); // remove the header from import file
-            $rows = array_slice($rows, 0, 500); // remove all but first 500 rows
+            // get only rows specified by user
+            $rows = array_slice($rows, $this->startRow-1, $this->endRow-$this->startRow+1);
             $posts = [];
 
             $this->log('Total rows: ' . count($rows), ' ');
@@ -107,68 +115,207 @@ class PostsImport implements ShouldQueue
         ]);
     }
 
-    private function log($text, $prefix='')
-    {
-        \Log::channel('importing')->info("$prefix Import #" . $this->import->id . ": $text");
-    }
-
     private function processRow($row)
     {
-        $translator = new TranslationService();
-        $textLocale = $translator->detectLanguage($row[1] . '. ' . $row[2]);
-
         // create post from row
         $post = Post::create([
             'status' => 'pending',
+            'duration' => 'unlim',
             'is_active' => true,
             'user_id' => $this->user->id,
-            'origin_lang' => $textLocale,
-            'category_id' => $this->category($row[3]),
-            'type' => strtolower($row[5]),
-            'condition' => strtolower($row[6]),
-            'amount' => $row[7],
-            'manufacturer' => $row[8],
-            'manufactureDate' => $row[9],
-            'partNumber' => $row[10],
-            'country' => $row[12] ? strtolower($row[12]) : $this->user->country,
-            'duration' => strtolower($row[13]),
+            'origin_lang' => 'en',
+            'category_id' => $this->getCategory($row[$this->userColumns['category']]),
+            'type' => $this->getType($row),
+            'condition' => $this->getCondition($row),
+            'amount' => $this->getAmount($row),
+            'manufacturer' => $this->getManufacturer($row),
+            'manufactureDate' => $this->getManufactureDate($row),
+            'partNumber' => $this->getPartNumber($row),
+            'country' => $this->getCountry($row)
         ]);
 
-        // save translations
-        $post->saveTranslations([
-            'slug' => [
-                $textLocale => makeSlug($row[1], Post::allSlugs())
-            ],
-            'title' => [
-                $textLocale => $row[1]
-            ],
-            'description' => [
-                $textLocale => $row[2]
-            ]
-        ]);
-        PostTranslate::dispatch($post);
-
-        // attach prices in all currencies
-        if ($row[11]) {
-            $post->saveCosts([
-                'cost' => substr($row[11], 1),
-                'currency' => array_search($row[11][0], currencies()),
-            ]);
-        }
-
-        // attach images from url
-        $this->storeImages($post, $row[4]);
+        $this->addTranslations($post, $row);
+        $this->addCosts($post, $row);
+        $this->addImages($post, $row);
 
         return $post->id;
     }
 
-    private function storeImages($post, $imagesRaw)
+    private function getCategory($val)
     {
+        return Translation::query()
+            ->where('translatable_type', Category::class)
+            ->where('locale', 'en')
+            ->where('value', 'like', "%$val%")
+            ->whereIn('field', ['slug', 'name'])
+            ->value('translatable_id');
+    }
+
+    private function getType($row)
+    {
+        $i = $this->userColumns['type'];
+        $default = 'sell';
+
+        if (!$i) {
+            return $default;
+        }
+
+        $val = strtolower($row[$i]);
+        $val = trim($val);
+
+        return $val ? $val : $default;
+    }
+
+    private function getCondition($row)
+    {
+        $i = $this->userColumns['condition'];
+        $default = 'new';
+
+        if (!$i) {
+            return $default;
+        }
+
+        $val = strtolower($row[$i]);
+        $val = trim($val);
+
+        return $val ? $val : $default;
+    }
+
+    private function getAmount($row)
+    {
+        $i = $this->userColumns['amount'];
+        $default = null;
+
+        if (!$i) {
+            return $default;
+        }
+
+        $val = trim($row[$i]);
+
+        return $val ? $val : $default;
+    }
+
+    private function getManufacturer($row)
+    {
+        $i = $this->userColumns['manufacturer'];
+        $default = null;
+
+        if (!$i) {
+            return $default;
+        }
+
+        $val = trim($row[$i]);
+
+        return $val ? $val : $default;
+    }
+
+    private function getManufactureDate($row)
+    {
+        $i = $this->userColumns['manufactureDate'];
+        $default = null;
+
+        if (!$i) {
+            return $default;
+        }
+
+        $val = trim($row[$i]);
+
+        return $val ? $val : $default;
+    }
+
+    private function getPartNumber($row)
+    {
+        $i = $this->userColumns['partNumber'];
+        $default = null;
+
+        if (!$i) {
+            return $default;
+        }
+
+        $val = trim($row[$i]);
+
+        return $val ? $val : $default;
+    }
+
+    private function getCountry($row)
+    {
+        $i = $this->userColumns['country'];
+        $default = $this->user->country;
+
+        if (!$i) {
+            return $default;
+        }
+
+        $val = strtolower($row[$i]);
+        $val = trim($val);
+
+        return $val ? $val : $default;
+    }
+
+    private function addTranslations($post, $row)
+    {
+        $title = $row[$this->userColumns['title']];
+        $description = $row[$this->userColumns['description']];
+        $textLocale = (new TranslationService())->detectLanguage("$title. $description");
+
+        $post->saveTranslations([
+            'slug' => [
+                $textLocale => makeSlug($title, Post::allSlugs())
+            ],
+            'title' => [
+                $textLocale => $title
+            ],
+            'description' => [
+                $textLocale => $description
+            ]
+        ]);
+
+        PostTranslate::dispatch($post);
+
+        if ($textLocale != 'en') {
+            $post->update([
+                'origin_lang' => $textLocale
+            ]);
+        }
+    }
+
+    private function addCosts($post, $row)
+    {
+        $i = $this->userColumns['cost'];
+
+        if (!$i) {
+            return;
+        }
+
+        $val = trim($row[$i]);
+
+        if (!$val) {
+            return;
+        }
+
+        $post->saveCosts([
+            'cost' => substr($val, 1),
+            'currency' => array_search($val[0], currencies()),
+        ]);
+    }
+
+    private function addImages($post, $row)
+    {
+        $i = $this->userColumns['images'];
+
+        if (!$i) {
+            return;
+        }
+
+        $imagesRaw = trim($row[$i]);
+
         if (!$imagesRaw) {
             return;
         }
+
         $this->log("Store images", '   ');
         $disk = Storage::disk('aimages');
+        $resultImages = [];
         $images = [];
         //? use preg_split to split by two chars
         foreach (explode(' ', $imagesRaw) as $i) {
@@ -192,9 +339,19 @@ class PostsImport implements ShouldQueue
             }
             try {
                 $contents = file_get_contents($url);
+                $ext = ProcessImageService::mimeFromUrl($url);
+
+                if (!$ext) {
+                    abort(500, 'Can not detect extension');
+                }
+
                 $name = substr($url, strrpos($url, '/') + 1);
-                $ext = substr($name, strrpos($name, '.'));
-                $random_name = Str::random(40) . $ext;
+
+                if (strrpos($name, '.') === false) {
+                    $name .= ".$ext";
+                }
+
+                $random_name = Str::random(40) . ".$ext";
 
                 $disk->put($random_name, $contents);
 
@@ -206,7 +363,7 @@ class PostsImport implements ShouldQueue
                     continue;
                 }
 
-                Attachment::create([
+                $resultImages[] = Attachment::create([
                     'attachmentable_id' => $post->id,
                     'attachmentable_type' => Post::class,
                     'name' => $random_name,
@@ -225,20 +382,14 @@ class PostsImport implements ShouldQueue
                 ]);
             }
         }
+
+        if ($resultImages) {
+            ProcessPostImages::dispatch($resultImages);
+        }
     }
 
-    private function category($val)
+    private function log($text, $prefix='')
     {
-        return Translation::query()
-            ->where('translatable_type', Category::class)
-            ->where('locale', 'en')
-            ->where(function ($q) use($val){
-                $q->where(function ($q2) use($val){
-                    $q2->where('field', 'slug')->where('value', 'like', "%$val%");
-                })->orWhere(function ($q2) use($val){
-                    $q2->where('field', 'name')->where('value', 'like', "%$val%");
-                });
-            })
-            ->value('translatable_id');
+        \Log::channel('importing')->info("$prefix Import #" . $this->import->id . ": $text");
     }
 }

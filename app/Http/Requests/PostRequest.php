@@ -34,7 +34,7 @@ class PostRequest extends FormRequest
             'type' => ['required', 'string', Rule::in(Post::TYPES)],
             'condition' => ['nullable', 'string', Rule::in(Post::CONDITIONS)],
             'is_urgent' => ['nullable', 'boolean'],
-            'amount' => ['nullable', 'integer', 'min:1', 'max:9999999'],
+            'amount' => ['nullable', 'string', 'max:70'],
             'country' => ['required', 'string', 'max:2'],
             'manufacturer' => ['nullable', 'string', 'max:70'],
             'manufacture_date' => ['nullable', 'string', 'max:70'],

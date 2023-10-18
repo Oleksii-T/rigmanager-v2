@@ -108,4 +108,35 @@ class ProcessImageService
 
         return $path;
     }
+
+    public static function mimeFromUrl($url)
+    {
+        try {
+            $mime = exif_imagetype($url);
+            $mimes  = [
+                IMAGETYPE_GIF => "gif",
+                IMAGETYPE_JPEG => "jpg",
+                IMAGETYPE_PNG => "png",
+                IMAGETYPE_WEBP => "webp",
+                IMAGETYPE_BMP => "bmp",
+                // IMAGETYPE_SWF => "image/swf",
+                // IMAGETYPE_PSD => "image/psd",
+                // IMAGETYPE_JPC => "image/jpc",
+                // IMAGETYPE_JP2 => "image/jp2",
+                // IMAGETYPE_JPX => "image/jpx",
+                // IMAGETYPE_JB2 => "image/jb2",
+                // IMAGETYPE_SWC => "image/swc",
+                // IMAGETYPE_IFF => "image/iff",
+                // IMAGETYPE_WBMP => "image/wbmp",
+                // IMAGETYPE_XBM => "image/xbm",
+                // IMAGETYPE_ICO => "image/ico",
+            ];
+
+            $mime = $mimes[$mime];
+        } catch (\Throwable $th) {
+            $mime = null;
+        }
+
+        return $mime;
+    }
 }

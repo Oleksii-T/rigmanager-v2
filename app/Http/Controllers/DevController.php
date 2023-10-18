@@ -64,6 +64,52 @@ class DevController extends Controller
 
     private function test()
     {
+        $url = 'https://dummyimage.com/600x400/ff8d12/fff';
+        // $url = 'http://localhost/storage/attachments/images/compressed/OaVv8zKWCnSjAv6uKuUQeGD5M5feKbqvsjopAh9o-300-300.webp';
+        $url = 'https://www.gstatic.com/webp/gallery/4.sm.webp';
+        $url = 'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/AJ_Digital_Camera.svg';
+        try {
+            $mime = mime_content_type($url);
+        } catch (\Throwable $th) {
+            $mime = $th->getMessage();
+        }
+        $this->d($mime, 'mime php');
+
+        $headers = get_headers($url, 1);
+        $this->d($headers, 'headers');
+
+        //.jpg, .jpeg, .png, .bmp, .gif, .svg, .webp
+        $mime = exif_imagetype($url);
+        $possibleMimes = [];
+        $mimes  = [
+            IMAGETYPE_GIF => "image/gif",
+            IMAGETYPE_JPEG => "image/jpg",
+            IMAGETYPE_PNG => "image/png",
+            IMAGETYPE_WEBP => "image/webp",
+            IMAGETYPE_BMP => "image/bmp",
+            // IMAGETYPE_SWF => "image/swf",
+            // IMAGETYPE_PSD => "image/psd",
+            // IMAGETYPE_JPC => "image/jpc",
+            // IMAGETYPE_JP2 => "image/jp2",
+            // IMAGETYPE_JPX => "image/jpx",
+            // IMAGETYPE_JB2 => "image/jb2",
+            // IMAGETYPE_SWC => "image/swc",
+            // IMAGETYPE_IFF => "image/iff",
+            // IMAGETYPE_WBMP => "image/wbmp",
+            // IMAGETYPE_XBM => "image/xbm",
+            // IMAGETYPE_ICO => "image/ico",
+        ];
+        $this->d($mimes, 'mimes');
+        $this->d($mime, 'exif_imagetype');
+
+        // $fileContents = file_get_contents($url);
+        // if ($fileContents !== false) {
+        //     $finfo = new finfo(FILEINFO_MIME);
+        //     $mimeType = $finfo->buffer($fileContents);
+        //     $this->d($mimeType, 'mime via finfo');
+        // } else {
+        //     $this->d('EMPTY', 'mime via finfo');
+        // }
 
     }
 

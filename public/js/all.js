@@ -484,7 +484,7 @@ function trans(key) {
     return window.Laravel.translations[key];
 }
 
-async function ajaxSubmit(form, formData, button) {
+async function ajaxSubmit(form, formData, button, successCallback=null) {
     $('.form-error').empty();
     button.addClass('cursor-wait');
     $.ajax({
@@ -495,9 +495,14 @@ async function ajaxSubmit(form, formData, button) {
         contentType: false,
         processData: false,
         success: (response)=>{
-            fullLoader(false);
-            button.removeClass('cursor-wait');
-            showServerSuccess(response);
+            if (successCallback) {
+                successCallback(response);
+                return;
+            } else {
+                fullLoader(false);
+                button.removeClass('cursor-wait');
+                showServerSuccess(response);
+            }
         },
         error: function(response) {
             fullLoader(false);
@@ -575,7 +580,6 @@ function showServerError(response) {
             errorElement = errorElement.length ? errorElement : $(`[name="${field}[]"]`).closest('.form-group').find('.form-error');
 
             if (!errorElement.length) {
-                console.log(`ERROR: element for ${field} no found`); //! LOG
                 continue;
             }
 
@@ -592,7 +596,6 @@ function showServerError(response) {
         let firstErrorField = firstError.data('input').replaceAll('.', '\\.');
         let input = $(`[name=${firstErrorField}]`);
 
-        //TODO: add check is in viewport
         if (input.length && !isScrolledIntoView(input)) {
             animatedScroll(input, 50);
         }
