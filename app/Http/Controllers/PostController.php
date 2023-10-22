@@ -24,7 +24,7 @@ class PostController extends Controller
         // return new \App\Mail\PostTba($post, auth()->user());
         $user = auth()->user();
 
-        if (!$post->is_active && $post->user_id != $user->id) {
+        if (($post->is_trashed || !$post->is_active) && $post->user_id != $user?->id) {
             return view('posts.inactive', compact('post'));
         }
 

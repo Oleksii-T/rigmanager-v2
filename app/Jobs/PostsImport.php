@@ -128,6 +128,7 @@ class PostsImport implements ShouldQueue
             'type' => $this->getType($row),
             'condition' => $this->getCondition($row),
             'amount' => $this->getAmount($row),
+            'is_tba' => true,
             'manufacturer' => $this->getManufacturer($row),
             'manufactureDate' => $this->getManufactureDate($row),
             'partNumber' => $this->getPartNumber($row),

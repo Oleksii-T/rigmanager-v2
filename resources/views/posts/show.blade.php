@@ -23,6 +23,10 @@
         <div class="outdated-post-alert">
             <p>{{__('ui.postIsHidden')}}</p>
         </div>
+    @elseif ($post->is_trashed)
+        <div class="outdated-post-alert">
+            <p>Only you(author) can view this post, because it been trashed.</p>
+        </div>
     @endif
     <div class="prod">
         <div class="prod-content">
