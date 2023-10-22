@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('manufacturer')->nullable();
             $table->string('manufacture_date')->nullable();
             $table->string('part_number')->nullable();
+            $table->string('scraped_url')->nullable();
             $table->timestamps();
         });
     }

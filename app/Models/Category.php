@@ -204,18 +204,6 @@ class Category extends Model
         return self::find(1);
     }
 
-    private function getChildrenIds($subcategories)
-    {
-        $array = array();
-        foreach ($subcategories as $subcategory) {
-            array_push($array, $subcategory->id);
-            if ($subcategory->childs->isNotEmpty()) {
-                $array = array_merge($array, $this->getChildrenIds($subcategory->childs));
-            }
-        }
-        return $array;
-    }
-
     public static function getLevels()
     {
         $categs = self::active()->whereNull('category_id')->with('childs.childs')->get();
@@ -243,5 +231,17 @@ class Category extends Model
         }
 
         return [$first, $second, $third];
+    }
+
+    private function getChildrenIds($subcategories)
+    {
+        $array = array();
+        foreach ($subcategories as $subcategory) {
+            array_push($array, $subcategory->id);
+            if ($subcategory->childs->isNotEmpty()) {
+                $array = array_merge($array, $this->getChildrenIds($subcategory->childs));
+            }
+        }
+        return $array;
     }
 }

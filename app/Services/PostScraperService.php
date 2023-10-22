@@ -20,6 +20,7 @@ class PostScraperService
     private int $sleep = 0;
     private array $values = [];
     private array $result = [];
+    private \Closure $logUsingClosure;
     private array $meta = [
         'parsed_posts' => [],
         'parsed_pages' => [],
@@ -27,12 +28,12 @@ class PostScraperService
         'parsed_posts_count' => 0
     ];
 
-    public function __construct($url)
+    public function __construct(string $url)
     {
         $this->url = $url;
     }
 
-    public static function make($url)
+    public static function make(string $url)
     {
         return new self($url);
     }
@@ -44,6 +45,13 @@ class PostScraperService
         return $this;
     }
 
+    public function logUsing(\Closure $callback)
+    {
+        $this->logUsingClosure = $callback;
+
+        return $this;
+    }
+
     public function abortOnPageError(bool $abort)
     {
         $this->abortOnPageError = $abort;
@@ -51,6 +59,13 @@ class PostScraperService
         return $this;
     }
 
+    /**
+     * Set debug flag
+     *
+     * @param bool $debug Debug flag
+     *
+     * @return self
+     */
     public function debug(bool $debug)
     {
         $this->debug = $debug;
@@ -58,6 +73,14 @@ class PostScraperService
         return $this;
     }
 
+    /**
+     * Set limit of scraped posts
+     * Ignored if count() used
+     *
+     * @param int $limit Limit
+     *
+     * @return self
+     */
     public function limit(int $limit)
     {
         $this->limitResult = $limit;
@@ -65,6 +88,13 @@ class PostScraperService
         return $this;
     }
 
+    /**
+     * Set pause before making GET request
+     *
+     * @param int $sleep Pause seconds
+     *
+     * @return self
+     */
     public function sleep(int $sleep)
     {
         $this->sleep = $sleep;
@@ -72,6 +102,13 @@ class PostScraperService
         return $this;
     }
 
+    /**
+     * Set the selector for posts page pagination.
+     *
+     * @param string $selector Selector for post
+     *
+     * @return self
+     */
     public function pagination($selector)
     {
         $this->paginationSelector = $selector;
@@ -79,6 +116,13 @@ class PostScraperService
         return $this;
     }
 
+    /**
+     * Set the selector for post element (e.g. with post link/title/thumb) withing posts page.
+     *
+     * @param string $selector Selector for post
+     *
+     * @return self
+     */
     public function post($selector)
     {
         $this->postSelector = $selector;
@@ -86,6 +130,14 @@ class PostScraperService
         return $this;
     }
 
+    /**
+     * Sets the selector post page link
+     *
+     * @param string $selector Selector of links
+     * @param string $attr Attribute where link can be found. href is default
+     *
+     * @return self
+     */
     public function postLink($selector, $attr='href')
     {
         $this->postLinkSelector = $selector;
@@ -94,6 +146,17 @@ class PostScraperService
         return $this;
     }
 
+    /**
+     * Sets the selector for post field. Eg for title or description.
+     *
+     * @param string $name Name of field
+     * @param string $selector Selector where field value can be found
+     * @param string|null $attribute Attribute of value. If not supplied, content of tag will be scraped
+     * @param bool|null $isMultiple Defines if scraped value must be an array
+     * @param bool|null $getFromPostsPage Defines if value should be scraped from posts page instead on separate post page
+     *
+     * @return self
+     */
     public function value(string $name, string $selector, string $attribute=null, bool $isMultiple=false, bool $getFromPostsPage=false)
     {
         $this->values[$name] = [
@@ -106,6 +169,12 @@ class PostScraperService
         return $this;
     }
 
+    /**
+     * Run the scraper but only count pages and posts
+     *
+     * @param bool $includeMeta Flag wether to include additonal data about scrappping process or no
+     * @return array Returs scraped posts as array (and additional data if paramere applied)
+     */
     public function scrape($includeMeta=false)
     {
         $this->scrapeHelper($this->url);
@@ -114,6 +183,11 @@ class PostScraperService
         return $includeMeta ? ['data' => $this->result, 'meta' => $this->meta] : $this->result;
     }
 
+    /**
+     * Run the scraper but only count pages and posts
+     *
+     * @return array Count resut
+     */
     public function count()
     {
         $this->onlyCount = true;
@@ -125,6 +199,11 @@ class PostScraperService
         ];
     }
 
+    /**
+     * Format and calculate scraping data and timungs
+     *
+     * @return void
+     */
     private function sumarizeMeta()
     {
         $this->meta['parsed_pages_total'] = count($this->meta['parsed_pages']);
@@ -148,29 +227,29 @@ class PostScraperService
     }
 
     /**
-     * Recursive function for page scraping
+     * Recursive function for site scraping
+     * Determined pagination links and iterates through them.
      *
+     * @param string $url Page url to start scraping
+     *
+     * @return void
      */
-    public function scrapeHelper($url)
+    public function scrapeHelper($url, $page=1)
     {
         $this->log("scrapeHelper $url");
         $this->meta['parsed_pages'][$url] = [
             'start' => microtime(true)
         ];
         $html = $this->getHTML($url);
-        $this->log($html);
+        $this->log(' HTML: ' . str_replace(["\r\n", "\r", "\n"], ' ', $html));
         $paginationUrls = $this->getLinksFromUrl($html, $this->paginationSelector);
         $postsNodeLists = $this->querySelector($html, $this->postSelector);
 
         // scrape posts
         foreach ($postsNodeLists as $i => $postNode) {
-            if ($this->onlyCount) {
-                $this->meta['parsed_posts'][] = 1;
-                continue;
-            }
             $postUrl = $this->querySelector($postNode, $this->postLinkSelector)->item(0)->getAttribute($this->postLinkAttribute)??null;
 
-            $this->log("  Post #$i process: $postUrl");
+            $this->log("  Post #$page:$i process: $postUrl");
 
             if (!$postUrl) {
                 $this->log("    NOT URL");
@@ -180,6 +259,12 @@ class PostScraperService
                 continue;
             }
 
+            if ($this->onlyCount) {
+                $this->meta['parsed_posts'][] = 1;
+                continue;
+            }
+
+            // ensure that link contains schema and domain
             $postUrl = $this->ensureSchema($postUrl);
 
             $this->meta['parsed_posts'][$postUrl] = [
@@ -222,19 +307,26 @@ class PostScraperService
         // check is next page must be scraped
         if ($this->enough() || !isset($nextPageUrl)) {
             $this->log("  ENOUGHT or NO PAGE");
-            return null;
+            return;
         }
 
         // scrape next page
-        return $this->scrapeHelper($nextPageUrl);
+        return $this->scrapeHelper($nextPageUrl, $page+1);
     }
 
+    /**
+     * Scrape all configured values from page.
+     *
+     * @param string $url Page HTML
+     *
+     * @return array scraped values
+     */
     private function processPost($url)
     {
         $this->log("    Post process start $url");
 
         $html = $this->getHTML($url);
-        $this->log("    $html");
+        $this->log('    HTML: ' . str_replace(["\r\n", "\r", "\n"], ' ', $html));
         $values = [];
 
         foreach ($this->values as $key => $data) {
@@ -250,6 +342,16 @@ class PostScraperService
         return $values;
     }
 
+    /**
+     * Get tag or multiple tags from provided html.
+     * Call helper to scrape value from tag(s)
+     *
+     * @param $html Page HTML
+     * @param string $key Value name
+     * @param array $data Data of how the value must be scraped
+     *
+     * @return string $res Scraped value
+     */
     private function scrapeValue($html, $key, $data)
     {
         $nodeList = $this->querySelector($html, $data['selector']);
@@ -273,6 +375,16 @@ class PostScraperService
         return $res;
     }
 
+    /**
+     * Scrape value from tag.
+     * Get inner html or arratibite value.
+     *
+     * @param $node Tag to be scraped
+     * @param string $key Value name
+     * @param array $data Data of how the value must be scraped
+     *
+     * @return string $res Scraped value
+     */
     private function scrapeValueHelper($node, $key, $data)
     {
         $attr = $data['attribute'];
@@ -403,6 +515,12 @@ class PostScraperService
             $toLog .= (': ' . json_encode($data));
         }
 
-        dump($toLog);
+        if (isset($this->logUsingClosure)) {
+            $function = $this->logUsingClosure;
+            $function($toLog);
+        } else {
+            \Log::channel('scraping')->info($toLog);
+        }
+
     }
 }

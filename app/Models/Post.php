@@ -36,6 +36,7 @@ class Post extends Model
         'manufacturer',
         'manufacture_date',
         'part_number',
+        'scraped_url'
     ];
 
     protected $appends = self::TRANSLATABLES + [
