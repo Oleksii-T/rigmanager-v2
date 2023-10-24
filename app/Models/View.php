@@ -11,6 +11,7 @@ class View extends Model
         'user_id',
         'viewable_type',
         'viewable_id',
+        'is_fake',
         'ip'
     ];
 

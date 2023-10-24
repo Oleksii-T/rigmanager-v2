@@ -266,11 +266,6 @@ class Post extends Model
         return $this->translated($field, $this->origin_lang);
     }
 
-    public function compileViews()
-    {
-        return [];
-    }
-
     public static function dataTable($query)
     {
         return DataTables::of($query)
