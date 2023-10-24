@@ -242,7 +242,9 @@ class PostScraperService
         ];
         $html = $this->getHTML($url);
         $this->log(' HTML: ' . str_replace(["\r\n", "\r", "\n"], ' ', $html));
-        $paginationUrls = $this->getLinksFromUrl($html, $this->paginationSelector);
+        $paginationUrls = $this->paginationSelector
+            ? $this->getLinksFromUrl($html, $this->paginationSelector)
+            : [];
         $postsNodeLists = $this->querySelector($html, $this->postSelector);
 
         // scrape posts

@@ -15,57 +15,58 @@ use App\Services\TranslationService;
 use App\Services\ProcessImageService;
 use Illuminate\Support\Facades\Storage;
 
-class ScrapePosts extends Command
+class ScrapePostsCepai extends Command
 {
+    private $user = null;
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'posts:scrape';
+    protected $signature = 'posts:scrape-cepai';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Scrape posts';
+    protected $description = 'Scrape posts from cepai.com.cn';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->cepai();
-        // $this->cnsanmon();
-    }
-
-    private function cepai()
-    {
+        $this->user = User::where('email', 'aires@cepai.com')->first();
         $jsonFilePath = storage_path('scraper_jsons/cepai.json');
 
         if (file_exists($jsonFilePath)) {
             $json = file_get_contents($jsonFilePath);
-            $json = json_decode($json, true);
+            $result = json_decode($json, true);
         } else {
-            $result = \App\Services\PostScraperService::make('http://en.cepai.com.cn/product/instrument/mperatu/index.html')
-                ->pagination('#main_product_center #main1_box #main1_box2 a')
-                ->post('#main_product_center #main1_box #main1_box1_1')
-                ->postLink('.main1_box1_12 a')
-                ->value('title', '#main_product #main2_btleft span')
-                ->value('description', '#main_product #main2_cpmsbj p')
-                ->value('image', '#main_product #main2_cpxqbj img', 'src')
-                ->value('body', '#main_product #main2_lrxq #main2_box4', 'html')
-                ->value('breadcrumbs', '#main_product #main1_wei a', null, true)
-                ->abortOnEmpty(true)
-                // ->limit(100)
-                ->sleep(0)
-                ->debug(true)
-                // ->logUsing(function ($log) {
-                //     $this->info($log);
-                // })
-                ->scrape();
-                // ->count();
+            $result = [];
+            $baseUrls = [
+                'http://en.cepai.com.cn/product/instrument/mperatu/index.html',
+                'http://en.cepai.com.cn/product/alves/uidin/',
+                'http://en.cepai.com.cn/product/tuat/uas/',
+                'http://en.cepai.com.cn/product/ccessor/ositioner/',
+            ];
+            foreach ($baseUrls as $url) {
+                $tmp = \App\Services\PostScraperService::make($url)
+                    ->pagination('#main_product_center #main1_box #main1_box2 a')
+                    ->post('#main_product_center #main1_box #main1_box1_1')
+                    ->postLink('.main1_box1_12 a')
+                    ->value('title', '#main_product #main2_btleft span')
+                    ->value('description', '#main_product #main2_cpmsbj p')
+                    ->value('image', '#main_product #main2_cpxqbj img', 'src')
+                    ->value('body', '#main_product #main2_lrxq #main2_box4', 'html')
+                    ->value('breadcrumbs', '#main_product #main1_wei a', null, true)
+                    ->abortOnEmpty(true)
+                    ->debug(true)
+                    ->scrape();
+                $result = array_merge($result, $tmp);
+            }
 
             $json = json_encode($result);
             $fp = fopen($jsonFilePath, 'w');
@@ -73,70 +74,25 @@ class ScrapePosts extends Command
             fclose($fp);
         }
 
-
-        $user = User::where('email', 'aires@cepai.com')->first();
-        $this->makePost($result, $user);
-
+        $this->makePost($result);
     }
 
-    private function cnsanmon()
-    {
-        $d['cnsanmon'] = \App\Services\PostScraperService::make('http://www.cnsanmon.com/sjal')
-            ->pagination('.ny_pages a')
-            ->post('.nproduct li')
-            ->postLink('a')
-            ->value('title', '.nmain .news_title')
-            ->value('description', '.nmain .newsbody', 'html')
-            ->value('image', 'img', 'src', false, true)
-            ->value('category', '.nbt')
-            ->abortOnEmpty(true)
-            ->limit(1)
-            ->sleep(0)
-            // ->debug(true)
-            // ->scrape(false);
-            ->count();
-    }
-
-    private function makePost($scrapedData, $user)
+    private function makePost($scrapedData)
     {
         foreach ($scrapedData as $url => $scrapedPost) {
-            $exists = Post::where('scraped_url', $url)->count();
-
-            // ignore already scraped posts
-            if ($exists) {
+            if ($this->checkExist($url, $scrapedPost['title'])) {
                 continue;
             }
 
-            $category = Category::getBySlug('other-measurement-equipment');
-
-            $t = $scrapedPost['title'];
-            $exists = Translation::query()
-                ->where('field', 'title')
-                ->where('locale', 'en')
-                ->where('translatable_type', Post::class)
-                ->where('value', $t)
-                ->get();
-            if ($exists->isEmpty()) {
-                $this->info("$t: $url - NEW");
+            if (in_array('CEPAI Valves', $scrapedPost['breadcrumbs'])) {
+                $categorySlug = 'flowline-products';
             } else {
-                foreach ($exists as $e) {
-                    $post = $e->translatable;
-                    if ($post->user_id == $user->id) {
-                        $this->info("$t: $url - EXISTS: " . $post->id);
-                        // $this->line(' #Descriptions:');
-                        // $this->line('  Cepai: ' . $scrapedPost['description']);
-                        // $this->line('  DB   : ' . $post->description);
-                        // $this->line(' #Image:');
-                        // $this->line('  Cepai: ' . $scrapedPost['image']);
-                        // $this->line('  DB   : ' . ($post->images->first()->original_name ?? '-'));
-                        break;
-                    }
-                }
+                $categorySlug = 'other-measurement-equipment';
             }
-            continue;
+            $category = Category::getBySlug($categorySlug);
 
             $post = [
-                'user_id' => $user->id,
+                'user_id' => $this->user->id,
                 'status' => 'pending',
                 'duration' => 'unlim',
                 'is_active' => true,
@@ -156,8 +112,44 @@ class ScrapePosts extends Command
             $post = Post::create($post);
 
             $this->addImage($post, $scrapedPost['image']??false);
-            $this->addTranslations($post, $scrapedPost['title']??'', $scrapedPost['description']??'');
+            $this->addTranslations($post, $scrapedPost['title'], $scrapedPost['description']);
         }
+    }
+
+    /**
+     * Detec already scraped or dublicated post
+     *
+     */
+    private function checkExist($url, $title)
+    {
+        $exists = Post::where('scraped_url', $url)->count();
+
+        if ($exists) {
+            $this->info("$url - EXISTS by url");
+            return true;
+        }
+
+        $exists = Translation::query()
+            ->where('field', 'title')
+            ->where('locale', 'en')
+            ->where('translatable_type', Post::class)
+            ->where('value', $title)
+            ->get();
+
+        if ($exists->isEmpty()) {
+            return false;
+        }
+
+        foreach ($exists as $e) {
+            $post = $e->translatable;
+            $this->log(" found '$title' in $e->id");
+            if ($post->user_id == $this->user->id) {
+                $this->info("$url - EXISTS by title '$title' in post #$post->id");
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function addImage($post, $url)
