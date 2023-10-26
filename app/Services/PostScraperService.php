@@ -486,6 +486,10 @@ class PostScraperService
             return $url;
         }
 
+        if (str_starts_with($url, '//')) {
+            return "http:$url";
+        }
+
         $baseUrl = parse_url($this->url);
 
         if (str_contains($url, '//' . $baseUrl['host'])) {
