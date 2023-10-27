@@ -34,11 +34,6 @@ class ScrapePostsSanmon extends Command
     public function handle()
     {
         $this->user = User::where('email', 'sales@cnsanmon.com')->first();
-
-        foreach ($this->user->posts as $p) {
-            $p->delete();
-        }
-
         $jsonFilePath = storage_path('scraper_jsons/sanmon.json');
 
         if (file_exists($jsonFilePath)) {
@@ -48,7 +43,7 @@ class ScrapePostsSanmon extends Command
             $this->line(" Done");
         } else {
             $this->info("Web scrappping...");
-            $result = \App\Services\PostScraperService::make('http://www.cnsanmon.com/sjal/wireline-slickline/')
+            $result = \App\Services\PostScraperService::make('http://www.cnsanmon.com/sjal')
                 ->pagination('.ny_pages a')
                 ->post('.nproduct li')
                 ->postLink('a')
@@ -58,7 +53,6 @@ class ScrapePostsSanmon extends Command
                 ->value('images', '.newsbody img', 'src', true)
                 ->value('category', '.nbt')
                 ->abortOnEmpty(true)
-                ->sleep(0)
                 ->scrape();
 
             $json = json_encode($result);
@@ -68,21 +62,7 @@ class ScrapePostsSanmon extends Command
             $this->line(" Done");
         }
 
-        // dd($result);
-
-        $count = count($result);
-        if (!$this->confirm("Found $count posts. Proceed?")) {
-            return;
-        }
-
-        $this->makePost($result);
-
-        $this->info("Successfully processed $count posts.");
-        if ($this->skipped) {
-            $this->warn("Skipped: $this->skipped");
-        }
-        $this->newLine(1);
-        $this->info('Process finished');
+        $this->process($result);
     }
 
     private function parseTitle($scrapedPost)
@@ -102,7 +82,7 @@ class ScrapePostsSanmon extends Command
         $description = strip_tags($description);
         $description = str_replace('&Acirc;', '', $description);
         $description = str_replace('&nbsp;', '', $description);
-        $description = preg_replace('~[\r\n]+~', '\r\n', $description); //! FIX
+        $description = preg_replace('/(\r\n){3,}/', "\r\n\r\n", $description);
 
         return $description;
     }

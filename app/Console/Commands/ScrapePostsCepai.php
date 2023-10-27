@@ -73,19 +73,7 @@ class ScrapePostsCepai extends Command
             $this->line(" Done");
         }
 
-        $count = count($result);
-        if (!$this->confirm("Found $count posts. Proceed?")) {
-            return;
-        }
-
-        $this->makePost($result);
-
-        $this->info("Successfully processed $count posts.");
-        if ($this->skipped) {
-            $this->warn("Skipped: $this->skipped");
-        }
-        $this->newLine(1);
-        $this->info('Process finished');
+        $this->process($result);
     }
 
     private function parseTitle($scrapedPost)

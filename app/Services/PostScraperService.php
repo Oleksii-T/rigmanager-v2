@@ -12,6 +12,7 @@ class PostScraperService
     private string $postSelector;
     private string $postLinkSelector;
     private string $postLinkAttribute;
+    private string $currentUrl = '';
     private bool $abortOnEmpty = true;
     private bool $abortOnPageError = true;
     private bool $onlyCount = false;
@@ -326,6 +327,7 @@ class PostScraperService
     private function processPost($url)
     {
         $this->log("    Post process start $url");
+        $this->currentUrl = $url;
 
         $html = $this->getHTML($url);
         $this->log('    HTML: ' . str_replace(["\r\n", "\r", "\n"], ' ', $html));
@@ -402,7 +404,7 @@ class PostScraperService
         }
 
         if (!$res && $this->abortOnEmpty) {
-            throw new \Exception("Empty value encounered for '$key' value ({$data['selector']})", 1);
+            throw new \Exception("Empty value encounered for '$key' value ({$data['selector']}) at $this->currentUrl", 1);
         }
 
         if ($res && $attr && in_array($attr, ['href', 'src'])) {
@@ -412,6 +414,13 @@ class PostScraperService
         return $res;
     }
 
+    /**
+     * Remove arbitrary attributes from html
+     *
+     * @param string $html Input html
+     *
+     * @return string $html Cleaned html
+     */
     private function crearHtml($html)
     {
         if (!$html) return $html;
@@ -427,8 +436,10 @@ class PostScraperService
         }
 
         $html = $dom->saveHTML();
-        $html = preg_replace('/^.*<body>/s', '', $html);
-        $html = preg_replace('/<\/body>.*$/s', '', $html);
+        $pos = strpos($html, '<body>');
+        $html = substr($html, $pos+6);
+        $pos = strpos($html, '</body>');
+        $html = substr($html, 0, $pos);
 
         return $html;
     }

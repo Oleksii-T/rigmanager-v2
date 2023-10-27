@@ -14,7 +14,24 @@ use Illuminate\Support\Facades\Storage;
 
 trait ScrapePosts
 {
-    private function makePost($scrapedData)
+    private function process($scrapedPosts)
+    {
+        $count = count($scrapedPosts);
+        if (!$this->confirm("Found $count posts. Proceed?")) {
+            return;
+        }
+
+        $this->importScrapedPosts($scrapedPosts);
+
+        $this->info("Successfully processed $count posts.");
+        if ($this->skipped) {
+            $this->warn("Skipped: $this->skipped");
+        }
+        $this->newLine(1);
+        $this->info('Process finished');
+    }
+
+    private function importScrapedPosts($scrapedData)
     {
         $this->info("Importing into db...");
         $bar = $this->output->createProgressBar(count($scrapedData));
