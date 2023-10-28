@@ -8,12 +8,12 @@ use App\Services\Css2XPathService;
 class PostScraperService
 {
     private string $url = '';
-    private string $paginationSelector;
+    private string $paginationSelector = '';
     private string $postSelector;
     private string $postLinkSelector;
     private string $postLinkAttribute;
     private string $currentUrl = '';
-    private bool $abortOnEmpty = true;
+    private bool $abortOnEmptyValue = true;
     private bool $abortOnPageError = true;
     private bool $onlyCount = false;
     private bool $debug = false;
@@ -21,6 +21,7 @@ class PostScraperService
     private int $sleep = 0;
     private array $values = [];
     private array $result = [];
+    private array $ignoreUrls = [];
     private \Closure $logUsingClosure;
     private array $meta = [
         'parsed_posts' => [],
@@ -39,9 +40,9 @@ class PostScraperService
         return new self($url);
     }
 
-    public function abortOnEmpty(bool $abort)
+    public function abortOnEmptyValue(bool $abort)
     {
-        $this->abortOnEmpty = $abort;
+        $this->abortOnEmptyValue = $abort;
 
         return $this;
     }
@@ -85,6 +86,20 @@ class PostScraperService
     public function limit(int $limit)
     {
         $this->limitResult = $limit;
+
+        return $this;
+    }
+
+    /**
+     * Set urls to be ignored when scrapping
+     *
+     * @param array $urls Array of url to be ignored
+     *
+     * @return self
+     */
+    public function ignoreUrls(array $urls)
+    {
+        $this->ignoreUrls = $urls;
 
         return $this;
     }
@@ -148,6 +163,24 @@ class PostScraperService
     }
 
     /**
+     * Ads static value which will be added to all scraped posts.
+     *
+     * @param string $name Name of value
+     * @param string $value The value
+     *
+     * @return self
+     */
+    public function staticValue(string $name, string $value)
+    {
+        $this->values[$name] = [
+            'static' => true,
+            'value' => $value
+        ];
+
+        return $this;
+    }
+
+    /**
      * Sets the selector for post field. Eg for title or description.
      *
      * @param string $name Name of field
@@ -161,6 +194,7 @@ class PostScraperService
     public function value(string $name, string $selector, string $attribute=null, bool $isMultiple=false, bool $getFromPostsPage=false)
     {
         $this->values[$name] = [
+            'static' => false,
             'selector' => $selector,
             'is_multiple' => $isMultiple,
             'attribute' => $attribute,
@@ -252,13 +286,17 @@ class PostScraperService
         foreach ($postsNodeLists as $i => $postNode) {
             $postUrl = $this->querySelector($postNode, $this->postLinkSelector)->item(0)->getAttribute($this->postLinkAttribute)??null;
 
-            $this->log("  Post #$page:$i process: $postUrl");
+            $this->log("  Post #$page:" . $i+1 . " process: $postUrl");
 
             if (!$postUrl) {
                 $this->log("    NOT URL");
                 if ($this->abortOnPageError) {
-                    throw new Exception("Post #" . $i+1 . " url at '$url' can not be retrived", 1);
+                    throw new \Exception("Post #" . $i+1 . " url at '$url' can not be retrived", 1);
                 }
+                continue;
+            }
+
+            if (in_array($postUrl, $this->ignoreUrls)) {
                 continue;
             }
 
@@ -283,7 +321,9 @@ class PostScraperService
                     continue;
                 }
 
-                $this->result[$postUrl][$key] = $this->scrapeValue($postNode, $key, $data);
+                $this->result[$postUrl][$key] = $data['static']
+                    ?  $data['value']
+                    : $this->scrapeValue($postNode, $key, $data);
             }
 
             $this->meta['parsed_posts'][$postUrl]['end'] = microtime(true);
@@ -373,7 +413,7 @@ class PostScraperService
             $this->log("        is not multiple");
             $node = $nodeList->item(0);
             $res = $this->scrapeValueHelper($node, $key, $data);
-            $this->log("        result: $res");
+            $this->log("        result: " .str_replace(["\r\n", "\r", "\n"], ' ', $res));
         }
 
         return $res;
@@ -403,7 +443,7 @@ class PostScraperService
             $res = $node->nodeValue??null;
         }
 
-        if (!$res && $this->abortOnEmpty) {
+        if (!$res && $this->abortOnEmptyValue) {
             throw new \Exception("Empty value encounered for '$key' value ({$data['selector']}) at $this->currentUrl", 1);
         }
 
@@ -459,7 +499,7 @@ class PostScraperService
 
     private function getHTML($url)
     {
-        return cache()->remember("post-scraper-html-$url", 60*10, function() use ($url) {
+        return cache()->remember("post-scraper-html-$url", 60*60, function() use ($url) {
             if ($this->sleep) {
                 sleep($this->sleep);
             }

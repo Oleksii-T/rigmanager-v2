@@ -11,9 +11,6 @@ class ScrapePostsCepai extends Command
 {
     use ScrapePosts;
 
-    private $user = null;
-    private $skipped = 0;
-
     /**
      * The name and signature of the console command.
      *
@@ -33,47 +30,36 @@ class ScrapePostsCepai extends Command
      */
     public function handle()
     {
+        $this->cacheFile = storage_path('scraper_jsons/cepai.json');
         $this->user = User::where('email', 'aires@cepai.com')->first();
-        $jsonFilePath = storage_path('scraper_jsons/cepai.json');
 
-        if (file_exists($jsonFilePath)) {
-            $this->info("Loading scraped data from $jsonFilePath file");
-            $json = file_get_contents($jsonFilePath);
-            $result = json_decode($json, true);
-            $this->line(" Done");
-        } else {
-            $this->info("Web scrappping...");
-            $result = [];
-            $baseUrls = [
-                'http://en.cepai.com.cn/product/instrument/mperatu/index.html',
-                'http://en.cepai.com.cn/product/alves/uidin/',
-                'http://en.cepai.com.cn/product/tuat/uas/',
-                'http://en.cepai.com.cn/product/ccessor/ositioner/',
-            ];
-            foreach ($baseUrls as $url) {
-                $tmp = \App\Services\PostScraperService::make($url)
-                    ->pagination('#main_product_center #main1_box #main1_box2 a')
-                    ->post('#main_product_center #main1_box #main1_box1_1')
-                    ->postLink('.main1_box1_12 a')
-                    ->value('title', '#main_product #main2_btleft span')
-                    ->value('description', '#main_product #main2_cpmsbj p')
-                    ->value('image', '#main_product #main2_cpxqbj img', 'src')
-                    ->value('body', '#main_product #main2_lrxq #main2_box4', 'html')
-                    ->value('breadcrumbs', '#main_product #main1_wei a', null, true)
-                    ->abortOnEmpty(true)
-                    ->debug(true)
-                    ->scrape();
-                $result = array_merge($result, $tmp);
-            }
+        $this->porocess();
+    }
 
-            $json = json_encode($result);
-            $fp = fopen($jsonFilePath, 'w');
-            fwrite($fp, $json);
-            fclose($fp);
-            $this->line(" Done");
+    public function scrapePosts()
+    {
+        $result = [];
+        $baseUrls = [
+            'http://en.cepai.com.cn/product/instrument/mperatu/index.html',
+            'http://en.cepai.com.cn/product/alves/uidin/',
+            'http://en.cepai.com.cn/product/tuat/uas/',
+            'http://en.cepai.com.cn/product/ccessor/ositioner/',
+        ];
+        foreach ($baseUrls as $url) {
+            $tmp = \App\Services\PostScraperService::make($url)
+                ->pagination('#main_product_center #main1_box #main1_box2 a')
+                ->post('#main_product_center #main1_box #main1_box1_1')
+                ->postLink('.main1_box1_12 a')
+                ->value('title', '#main_product #main2_btleft span')
+                ->value('description', '#main_product #main2_cpmsbj p')
+                ->value('image', '#main_product #main2_cpxqbj img', 'src')
+                ->value('body', '#main_product #main2_lrxq #main2_box4', 'html')
+                ->value('breadcrumbs', '#main_product #main1_wei a', null, true)
+                ->scrape();
+            $result = array_merge($result, $tmp);
         }
 
-        $this->process($result);
+        return $result;
     }
 
     private function parseTitle($scrapedPost)

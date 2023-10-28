@@ -14,8 +14,31 @@ use Illuminate\Support\Facades\Storage;
 
 trait ScrapePosts
 {
-    private function process($scrapedPosts)
+    private $user = null;
+    private $alreadyExisted = [];
+    private $failValidation = [];
+    private $cacheFile;
+    private $userEmail;
+    private $ignoreCache;
+
+    public function porocess()
     {
+        if (!$this->ignoreCache && file_exists($this->cacheFile)) {
+            $this->info("Loading cached scraped data from $this->cacheFile file");
+            $json = file_get_contents($this->cacheFile);
+            $scrapedPosts = json_decode($json, true);
+            $this->line(" Done");
+        } else {
+            $this->info("Web scrappping...");
+            $scrapedPosts = $this->scrapePosts();
+            $json = json_encode($scrapedPosts);
+            $fp = fopen($this->cacheFile, 'w');
+            fwrite($fp, $json);
+            fclose($fp);
+            $this->line(" Posts been cashed into $this->cacheFile file");
+            $this->line(" Done");
+        }
+
         $count = count($scrapedPosts);
         if (!$this->confirm("Found $count posts. Proceed?")) {
             return;
@@ -24,9 +47,19 @@ trait ScrapePosts
         $this->importScrapedPosts($scrapedPosts);
 
         $this->info("Successfully processed $count posts.");
-        if ($this->skipped) {
-            $this->warn("Skipped: $this->skipped");
+
+        if ($this->alreadyExisted) {
+            $error = "Already Existed: " . count($this->alreadyExisted);
+            $this->warn("$error. See log for more info.");
+            $this->log($error, $this->alreadyExisted);
         }
+
+        if ($this->failValidation) {
+            $error = "Failed Validation: " . count($this->failValidation);
+            $this->warn("$error. See log for more info.");
+            $this->log($error, $this->failValidation);
+        }
+
         $this->newLine(1);
         $this->info('Process finished');
     }
@@ -38,9 +71,16 @@ trait ScrapePosts
         $bar->start();
 
         foreach ($scrapedData as $url => $scrapedPost) {
-            $title = $this->parseTitle($scrapedPost);
 
-            if ($this->checkExist($url, $title)) {
+            if (!$this->validateScrapedPost($url, $scrapedPost)) {
+                $this->failValidation[$url] = $scrapedPost;
+                continue;
+            }
+
+            $title = $this->parseTitle($scrapedPost);
+            $description = $this->parseDescription($scrapedPost);
+
+            if ($this->checkExist($url, $title, $scrapedPost)) {
                 $bar->advance();
                 continue;
             }
@@ -68,7 +108,7 @@ trait ScrapePosts
             $post = Post::create($post);
 
             $this->addImages($post, $this->parseImages($scrapedPost));
-            $this->addTranslations($post, $title, $this->parseDescription($scrapedPost));
+            $this->addTranslations($post, $title, $description);
 
             $bar->advance();
         }
@@ -77,17 +117,21 @@ trait ScrapePosts
         $this->newLine(2);
     }
 
+    private function validateScrapedPost($url, $scrapedPost)
+    {
+        return true;
+    }
+
     /**
      * Detec already scraped or dublicated post
      *
      */
-    private function checkExist($url, $title)
+    private function checkExist($url, $title, $scrapedPost)
     {
         $exists = Post::where('scraped_url', $url)->count();
 
         if ($exists) {
-            // $this->info("$url - EXISTS by url");
-            $this->skipped++;
+            $this->alreadyExisted[$url] = $scrapedPost;
             return true;
         }
 
@@ -106,8 +150,7 @@ trait ScrapePosts
             $post = $e->translatable;
             $this->log(" found '$title' in $e->id");
             if ($post->user_id == $this->user->id) {
-                // $this->info("$url - EXISTS by title '$title' in post #$post->id");
-                $this->skipped++;
+                $this->alreadyExisted[$url] = $scrapedPost;
                 return true;
             }
         }

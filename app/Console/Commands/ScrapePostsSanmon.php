@@ -11,9 +11,6 @@ class ScrapePostsSanmon extends Command
 {
     use ScrapePosts;
 
-    private $user = null;
-    private $skipped = 0;
-
     /**
      * The name and signature of the console command.
      *
@@ -33,36 +30,26 @@ class ScrapePostsSanmon extends Command
      */
     public function handle()
     {
+        $this->cacheFile = storage_path('scraper_jsons/sanmon.json');
         $this->user = User::where('email', 'sales@cnsanmon.com')->first();
-        $jsonFilePath = storage_path('scraper_jsons/sanmon.json');
 
-        if (file_exists($jsonFilePath)) {
-            $this->info("Loading scraped data from $jsonFilePath file");
-            $json = file_get_contents($jsonFilePath);
-            $result = json_decode($json, true);
-            $this->line(" Done");
-        } else {
-            $this->info("Web scrappping...");
-            $result = \App\Services\PostScraperService::make('http://www.cnsanmon.com/sjal')
-                ->pagination('.ny_pages a')
-                ->post('.nproduct li')
-                ->postLink('a')
-                ->value('title', '.nmain .news_title')
-                ->value('description', '.nmain .newsbody', 'html')
-                ->value('thumb', 'img', 'src', false, true)
-                ->value('images', '.newsbody img', 'src', true)
-                ->value('category', '.nbt')
-                ->abortOnEmpty(true)
-                ->scrape();
+        $this->porocess();
+    }
 
-            $json = json_encode($result);
-            $fp = fopen($jsonFilePath, 'w');
-            fwrite($fp, $json);
-            fclose($fp);
-            $this->line(" Done");
-        }
+    private function scrapePosts()
+    {
+        $result = \App\Services\PostScraperService::make('http://www.cnsanmon.com/sjal')
+            ->pagination('.ny_pages a')
+            ->post('.nproduct li')
+            ->postLink('a')
+            ->value('title', '.nmain .news_title')
+            ->value('description', '.nmain .newsbody', 'html')
+            ->value('thumb', 'img', 'src', false, true)
+            ->value('images', '.newsbody img', 'src', true)
+            ->value('category', '.nbt')
+            ->scrape();
 
-        $this->process($result);
+        return $result;
     }
 
     private function parseTitle($scrapedPost)
