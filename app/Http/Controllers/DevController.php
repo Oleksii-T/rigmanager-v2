@@ -69,85 +69,40 @@ class DevController extends Controller
 
     private function showScrapedCashedFiles()
     {
-        $files = [
-            'lakepetro' => storage_path('scraper_jsons/lakepetro.json')
+        $price = 'USD800-2000/ton';
+        $price = str_replace(' ', '', $price);
+        $price = explode('/', $price);
+        $perItem = $price[1];
+        $price = $price[0];
+        preg_match('/[A-Z]*/', $price, $curr);
+        $result = [
+            'currency' => $curr[0],
         ];
-        $empty = [];
-        $all = [];
-        $standart = [];
-        $nonStandart = [];
-        $noDesc = [];
-        $withDesc = [];
-        $parcesDesc = [];
+        $price = preg_replace('/[A-Z]*/', '', $price);
+        if (str_contains($price, '-')) {
+            $price = explode('-', $price);
+            $from = $price[0];
+            $to = $price[1];
+            $result['cost_from'] = $from;
+            $result['cost_to'] = $to;
+        } else {
+            $result['cost'] = $price;
+        }
+
+        dd('result', $result);
+
+        $files = [
+            // 'lakepetro' => storage_path('scraper_jsons/lakepetro.json'),
+            'oilmanchina' => storage_path('scraper_jsons/oilmanchina.json'),
+        ];
 
         foreach ($files as $author => $file) {
             $json = file_get_contents($file);
             $scrapedPosts = json_decode($json, true);
+
             foreach ($scrapedPosts as $url => $p) {
-                // if ($url == 'https://www.lakepetro.com/Drill%20Collar') {
-                //     dump('Tect sped strip_tags');
-                //     $startTable = strpos($p['tab-1-html'], '<table');
-                //     $endTable = strpos($p['tab-1-html'], '</table>');
-                //     $p['tab-1-html'] = substr($p['tab-1-html'], 0, $startTable) . substr($p['tab-1-html'], $endTable+8);
-                //     dump(strip_tags($p['tab-1-html']));
-                //     dd($p);
-                // }
-                $tabs = $p['tabs'];
-                if (!$tabs) {
-                    $empty[$url] = $p;
-                    continue;
-                }
-
-                $text = (count($tabs)) . ': ' . implode(' | ', $tabs) . ' - - - - - ' . $url;
-                // $text = $url;
-                // $text = (count($tabs)) . ':' . ($tabs[0]??'') . ' - - - - - ' . $url;
-                // $text = $p;
-                $text = $p['category'] . ' - - - - - ' . $url;
-                $all[] = $text;
-
-                if (!in_array('Description', $tabs) && !in_array('More Details', $tabs) && !in_array('Technical Specification', $tabs) && !in_array('Techanical Specification', $tabs)) {
-                    $noDesc[] = $text;
-                } else {
-                    $withDesc[] = $text;
-                }
-
-                $tabs = $p['tabs'];
-                if (in_array('Description', $tabs)) {
-                    // we have standart description
-                    $field = match (array_search('Description', $tabs)) {
-                        0 => 'tab-1-html',
-                        1 => 'tab-2-html',
-                        2 => 'tab-3-html',
-                    };
-                    $description = $p[$field];
-                    $parcesDesc[$url] = [
-                        'add-data' => $p,
-                        'parces-desciption' => $description,
-                        'from' => $field
-                    ];
-                } else if (in_array('More Details', $tabs)) {
-                    // we have standart description
-                    $field = match (array_search('More Details', $tabs)) {
-                        0 => 'tab-1-html',
-                        1 => 'tab-2-html',
-                        2 => 'tab-3-html',
-                    };
-                    $description = $p[$field];
-                    $parcesDesc[$url] = [
-                        'add-data' => $p,
-                        'parces-desciption' => $description,
-                        'from' => $field
-                    ];
-                }
+                $this->d($p, $url);
             }
-
-            $this->d($all, 'all');
-            $this->d($standart, 'standart');
-            $this->d($nonStandart, 'nonStandart');
-            $this->d($empty, 'empty');
-            $this->d($noDesc, 'NoDescription');
-            $this->d($withDesc, 'withDescription');
-            $this->d($parcesDesc, 'parcesDesc');
         }
     }
 

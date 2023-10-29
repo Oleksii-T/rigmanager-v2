@@ -318,8 +318,8 @@ class Post extends Model
         foreach ($costs as $type => $cost) {
             if (!$cost) {
                 $this->costs()->where('type', $type)->delete();
-                return;
-            }
+                continue;
+            };
 
             foreach (currencies() as $currency => $symbol) {
                 PostCost::updateOrCreate(

@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use App\Models\Category;
 use App\Traits\ScrapePosts;
 use Illuminate\Console\Command;
@@ -17,7 +16,12 @@ class ScrapePostsLakePetro extends Command
      * @var string
      */
     protected $signature = 'posts:scrape-lakepetro
-                            {--ignore-cache : Ignore cached scraped data }';
+                            {--ignore-cache : Ignore cached scraped data. }
+                            {--C|cache-file=storage/scraper_jsons/lakepetro.json : Path to cache file. }
+                            {--U|user=sales@lakepetro.com : User id or email to which imported posts will be attached. }
+                            {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
+                            {--L|import-limit=0 : Limit the amount of successfully imported posts. }
+                            {--S|sleep=0 : Wait seconds before scrapping the page. May protect agains 429. }';
 
     /**
      * The console command description.
@@ -31,10 +35,7 @@ class ScrapePostsLakePetro extends Command
      */
     public function handle()
     {
-        $this->cacheFile = storage_path('scraper_jsons/lakepetro.json');
-        $this->user = User::where('email', 'sales@lakepetro.com')->first();
-        $this->ignoreCache = $this->option('ignore-cache');
-
+        $this->setOptions();
         $this->porocess();
     }
 
@@ -42,16 +43,16 @@ class ScrapePostsLakePetro extends Command
     {
         $result = [];
         $baseUrls = [
-            'https://www.lakepetro.com/rig-accessories' => '',
-            'https://www.lakepetro.com/well-control-equipment' => '',
-            'https://www.lakepetro.com/solid-control-equipment' => '',
-            'https://www.lakepetro.com/drill-string' => '',
-            'https://www.lakepetro.com/handling-tools' => '',
-            'https://www.lakepetro.com/downhole-tools' => '',
-            'https://www.lakepetro.com/mud-pump-parts' => '',
-            'https://www.lakepetro.com/production-equipment-octg' => '',
-            'https://www.lakepetro.com/wellhead-equipment' => '',
-            'https://www.lakepetro.com/flowline-products' => '',
+            'https://www.lakepetro.com/rig-accessories' => 'rig-accessories',
+            'https://www.lakepetro.com/well-control-equipment' => 'well-control-equipment',
+            'https://www.lakepetro.com/solid-control-equipment' => 'solid-control-equipment',
+            'https://www.lakepetro.com/drill-string' => 'drill-string',
+            'https://www.lakepetro.com/handling-tools' => 'handling-tools',
+            'https://www.lakepetro.com/downhole-tools' => 'downhole-tools',
+            'https://www.lakepetro.com/mud-pump-parts' => 'mud-pump-spare-parts',
+            'https://www.lakepetro.com/production-equipment-octg' => 'production-equipment-octg',
+            'https://www.lakepetro.com/wellhead-equipment' => 'wellhead-equipment',
+            'https://www.lakepetro.com/flowline-products' => 'flowline-products',
         ];
 
         foreach ($baseUrls as $url => $categSlug) {
@@ -68,11 +69,11 @@ class ScrapePostsLakePetro extends Command
                 ->value('tab-2-images', '.tabsWrapper #tab-2 img',   'src', true) // tab 2 main contain "Description" or "Drowings"
                 ->value('tab-3-html',   '.tabsWrapper #tab-3',       'html'     ) // tab 3 main contain "Drowings" or "Contact Us"
                 ->value('tab-3-images', '.tabsWrapper #tab-3 img',   'src', true) // tab 3 main contain "Drowings" or "Contact Us"
-                ->value('category', '.bannerBox .bannerSubheading')
                 ->staticValue('category', $categSlug)
                 ->abortOnPageError(false) // some lakepost posts has empty href
                 ->abortOnEmptyValue(false) // some lakepost posts returns 404 page or doesnt have description
-                ->debug(1)
+                ->limit($this->scrapeLimit)
+                ->sleep($this->sleep)
                 ->scrape();
             $result = array_merge($result, $tmp);
         }
@@ -80,7 +81,7 @@ class ScrapePostsLakePetro extends Command
         return $result;
     }
 
-    private function validateScrapedPost($url, $scrapedPost)
+    private function validateScrapedPost($scrapedPost)
     {
         if (!$scrapedPost['title']) {
             return false;
@@ -140,9 +141,7 @@ class ScrapePostsLakePetro extends Command
         }
 
         $description = strip_tags($description);
-        $description = str_replace('&Acirc;', '', $description);
-        $description = str_replace('&nbsp;', '', $description);
-        $description = preg_replace('/(\r\n){3,}/', "\r\n\r\n", $description);
+        $description = $this->descriptionEscape($description);
 
         return $description;
     }
@@ -150,7 +149,7 @@ class ScrapePostsLakePetro extends Command
     private function parseImages($scrapedPost)
     {
         // may generate dublicated images
-        $images = [$scrapedPost['images']??false];
+        $images = $scrapedPost['images']??false;
         $images = array_merge($images, $scrapedPost['tab-1-images']??[]);
         $images = array_merge($images, $scrapedPost['tab-2-images']??[]);
         $images = array_merge($images, $scrapedPost['tab-3-images']??[]);
@@ -160,27 +159,6 @@ class ScrapePostsLakePetro extends Command
 
     private function parseCategory($scrapedPost)
     {
-        $map = [
-            'Pump Jack/Pumping Unit' => 'production-equipment-octg',
-            'Sucker Rod Pump' => 'sucker-rod-pump',
-            'Sucker Rods' => 'sucker-rod',
-            'seamless pipes' => 'tubing',
-            'Drilling and milling' => 'drill-string',
-            'downhole tools' => 'downhole-tools',
-            'Wellhead and Christmas Tree' => 'wellhead-equipment',
-            'API Valves' => 'flowline-products',
-            'Manifold' => 'choke-manifold-kill-manifold',
-            'BOP' => 'well-control-equipment',
-            'Wireline Slickline' => 'fishing-tools',
-            'Solids Control Equipment' => 'solid-control-equipment',
-            'MWD and LWD' => '',
-            'ESP / ESPCP' => '',
-            'Coiled Tubing Tools' => '',
-            'Artificial Lifting' => '',
-        ];
-
-        $mySlug = $map[$scrapedPost['category']] ?? 'other-measurement-equipment';
-
-        return Category::getBySlug($mySlug);
+        return Category::getBySlug($scrapedPost['category']);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use App\Models\Category;
 use App\Traits\ScrapePosts;
 use Illuminate\Console\Command;
@@ -16,7 +15,13 @@ class ScrapePostsSanmon extends Command
      *
      * @var string
      */
-    protected $signature = 'posts:scrape-sanmon';
+    protected $signature = 'posts:scrape-lakepetro
+                            {--ignore-cache : Ignore cached scraped data. }
+                            {--C|cache-file=storage/scraper_jsons/sanmon.json : Path to cache file. }
+                            {--U|user=sales@cnsanmon.com : User id or email to which imported posts will be attached. }
+                            {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
+                            {--L|import-limit=0 : Limit the amount of successfully imported posts. }
+                            {--S|sleep=0 : Wait seconds before scrapping the page. May protect agains 429. }';
 
     /**
      * The console command description.
@@ -30,9 +35,7 @@ class ScrapePostsSanmon extends Command
      */
     public function handle()
     {
-        $this->cacheFile = storage_path('scraper_jsons/sanmon.json');
-        $this->user = User::where('email', 'sales@cnsanmon.com')->first();
-
+        $this->setOptions();
         $this->porocess();
     }
 
@@ -47,6 +50,8 @@ class ScrapePostsSanmon extends Command
             ->value('thumb', 'img', 'src', false, true)
             ->value('images', '.newsbody img', 'src', true)
             ->value('category', '.nbt')
+            ->limit($this->scrapeLimit)
+            ->sleep($this->sleep)
             ->scrape();
 
         return $result;
@@ -67,9 +72,7 @@ class ScrapePostsSanmon extends Command
     {
         $description = $scrapedPost['description'];
         $description = strip_tags($description);
-        $description = str_replace('&Acirc;', '', $description);
-        $description = str_replace('&nbsp;', '', $description);
-        $description = preg_replace('/(\r\n){3,}/', "\r\n\r\n", $description);
+        $description = $this->descriptionEscape($description);
 
         return $description;
     }

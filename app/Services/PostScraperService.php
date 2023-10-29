@@ -5,6 +5,46 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use App\Services\Css2XPathService;
 
+/**
+ * Website posts scrapping.
+ *
+ * Get the posts contents as an array from website using CSS selectors.
+ * Logic is designed for 'classic' layout of posts in website. It means:
+ * Website has page, where all posts can be found via link based pagination.
+ *
+ * To start the scrappping, initialize object with base website url as a parameter.
+ * Than, few base method should be called to configure scrapping behavior:
+ * - post() - sets the selector for 'post cart' within posts page;
+ * - postLink() - set the selector for link which must lead to post page;
+ * - pagination() - set the seelctor for pagination links;
+ * - value() - set the selector for target value to be scraped;
+ * - scrape() - start the scrapping.
+ *
+ * Algorithm breakdown:
+ * 1. go to base url;
+ * 2. find 'post cart';
+ * 3. go to post page and scrape values;
+ * 4. check posts pagination and find next non-scraped page;
+ * 5. go to next page;
+ * 6. repeat steps 2-5 untill there is no non-scraped pages found in pagination.
+ *
+ * Can be used without pagination.
+ *
+ * There is other helper method to tweak the behavior:
+ * - abortOnEmptyValue() - Enable\disable exception when empty value found;
+ * - abortOnPageError() - Enable\disable exception when page can not be downloaded;
+ * - debug() - Enable\disable scrapping logging;
+ * - logUsing() - Define who logging logic;
+ * - limit() - Set the limit;
+ * - sleep() - Defile wait seconds before page will be downloaded;
+ * - count() - Count pages instead on scrapping. Use instead of scrape();
+ * - staticValue() - Manualy insert provided value in result array.
+ *
+ * See detailed usage, parameters and return values in method comments.
+ *
+ * TODO: make possible to scrape one url.
+ *
+ */
 class PostScraperService
 {
     private string $url = '';
@@ -85,7 +125,9 @@ class PostScraperService
      */
     public function limit(int $limit)
     {
-        $this->limitResult = $limit;
+        if ($limit) {
+            $this->limitResult = $limit;
+        }
 
         return $this;
     }
@@ -277,9 +319,6 @@ class PostScraperService
         ];
         $html = $this->getHTML($url);
         $this->log(' HTML: ' . str_replace(["\r\n", "\r", "\n"], ' ', $html));
-        $paginationUrls = $this->paginationSelector
-            ? $this->getLinksFromUrl($html, $this->paginationSelector)
-            : [];
         $postsNodeLists = $this->querySelector($html, $this->postSelector);
 
         // scrape posts
@@ -329,7 +368,7 @@ class PostScraperService
             $this->meta['parsed_posts'][$postUrl]['end'] = microtime(true);
 
             if ($this->enough()) {
-                $this->log("    ENOUGHT");
+                $this->log("    ENOUGH");
                 break;
             }
         }
@@ -337,6 +376,10 @@ class PostScraperService
         $this->log("  Posts process done");
 
         // find next page url
+        $paginationUrls = $this->paginationSelector
+            ? $this->getLinksFromUrl($html, $this->paginationSelector)
+            : [];
+
         foreach ($paginationUrls as $paginationUrl) {
             if (!isset($this->meta['parsed_pages'][$paginationUrl])) {
                 $nextPageUrl = $paginationUrl;
@@ -349,7 +392,7 @@ class PostScraperService
 
         // check is next page must be scraped
         if ($this->enough() || !isset($nextPageUrl)) {
-            $this->log("  ENOUGHT or NO PAGE");
+            $this->log("  ENOUGH or NO PAGE");
             return;
         }
 
@@ -553,11 +596,6 @@ class PostScraperService
     private function enough()
     {
         return $this->limitResult && $this->limitResult <= count($this->result);
-    }
-
-    private function domel2html($node)
-    {
-
     }
 
     private function log(string $text, $data=[])

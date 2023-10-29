@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Attachment;
 use App\Jobs\PostTranslate;
 use App\Models\Translation;
@@ -18,29 +19,69 @@ trait ScrapePosts
     private $alreadyExisted = [];
     private $failValidation = [];
     private $cacheFile;
+    private $scrapeLimit;
+    private $importLimit;
+    private $sleep;
     private $userEmail;
     private $ignoreCache;
 
-    public function porocess()
+    private function setOptions()
+    {
+        $userId = $this->option('user');
+        $user = User::where('email', $userId)->orWhere('id', $userId)->first();
+
+        if (!$user) {
+            $this->error("User '$userId' not found");
+            die();
+        }
+
+        $this->ignoreCache = $this->option('ignore-cache');
+        $this->cacheFile = base_path($this->option('cache-file'));
+        $this->scrapeLimit = $this->option('scrape-limit');
+        $this->importLimit = $this->option('import-limit');
+        $this->sleep = $this->option('sleep');
+
+        $this->warn("User: #$user->id $user->name <$user->email>");
+        $this->warn("Ignore cache file? " . ($this->ignoreCache ? 'yes' : 'no'));
+        $this->warn("Cache file path: $this->cacheFile");
+        $this->warn("Scrape Limit: " . (!$this->scrapeLimit ? 'none' : $this->scrapeLimit));
+        $this->warn("Import Limit: " . (!$this->importLimit ? 'none' : $this->importLimit));
+        $this->warn("Sleep before scrape: " . (!$this->sleep ? 'none' : $this->sleep));
+
+        if (!$this->confirm('Please confirm config above')) {
+            die();
+        }
+
+        $this->user = $user;
+    }
+
+    private function porocess()
     {
         if (!$this->ignoreCache && file_exists($this->cacheFile)) {
-            $this->info("Loading cached scraped data from $this->cacheFile file");
+            $this->info("Cache file detected. Loading data...");
             $json = file_get_contents($this->cacheFile);
             $scrapedPosts = json_decode($json, true);
-            $this->line(" Done");
+            $this->line(" Done.");
         } else {
-            $this->info("Web scrappping...");
+            $this->warn("Cache file NOT found. Web scrappping...");
             $scrapedPosts = $this->scrapePosts();
             $json = json_encode($scrapedPosts);
             $fp = fopen($this->cacheFile, 'w');
             fwrite($fp, $json);
             fclose($fp);
-            $this->line(" Posts been cashed into $this->cacheFile file");
-            $this->line(" Done");
+            $this->line(" Posts been cashed into cashe file.");
+            $this->line(" Done.");
         }
 
+        //! dev
+        // $firstKey = array_keys($scrapedPosts)[0];
+        // $tmp = [
+        //     $firstKey => $scrapedPosts[$firstKey]
+        // ];
+        // $scrapedPosts =  $tmp;
+
         $count = count($scrapedPosts);
-        if (!$this->confirm("Found $count posts. Proceed?")) {
+        if (!$this->confirm("Found $count posts. Proceed to importing?")) {
             return;
         }
 
@@ -69,55 +110,71 @@ trait ScrapePosts
         $this->info("Importing into db...");
         $bar = $this->output->createProgressBar(count($scrapedData));
         $bar->start();
+        $importedCount = 0;
 
         foreach ($scrapedData as $url => $scrapedPost) {
-
-            if (!$this->validateScrapedPost($url, $scrapedPost)) {
-                $this->failValidation[$url] = $scrapedPost;
-                continue;
-            }
-
-            $title = $this->parseTitle($scrapedPost);
-            $description = $this->parseDescription($scrapedPost);
-
-            if ($this->checkExist($url, $title, $scrapedPost)) {
-                $bar->advance();
-                continue;
-            }
-
-            $category = $this->parseCategory($scrapedPost);
-
-            $post = [
-                'user_id' => $this->user->id,
-                'status' => 'pending',
-                'duration' => 'unlim',
-                'is_active' => true,
-                'origin_lang' => 'en',
-                'category_id' => $category->id,
-                'type' => 'sell',
-                'condition' => 'new',
-                'country' => 'cn',
-                'is_tba' => true,
-                'scraped_url' => $url,
-                // 'amount' => '',
-                // 'manufacturer' => '',
-                // 'manufactureDate' => '',
-                // 'partNumber' => '',
-            ];
-
-            $post = Post::create($post);
-
-            $this->addImages($post, $this->parseImages($scrapedPost));
-            $this->addTranslations($post, $title, $description);
+            $isImported = $this->importScrapedPost($url, $scrapedPost);
 
             $bar->advance();
+
+            if ($isImported) {
+                $importedCount++;
+            }
+
+            if ($this->importLimit && $importedCount >= $this->importLimit) {
+                $this->warn("Importing limit reached");
+                break;
+            }
         }
 
         $bar->finish();
         $this->newLine(2);
     }
 
-    private function validateScrapedPost($url, $scrapedPost)
+    private function importScrapedPost($url, $scrapedPost)
+    {
+        if (!$this->validateScrapedPost($scrapedPost)) {
+            $this->failValidation[$url] = $scrapedPost;
+            return false;
+        }
+
+        $title = $this->parseTitle($scrapedPost);
+        $description = $this->parseDescription($scrapedPost);
+
+        if ($this->checkExist($url, $title, $scrapedPost)) {
+            return false;
+        }
+
+        $category = $this->parseCategory($scrapedPost);
+
+        $post = [
+            'user_id' => $this->user->id,
+            'status' => 'pending',
+            'duration' => 'unlim',
+            'is_active' => true,
+            'origin_lang' => 'en',
+            'category_id' => $category->id,
+            'type' => 'sell',
+            'condition' => 'new',
+            'country' => 'cn',
+            'is_tba' => true,
+            'scraped_url' => $url,
+            // 'amount' => '',
+            // 'manufacturer' => '',
+            // 'manufactureDate' => '',
+            // 'partNumber' => '',
+        ];
+
+        $post = Post::create($post);
+
+        // $this->addImages($post, $this->parseImages($scrapedPost));
+        $this->addCosts($post, $scrapedPost);
+        $this->addTranslations($post, $title, $description);
+
+        return true;
+    }
+
+    private function validateScrapedPost($scrapedPost)
     {
         return true;
     }
@@ -234,6 +291,22 @@ trait ScrapePosts
                 'origin_lang' => $textLocale
             ]);
         }
+    }
+
+    private function addCosts($post, $scrapedPost)
+    {
+        return;
+    }
+
+    private function descriptionEscape($desc)
+    {
+        $desc = str_replace('&Acirc;', '', $desc);
+        $desc = str_replace('&nbsp;', '', $desc);
+        $desc = preg_replace('/^[ \n]*/', "", $desc); // remove leading newlines and spaces
+        $desc = preg_replace('/(\r\n){3,}/', "\r\n\r\n", $desc); // remove dublicated new lines
+        $desc = preg_replace('/(\n){3,}/', "\n", $desc); // remove dublicated new lines
+
+        return $desc;
     }
 
     private function log(string $text, $data=[])
