@@ -36,12 +36,6 @@ class ScrapePostsOilManChina extends Command
     public function handle()
     {
         $this->setOptions();
-
-        //! dev
-        foreach ($this->user->posts as $p) {
-            $p->delete();
-        }
-
         $this->porocess();
     }
 
@@ -94,16 +88,53 @@ class ScrapePostsOilManChina extends Command
 
     private function parseDescription($scrapedPost)
     {
-        //TODO: add details
         $desc = $scrapedPost['description'];
         $startTable = strpos($desc, '<table');
         $endTable = strpos($desc, '</table>');
-        $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
+        if ($startTable !== false && $endTable !== false) {
+            $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
+        }
         $desc = strip_tags($desc);
         $desc = str_replace('Product Description', '', $desc);
         $desc = str_replace('SPECIFICATION AND TECHNICAL DATA:', '', $desc);
         $desc = str_replace('Technical Specifications', '', $desc);
         $desc = $this->descriptionEscape($desc);
+
+        $cutFooters = [
+            'If any needs',
+            'Visit our website',
+            'Any enquiry please'
+        ];
+
+        foreach ($cutFooters as $cutFooter) {
+            $footerPost = strpos($desc, $cutFooter);
+            if ($footerPost !== false) {
+                $desc = substr($desc, 0, $footerPost);
+            }
+        }
+
+        $excludeKey = [
+            'Product Name:',
+            'Price:',
+        ];
+
+        $detailsText = '';
+        foreach ($scrapedPost['details1-keys'] as $i => $detailKey) {
+            if (in_array($detailKey, $excludeKey)) {
+                continue;
+            }
+            $detailsText .= $detailKey . ' ' . $scrapedPost['details1-values'][$i] . "\r\n";
+        }
+        foreach ($scrapedPost['details2-keys'] as $i => $detailKey) {
+            if (in_array($detailKey, $excludeKey)) {
+                continue;
+            }
+            $detailsText .= $detailKey . ' ' . $scrapedPost['details2-values'][$i+1] . "\r\n";
+        }
+
+        if ($detailsText) {
+            $desc = $detailsText . "\r\n" . $desc;
+        }
 
         return $desc;
     }

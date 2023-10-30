@@ -69,40 +69,41 @@ class DevController extends Controller
 
     private function showScrapedCashedFiles()
     {
-        $price = 'USD800-2000/ton';
-        $price = str_replace(' ', '', $price);
-        $price = explode('/', $price);
-        $perItem = $price[1];
-        $price = $price[0];
-        preg_match('/[A-Z]*/', $price, $curr);
-        $result = [
-            'currency' => $curr[0],
-        ];
-        $price = preg_replace('/[A-Z]*/', '', $price);
-        if (str_contains($price, '-')) {
-            $price = explode('-', $price);
-            $from = $price[0];
-            $to = $price[1];
-            $result['cost_from'] = $from;
-            $result['cost_to'] = $to;
-        } else {
-            $result['cost'] = $price;
-        }
-
-        dd('result', $result);
-
         $files = [
             // 'lakepetro' => storage_path('scraper_jsons/lakepetro.json'),
             'oilmanchina' => storage_path('scraper_jsons/oilmanchina.json'),
         ];
+
+        $details1Keys = [];
+        $details2Keys = [];
+        $details2Values = [];
+        $details2ValuesFirst = [];
 
         foreach ($files as $author => $file) {
             $json = file_get_contents($file);
             $scrapedPosts = json_decode($json, true);
 
             foreach ($scrapedPosts as $url => $p) {
-                $this->d($p, $url);
+                $details1Keys = array_merge($details1Keys, $p['details1-keys']);
+                $details2Values = array_merge($details2Values, $p['details2-values']);
+                $details2ValuesFirst[] = $p['details2-values'][0]??null;
+
+                foreach ($p['details2-keys'] as $i => $key) {
+                    if (isset($details2Keys[$key])) {
+                        $details2Keys[$key][] = $p['details2-values'][$i+1];
+                    } else {
+                        $details2Keys[$key] = [$p['details2-values'][$i+1]];
+                    }
+                }
             }
+
+            $details1Keys = array_unique($details1Keys);
+
+            // dd($details2ValuesFirst);
+            // dd($details2Values);
+            // dd($details2Keys);
+            $this->d($details1Keys, '$details1Keys');
+            $this->d($details2Keys, '$details2Keys');
         }
     }
 
