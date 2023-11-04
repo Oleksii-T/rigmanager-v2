@@ -311,7 +311,8 @@ class PostScraperService
             'start' => microtime(true)
         ];
         $html = $this->getHTML($url);
-        $this->log(' HTML: ' . str_replace(["\r\n", "\r", "\n"], ' ', $html));
+
+        $this->log(" HTML: $html");
         $postsNodeLists = $this->querySelector($html, $this->postSelector);
 
         // scrape posts
@@ -374,11 +375,17 @@ class PostScraperService
             : [];
 
         foreach ($paginationUrls as $paginationUrl) {
-            if (!isset($this->meta['parsed_pages'][$paginationUrl])) {
-                $nextPageUrl = $paginationUrl;
-                $this->log("  Next page url found: $nextPageUrl");
-                break;
+            if (isset($this->meta['parsed_pages'][$paginationUrl])) {
+                continue;
             }
+
+            if (filter_var($paginationUrl, FILTER_VALIDATE_URL) === false) {
+                continue;
+            }
+
+            $nextPageUrl = $paginationUrl;
+            $this->log("  Next page url found: $nextPageUrl");
+            break;
         }
 
         $this->meta['parsed_pages'][$url]['end'] = microtime(true);
@@ -406,7 +413,7 @@ class PostScraperService
         $this->currentUrl = $url;
 
         $html = $this->getHTML($url);
-        $this->log('    HTML: ' . str_replace(["\r\n", "\r", "\n"], ' ', $html));
+        $this->log("    HTML: $html");
         $values = [];
 
         foreach ($this->values as $key => $valueData) {
@@ -449,7 +456,7 @@ class PostScraperService
             $this->log("        is not multiple");
             $node = $nodeList->item(0);
             $res = $this->scrapeValueHelper($node, $key, $valueData);
-            $this->log("        result: " .str_replace(["\r\n", "\r", "\n"], ' ', $res));
+            $this->log("        result: $res");
         }
 
         return $res;
@@ -604,7 +611,7 @@ class PostScraperService
             return;
         }
 
-        $toLog = $text;
+        $toLog = str_replace(["\r\n", "\r", "\n"], ' ', $text);
 
         if ($data) {
             $toLog .= (': ' . json_encode($data));

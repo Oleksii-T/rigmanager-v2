@@ -135,14 +135,9 @@ class ScrapePostsLakePetro extends Command
         } else {
             // take Tech specs as description.
             // TechSpecs are always in first tab.
-            // Remove <table> from specs to get only description.
-            $specs = $scrapedPost['tab-1-html'];
-            $startTable = strpos($specs, '<table');
-            $endTable = strpos($specs, '</table>');
-            $description = substr($specs, 0, $startTable) . substr($specs, $endTable+8);
+            $description = $scrapedPost['tab-1-html'];
         }
 
-        $description = strip_tags($description);
         $description = $this->descriptionEscape($description);
 
         return $description;

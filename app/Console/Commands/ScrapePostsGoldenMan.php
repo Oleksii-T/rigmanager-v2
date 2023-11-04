@@ -37,12 +37,6 @@ class ScrapePostsGoldenMan extends Command
     public function handle()
     {
         $this->setOptions();
-
-        //! dev
-        foreach ($this->user->posts as $p) {
-            $p->delete();
-        }
-
         $this->porocess();
     }
 
@@ -76,14 +70,7 @@ class ScrapePostsGoldenMan extends Command
     private function parseDescription($scrapedPost)
     {
         $desc = $scrapedPost['description-short'] . "\r\n" . $scrapedPost['description'];
-        $startTable = strpos($desc, '<table');
-        $endTable = strpos($desc, '</table>');
-        if ($startTable !== false && $endTable !== false) {
-            $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
-        }
-        $desc = strip_tags($desc);
         $desc = $this->descriptionEscape($desc);
-
 
         return $desc;
     }

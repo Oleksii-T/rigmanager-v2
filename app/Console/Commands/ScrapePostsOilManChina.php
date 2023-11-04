@@ -90,12 +90,6 @@ class ScrapePostsOilManChina extends Command
     private function parseDescription($scrapedPost)
     {
         $desc = $scrapedPost['description'];
-        $startTable = strpos($desc, '<table');
-        $endTable = strpos($desc, '</table>');
-        if ($startTable !== false && $endTable !== false) {
-            $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
-        }
-        $desc = strip_tags($desc);
         $desc = str_replace('Product Description', '', $desc);
         $desc = str_replace('SPECIFICATION AND TECHNICAL DATA:', '', $desc);
         $desc = str_replace('Technical Specifications', '', $desc);

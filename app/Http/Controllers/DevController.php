@@ -72,7 +72,8 @@ class DevController extends Controller
         $files = [
             // 'lakepetro' => storage_path('scraper_jsons/lakepetro.json'),
             // 'oilmanchina' => storage_path('scraper_jsons/oilmanchina.json'),
-            'goldenman' => storage_path('scraper_jsons/goldenman.json'),
+            // 'goldenman' => storage_path('scraper_jsons/goldenman.json'),
+            'rsdst' => storage_path('scraper_jsons/rsdst.json'),
         ];
 
         foreach ($files as $author => $file) {
@@ -80,12 +81,10 @@ class DevController extends Controller
             $scrapedPosts = json_decode($json, true);
 
             foreach ($scrapedPosts as $url => $p) {
-                $b = $p['breadcrumbs'];
-                unset($b[0]);
-                unset($b[1]);
-                $text = implode(', ', $b);
-                $this->d($text);
+
             }
+
+            $this->d($scrapedPosts);
         }
     }
 

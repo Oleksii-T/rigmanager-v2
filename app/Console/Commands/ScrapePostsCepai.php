@@ -80,7 +80,6 @@ class ScrapePostsCepai extends Command
     private function parseDescription($scrapedPost)
     {
         $description = $scrapedPost['description'];
-        $description = strip_tags($description);
         $description = $this->descriptionEscape($description);
 
         return $description;

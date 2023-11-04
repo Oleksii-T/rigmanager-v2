@@ -300,8 +300,16 @@ trait ScrapePosts
         return;
     }
 
-    private function descriptionEscape($desc)
+    private function descriptionEscape($desc, $removeTable=true)
     {
+        if ($removeTable) {
+            $startTable = strpos($desc, '<table');
+            $endTable = strpos($desc, '</table>');
+            if ($startTable !== false && $endTable !== false) {
+                $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
+            }
+        }
+        $desc = strip_tags($desc);
         $desc = str_replace('&Acirc;', '', $desc);
         $desc = str_replace('&nbsp;', '', $desc);
         $desc = preg_replace('/^[ \n]*/', "", $desc); // remove leading newlines and spaces
