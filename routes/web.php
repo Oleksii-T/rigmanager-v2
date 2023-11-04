@@ -14,6 +14,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\MailerController;
 use App\Http\Controllers\ImportController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +132,11 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::put('password', [ProfileController::class, 'password'])->name('password');
                 Route::put('login', [ProfileController::class, 'login'])->name('login');
                 Route::put('clear-favs', [ProfileController::class, 'clearFavs'])->name('clear-favs');
+            });
+
+            Route::prefix('profile/notifications')->name('notifications.')->group(function () {
+                Route::get('/', [NotificationController::class, 'index'])->name('index');
+                Route::post('{notification}', [NotificationController::class, 'read'])->name('read');
             });
 
         });

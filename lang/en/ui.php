@@ -64,6 +64,7 @@ return [
     'ukLang' => 'Ukrainian',
     'ruLang' => 'Russian',
     'enLang' => 'English',
+    'notifications' => 'Notifications',
     'change' => 'Change',
     'download' => 'Download',
     'upload' => 'Upload',
