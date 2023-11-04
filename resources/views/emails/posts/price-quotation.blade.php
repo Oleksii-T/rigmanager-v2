@@ -1,7 +1,11 @@
 @component('mail::message')
 # Hello!
 
-Your Post "{{$post->title}}" has recieved price request from {{$user->name}} ({{$user->getEmails()[0]}})
+Your Post "{{$post->title}}" has recieved price request from <a href="{{route('users.show', $user)}}">{{$user->name}}</a> ({{$user->getEmails(0)}})
+
+@component('mail::panel')
+{{$messageText}}
+@endcomponent
 
 Be sure to reply your new client!
 

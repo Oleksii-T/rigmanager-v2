@@ -15,14 +15,16 @@ class PostTba extends Mailable
 
     public $post;
     public $user;
+    public $messageText;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($post, $user)
+    public function __construct($post, $user, $message)
     {
         $this->post = $post;
         $this->user = $user;
+        $this->messageText = $message;
     }
 
     /**
@@ -32,7 +34,7 @@ class PostTba extends Mailable
     {
         return new Envelope(
             subject: 'Your Post recieved Price Request! | Rigmangers.com',
-            replyTo: $this->user->getEmails()[0]
+            replyTo: $this->user->getEmails(0)
         );
     }
 
@@ -42,7 +44,7 @@ class PostTba extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.post-tba',
+            markdown: 'emails.posts.price-quotation',
         );
     }
 

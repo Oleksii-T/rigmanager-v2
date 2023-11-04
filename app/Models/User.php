@@ -160,12 +160,17 @@ class User extends Authenticatable implements MustVerifyEmail
         Mail::to($this)->send(new PasswordReset($url));
     }
 
-    public function getEmails()
+    public function getEmails($i=null)
     {
         $emails = $this->info->emails??[];
         $emails = array_filter($emails);
+
         if (!$emails) {
             $emails = [$this->email];
+        }
+
+        if ($i!==null) {
+            return $emails[$i]??null;
         }
 
         return $emails;

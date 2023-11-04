@@ -75,7 +75,8 @@ return [
     'askForCost' => 'Send price request',
     'tba_modal' => [
         'title' => 'Send Price request?',
-        'text' => 'Price request will be send to author`s email(s). Your first contact email will be included as a reply-to',
+        'text' => 'Price request will be send to author`s email(s).',
+        'label' => 'Your first contact email will be included as a reply-to',
         'confirm' => 'Yes, send request',
         'cancel' => 'Cancel',
     ],

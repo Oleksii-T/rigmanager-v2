@@ -4,6 +4,13 @@ body.swal2-toast-shown .swal2-container {
     max-width: 500px !important;
     min-width: 300px;
 }
+.post-price-quotation-popup {
+    max-width: 90% !important;
+    width: 800px;
+}
+.post-price-quotation-popup textarea {
+    height: 12em !important;
+}
 .swal2-popup.swal2-toast {
     background-color: #28282826 !important;
     border: 1px solid #505050;

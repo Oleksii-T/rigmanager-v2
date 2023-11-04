@@ -16,6 +16,7 @@ use App\Jobs\MailerProcessNewPost;
 use Illuminate\Support\Facades\Bus;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 
 class PostController extends Controller
 {
@@ -284,8 +285,30 @@ class PostController extends Controller
         return $this->jsonSuccess('', view('components.views', compact('views'))->render());
     }
 
-    public function tba(Request $request, Post $post)
+    public function priceRequest(Request $request, Post $post)
     {
+        $input = $request->validate([
+            'message' => ['required', 'string', new \App\Rules\EscapedText()]
+        ]);
+
+        $from = auth()->user();
+
+        $cKey = "price-request-from-$from->id-to-post-$post->id";
+        // RateLimiter::clear($cKey);
+        $executed = RateLimiter::attempt($cKey, 1, fn()=>true, 60*60*24);
+        if (!$executed) {
+            $avIn = ceil(RateLimiter::availableIn($cKey) / 60);
+            return $this->jsonError("Price request for this post has already been sent within 24 hours. Next price request in: $avIn minutes");
+        }
+
+        $cKey = "price-request-from-$from->id-to-user-$post->user_id";
+        // RateLimiter::clear($cKey);
+        $executed = RateLimiter::attempt($cKey, 5, fn() => true, 60*60*1);
+        if (!$executed) {
+            $avIn = ceil(RateLimiter::availableIn($cKey) / 60);
+            return $this->jsonError("Five price requests for this author has already been sent within 1 hour. Next price request in: $avIn minutes");
+        }
+
         $from = auth()->user();
         $author = $post->user;
 
@@ -301,18 +324,18 @@ class PostController extends Controller
             $mail->cc($e);
         }
 
-        if (!$author->info->is_registered) {
+        if (false && !$author->info->is_registered) {
             if (Setting::get('non_reg_send_price_req', true, true)) {
-                $mail->send(new \App\Mail\PostTbaForNonReg($post, $from));
+                $mail->send(new \App\Mail\PostTbaForNonReg($post, $from, $input['message']));
             }
         } else {
-            $mail->send(new \App\Mail\PostTba($post, $from));
+            $mail->send(new \App\Mail\PostTba($post, $from, $input['message']));
         }
 
         Notification::make($author->id, NotificationGroup::PRICE_REQ_RECIEVED, [
             'vars' => [
                 'userName' => $from->name,
-                'userEmail' => $from->getEmails()[0],
+                'userEmail' => $from->getEmails(0),
                 'postTitle' => $post->title
             ]
         ], $post);

@@ -18,16 +18,19 @@ class PostTbaForNonReg extends Mailable
     public $user;
     public $currentU;
     public $regUrl;
+    public $messageText;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($post, $user)
+    public function __construct($post, $user, $message)
     {
         $this->post = $post;
         $this->currentU = $post->user;
         $this->user = $user;
         $this->regUrl = URL::temporarySignedRoute('profile.register-simple-form', now()->addDays(2), ['email' => $this->user->email]);
+        $message = str_replace("\n", '<br>', $message);
+        $this->messageText = $message;
     }
 
     /**
@@ -37,7 +40,7 @@ class PostTbaForNonReg extends Mailable
     {
         return new Envelope(
             subject: 'Your have recieved Price Request | Rigmangers.com',
-            replyTo: $this->user->getEmails()[0]
+            replyTo: $this->user->getEmails(0)
         );
     }
 
@@ -47,7 +50,7 @@ class PostTbaForNonReg extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.post-tba-for-non-reg',
+            view: 'emails.posts.price-quotation-for-non-reg',
         );
     }
 

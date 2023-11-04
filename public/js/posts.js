@@ -25,15 +25,39 @@ $(document).ready(function() {
         e.preventDefault();
 
         let url = $(this).data('url');
+        let postTitle = $(this).data('ptitle');
+        let userName = $(this).data('uname');
 
         swal.fire({
             title: window.Laravel.translations.ui_tba_modal.title,
             text: window.Laravel.translations.ui_tba_modal.text,
             showCancelButton: true,
+            customClass: {
+                popup: 'post-price-quotation-popup'
+            },
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
+            input: 'textarea',
+            inputLabel: window.Laravel.translations.ui_tba_modal.label,
+            inputPlaceholder: 'Write your message...',
+            inputValue: `Hello, ${userName}` +
+            "\n\n" +
+            `I am looking for ${postTitle}, please give me some more detailed product information.` +
+            "\n\n" +
+            'I’m looking forward to your reply.' +
+            "\n" +
+            window.Laravel.user.name +
+            "\n" +
+            window.Laravel.user.email,
             confirmButtonText: window.Laravel.translations.ui_tba_modal.confirm,
-            cancelButtonText: window.Laravel.translations.ui_tba_modal.cancel
+            cancelButtonText: window.Laravel.translations.ui_tba_modal.cancel,
+            preConfirm: (value) => {
+                if (!value) {
+                    Swal.showValidationMessage(
+                        `Please enter the message`
+                    )
+                }
+            },
         }).then((result) => {
             if (!result.value) {
                 return;
@@ -44,8 +68,9 @@ $(document).ready(function() {
             $.ajax({
                 url,
                 type: 'post',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                data: {
+                    message: result.value,
+                    _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: (response)=>{
                     fullLoader(false);
@@ -53,7 +78,7 @@ $(document).ready(function() {
                 },
                 error: function(response) {
                     fullLoader(false);
-                    showServerError(response);
+                    showPopUp('Error', response.responseJSON.message, false);
                 }
             });
         });

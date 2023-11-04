@@ -119,7 +119,12 @@
                 @endif
                 @if ($post->is_tba)
                     <br>
-                    <button class="button execute-tba button-light" data-url="{{route('posts.tba', $post)}}">
+                    <button
+                        class="button execute-tba button-light"
+                        data-url="{{route('posts.price-request', $post)}}"
+                        data-uname="{{$post->user->name}}"
+                        data-ptitle="{{$post->title}}"
+                    >
                         @lang('ui.askForCost')
                     </button>
                 @endif
