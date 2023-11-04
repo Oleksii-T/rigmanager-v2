@@ -17,6 +17,7 @@ class ScrapePostsLakePetro extends Command
      */
     protected $signature = 'posts:scrape-lakepetro
                             {--ignore-cache : Ignore cached scraped data. }
+                            {--scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/lakepetro.json : Path to cache file. }
                             {--U|user=sales@lakepetro.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
@@ -74,6 +75,7 @@ class ScrapePostsLakePetro extends Command
                 ->abortOnEmptyValue(false) // some lakepost posts returns 404 page or doesnt have description
                 ->limit($this->scrapeLimit)
                 ->sleep($this->sleep)
+                ->debug($this->scraperDebug)
                 ->scrape();
             $result = array_merge($result, $tmp);
         }

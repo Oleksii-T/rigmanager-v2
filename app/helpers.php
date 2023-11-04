@@ -187,3 +187,13 @@ if (!function_exists('_json_last_error')) {
         }
     }
 }
+
+if (!function_exists('strposX')) {
+    function strposX($haystack, $needle, $number = 0)
+    {
+        return strpos($haystack, $needle,
+            $number > 1 ?
+            strposX($haystack, $needle, $number - 1) + strlen($needle) : 0
+        );
+    }
+}

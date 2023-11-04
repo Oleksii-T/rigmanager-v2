@@ -17,6 +17,7 @@ class ScrapePostsSanmon extends Command
      */
     protected $signature = 'posts:scrape-lakepetro
                             {--ignore-cache : Ignore cached scraped data. }
+                            {--scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/sanmon.json : Path to cache file. }
                             {--U|user=sales@cnsanmon.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
@@ -52,6 +53,7 @@ class ScrapePostsSanmon extends Command
             ->value('category', '.nbt')
             ->limit($this->scrapeLimit)
             ->sleep($this->sleep)
+            ->debug($this->scraperDebug)
             ->scrape();
 
         return $result;

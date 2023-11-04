@@ -31,7 +31,6 @@ use App\Services\Css2XPathService;
  * Can be used without pagination.
  *
  * There is other helper method to tweak the behavior:
- * - abortOnEmptyValue() - Enable\disable exception when empty value found;
  * - abortOnPageError() - Enable\disable exception when page can not be downloaded;
  * - debug() - Enable\disable scrapping logging;
  * - logUsing() - Define who logging logic;
@@ -53,7 +52,6 @@ class PostScraperService
     private string $postLinkSelector;
     private string $postLinkAttribute;
     private string $currentUrl = '';
-    private bool $abortOnEmptyValue = true;
     private bool $abortOnPageError = true;
     private bool $onlyCount = false;
     private bool $debug = false;
@@ -78,13 +76,6 @@ class PostScraperService
     public static function make(string $url)
     {
         return new self($url);
-    }
-
-    public function abortOnEmptyValue(bool $abort)
-    {
-        $this->abortOnEmptyValue = $abort;
-
-        return $this;
     }
 
     public function logUsing(\Closure $callback)
@@ -230,13 +221,15 @@ class PostScraperService
      * @param string|null $attribute Attribute of value. If not supplied, content of tag will be scraped
      * @param bool|null $isMultiple Defines if scraped value must be an array
      * @param bool|null $getFromPostsPage Defines if value should be scraped from posts page instead on separate post page
+     * @param bool|null $required Enable error if value is empty
      *
      * @return self
      */
-    public function value(string $name, string $selector, string $attribute=null, bool $isMultiple=false, bool $getFromPostsPage=false)
+    public function value(string $name, string $selector, string $attribute=null, bool $isMultiple=false, bool $getFromPostsPage=false, bool $required=true)
     {
         $this->values[$name] = [
             'static' => false,
+            'required' => $required,
             'selector' => $selector,
             'is_multiple' => $isMultiple,
             'attribute' => $attribute,
@@ -416,14 +409,14 @@ class PostScraperService
         $this->log('    HTML: ' . str_replace(["\r\n", "\r", "\n"], ' ', $html));
         $values = [];
 
-        foreach ($this->values as $key => $data) {
-            $this->log("      value '$key'", $data);
+        foreach ($this->values as $key => $valueData) {
+            $this->log("      value '$key'", $valueData);
 
-            if ($data['from_posts_page']) {
+            if ($valueData['from_posts_page']) {
                 continue;
             }
 
-            $values[$key] = $this->scrapeValue($html, $key, $data);
+            $values[$key] = $this->scrapeValue($html, $key, $valueData);
         }
 
         return $values;
@@ -439,23 +432,23 @@ class PostScraperService
      *
      * @return string $res Scraped value
      */
-    private function scrapeValue($html, $key, $data)
+    private function scrapeValue($html, $key, $valueData)
     {
-        $nodeList = $this->querySelector($html, $data['selector']);
+        $nodeList = $this->querySelector($html, $valueData['selector']);
 
-        $this->log("        selector '{$data['selector']}'");
+        $this->log("        selector '{$valueData['selector']}'");
 
-        if ($data['is_multiple']) {
+        if ($valueData['is_multiple']) {
             $this->log("        is multiple");
             $res = [];
             foreach ($nodeList as $node) {
-                $res[] = $this->scrapeValueHelper($node, $key, $data);
+                $res[] = $this->scrapeValueHelper($node, $key, $valueData);
             }
             $this->log("        result: ", $res);
         } else {
             $this->log("        is not multiple");
             $node = $nodeList->item(0);
-            $res = $this->scrapeValueHelper($node, $key, $data);
+            $res = $this->scrapeValueHelper($node, $key, $valueData);
             $this->log("        result: " .str_replace(["\r\n", "\r", "\n"], ' ', $res));
         }
 
@@ -472,9 +465,9 @@ class PostScraperService
      *
      * @return string $res Scraped value
      */
-    private function scrapeValueHelper($node, $key, $data)
+    private function scrapeValueHelper($node, $key, $valueData)
     {
-        $attr = $data['attribute'];
+        $attr = $valueData['attribute'];
         $res = '';
 
         if ($attr && $attr == 'html') {
@@ -486,8 +479,8 @@ class PostScraperService
             $res = $node->nodeValue??null;
         }
 
-        if (!$res && $this->abortOnEmptyValue) {
-            throw new \Exception("Empty value encounered for '$key' value ({$data['selector']}) at $this->currentUrl", 1);
+        if (!$res && $valueData['required']) {
+            throw new \Exception("Empty value encounered for required '$key' value ({$valueData['selector']}) at $this->currentUrl", 1);
         }
 
         if ($res && $attr && in_array($attr, ['href', 'src'])) {
@@ -561,6 +554,13 @@ class PostScraperService
             }
 
             $html = $innerHTML;
+        } else {
+            // remove inner html tag to prevent query selectors error
+            if (substr_count($html, '</html>') > 1) {
+                $start = strposX($html, '<html', 2);
+                $end = strpos($html, '</html>') + 7;
+                $html = substr($html, 0, $start) . substr($html, $end);
+            }
         }
 
         libxml_use_internal_errors(true);

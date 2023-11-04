@@ -71,39 +71,21 @@ class DevController extends Controller
     {
         $files = [
             // 'lakepetro' => storage_path('scraper_jsons/lakepetro.json'),
-            'oilmanchina' => storage_path('scraper_jsons/oilmanchina.json'),
+            // 'oilmanchina' => storage_path('scraper_jsons/oilmanchina.json'),
+            'goldenman' => storage_path('scraper_jsons/goldenman.json'),
         ];
-
-        $details1Keys = [];
-        $details2Keys = [];
-        $details2Values = [];
-        $details2ValuesFirst = [];
 
         foreach ($files as $author => $file) {
             $json = file_get_contents($file);
             $scrapedPosts = json_decode($json, true);
 
             foreach ($scrapedPosts as $url => $p) {
-                $details1Keys = array_merge($details1Keys, $p['details1-keys']);
-                $details2Values = array_merge($details2Values, $p['details2-values']);
-                $details2ValuesFirst[] = $p['details2-values'][0]??null;
-
-                foreach ($p['details2-keys'] as $i => $key) {
-                    if (isset($details2Keys[$key])) {
-                        $details2Keys[$key][] = $p['details2-values'][$i+1];
-                    } else {
-                        $details2Keys[$key] = [$p['details2-values'][$i+1]];
-                    }
-                }
+                $b = $p['breadcrumbs'];
+                unset($b[0]);
+                unset($b[1]);
+                $text = implode(', ', $b);
+                $this->d($text);
             }
-
-            $details1Keys = array_unique($details1Keys);
-
-            // dd($details2ValuesFirst);
-            // dd($details2Values);
-            // dd($details2Keys);
-            $this->d($details1Keys, '$details1Keys');
-            $this->d($details2Keys, '$details2Keys');
         }
     }
 

@@ -17,6 +17,7 @@ class ScrapePostsCepai extends Command
      */
     protected $signature = 'posts:scrape-lakepetro
                             {--ignore-cache : Ignore cached scraped data. }
+                            {--scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/cepai.json : Path to cache file. }
                             {--U|user=aires@cepai.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
@@ -60,6 +61,7 @@ class ScrapePostsCepai extends Command
                 ->value('breadcrumbs', '#main_product #main1_wei a', null, true)
                 ->limit($this->scrapeLimit)
                 ->sleep($this->sleep)
+                ->debug($this->scraperDebug)
                 ->scrape();
             $result = array_merge($result, $tmp);
         }

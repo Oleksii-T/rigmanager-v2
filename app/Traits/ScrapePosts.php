@@ -24,6 +24,7 @@ trait ScrapePosts
     private $sleep;
     private $userEmail;
     private $ignoreCache;
+    private $scraperDebug;
 
     private function setOptions()
     {
@@ -36,6 +37,7 @@ trait ScrapePosts
         }
 
         $this->ignoreCache = $this->option('ignore-cache');
+        $this->scraperDebug = $this->option('scraper-debug');
         $this->cacheFile = base_path($this->option('cache-file'));
         $this->scrapeLimit = $this->option('scrape-limit');
         $this->importLimit = $this->option('import-limit');
@@ -167,7 +169,7 @@ trait ScrapePosts
 
         $post = Post::create($post);
 
-        // $this->addImages($post, $this->parseImages($scrapedPost));
+        $this->addImages($post, $this->parseImages($scrapedPost));
         $this->addCosts($post, $scrapedPost);
         $this->addTranslations($post, $title, $description);
 

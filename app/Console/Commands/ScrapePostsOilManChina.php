@@ -17,6 +17,7 @@ class ScrapePostsOilManChina extends Command
      */
     protected $signature = 'posts:scrape-oilmanchina
                             {--ignore-cache : Ignore cached scraped data. }
+                            {--scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/oilmanchina.json : Path to cache file. }
                             {--U|user=christal@oilmancn.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
@@ -56,7 +57,7 @@ class ScrapePostsOilManChina extends Command
             ->value('details2-values', '#detail_infomation td', null, true)
             ->limit($this->scrapeLimit)
             ->sleep($this->sleep)
-            ->debug(1)
+            ->debug($this->scraperDebug)
             ->scrape();
 
         return $result;
