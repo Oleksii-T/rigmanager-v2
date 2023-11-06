@@ -164,3 +164,13 @@ if (!function_exists('currencies')) {
         return $code ? $all[$code] : $all;
     }
 }
+
+// case insensitive array_unique
+if (!function_exists('array_iunique')) {
+    function array_iunique($array) {
+        return array_intersect_key(
+            $array,
+            array_unique( array_map( "strtolower", $array ) )
+        );
+    }
+}

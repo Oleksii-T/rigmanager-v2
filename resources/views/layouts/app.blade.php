@@ -15,7 +15,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/all.css')}}" />
-	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}?v={{time()}}" />
+	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/slick.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery-ui.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom-swal.css')}}" />
@@ -82,7 +82,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 	<script src="{{asset('js/slick.min.js')}}"></script>
 	<script src="{{asset('js/jquery-ui-2.min.js')}}"></script>
-	<script src="{{asset('js/all.js')}}?v={{time()}}"></script>
+	<script src="{{asset('js/typeahead.bundle.js')}}"></script>
+	<script src="{{asset('js/all.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render={{config('services.recaptcha.public_key')}}"></script>
     @vite('resources/js/app.js')

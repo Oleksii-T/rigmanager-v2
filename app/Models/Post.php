@@ -270,38 +270,6 @@ class Post extends Model
         return [];
     }
 
-    public static function dataTable($query)
-    {
-        return DataTables::of($query)
-            ->addColumn('user', function ($model) {
-                $user = $model->user;
-                return '<a href="'.route('admin.users.edit', $user).'">'.$user->name.'</a>';
-            })
-            ->addColumn('category', function ($model) {
-                $c = $model->category;
-                return '<a href="'.route('admin.categories.edit', $c).'">'.$c->name.'</a>';
-            })
-            ->editColumn('is_active', function ($model) {
-                return $model->is_active
-                    ? '<span class="badge badge-success">yes</span>'
-                    : '<span class="badge badge-warning">no</span>';
-            })
-            ->editColumn('created_at', function ($model) {
-                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
-            })
-            ->editColumn('updated_at', function ($model) {
-                return $model->updated_at->format(env('ADMIN_DATETIME_FORMAT'));
-            })
-            ->addColumn('action', function ($model) {
-                return view('components.admin.actions', [
-                    'model' => $model,
-                    'name' => 'posts'
-                ])->render();
-            })
-            ->rawColumns(['user', 'category', 'is_active', 'action'])
-            ->make(true);
-    }
-
     public function saveCosts($input)
     {
         if ($input['is_double_cost']??false) {
@@ -339,6 +307,38 @@ class Post extends Model
                 );
             }
         }
+    }
+
+    public static function dataTable($query)
+    {
+        return DataTables::of($query)
+            ->addColumn('user', function ($model) {
+                $user = $model->user;
+                return '<a href="'.route('admin.users.edit', $user).'">'.$user->name.'</a>';
+            })
+            ->addColumn('category', function ($model) {
+                $c = $model->category;
+                return '<a href="'.route('admin.categories.edit', $c).'">'.$c->name.'</a>';
+            })
+            ->editColumn('is_active', function ($model) {
+                return $model->is_active
+                    ? '<span class="badge badge-success">yes</span>'
+                    : '<span class="badge badge-warning">no</span>';
+            })
+            ->editColumn('created_at', function ($model) {
+                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+            })
+            ->editColumn('updated_at', function ($model) {
+                return $model->updated_at->format(env('ADMIN_DATETIME_FORMAT'));
+            })
+            ->addColumn('action', function ($model) {
+                return view('components.admin.actions', [
+                    'model' => $model,
+                    'name' => 'posts'
+                ])->render();
+            })
+            ->rawColumns(['user', 'category', 'is_active', 'action'])
+            ->make(true);
     }
 
     public static function allSlugs($ignore=null)
@@ -541,10 +541,15 @@ class Post extends Model
         }
 
         if ($search) {
-            $posts->whereHas('translations', function ($q) use ($search){
-                $q->whereIn('field', ['title', 'description'])
-                    ->where('locale', LaravelLocalization::getCurrentLocale())
-                    ->where('value', 'like', "%$search%");
+            $fullSearch = false;
+            $posts->whereHas('translations', function ($q) use ($search, $fullSearch) {
+                if ($fullSearch) {
+                    $q->whereIn('field', ['title', 'description']);
+                } else {
+                    $q->where('field', 'title');
+                }
+                $q->where('locale', LaravelLocalization::getCurrentLocale());
+                $q->where('value', 'like', "%$search%");
             });
         }
 

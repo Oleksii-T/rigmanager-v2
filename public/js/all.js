@@ -2,6 +2,25 @@ $(document).ready(function () {
     $('.select2').select2();
     let urlSearchParams = new URLSearchParams(window.location.search);
 
+    // autocomplete global search
+    $('[name="search"]').typeahead(
+        {
+            // hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            limit: 50,
+            source: function (search, cb, acb) {
+                $.ajax({
+                    url: '/search-autocomplete',
+                    data: {search},
+                    success: (response) => acb(response),
+                });
+            }
+        }
+    );
+
     // init user friendly title tooltips
     $( document ).tooltip({
         position: {
