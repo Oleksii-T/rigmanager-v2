@@ -17,6 +17,7 @@ use App\Services\ProcessImageService;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Queue\InteractsWithQueue;
+use Spatie\Activitylog\Facades\LogBatch;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -45,6 +46,9 @@ class PostsImport implements ShouldQueue
         $this->endRow = $s['end_row'];
         $this->userColumns = $s['columns'];
         $this->user = $import->user;
+
+        LogBatch::startBatch();
+        LogBatch::setBatch("import-id-$import->id");
     }
 
     /**
@@ -98,8 +102,12 @@ class PostsImport implements ShouldQueue
                 'status' => Import::STATUS_FAILED
             ]);
 
+            LogBatch::endBatch();
+
             return;
         }
+
+        LogBatch::endBatch();
 
         $this->log('DONE', ' ');
 
@@ -391,6 +399,7 @@ class PostsImport implements ShouldQueue
 
     private function log($text, $prefix='')
     {
-        \Log::channel('importing')->info("$prefix Import #" . $this->import->id . ": $text");
+        activity('import')->by($this->user)->on($this->import)->event('importing')->log($prefix.$text);
+        // \Log::channel('importing')->info("$prefix Import #" . $this->import->id . ": $text");
     }
 }

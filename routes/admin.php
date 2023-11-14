@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\MailerController;
-use App\Http\Controllers\Admin\MailerLogController;
+use App\Http\Controllers\Admin\ActivityLogController;
 
 /*
  *
@@ -44,8 +44,6 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('posts', PostController::class);
 
-    Route::resource('mailer-logs', MailerLogController::class)->only('index');
-
     Route::resource('mailers', MailerController::class)->except('show');
 
     Route::resource('partners', PartnerController::class)->except('show');
@@ -61,6 +59,8 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('notifications', NotificationController::class)->except('show');
 
     Route::resource('blogs', BlogController::class)->except(['show']);
+
+    Route::resource('activity-logs', ActivityLogController::class)->only(['index']);
 
     Route::resource('messages', MessageController::class)->only('index', 'store', 'destroy');
     Route::get('messages/{u1}/{u2}', [MessageController::class, 'show'])->name('messages.show');

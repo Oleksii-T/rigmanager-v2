@@ -51,7 +51,7 @@ class ProfileController extends Controller
         $user->update($input);
         $input['info']['emails'] = array_filter($input['info']['emails']);
         $input['info']['phones'] = array_filter($input['info']['phones']??[]);
-        $user->info()->update($input['info']);
+        \App\Models\UserInformation::where('user_id', $user->id)->first()->update($input['info']);
         $avatar = $user->addAttachment($input['avatar']??null, 'avatar');
         $banner = $user->addAttachment($input['banner']??null, 'banner');
         \App\Jobs\ProcessUserImages::dispatch($avatar, $banner);

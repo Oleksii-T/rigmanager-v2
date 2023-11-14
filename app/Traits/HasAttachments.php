@@ -10,7 +10,7 @@ trait HasAttachments
     public function addAttachment($attachment, string $group='', $toOrder=false)
     {
         if (!$attachment) {
-            return;
+            return $attachment;
         }
 
         $isMultiple = false;

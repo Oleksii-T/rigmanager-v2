@@ -13,6 +13,7 @@ class ImportValidation implements DataAwareRule, ValidationRule
 {
     protected $data = [];
     protected $rows;
+    protected $fail_;
 
     public function setData(array $data): static
     {
@@ -28,10 +29,12 @@ class ImportValidation implements DataAwareRule, ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
+        $this->fail_ = $fail;
         $file = $this->data['file'];
         $startRow = $this->data['start_row'];
         $endRow = $this->data['end_row'];
         $userColumns = $value;
+        $logType = 'import';
 
         // get excel pages
         $pages = \Excel::toArray(new \App\Imports\PostsImport, $file);
@@ -41,16 +44,16 @@ class ImportValidation implements DataAwareRule, ValidationRule
 
         // basic rows validation
         if ($startRow > $endRow) {
-            $fail("Start row must be less than end row");
+            $this->fail("Start row must be less than end row");
             return;
         }
         if (count($this->rows) < $endRow) {
-            $fail("Invalid end line number. Uploaded file contains only ".count($this->rows)." rows.");
+            $this->fail("Invalid end line number. Uploaded file contains only ".count($this->rows)." rows.");
             return;
         }
 
         if ($endRow-$startRow > 500) {
-            $fail("Maximum lines to process - 500");
+            $this->fail("Maximum lines to process - 500");
             return;
         }
 
@@ -59,7 +62,7 @@ class ImportValidation implements DataAwareRule, ValidationRule
 
         $totalRows = count($this->rows);
         $totalColumns = count($this->rows[0]);
-        $hasError = $this->validateRequiredFields($userColumns, $totalColumns, $fail);
+        $hasError = $this->validateRequiredFields($userColumns, $totalColumns);
 
         if ($hasError) {
             return;
@@ -72,61 +75,62 @@ class ImportValidation implements DataAwareRule, ValidationRule
                 }
 
                 $method = 'validate' . ucfirst($field);
-                $this->$method($row[$columnIndex], $fail, $rowIndex+$startRow);
+                $this->$method($row[$columnIndex], $rowIndex+$startRow);
             }
         }
     }
 
-    private function validateRequiredFields($userColumns, $totalColumns, $fail)
+    // validate user configuration of how columns will be imported
+    private function validateRequiredFields($userColumns, $totalColumns)
     {
         $totalColumnsArray = range(0, $totalColumns);
         $hasError = false;
 
         if (!in_array($userColumns['title'], $totalColumnsArray)) {
             $hasError = true;
-            $fail("A column for Title field is required");
+            $this->fail("A column for Title field is required");
         }
 
         if (!in_array($userColumns['description'], $totalColumnsArray)) {
             $hasError = true;
-            $fail("A column for Description field is required");
+            $this->fail("A column for Description field is required");
         }
 
         if (!in_array($userColumns['category'], $totalColumnsArray)) {
             $hasError = true;
-            $fail("A column for Category field is required");
+            $this->fail("A column for Category field is required");
         }
 
         return $hasError;
     }
 
-    private function validateTitle($val, $fail, $i)
+    private function validateTitle($val, $i)
     {
         if (!$val) {
-            $fail("Title can not be empty - row #$i");
+            $this->fail("Title can not be empty - row #$i");
             return;
         }
         if (strlen($val) > 255) {
-            $fail("Title maximum length is 255 characters - row #$i");
+            $this->fail("Title maximum length is 255 characters - row #$i");
         }
     }
 
-    private function validateDescription($val, $fail, $i)
+    private function validateDescription($val, $i)
     {
         if (!$val) {
-            $fail("Description can not be empty - row #$i");
+            $this->fail("Description can not be empty - row #$i");
             return;
         }
 
         if (strlen($val) > 9000) {
-            $fail("Description maximum length is 9000 characters - row #$i");
+            $this->fail("Description maximum length is 9000 characters - row #$i");
         }
     }
 
-    private function validateCategory($val, $fail, $i)
+    private function validateCategory($val, $i)
     {
         if (!$val) {
-            $fail("Category can not be empty - row #$i");
+            $this->fail("Category can not be empty - row #$i");
             return;
         }
 
@@ -143,11 +147,11 @@ class ImportValidation implements DataAwareRule, ValidationRule
         });
 
         if (!$slugs->contains($val)) {
-            $fail("Category '$val' not recognized - row #$i");
+            $this->fail("Category '$val' not recognized - row #$i");
         }
     }
 
-    private function validateImages($val, $fail, $i)
+    private function validateImages($val, $i)
     {
         if ($val === null) {
             return;
@@ -170,7 +174,7 @@ class ImportValidation implements DataAwareRule, ValidationRule
             }
 
             if (filter_var($link, FILTER_VALIDATE_URL) === FALSE) {
-                $fail("Image link '$link' not valid - row #$i");
+                $this->fail("Image link '$link' not valid - row #$i");
                 return;
             }
             // if (
@@ -179,78 +183,78 @@ class ImportValidation implements DataAwareRule, ValidationRule
             //     !str_ends_with($link, '.png') &&
             //     !str_ends_with($link, '.webp')
             // ) {
-            //     $fail("Image link '$link' must be an image link - row #$i");
+            //     $this->fail("Image link '$link' must be an image link - row #$i");
             // }
         }
     }
 
-    private function validateType($val, $fail, $i)
+    private function validateType($val, $i)
     {
         if ($val === null) {
             return;
         }
 
         if (!in_array(strtolower($val), Post::TYPES)) {
-            $fail("Type '$val' not recognized - row #$i");
+            $this->fail("Type '$val' not recognized - row #$i");
         }
     }
 
-    private function validateCondition($val, $fail, $i)
+    private function validateCondition($val, $i)
     {
         if ($val === null) {
             return;
         }
 
         if (!in_array(strtolower($val), Post::CONDITIONS)) {
-            $fail("Condition '$val' not recognized - row #$i");
+            $this->fail("Condition '$val' not recognized - row #$i");
         }
     }
 
-    private function validateAmount($val, $fail, $i)
+    private function validateAmount($val, $i)
     {
         if ($val === null) {
             return;
         }
 
         if (strlen($val) > 70) {
-            $fail("Quantity maximum length is 70 characters - row #$i");
+            $this->fail("Quantity maximum length is 70 characters - row #$i");
         }
     }
 
-    private function validateManufacturer($val, $fail, $i)
+    private function validateManufacturer($val, $i)
     {
         if ($val === null) {
             return;
         }
 
         if (strlen($val) > 70) {
-            $fail("Manufacturer maximum length is 70 characters - row #$i");
+            $this->fail("Manufacturer maximum length is 70 characters - row #$i");
         }
     }
 
-    private function validateManufactureDate($val, $fail, $i)
+    private function validateManufactureDate($val, $i)
     {
         if ($val === null) {
             return;
         }
 
         if (strlen($val) > 70) {
-            $fail("Manufacture Date maximum length is 70 characters - row #$i");
+            $this->fail("Manufacture Date maximum length is 70 characters - row #$i");
         }
     }
 
-    private function validatePartNumber($val, $fail, $i)
+    private function validatePartNumber($val, $i)
     {
         if ($val === null) {
             return;
         }
 
         if (strlen($val) > 70) {
-            $fail("Part Number maximum length is 70 characters - row #$i");
+            $this->fail("Part Number maximum length is 70 characters - row #$i");
         }
     }
 
-    private function validateCost($val, $fail, $i)
+    private function validateCost($val, $i)
     {
         if ($val === null) {
             return;
@@ -261,15 +265,15 @@ class ImportValidation implements DataAwareRule, ValidationRule
         $val = substr($val, 1);
 
         if (!in_array($currency, $currencies)) {
-            $fail("Cost currency '$currency' not recognized - row #$i");
+            $this->fail("Cost currency '$currency' not recognized - row #$i");
         }
 
         if ($val != floatval($val)) {
-            $fail("Cost '$val' not valid - row #$i");
+            $this->fail("Cost '$val' not valid - row #$i");
         }
     }
 
-    private function validateCountry($val, $fail, $i)
+    private function validateCountry($val, $i)
     {
         if ($val === null) {
             return;
@@ -277,7 +281,14 @@ class ImportValidation implements DataAwareRule, ValidationRule
 
         $countries = array_keys(countries());
         if (!in_array(strtolower($val), $countries)) {
-            $fail("Country '$val' not recognized - row #$i");
+            $this->fail("Country '$val' not recognized - row #$i");
         }
+    }
+
+    private function fail($message)
+    {
+        activity('import')->event('error-validation')->log($message);
+        $closure = $this->fail_;
+        $closure($message);
     }
 }

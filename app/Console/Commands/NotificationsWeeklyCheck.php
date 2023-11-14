@@ -102,5 +102,7 @@ class NotificationsWeeklyCheck extends Command
         } catch (\Throwable $th) {
             Log::channel('commands')->error("[$this->signature] " . $th->getMessage());
         }
+
+        return 0;
     }
 }

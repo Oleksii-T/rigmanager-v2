@@ -35,7 +35,6 @@ class NotificationsDailyCheck extends Command
     public function handle()
     {
         try {
-
             //posts views
             $min = Setting::get('notif_daily_posts_views_min');
             $postsByUser = Post::query()
@@ -102,6 +101,8 @@ class NotificationsDailyCheck extends Command
         } catch (\Throwable $th) {
             Log::channel('commands')->error("[$this->signature] " . $th->getMessage());
         }
+
+        return 0;
     }
 
 }

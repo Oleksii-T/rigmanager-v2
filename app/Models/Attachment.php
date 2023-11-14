@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use Yajra\DataTables\DataTables;
+use Spatie\Activitylog\LogOptions;
 use App\Services\ProcessImageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Attachment extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     const POST_IMG_RESIZES = [
         300 => 300
@@ -58,6 +60,16 @@ class Attachment extends Model
                 }
             }
         });
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('models')
+            ->logAll()
+            ->logExcept(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
     /**

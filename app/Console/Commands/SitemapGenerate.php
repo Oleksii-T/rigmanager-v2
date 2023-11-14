@@ -160,5 +160,7 @@ class SitemapGenerate extends Command
                 'trace' => substr($th->getTraceAsString(), 0, 600)
             ]);
         }
+
+        return 0;
     }
 }

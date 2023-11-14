@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\DataTables;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Mailer extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'user_id',
         'is_active',
@@ -26,6 +30,16 @@ class Mailer extends Model
         'to_mail' => 'array'
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('models')
+            ->logAll()
+            ->logExcept(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
     // Get the route key for the model.
     public function getRouteKeyName()
     {
@@ -35,11 +49,6 @@ class Mailer extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function logs()
-    {
-        return $this->hasMany(MailerLog::class);
     }
 
     public function scopeActive($query)

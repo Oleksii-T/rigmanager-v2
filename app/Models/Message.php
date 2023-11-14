@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\DataTables;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Message extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'user_id',
         'reciever_id',
@@ -17,6 +21,16 @@ class Message extends Model
     protected $dispatchesEvents = [
         'saved' => \App\Events\MessageCreated::class,
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('models')
+            ->logAll()
+            ->logExcept(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function user()
     {

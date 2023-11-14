@@ -38,6 +38,9 @@ class Kernel extends ConsoleKernel
 
         // create notifications on weekly basis
         $schedule->command('notifications:weekly-check')->weekly();
+
+        // clear spatie activity logs
+        $schedule->command('activitylog:clean')->daily();
     }
 
     /**

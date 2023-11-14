@@ -35,16 +35,20 @@ class MailerSendNotifs extends Command
     public function handle()
     {
         try {
+            // get active mailers
             $mailers = Mailer::where('is_active', true)->whereNotNull('to_mail')->get();
 
+            // check each mailer for need of sending
             foreach ($mailers as $mailer) {
 
+                // get posts found by mailer
                 $posts = Post::query()
                     ->visible()
                     ->whereIn('id', $mailer->to_mail)
                     ->filter($mailer->filters)
                     ->get();
 
+                // skip if not posts found
                 if ($posts->isEmpty()) {
                     $mailer->update([
                         'to_mail' => null
@@ -52,8 +56,10 @@ class MailerSendNotifs extends Command
                     continue;
                 }
 
+                // send the mail with found posts
                 Mail::to($mailer->user)->send(new MailerPostFound($mailer, $posts));
 
+                // make notification about mailer been send
                 Notification::make($mailer->user->id, NotificationGroup::MAILER_SEND, [
                     'vars' => [
                         'name' => $mailer->title,
@@ -61,13 +67,8 @@ class MailerSendNotifs extends Command
                     ]
                 ], $mailer);
 
+                // clear found posts
                 $postsIds = $posts->pluck('id')->toArray();
-
-                $mailer->logs()->create([
-                    'posts' => $postsIds,
-                    'filters' => $mailer->filters
-                ]);
-
                 $mailer->update([
                     'last_at' => now(),
                     'posts' => array_merge($mailer->posts??[], $postsIds),
@@ -81,5 +82,7 @@ class MailerSendNotifs extends Command
                 'trace' => substr($th->getTraceAsString(), 0, 600)
             ]);
         }
+
+        return 0;
     }
 }

@@ -42,6 +42,6 @@ class PostsDeleteTrashed extends Command
             Log::channel('commands')->error("[$this->signature] " . $th->getMessage());
         }
 
-        return true;
+        return 0;
     }
 }

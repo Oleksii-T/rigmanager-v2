@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Spatie\Activitylog\LogOptions;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Role extends Model
+final class UserFavPost extends Pivot
 {
     use LogsActivity;
+
+    protected $table = 'user_fav_posts';
 
     public function getActivitylogOptions(): LogOptions
     {

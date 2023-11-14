@@ -354,8 +354,8 @@ return [
         ],
         'LOGS',
         [
-            'text' => 'Mailer Logs',
-            'route'  => 'admin.mailer-logs.index',
+            'text' => 'Activity Logs',
+            'route'  => 'admin.activity-logs.index',
             'icon' => 'fas fa-fw fa-print',
         ],
         [

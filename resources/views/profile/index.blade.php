@@ -158,8 +158,8 @@
                         <button type="button" class="header-button" id="add-cts-phone">@lang('ui.add')+</button>
                     </p>
                     <div class="row" id="cts-phone-inputs" data-defaultph="+0-000-000-000">
-                        @foreach ($info->phones as $i => $phone)
-                            <div class="col-4 cts-el">
+                        @foreach ($info->phones?:[null] as $i => $phone)
+                            <div class="col-4 cts-el {{$phone ? '' : 'd-none'}}">
                                 <div class="cts-input">
                                     <input type="text" class="input" name="info[phones][]" placeholder="{{$loop->first ? '+0-000-000-000' : ''}}" value="{{$phone}}">
                                     <button type="button" class="delete-cts-phone">

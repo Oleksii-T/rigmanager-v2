@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Mail;
+use App\Traits\Viewable;
 use App\Mail\PasswordReset;
 use App\Traits\HasAttachments;
-use App\Traits\Viewable;
+use Yajra\DataTables\DataTables;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasAttachments, Notifiable, Viewable;
+    use HasAttachments, Notifiable, Viewable, LogsActivity;
 
     const ONLINE_MINUTES = 5;
 
@@ -60,6 +62,16 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('models')
+            ->logAll()
+            ->logExcept(['updated_at', 'last_active_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
     // Get the route key for the model.
     public function getRouteKeyName()
     {
@@ -88,7 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function favorites()
     {
-        return $this->belongsToMany(Post::class, 'user_fav_posts')->withTimestamps();
+        return $this->belongsToMany(Post::class, UserFavPost::class)->withTimestamps();
     }
 
     public function mailers()
