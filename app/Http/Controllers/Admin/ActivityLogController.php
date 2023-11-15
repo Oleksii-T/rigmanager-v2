@@ -21,8 +21,6 @@ class ActivityLogController extends Controller
             return view('admin.activity-logs.index', compact('names', 'causers', 'subjects'));
         }
 
-        // dd($request->subject_type);
-
         $activity = Activity::query()
             ->when($request->log_name, function ($q) {
                 $q->where('log_name', request()->log_name);
@@ -65,7 +63,7 @@ class ActivityLogController extends Controller
                 }
                 return view('admin.activity-logs.description-cell', [
                     'id' => $model->id,
-                    'd' => $model->description
+                    'desc' => $model->description
                 ]);
             })
             ->editColumn('properties', function ($model) {

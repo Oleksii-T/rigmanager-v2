@@ -64,28 +64,7 @@ class DevController extends Controller
 
     private function test()
     {
-        $this->enableQueryLog();
-        $this->setFullStart();
-        $activities = \Spatie\Activitylog\Models\Activity::query()
-            ->selectRaw('subject_type, GROUP_CONCAT(DISTINCT subject_id) as subject_ids')
-            ->groupBy('subject_type')
-            ->get();
-        $result = [];
-        foreach ($activities as $activity) {
-            $result[$activity->subject_type??'-'] = explode(',', $activity->subject_ids);
-        }
-        $this->t('end of 1');
-        $this->d($result);
 
-        $this->setFullStart();
-        $activities = \Spatie\Activitylog\Models\Activity::query()
-            ->select('subject_type', 'subject_id', 'id')
-            ->get()
-            ->groupBy('subject_type')
-            ->map(fn ($a) => $a->pluck('subject_id')->unique()->values())
-            ->toArray();
-        $this->t('end of 2');
-        $this->d($activities);
     }
 
     // dummy method

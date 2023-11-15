@@ -400,6 +400,5 @@ class PostsImport implements ShouldQueue
     private function log($text, $prefix='')
     {
         activity('import')->by($this->user)->on($this->import)->event('importing')->log($prefix.$text);
-        // \Log::channel('importing')->info("$prefix Import #" . $this->import->id . ": $text");
     }
 }

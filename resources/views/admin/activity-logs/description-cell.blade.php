@@ -1,5 +1,5 @@
-@if (strlen($d) > 40)
-    <span class="alog-short-desc">{{substr($d, 0, 40)}}...</span>
+@if (strlen($desc) > 40)
+    <span class="alog-short-desc">{{substr($desc, 0, 40)}}...</span>
     <span class="badge badge-info" data-toggle="modal" data-target="#alog-full-desc-{{$id}}">show</span>
 
     <div class="modal fade" id="alog-full-desc-{{$id}}" style="display: none;">
@@ -14,12 +14,12 @@
                 </div>
                 <div class="modal-body">
                     <p style="white-space: pre-line">
-                        {!!$d!!}
+                        {!!$desc!!}
                     </p>
                 </div>
             </div>
         </div>
     </div>
 @else
-    <p>{{$d}}</p>
+    <p>{{$desc}}</p>
 @endif

@@ -3,9 +3,20 @@
 @section('title', 'Activity Logs')
 
 @section('content_header')
-    <x-admin.title
-        text="Activity Logs"
-    />
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <div class="float-left">
+                    <h1 class="m-0">Activity Logs</h1>
+                </div>
+                <div class="float-left pl-3">
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#alog-trivia">
+                        Trivia
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('content')
@@ -81,6 +92,86 @@
                         <tbody>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="alog-trivia" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Activily log trivia</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Log names and respective events explanation:
+                    <ol>
+                        <li>
+                            <b>models</b>
+                            <ul>
+                                <li>
+                                    <em>created</em>:
+                                    model created.
+                                    <small>All model attributes can be found in 'properties.attributes' field.</small>
+                                </li>
+                                <li>
+                                    <em>updated</em>:
+                                    model updated.
+                                    <small>Old of model attributes can be found in 'properties.old' field. New model attributes can be found in 'properties.attributes' field.</small>
+                                </li>
+                                <li>
+                                    <em>deleted</em>:
+                                    model deleted
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <b>emails</b>
+                            <ul>
+                                <li>
+                                    <em>send</em>:
+                                    email been send.
+                                    <small>Detailed email info can be found in 'properties' field.</small>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <b>import</b>
+                            <ul>
+                                <li>
+                                    <em>error-validation</em>:
+                                    422 validation error occured.
+                                    <small>Exact arror can be found in 'description' field.</small>
+                                </li>
+                                <li>
+                                    <em>importing</em>:
+                                    logs of importing logic
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <b>users</b>
+                            <ul>
+                                <li>
+                                    <em>login</em>:
+                                    user logged in.
+                                    <small>IP and User-Agent can be found in 'properties' field.</small>
+                                </li>
+                                <li>
+                                    <em>logout</em>:
+                                    user logged out.
+                                    <small>IP and User-Agent can be found in 'properties' field.</small>
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                    Causer: entity which caused the log. generally - logged in user.
+                    <br>
+                    Subject: entiry on which log event occurred. generally - model.
                 </div>
             </div>
         </div>
