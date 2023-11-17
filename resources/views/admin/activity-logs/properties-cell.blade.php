@@ -3,7 +3,7 @@
     <span class="badge badge-info" data-toggle="modal" data-target="#alog-full-props-{{$id}}">show</span>
 
     <div class="modal fade" id="alog-full-props-{{$id}}" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="width:90%;max-width:none;">
             <div class="modal-content">
                 @csrf
                 <div class="modal-header">

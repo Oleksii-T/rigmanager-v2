@@ -17,11 +17,9 @@ trait Viewable
             ->on($this)
             ->event('view')
             ->tap(function(\Spatie\Activitylog\Contracts\Activity $activity) {
-                $activity->properties = [
-                    'ip' => request()->ip(),
-                    'agent' => request()->header('User-Agent'),
+                $activity->properties = infoForActivityLog([
                     'is_fake' => false
-                ];
+                ]);
             })
             ->log('');
     }

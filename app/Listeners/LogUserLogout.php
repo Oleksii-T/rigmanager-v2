@@ -31,10 +31,7 @@ class LogUserLogout
         activity('users')
             ->event('logout')
             ->tap(function(Activity $activity) {
-                $activity->properties = [
-                    'ip' => request()->ip(),
-                    'agent' => request()->header('User-Agent')
-                ];
+                $activity->properties = infoForActivityLog();
             })
             ->log('');
     }

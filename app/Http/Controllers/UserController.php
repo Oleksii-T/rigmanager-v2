@@ -37,11 +37,7 @@ class UserController extends Controller
             ->event('contacts')
             ->on($user)
             ->tap(function(\Spatie\Activitylog\Contracts\Activity $activity) {
-                $activity->properties = [
-                    'ip' => request()->ip(),
-                    'agent' => request()->header('User-Agent'),
-                    'from' => request()->headers->get('referer')
-                ];
+                $activity->properties = infoForActivityLog();
             })
             ->log('');
 

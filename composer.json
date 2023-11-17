@@ -12,6 +12,7 @@
         "google/cloud-translate": "^1.12",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
+        "jenssegers/agent": "^2.6",
         "jeroennoten/laravel-adminlte": "^3.8",
         "laravel/fortify": "^1.13",
         "laravel/framework": "^10.0",

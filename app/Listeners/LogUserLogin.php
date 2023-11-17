@@ -31,10 +31,7 @@ class LogUserLogin
         activity('users')
             ->event('login')
             ->tap(function(Activity $activity) {
-                $activity->properties = [
-                    'ip' => request()->ip(),
-                    'agent' => request()->header('User-Agent')
-                ];
+                $activity->properties = infoForActivityLog();
             })
             ->log('');
     }

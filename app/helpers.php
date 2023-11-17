@@ -165,6 +165,52 @@ if (!function_exists('currencies')) {
     }
 }
 
+// get general info for activity log creation
+if (!function_exists('infoForActivityLog')) {
+    function infoForActivityLog($custom=[]) {
+        $location = null;
+        $ip = request()->ip();
+        $agentString = request()->header('User-Agent');
+        $agentInfo = [];
+
+        try {
+            $location = \Stevebauman\Location\Facades\Location::get($ip)->countryCode;
+        } catch (\Throwable $th) {
+            \Log::error('Can not detect location for activity log: ' . $th->getMessage());
+        }
+
+
+        try {
+            $agent = new \Jenssegers\Agent\Agent();
+            $agent->setUserAgent($agentString);
+            $agentInfo = [
+                'languages' => $agent->languages(),
+                'device' => $agent->device(),
+                'platform' => $agent->platform(),
+                'platform_version' => $agent->version($agent->platform()),
+                'browser' => $agent->browser(),
+                'browser_version' => $agent->version($agent->browser()),
+                'is_robot' => $agent->isRobot(),
+                'robot' => $agent->robot(),
+            ];
+        } catch (\Throwable $th) {
+            \Log::error('Can not detect agent info for activity log: ' . $th->getMessage());
+        }
+
+        $info = [
+            'ip' => $ip,
+            'agent' => $agentString,
+            'from' => request()->headers->get('referer'),
+            'location' => $location,
+            'agent_info' => $agentInfo
+        ];
+
+        $info = array_merge($info, $custom);
+
+        return $info;
+    }
+}
+
 // case insensitive array_unique
 if (!function_exists('array_iunique')) {
     function array_iunique($array) {
