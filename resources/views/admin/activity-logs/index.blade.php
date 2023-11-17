@@ -73,6 +73,9 @@
                                 </select>
                             @endforeach
                         </div>
+                        <div class="col-lg-2">
+                            <input type="text" name="period" class="form-control table-filter daterangepicker-mult">
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -127,6 +130,11 @@
                                     <em>deleted</em>:
                                     model deleted
                                 </li>
+                                <li>
+                                    <em>view</em>:
+                                    model been viewed
+                                    <small>IP and User-Agent can be found in 'properties' field.</small>
+                                </li>
                             </ul>
                         </li>
                         <li>
@@ -165,6 +173,11 @@
                                     <em>logout</em>:
                                     user logged out.
                                     <small>IP and User-Agent can be found in 'properties' field.</small>
+                                </li>
+                                <li>
+                                    <em>contacts</em>:
+                                    user contacts been requested.
+                                    <small>IP, User-Agent and outgoing page can be found in 'properties' field.</small>
                                 </li>
                             </ul>
                         </li>

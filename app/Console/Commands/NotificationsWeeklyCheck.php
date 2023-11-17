@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Enums\NotificationGroup;
-use App\Models\Notification;
-use App\Models\View;
+use Log;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Setting;
-use Log;
+use App\Models\Notification;
+use Illuminate\Console\Command;
+use App\Enums\NotificationGroup;
+use Spatie\Activitylog\Models\Activity;
 
 class NotificationsWeeklyCheck extends Command
 {
@@ -60,11 +60,12 @@ class NotificationsWeeklyCheck extends Command
 
             // contact views
             $min = Setting::get('notif_weekly_contacts_views_min');
-            $viewsByUser = View::query()
-                ->where('viewable_type', 'UserContacts')
+            $viewsByUser = Activity::query()
+                ->where('log_name', 'users')
+                ->where('event', 'contacts')
                 ->where('created_at', '>=', now()->subWeek())
                 ->get()
-                ->groupBy('viewable_id');
+                ->groupBy('subject_id');
             foreach ($postsByUser as $uId => $items) {
                 $count = $items->count();
 
@@ -81,11 +82,10 @@ class NotificationsWeeklyCheck extends Command
 
             // user page views
             $min = Setting::get('notif_weekly_profile_views_min');
-            $viewsByUser = View::query()
-                ->where('viewable_type', User::class)
+            $viewsByUser = User::getAllViews(true)
                 ->where('created_at', '>=', now()->subWeek())
                 ->get()
-                ->groupBy('viewable_id');
+                ->groupBy('subject_id');
             foreach ($viewsByUser as $uId => $items) {
                 $count = $items->count();
 

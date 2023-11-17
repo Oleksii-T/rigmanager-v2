@@ -324,7 +324,7 @@ class PostController extends Controller
             $mail->cc($e);
         }
 
-        if (false && !$author->info->is_registered) {
+        if (!$author->info->is_registered) {
             if (Setting::get('non_reg_send_price_req', true, true)) {
                 $mail->send(new \App\Mail\PostTbaForNonReg($post, $from, $input['message']));
             }

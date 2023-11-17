@@ -33,6 +33,18 @@ class UserController extends Controller
         $phones = array_filter($user->info->phones??[]);
         $emails = $user->getEmails();
 
+        activity('users')
+            ->event('contacts')
+            ->on($user)
+            ->tap(function(\Spatie\Activitylog\Contracts\Activity $activity) {
+                $activity->properties = [
+                    'ip' => request()->ip(),
+                    'agent' => request()->header('User-Agent'),
+                    'from' => request()->headers->get('referer')
+                ];
+            })
+            ->log('');
+
         return $this->jsonSuccess('', [
             'emails' => $emails,
             'phones' => $phones ? $phones : trans('ui.notSpecified'),

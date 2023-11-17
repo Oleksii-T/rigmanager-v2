@@ -229,6 +229,7 @@
     font-size: 80%;
 }
 
+
 /* typeahead */
 .tt-menu {
     border: 1px solid #1f1f1f;
@@ -244,6 +245,9 @@
 }
 .tt-menu .tt-suggestion.tt-cursor {
     background: #626262;
+}
+.top-form-line .twitter-typeahead {
+    flex: 1;
 }
 
 /* bootstrap-ish  */

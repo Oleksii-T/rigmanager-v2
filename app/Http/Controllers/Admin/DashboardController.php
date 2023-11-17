@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Blog;
 use App\Models\Import;
 use App\Models\Mailer;
-use App\Models\Blog;
-use App\Models\Feedback;
 use App\Models\Message;
-use App\Models\View;
+use App\Models\Feedback;
 use App\Models\Notification;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use App\Http\Controllers\Controller;
+use Spatie\Activitylog\Models\Activity;
 
 class DashboardController extends Controller
 {
@@ -27,7 +27,6 @@ class DashboardController extends Controller
             'postsNumbers' => $this->getPostsNumbers(),
             'feedbacksNumbers' => $this->getFeedbacksNumbers(),
             'messagesNumbers' => $this->getMessagesNumbers(),
-            'mailersNumbers' => $this->getMailersNumbers(),
             'postViewsNumbers' => $this->getPostViewsNumbers(),
             'blogViewsNumbers' => $this->getBlogViewsNumbers(),
             'notificationViewsNumbers' => $this->getNotificationViewsNumbers(),
@@ -61,11 +60,15 @@ class DashboardController extends Controller
             ],
             [
                 'label' => 'Post Views',
-                'data' => $this->constructChartData(View::where('viewable_type', Post::class)->where('is_fake', false))
+                'data' => $this->constructChartData(Post::getAllViews())
             ],
             [
                 'label' => 'Blog Views',
-                'data' => $this->constructChartData(View::where('viewable_type', Blog::class)->where('is_fake', false))
+                'data' => $this->constructChartData(Blog::getAllViews())
+            ],
+            [
+                'label' => 'User Views',
+                'data' => $this->constructChartData(User::getAllViews())
             ],
             [
                 'label' => 'Notifications',
@@ -82,18 +85,32 @@ class DashboardController extends Controller
 
     private function constructChartData($query)
     {
-        $from = request()->from ?? now()->subMonth();
+        $period = explode(' - ', request()->period);
+        $from = $period[0];
+        $to = $period[1];
         $result = [];
-        $to = request()->to ?? now();
         $models = $query
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
-            ->whereDate('created_at', '<=', $to)
             ->whereDate('created_at', '>=', $from)
+            ->whereDate('created_at', '<=', $to)
             ->groupBy('date')
             ->get();
 
+        // fill the dates
+        $from = Carbon::parse($from);
+        $to = Carbon::parse($to);
+        $diff = $from->diffInDays($to);
+
+        for ($i=0; $i < $diff+1; $i++) {
+            $result[] = [
+                'x' => (clone $from)->addDays($i)->timestamp * 1000,
+                'y' => 0
+            ];
+        }
+
+        // fill actual data
         foreach ($models as $model) {
-            $date = Carbon::createFromFormat('Y-m-d', $model->date)->timestamp * 1000;
+            $date = Carbon::parse($model->date)->timestamp * 1000;
             $result[] = [
                 'x' => $date,
                 'y' => $model->count
@@ -157,7 +174,12 @@ class DashboardController extends Controller
 
     private function getBlogViewsNumbers()
     {
-        $models = View::where('is_fake', false)->where('viewable_type', Blog::class)->get();
+        $models = Activity::query()
+            ->where('log_name', 'models')
+            ->where('event', 'view')
+            ->where('properties->is_fake', false)
+            ->where('subject_type', Blog::class)
+            ->get();
         $data = $this->getDataByCreatedAt($models);
         $data['total'] = $models->count();
 
@@ -166,7 +188,12 @@ class DashboardController extends Controller
 
     private function getPostViewsNumbers()
     {
-        $models = View::where('is_fake', false)->where('viewable_type', Post::class)->get();
+        $models = Activity::query()
+            ->where('log_name', 'models')
+            ->where('event', 'view')
+            ->where('properties->is_fake', false)
+            ->where('subject_type', Post::class)
+            ->get();
         $data = $this->getDataByCreatedAt($models);
         $data['total'] = $models->count();
 

@@ -22,31 +22,18 @@ $(document).ready(function () {
 
         drawChart(charts[key]);
     }
-
-    $('[name="chart_data"]').change(function(e) {
-        let date = $(this).val().split(' - ');
-        console.log(` date`, date); //! LOG
-        let url = $(this).closest('.card').find('canvas').data('url');
-        console.log(` url `, url); //! LOG
-        $.ajax({
-            url,
-            data: {
-                from: date[0],
-                to: date[1],
-            },
-            success: (response)=>{
-                console.log(response);
-            },
-            error: function(response) {
-                console.log(response);
-            }
-        });
-    })
 });
 
 function getChartTimeOptions() {
     return {
         scales: {
+            y: {
+                beginAtZero: true,
+                min: 0,
+                ticks: {
+                    stepSize: 1,
+                }
+            },
             x: {
                 type: 'time',
                 time: {
@@ -57,55 +44,12 @@ function getChartTimeOptions() {
     };
 }
 
-function makeLineChart(elem) {
-    return new Chart(elem, {
-        type: 'line',
-        data: {
-            // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: 'Users created',
-                data: [],
-                // backgroundColor: [
-                //     'rgba(255, 99, 132, 0.2)',
-                //     'rgba(54, 162, 235, 0.2)',
-                //     'rgba(255, 206, 86, 0.2)',
-                //     'rgba(75, 192, 192, 0.2)',
-                //     'rgba(153, 102, 255, 0.2)',
-                //     'rgba(255, 159, 64, 0.2)'
-                // ],
-                // borderColor: [
-                //     'rgba(255, 99, 132, 1)',
-                //     'rgba(54, 162, 235, 1)',
-                //     'rgba(255, 206, 86, 1)',
-                //     'rgba(75, 192, 192, 1)',
-                //     'rgba(153, 102, 255, 1)',
-                //     'rgba(255, 159, 64, 1)'
-                // ],
-                // borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day'
-                    }
-                }
-            }
-        }
-    });
-}
-
 function drawChart(chartItem) {
-    let period = chartItem.elem.closest('.card').find('input[name=period]').val().split(' - ');
+    let period = chartItem.elem.closest('.card').find('input[name=period]').val();
     $.ajax({
         url: chartItem.elem.data('url'),
         type: 'get',
-        data: {
-            from: period[0],
-            to: period[1]
-        },
+        data: {period},
         success: (response)=>{
             let data = response.data;
 

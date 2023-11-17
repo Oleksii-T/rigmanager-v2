@@ -22,6 +22,10 @@ class ActivityLogController extends Controller
         }
 
         $activity = Activity::query()
+            ->when($request->period, function ($q) {
+                $period = explode(' - ', request()->period);
+                $q->where('created_at', '>=', $period[0] . ' 00:00:00')->where('created_at', '<=', $period[1] . ' 23:59:59');
+            })
             ->when($request->log_name, function ($q) {
                 $q->where('log_name', request()->log_name);
             })

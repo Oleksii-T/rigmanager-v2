@@ -3,7 +3,7 @@ $(document).ready(function () {
     let urlSearchParams = new URLSearchParams(window.location.search);
 
     // autocomplete global search
-    $('[name="search"]').typeahead(
+    $('.typeahead-input').typeahead(
         {
             // hint: true,
             highlight: true,
