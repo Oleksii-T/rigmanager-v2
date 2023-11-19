@@ -101,7 +101,7 @@
                 </a>
                 <div class="faq-hidden form-block">
                     <div class="row filter-block">
-                        <x-profile.post-filters />
+                        <x-profile.post-filters ttt="my-posts" />
 
                         <!--status-->
                         <div class="col-6">

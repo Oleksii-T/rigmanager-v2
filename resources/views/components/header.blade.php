@@ -22,7 +22,7 @@
                 <div class="header-search-form">
                     <form action="{{route('search')}}">
                         <fieldset>
-                            <input type="text" name="search" class="header-search-input typeahead-input" placeholder="@lang('ui.search')" required>
+                            <input type="text" name="search" class="header-search-input typeahead-input" data-ttt="title" placeholder="@lang('ui.search')" required>
                             <button class="header-search-button"></button>
                         </fieldset>
                     </form>

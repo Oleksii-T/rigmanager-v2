@@ -3,7 +3,9 @@
     <label class="label">@lang('ui.search')</label>
     <form method="GET" action="{{route('profile.posts')}}">
         <fieldset>
-            <input type="text" class="input" placeholder="@lang('ui.search')" name="search">
+            <div class="tt-input-field-wrapper">
+                <input type="text" class="input typeahead-input" data-ttt="{{$ttt}}" placeholder="@lang('ui.search')" name="search">
+            </div>
             <button class="search-button"></button>
         </fieldset>
     </form>

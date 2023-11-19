@@ -64,7 +64,10 @@ class DevController extends Controller
 
     private function test()
     {
+        $post = Post::find(356);
+        $d = $post->favoriteBy->first()->toArray();
 
+        $this->d($d);
     }
 
     // dummy method

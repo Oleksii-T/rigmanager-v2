@@ -51,9 +51,8 @@ class SearchController extends Controller
         ]);
     }
 
-    public function autocomplete(Request $request)
+    public function autocomplete(Request $request, $type)
     {
-        $maxResultCount = 10;
         $search = $request->search;
         $searchLen = strlen($search);
 
@@ -61,7 +60,15 @@ class SearchController extends Controller
             return []; // do not suggest for long search strings
         }
 
-        $cKey = "autocomplete-search-for-$search";
+        if ($type == 'my-posts') {
+            $column = 'title';
+        } else if ($type == 'favorites') {
+            $column = 'title';
+        } else {
+            $column = $type;
+        }
+
+        $cKey = "autocomplete-search-for-$type-$search";
         // cache()->forget($cKey); //! dev
         $result = cache()->get($cKey, null);
 
@@ -69,31 +76,44 @@ class SearchController extends Controller
             return $result;
         }
 
-        $endWordChars = [' ', '-', ',', '.', '{', '}', '(', ')'];
-        $result = [];
-
         // get post titles where search string found
-        $postTitles = Post::query()
+        $posts = Post::query()
             ->visible()
-            ->whereHas('translations', function ($q) use ($search) {
-                $q->where('field', 'title');
-                $q->where('locale', LaravelLocalization::getCurrentLocale());
-                $q->where('value', 'like', "%$search%");
-            })
+            ->when($type == 'my-posts', fn ($q) => $q->where('user_id', auth()->id()))
+            ->when($type == 'favorites', fn ($q) => $q->whereRelation('favoriteBy', 'user_id', auth()->id()))
+            ->when($column=='title', fn ($q) => $q->whereHas('translations', function ($q1) use ($search) {
+                $q1->where('field', 'title');
+                $q1->where('locale', LaravelLocalization::getCurrentLocale());
+                $q1->where('value', 'like', "%$search%");
+            }))
+            ->when($column=='manufacturer', fn ($q) => $q->where('manufacturer', 'like', "%$search%"))
             ->latest()
-            ->select('id')
-            ->get()
-            ->map(fn($post) => $post->title)
-            ->toArray();
+            ->select('id', 'manufacturer')
+            ->get();
+
+        $posts = $posts->map(fn($model) => $model->$column)->toArray();
+
+        $result = $this->formatAutocomplete($posts, $search);
+
+        cache()->put($cKey, $result, 60*5);
+
+        return $result;
+    }
+
+    private function formatAutocomplete($strings, $search, $maxResultCount=10)
+    {
+        $searchLen = strlen($search);
+        $endWordChars = [' ', '-', ',', '.', '{', '}', '(', ')'];
+        $result = [];;
 
         // get two words from post titles with search string
-        foreach ($postTitles as $title) {
-            $pos = strripos($title, $search);
+        foreach ($strings as $autocompleteString) {
+            $pos = strripos($autocompleteString, $search);
 
             // find start of the search string
             $startOfAutocompleteString = 0;
             for ($i=$pos; $i >= 0; $i--) {
-                if (in_array($title[$i], $endWordChars)) {
+                if (in_array($autocompleteString[$i], $endWordChars)) {
                     $startOfAutocompleteString = $i+1;
                     break;
                 }
@@ -103,13 +123,13 @@ class SearchController extends Controller
             $endOfAutocompleteString = $startOfAutocompleteString;
             $wordsToFind = 2 + substr_count($search, ' ');
             $wordsFound = 0;
-            $maxLengthOfAutocomplete = min($startOfAutocompleteString+$searchLen+30, strlen($title));
+            $maxLengthOfAutocomplete = min($startOfAutocompleteString+$searchLen+30, strlen($autocompleteString));
             $prevCharIsEndWord = false;
 
             for ($i=$startOfAutocompleteString; $i < $maxLengthOfAutocomplete; $i++) {
                 $endOfAutocompleteString++;
 
-                if (!in_array($title[$i], $endWordChars)) {
+                if (!in_array($autocompleteString[$i], $endWordChars)) {
                     $prevCharIsEndWord = false;
                     continue;
                 }
@@ -131,7 +151,7 @@ class SearchController extends Controller
                 continue; // skip if autocomplete string somehow smaller than search string
             }
 
-            $autocompleteString = substr($title, $startOfAutocompleteString, $lengthOfAutocompleteString);
+            $autocompleteString = substr($autocompleteString, $startOfAutocompleteString, $lengthOfAutocompleteString);
             $autocompleteString = trim($autocompleteString);
             $result[] = $autocompleteString;
         }
@@ -146,8 +166,6 @@ class SearchController extends Controller
         $result = array_iunique($result);
         $result = array_slice($result, 0, $maxResultCount);
         $result = array_values($result);
-
-        cache()->put($cKey, $result, 60*5);
 
         return $result;
     }

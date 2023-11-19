@@ -24,7 +24,7 @@
                     <form action="{{route('search')}}">
                         <fieldset>
                             <div class="top-form-line">
-                                <input type="text" class="input typeahead-input" name="search" placeholder="@lang('ui.search')" required>
+                                <input type="text" class="input typeahead-input" data-ttt="title" name="search" placeholder="@lang('ui.search')" required>
                                 <button class="button">@lang('ui.search')</button>
                             </div>
                         </fieldset>

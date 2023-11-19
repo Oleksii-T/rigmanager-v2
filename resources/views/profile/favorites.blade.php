@@ -55,7 +55,7 @@
                 </a>
                 <div class="faq-hidden form-block">
                     <div class="row filter-block">
-                        <x-profile.post-filters />
+                        <x-profile.post-filters ttt="favorites" />
 
                         <div class="col-12">
                             <div class="searched-categories-content"></div>

@@ -231,10 +231,20 @@
 
 
 /* typeahead */
+.tt-input-field-wrapper {
+    margin-bottom: 27px;
+}
+.tt-input-field-wrapper > span {
+    width: 100%;
+}
+.tt-input-field-wrapper .typeahead-input {
+    margin: 0;
+}
 .tt-menu {
     border: 1px solid #1f1f1f;
     border-radius: 8px;
     overflow: hidden;
+    z-index: 101 !important;
 }
 .tt-menu .tt-suggestion{
     padding: 6px 15px;

@@ -81,7 +81,9 @@
                                     </div>
                                 </div>
                             </label>
-                            <input class="input input-long" name="title" type="text"/>
+                            <div class="tt-input-field-wrapper">
+                                <input class="input input-long typeahead-input" data-ttt="title" name="title" type="text"/>
+                            </div>
                             <div data-input="title" class="form-error"></div>
                             <div class="form-note lifetime-note-pre">@lang('ui.titleSeHelp')</div>
 
@@ -308,7 +310,9 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="label">@lang('ui.chooseManufacturer')</label>
-                                            <input class="input" name="manufacturer" type="text"/>
+                                            <div class="tt-input-field-wrapper">
+                                                <input class="input typeahead-input" data-ttt="manufacturer" name="manufacturer" type="text"/>
+                                            </div>
                                             <div data-input="manufacturer" class="form-error"></div>
                                         </div>
 

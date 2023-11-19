@@ -51,7 +51,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('site-map', [PageController::class, 'siteMap'])->name('site-map');
     Route::get('categories', [PageController::class, 'categories'])->name('categories');
     Route::get('catalog/{slug1?}/{slug2?}/{slug3?}', [SearchController::class, 'index'])->name('search');
-    Route::get('search-autocomplete', [SearchController::class, 'autocomplete']);
+    Route::get('search-autocomplete/{type}', [SearchController::class, 'autocomplete']);
 
     Route::get('blog', [BlogController::class, 'index'])->name('blog.index');
     Route::get('blog/{blog}', [BlogController::class, 'show'])->name('blog.show');

@@ -3,23 +3,26 @@ $(document).ready(function () {
     let urlSearchParams = new URLSearchParams(window.location.search);
 
     // autocomplete global search
-    $('.typeahead-input').typeahead(
-        {
-            // hint: true,
-            highlight: true,
-            minLength: 1
-        },
-        {
-            limit: 50,
-            source: function (search, cb, acb) {
-                $.ajax({
-                    url: '/search-autocomplete',
-                    data: {search},
-                    success: (response) => acb(response),
-                });
+    $('.typeahead-input').each(function(index) {
+        let type = $(this).data('ttt');
+        $(this).typeahead(
+            {
+                // hint: true,
+                highlight: true,
+                minLength: 1
+            },
+            {
+                limit: 50,
+                source: function (search, cb, acb) {
+                    $.ajax({
+                        url: `/search-autocomplete/${type}`,
+                        data: {search},
+                        success: (response) => acb(response),
+                    });
+                }
             }
-        }
-    );
+        );
+    });
 
     // init user friendly title tooltips
     $( document ).tooltip({
@@ -768,10 +771,8 @@ function initPageAssists(currentRoute) {
         }
 
         let interval = setInterval(() => {
-            console.log(`Interval tick`, secondsPassed); //! LOG
 
             if (secondsPassed >= config.show_after_seconds) {
-                console.log(` show page assist`); //! LOG
                 showPageAssist(assistType);
                 clearInterval(interval);
             }
