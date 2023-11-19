@@ -71,4 +71,14 @@ class PageController extends Controller
     {
         return view('privacy');
     }
+
+    public function pageAssistShown(Request $request)
+    {
+        activity('page-assists')
+            ->event($request->type)
+            ->tap(function(\Spatie\Activitylog\Contracts\Activity $activity) {
+                $activity->properties = infoForActivityLog();
+            })
+            ->log('');
+    }
 }

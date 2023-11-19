@@ -419,7 +419,7 @@ $(document).ready(function () {
             success: function(response) {
                 button.removeClass('loading');
                 let emails = response.data.emails.join(', ');
-                let phones = response.data.phones.join(', ');
+                let phones =  Array.isArray(response.data.phones) ? response.data.phones.join(', ') : response.data.phones;
                 swal.fire({
                     html: `<p>${trans('ui_email')}: <b>${emails}</b></p>
                         <p>${trans('ui_phone')}: <b>${phones}</b></p>`,
@@ -536,13 +536,50 @@ $(document).ready(function () {
             showToast(response.message);
         });
     })
+
+    //user adds post to favourites
+    $(document).on('click', '.add-to-fav', function (e) {
+        e.preventDefault();
+        let button = $(this);
+        if (button.hasClass('loading')) {
+            return;
+        }
+        let url = button.attr('href');
+        button.addClass('loading')
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                _method: 'PUT',
+                _token: $('meta[name=csrf-token]').attr('content')
+            },
+            success: (response)=>{
+                showToast(response.message);
+                button.toggleClass('active');
+                button.removeClass('loading');
+            },
+            error: function(response) {
+                button.removeClass('loading');
+                showToast(response.responseJSON.message, false);
+
+            }
+        });
+    })
+
+    // close page assist
+    $('.page-assist .pa-close').click(function(e) {
+        e.preventDefault();
+        $(this).closest('.page-assist').addClass('d-none');
+    })
+
+    initPageAssists(window.Laravel.route_name);
 });
 
 function trans(key) {
     return window.Laravel.translations[key];
 }
 
-async function ajaxSubmit(form, formData, button, successCallback=null) {
+async function ajaxSubmit(form, formData, button, successCallback=null, errorCallback=null) {
     $('.form-error').empty();
     button.addClass('cursor-wait');
     $.ajax({
@@ -556,13 +593,16 @@ async function ajaxSubmit(form, formData, button, successCallback=null) {
             if (successCallback) {
                 successCallback(response);
                 return;
-            } else {
-                fullLoader(false);
-                button.removeClass('cursor-wait');
-                showServerSuccess(response);
             }
+            fullLoader(false);
+            button.removeClass('cursor-wait');
+            showServerSuccess(response);
         },
         error: function(response) {
+            if (errorCallback) {
+                errorCallback(response);
+                return;
+            }
             fullLoader(false);
             button.removeClass('cursor-wait');
             showServerError(response);
@@ -716,31 +756,64 @@ function toggleFaqText(item) {
 	}
 }
 
-//user adds post to favourites
-$(document).on('click', '.add-to-fav', function (e) {
-    e.preventDefault();
-    let button = $(this);
-    if (button.hasClass('loading')) {
-        return;
+// show user assistant modal based on current page and time passed
+function initPageAssists(currentRoute) {
+    let secondsPassed = 0;
+
+    for (const assistType in window.Laravel.page_assists_config) {
+        let config = window.Laravel.page_assists_config[assistType];
+
+        if (config.route_name != currentRoute || haveBeenCalled(assistType)) {
+            continue;
+        }
+
+        let interval = setInterval(() => {
+            console.log(`Interval tick`, secondsPassed); //! LOG
+
+            if (secondsPassed >= config.show_after_seconds) {
+                console.log(` show page assist`); //! LOG
+                showPageAssist(assistType);
+                clearInterval(interval);
+            }
+
+            secondsPassed += 1;
+        }, 1000);
+
+        break;
     }
-    let url = button.attr('href');
-    button.addClass('loading')
+}
+
+function showPageAssist(type) {
     $.ajax({
-        url: url,
+        url: '/page-assist',
         type: 'post',
         data: {
-            _method: 'PUT',
-            _token: $('meta[name=csrf-token]').attr('content')
-        },
-        success: (response)=>{
-            showToast(response.message);
-            button.toggleClass('active');
-            button.removeClass('loading');
-        },
-        error: function(response) {
-            button.removeClass('loading');
-            showToast(response.responseJSON.message, false);
-
+            type,
+            _token: $('meta[name="csrf-token"]').attr('content'),
         }
     });
-})
+    $(`#page-assist-${type}`).removeClass('d-none');
+    haveBeenCalled(type, true);
+}
+
+// returns true if function was already called with same input
+function haveBeenCalled(input, remember=false) {
+    // Retrieve the existing cookie
+    var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)uniqueTrigger\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+    // Parse the cookie value into an array
+    var usedInputs = cookieValue ? JSON.parse(cookieValue) : [];
+
+    // Check if the input has already been used
+    if (usedInputs.includes(input)) {
+        return true;
+    }
+
+    if (remember) {
+        // Add the new input to the array and update the cookie
+        usedInputs.push(input);
+        document.cookie = "uniqueTrigger=" + JSON.stringify(usedInputs) + ";path=/";
+    }
+
+    return false;
+}

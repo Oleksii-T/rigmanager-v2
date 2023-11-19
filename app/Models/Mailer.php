@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use Yajra\DataTables\DataTables;
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Mailer extends Model
 {
-    use LogsActivity;
+    use LogsActivityBasic;
 
     protected $fillable = [
         'user_id',
@@ -29,16 +28,6 @@ class Mailer extends Model
         'last_at' => 'datetime',
         'to_mail' => 'array'
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
 
     // Get the route key for the model.
     public function getRouteKeyName()

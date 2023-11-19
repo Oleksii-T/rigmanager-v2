@@ -6,16 +6,15 @@ use App\Traits\Viewable;
 use App\Mail\PasswordReset;
 use App\Traits\HasAttachments;
 use Yajra\DataTables\DataTables;
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasAttachments, Notifiable, Viewable, LogsActivity;
+    use HasAttachments, Notifiable, Viewable, LogsActivityBasic;
 
     const ONLINE_MINUTES = 5;
 
@@ -60,16 +59,6 @@ class User extends Authenticatable implements MustVerifyEmail
         static::created(function ($model) {
             $model->info()->create([]);
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at', 'last_active_at'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     // Get the route key for the model.

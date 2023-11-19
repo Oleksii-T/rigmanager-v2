@@ -4,14 +4,13 @@ namespace App\Models;
 
 use App\Traits\HasAttachments;
 use Yajra\DataTables\DataTables;
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Partner extends Model
 {
-    use HasAttachments, LogsActivity;
+    use HasAttachments, LogsActivityBasic;
 
     protected $fillable = [
         'user_id',
@@ -26,16 +25,6 @@ class Partner extends Model
         static::deleting(function ($model) {
             $model->purgeAttachments();
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     public function image()

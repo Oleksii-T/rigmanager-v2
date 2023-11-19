@@ -43,6 +43,7 @@ Route::get('logout', function () {
 Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(LaravelLocalization::setLocale())->group(function () {
 
     Route::get('/', [PageController::class, 'index'])->name('index');
+    Route::post('page-assist', [PageController::class, 'pageAssistShown']);
     Route::get('about', [PageController::class, 'about'])->name('about');
     Route::get('faq', [PageController::class, 'faq'])->name('faq');
     Route::get('privacy', [PageController::class, 'privacy'])->name('privacy');

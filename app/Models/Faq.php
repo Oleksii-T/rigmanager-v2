@@ -4,15 +4,14 @@ namespace App\Models;
 
 use App\Traits\HasTranslations;
 use Yajra\DataTables\DataTables;
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Faq extends Model
 {
-    use HasTranslations, LogsActivity;
+    use HasTranslations, LogsActivityBasic;
 
     protected $fillable = [
         'slug',
@@ -35,16 +34,6 @@ class Faq extends Model
         static::deleting(function ($model) {
             $model->purgeTranslations();
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     public function question(): Attribute

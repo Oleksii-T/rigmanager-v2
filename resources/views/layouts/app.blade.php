@@ -19,8 +19,60 @@
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/slick.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/jquery-ui.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom-swal.css')}}" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancyx/fancybox.css" />
 	@yield('style')
+    <style>
+        .page-assist {
+            position: fixed;
+            right: 30px;
+            max-width: 450px;
+            bottom: 30px;
+            background-color: #28282826 !important;
+            backdrop-filter: blur(9px);
+            border-radius: 8px !important;
+            border: 1px solid #505050 !important;
+            color: white !important;
+            padding: 20px 30px;
+            z-index: 1;
+        }
+        .page-assist svg path{
+            transition: all 0.3s linear;
+        }
+        .pa-header {
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .pa-header b{
+            color: #ff8d11;
+            font-size: 110%;
+        }
+        .pa-header span{
+            padding-top: 5px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            justify-items: center;
+        }
+        .pa-header span svg path{
+            fill: white
+        }
+        .pa-header span:hover svg path{
+            fill: #ff8d11
+        }
+        .pa-content {
+            padding-bottom: 20px;
+            white-space: pre-line;
+        }
+        .pa-content a{
+            color: #ff8d11;
+            text-decoration: underline;
+        }
+        .pa-content a:hover{
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 	<div id="wrapper">
@@ -70,6 +122,42 @@
             </p>
 		</div>
 	</div>
+
+    <div id="page-assist-importCreate" class="page-assist d-none">
+        <div>
+            <div class="pa-header">
+                <b>@lang('ui.page-assists.importCreate.title')</b>
+                <span class="pa-close">
+                    @svg('icons/close.svg')
+                </span>
+            </div>
+            <div class="pa-content">@lang('ui.page-assists.importCreate.body')</div>
+        </div>
+    </div>
+
+    <div id="page-assist-importValidationErrors" class="page-assist d-none">
+        <div>
+            <div class="pa-header">
+                <b>@lang('ui.page-assists.importValidationErrors.title')</b>
+                <span class="pa-close">
+                    @svg('icons/close.svg')
+                </span>
+            </div>
+            <div class="pa-content">@lang('ui.page-assists.importValidationErrors.body')</div>
+        </div>
+    </div>
+
+    <div id="page-assist-postCreate" class="page-assist d-none">
+        <div>
+            <div class="pa-header">
+                <b>@lang('ui.page-assists.postCreate.title')</b>
+                <span class="pa-close">
+                    @svg('icons/close.svg')
+                </span>
+            </div>
+            <div class="pa-content">@lang('ui.page-assists.postCreate.body')</div>
+        </div>
+    </div>
 
 	@yield('modals')
 

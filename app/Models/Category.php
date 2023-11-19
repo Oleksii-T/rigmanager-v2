@@ -5,14 +5,13 @@ namespace App\Models;
 use App\Traits\HasAttachments;
 use App\Traits\HasTranslations;
 use Yajra\DataTables\DataTables;
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Category extends Model
 {
-    use HasTranslations, HasAttachments, LogsActivity;
+    use HasTranslations, HasAttachments, LogsActivityBasic;
 
     protected $fillable = [
         'category_id',
@@ -36,16 +35,6 @@ class Category extends Model
             $model->purgeAttachments();
             $model->purgeTranslations();
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     // overload laravel`s method for route key generation

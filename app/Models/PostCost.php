@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class PostCost extends Model
 {
-    use LogsActivity;
+    use LogsActivityBasic;
 
     protected $fillable = [
         'post_id',
@@ -17,16 +16,6 @@ class PostCost extends Model
         'type',
         'cost'
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
 
     public function post()
     {

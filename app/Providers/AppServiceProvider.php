@@ -51,8 +51,28 @@ class AppServiceProvider extends ServiceProvider
                 'csrf' => csrf_token(),
                 'route_name' => \Route::currentRouteName(),
                 'translations' => [],
-                'recaptcha_key' => config('services.recaptcha.public_key')
-                // some more public data to use in JS
+                'recaptcha_key' => config('services.recaptcha.public_key'),
+                'page_assists_config' => [
+                    'importValidationErrors' => [
+                        'error_amount' => 3
+                    ],
+                    'importCreate' => [
+                        'show_after_seconds' => 60,
+                        'route_name' => 'imports.create'
+                    ],
+                    'postCreate' => [
+                        'show_after_seconds' => 60,
+                        'route_name' => 'posts.create'
+                    ],
+                    // 'postShow' => [
+                    //     'show_after_seconds' => 3,
+                    //     'route_name' => 'posts.show'
+                    // ],
+                    // 'subscriptionCreate' => [
+                    //     'show_after_seconds' => 3,
+                    //     'route_name' => 'subscriptions.create'
+                    // ],
+                ]
             ];
             $translationsForJs = [
                 'messages.inProgress',

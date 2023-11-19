@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Translation extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivityBasic;
 
     protected $fillable = [
         'translatable_id',
@@ -18,15 +17,6 @@ class Translation extends Model
         'field',
         'value'
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at'])
-            ->dontSubmitEmptyLogs();
-    }
 
     public function translatable()
     {

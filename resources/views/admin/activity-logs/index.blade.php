@@ -119,12 +119,12 @@
                                 <li>
                                     <em>created</em>:
                                     model created.
-                                    <small>All model attributes can be found in 'properties.attributes' field.</small>
+                                    <small>Model attributes can be found in 'properties.attributes' field.</small>
                                 </li>
                                 <li>
                                     <em>updated</em>:
                                     model updated.
-                                    <small>Old of model attributes can be found in 'properties.old' field. New model attributes can be found in 'properties.attributes' field.</small>
+                                    <small>Updated model attributes can be found in 'properties' field</small>
                                 </li>
                                 <li>
                                     <em>deleted</em>:
@@ -133,7 +133,6 @@
                                 <li>
                                     <em>view</em>:
                                     model been viewed
-                                    <small>IP and User-Agent can be found in 'properties' field.</small>
                                 </li>
                             </ul>
                         </li>
@@ -167,17 +166,35 @@
                                 <li>
                                     <em>login</em>:
                                     user logged in.
-                                    <small>IP and User-Agent can be found in 'properties' field.</small>
                                 </li>
                                 <li>
                                     <em>logout</em>:
                                     user logged out.
-                                    <small>IP and User-Agent can be found in 'properties' field.</small>
                                 </li>
                                 <li>
                                     <em>contacts</em>:
                                     user contacts been requested.
-                                    <small>IP, User-Agent and outgoing page can be found in 'properties' field.</small>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <b>page-assists</b>
+                            <ul>
+                                <li>
+                                    <em>import</em>:
+                                    import asisst modal shown.
+                                </li>
+                                <li>
+                                    <em>importValidationErrors</em>:
+                                    import validation errors asisst modal shown.
+                                </li>
+                                <li>
+                                    <em>postCreation</em>:
+                                    post creation asisst modal shown.
+                                </li>
+                                <li>
+                                    <em>postShow</em>:
+                                    post show asisst modal shown.
                                 </li>
                             </ul>
                         </li>

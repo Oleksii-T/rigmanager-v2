@@ -64,22 +64,7 @@ class DevController extends Controller
 
     private function test()
     {
-        $agentString = request()->header('User-Agent');
-        $this->d($agentString);
-        $agent = new \Jenssegers\Agent\Agent();
-        $agent->setUserAgent($agentString);
-        $agentInfo = [
-            'languages' => $agent->languages(),
-            'device' => $agent->device(),
-            'platform' => $agent->platform(),
-            'platform_version' => $agent->version($agent->platform()),
-            'browser' => $agent->browser(),
-            'browser_version' => $agent->version($agent->browser()),
-            'is_robot' => $agent->isRobot(),
-            'robot' => $agent->robot(),
-        ];
 
-        $this->d($agentInfo);
     }
 
     // dummy method

@@ -6,15 +6,14 @@ use App\Enums\NotificationType;
 use App\Traits\HasTranslations;
 use App\Enums\NotificationGroup;
 use Yajra\DataTables\DataTables;
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Notification extends Model
 {
-    use HasTranslations, LogsActivity;
+    use HasTranslations, LogsActivityBasic;
 
     protected $fillable = [
         'user_id',
@@ -40,16 +39,6 @@ class Notification extends Model
         static::deleting(function ($model) {
             $model->purgeTranslations();
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     public function user()

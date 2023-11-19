@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use Yajra\DataTables\DataTables;
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class ExchangeRate extends Model
 {
-    use LogsActivity;
+    use LogsActivityBasic;
 
     protected $fillable = [
         'auto_update',
@@ -17,16 +16,6 @@ class ExchangeRate extends Model
         'to',
         'cost'
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
 
     public static function convert($from, $to, $amount)
     {

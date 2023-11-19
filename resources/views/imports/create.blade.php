@@ -172,6 +172,8 @@
 @section('scripts')
     <script>
         let file = null;
+        let timesErrorOccured = 0;
+
         $(document).ready(function () {
             $('.back-to-file').click(function(e) {
                 e.preventDefault();
@@ -257,8 +259,24 @@
                     return;
                 }
                 fullLoader();
-                ajaxSubmit(form, formData, button);
+                ajaxSubmit(form, formData, button, null, function (response) {
+                    console.log(`custom error callback`); //! LOG
+                    button.removeClass('cursor-wait');
+                    showServerError(response);
+                    if (response.status == 422) {
+                        importValidationErrorOccured();
+                    }
+                });
             })
         });
+
+        function importValidationErrorOccured() {
+            timesErrorOccured++;
+            let type = 'importValidationErrors';
+
+            if (!haveBeenCalled(type) && timesErrorOccured >= window.Laravel.page_assists_config[type].error_amount) {
+                showPageAssist(type);
+            }
+        }
     </script>
 @endsection

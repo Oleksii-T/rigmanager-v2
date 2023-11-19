@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use Yajra\DataTables\DataTables;
-use Spatie\Activitylog\LogOptions;
+use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Feedback extends Model
 {
-    use LogsActivity;
+    use LogsActivityBasic;
 
     protected $fillable = [
         'user_id',
@@ -26,16 +25,6 @@ class Feedback extends Model
     protected $casts = [
         'status' => \App\Enums\FeedbackStatus::class
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->useLogName('models')
-            ->logAll()
-            ->logExcept(['updated_at'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
 
     public function user()
     {

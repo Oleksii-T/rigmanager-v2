@@ -13,6 +13,33 @@ return [
         'loginHelp' => '',
         'userNameHelp' => '',
     ],
+    'page-assists' => [
+        'importValidationErrors' => [
+            'title' => 'Having trouble?',
+            'body' => 'We detect you have few failed import submissions.
+Please, <a href="/contact-us" target="_blank">contact us</a> and we will provide help with your import file.
+Our support team can assist with import file creation based on your <b>personal documentation</b>!',
+        ],
+        'importCreate' => [
+            'title' => 'Need help?',
+            'body' => 'If you have any problems with importing, feel free to <a href="/contact-us" target="_blank">contact us</a>!
+Our support team provide assistant with import file creation based on yours <b>personal documentation</b>.',
+        ],
+        'postCreate' => [
+            'title' => 'Have any questions?',
+            'body' => 'Please, see <a href="/faq" target="_blank">FAQ page</a>.
+Or, feel free to <a href="/contact-us" target="_blank">contact the Support team</a> to clarify any detail.
+If you have significant amount of posts, consider using <a href="/imports" target="_blank">bulk posts import</a>.',
+        ],
+        'postShow' => [
+            'title' => '',
+            'body' => '',
+        ],
+        'subscriptionCreate' => [
+            'title' => '',
+            'body' => '',
+        ]
+    ],
     'workInProgress' => 'Work in progress',
     'development' => 'The site is at a late development stage. Coming soon.',
     'tagsCodesNotReady' => 'The list of categories is not ready. See list of categories in import file.',
