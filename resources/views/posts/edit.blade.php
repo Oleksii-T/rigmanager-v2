@@ -7,19 +7,9 @@
 @endsection
 
 @section('bc')
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name"></span>
-        <a itemprop="item" href="{{route('profile.posts')}}"><span itemprop="name">@lang('ui.myPosts')</span></a>
-        <meta itemprop="position" content="2" />
-    </li>
-    <li class="crop-bc-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a itemprop="item" href="{{route('posts.show', $post)}}"><span itemprop="name">{{$post->title}}</span></a>
-        <meta itemprop="position" content="3" />
-    </li>
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name">@lang('ui.postSettings')</span>
-        <meta itemprop="position" content="4" />
-    </li>
+    <x-bci :text="trans('ui.myPosts')" :href="route('')" i="2" />
+    <x-bci :text="$post->title" :href="route('posts.show', $post)" i="3" />
+    <x-bci :text="trans('ui.postSettings')" i="4" islast="1" />
 @endsection
 
 @section('style')

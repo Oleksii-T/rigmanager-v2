@@ -7,10 +7,7 @@
 @endsection
 
 @section('bc')
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name">@lang('ui.passReset')</span>
-        <meta itemprop="position" content="2" />
-    </li>
+    <x-bci :text="trans('ui.passReset')" i="2" islast="1" />
 @endsection
 
 @section('content')

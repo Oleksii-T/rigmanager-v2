@@ -1,10 +1,7 @@
 @extends('layouts.page')
 
 @section('bc')
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name">@lang('ui.auth')</span>
-        <meta itemprop="position" content="2" />
-    </li>
+    <x-bci :text="trans('ui.auth')" i="2" islast="1" />
 @endsection
 
 @section('content')

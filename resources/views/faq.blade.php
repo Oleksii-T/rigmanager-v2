@@ -7,10 +7,7 @@
 @endsection
 
 @section('bc')
-	<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-		<span itemprop="name">FAQ</span>
-		<meta itemprop="position" content="2" />
-	</li>
+    <x-bci text="FAQ" i="2" islast="1" />
 @endsection
 
 @section('content')

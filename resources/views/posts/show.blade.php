@@ -210,7 +210,7 @@
                 @endif
                 <div class="prod-info-item">
                     <div class="prod-info-name">{{__('ui.postCreated')}}</div>
-                    <div class="prod-info-text">{{$post->created_at->diffForHumans()}}</div>
+                    <div class="prod-info-text">{{$post->updated_at->diffForHumans()}}</div>
                 </div>
             </div>
         </div>

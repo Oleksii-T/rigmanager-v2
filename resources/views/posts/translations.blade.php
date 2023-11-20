@@ -8,22 +8,10 @@
 
 @section('bc')
     @if (isset($post))
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a itemprop="item" href="{{route('profile.posts')}}"><span itemprop="name">{{__('ui.myPosts')}}</span></a>
-            <meta itemprop="position" content="2" />
-        </li>
-        <li class="crop-bc-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a itemprop="item" href="{{route('posts.show', $post)}}"><span itemprop="name">{{$post->title_localed}}</span></a>
-            <meta itemprop="position" content="3" />
-        </li>
-		<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a itemprop="item" href="{{route('posts.edit', $post)}}"><span itemprop="name">{{__('ui.postSettings')}}</span></a>
-            <meta itemprop="position" content="4" />
-        </li>
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <span itemprop="name">{{__('ui.postTransSettings')}}</span>
-            <meta itemprop="position" content="5" />
-        </li>
+        <x-bci :text="trans('ui.myPosts')" :href="route('profile.posts')" i="2"/>
+        <x-bci :text="$post->title" :href="route('posts.show', $post)" i="3"/>
+        <x-bci :text="trans('ui.postSettings')" :href="route('posts.edit', $post)" i="4"/>
+        <x-bci :text="trans('ui.postTransSettings')" i="5" islast="1"/>
     @endif
 @endsection
 

@@ -7,20 +7,11 @@
 @endsection
 
 @section('bc')
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a itemprop="item" href="{{route('search')}}"><span itemprop="name">{{__('ui.catalog')}}</span></a>
-        <meta itemprop="position" content="2" />
-    </li>
+    <x-bci :text="trans('ui.catalog')" :href="route('search')" i="2"/>
     @foreach ($post->category->parents(true) as $category)
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a itemprop="item" href="{{$category->getUrl()}}"><span itemprop="name">{{$category->name}}</span></a>
-            <meta itemprop="position" content="{{$loop->index+3}}" />
-        </li>
+        <x-bci :text="$category->name" :href="$category->getUrl()" :i="$loop->index+3"/>
         @if ($loop->last)
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <span itemprop="name">{{$post->title}}</span>
-                <meta itemprop="position" content="{{$loop->index+4}}" />
-            </li>
+            <x-bci :text="$post->title" :i="$loop->index+4" islast="1"/>
         @endif
     @endforeach
 @endsection

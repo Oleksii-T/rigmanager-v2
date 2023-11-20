@@ -7,10 +7,7 @@
 @endsection
 
 @section('bc')
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name">{{__('ui.mySubscription')}}</span>
-        <meta itemprop="position" content="2" />
-    </li>
+    <x-bci :text="trans('ui.mySubscription')" i="2" islast="1"/>
 @endsection
 
 @section('content')

@@ -7,14 +7,8 @@
 @endsection
 
 @section('bc')
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a itemprop="item" href="{{route('mailers.index')}}"><span itemprop="name">{{__('ui.mailer')}}</span></a>
-        <meta itemprop="position" content="2" />
-    </li>
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name">{{__('ui.editing')}} "{{$mailer->title}}"</span>
-        <meta itemprop="position" content="3" />
-    </li>
+    <x-bci :text="trans('mailers.index')" :href="{{route('')}}" i="2" />
+    <x-bci :text="trans('ui.editing')" i="3" islast="1" />
 @endsection
 
 @section('content')
