@@ -13,6 +13,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\MailerController;
+use App\Http\Controllers\StripeController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\NotificationController;
 
@@ -58,7 +59,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::put('blog/{blog}/view', [BlogController::class, 'view'])->name('blog.view');
 
     Route::get('plans', [SubscriptionPlanController::class, 'index'])->name('plans.index');
-    Route::get('plans/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.subscribe');
+    Route::get('plans/{subscription_plan}/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.show');
 
     Route::get('contact-us', [FeedbackController::class, 'create'])->name('feedbacks.create');
     Route::post('contact-us', [FeedbackController::class, 'store'])->middleware('throttle:feedbacks', 'recaptcha')->name('feedbacks.store');
@@ -74,6 +75,11 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::middleware('auth')->group(function () {
 
         Route::middleware('verified')->group(function () {
+
+            // Subscription Stripe
+            Route::prefix('stripe')->group(function () {
+                Route::post('setup-intent', [StripeController::class, 'setupIntent']);
+            });
 
             Route::prefix('users')->name('users.')->group(function () {
                 Route::get('{user}/contacts', [UserController::class, 'contacts'])->name('contacts');

@@ -14,7 +14,6 @@
 	<div class="main-block">
 		<x-informations-nav active='plans'/>
 
-
 		<div class="content">
 			<h1>{{__('ui.footerSubscription')}}</h1>
 			@if (Session::has('subscription-required'))
@@ -196,11 +195,7 @@
 					@if (auth()->user() && auth()->user()->is_standart && !auth()->user()->is_pro)
 						<button href="" class="sub-button">{{__('ui.chosen')}}</button>
 					@else
-						<form action="" method="POST">
-							@csrf
-							<input type="text" name="plan" value="standart" hidden>
-							<button href="" class="not-ready sub-button">{{__('ui.plansChoose')}}</button>
-						</form>
+                        <a href="{{route('plans.show', $plans['premium']['monthly'])}}" class="sub-button">{{__('ui.choose')}}</a>
 					@endif
 				</div>
 				<!--pro column-->
@@ -266,7 +261,7 @@
 						</div>
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
-                    <a href="{{route('plans.subscribe')}}" class="not-ready sub-button">{{__('ui.choose')}}</a>
+                    <a href="{{route('plans.show', $plans['commercial']['monthly'])}}" class="sub-button">{{__('ui.choose')}}</a>
 				</div>
 			</div>
 		</div>

@@ -41,6 +41,9 @@ class Kernel extends ConsoleKernel
 
         // clear spatie activity logs
         $schedule->command('activitylog:clean')->daily();
+
+        // check subscriptions
+        $schedule->command('check:subscriptions')->daily();
     }
 
     /**

@@ -141,6 +141,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $messages;
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function paymentMethods()
+    {
+        return $this->hasMany(PaymentMethod::class);
+    }
+
     public function hasChatWith($uid)
     {
         $messages = $this->messages()
@@ -183,6 +193,17 @@ class User extends Authenticatable implements MustVerifyEmail
         $c = $this->posts()->whereHas('costs')->latest()->first()?->costs()->where('is_default', true)->value('currency');
 
         return $c ?? 'usd';
+    }
+
+    public function getDefaultPaymentMethod()
+    {
+        return $this->paymentMethods()->where('is_default', 1)->first();
+    }
+
+    public function activeSubscription()
+    {
+        // subscription is actve if it has active(payed) cycle, even if sub is canceled
+        return $this->subscriptions()->whereHas('cycle')->get()->first();
     }
 
     public static function dataTable($query)

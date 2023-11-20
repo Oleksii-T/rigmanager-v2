@@ -110,6 +110,14 @@ class Setting extends Model
                 'apple_auth_enabled' => 'Apple Auth Enabled',
             ]
         ],
+        [
+            'name' => 'Stripe',
+            'settings' => [
+                'stripe_public_key' => 'Public Key',
+                'stripe_secret_key' => 'Secret Key',
+                'stripe_product' => 'Product ID'
+            ]
+        ],
     ];
 
     public static function get($key, $onlyValue = true, $cache = false)

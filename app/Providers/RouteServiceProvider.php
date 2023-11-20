@@ -2,14 +2,15 @@
 
 namespace App\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
-use App\Models\Post;
 use App\Models\Blog;
+use App\Models\Post;
 use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Models\SubscriptionPlan;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('post', function ($value) {
             return Post::getBySlug($value);
+        });
+
+        Route::bind('subscription_plan', function ($value) {
+            return SubscriptionPlan::getBySlug($value);
         });
 
         Route::bind('category', function ($value) {

@@ -288,11 +288,21 @@ return [
             'route'  => 'admin.categories.index',
             'icon' => 'fas fa-fw fa-sitemap',
         ],
+        [
+            'text' => 'Subscriptions',
+            'route'  => 'admin.subscriptions.index',
+            'icon' => 'fas fa-fw fa-credit-card',
+        ],
         'SECONDARY SECTIONS',
         [
             'text' => 'Mailers',
             'route'  => 'admin.mailers.index',
             'icon' => 'fas fa-fw fa-inbox',
+        ],
+        [
+            'text' => 'Subscription Plans',
+            'route'  => 'admin.subscription-plans.index',
+            'icon' => 'fas fa-fw fa-shopping-cart',
         ],
         [
             'text' => 'Partners',

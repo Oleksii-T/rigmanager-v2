@@ -1,22 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\PostController;
-use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\FeedbackController;
-use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\BlogController;
-use App\Http\Controllers\Admin\MessageController;
-use App\Http\Controllers\Admin\ExchangeRateController;
-use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\MailerController;
+use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\FeedbackController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\ExchangeRateController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\SubscriptionPlanController;
 
 /*
  *
@@ -43,6 +45,10 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('categories', CategoryController::class);
 
     Route::resource('posts', PostController::class);
+
+    Route::resource('subscription-plans', SubscriptionPlanController::class)->except('show');
+
+    Route::resource('subscriptions', SubscriptionController::class)->only(['index', 'show', 'destroy']);
 
     Route::resource('mailers', MailerController::class)->except('show');
 
