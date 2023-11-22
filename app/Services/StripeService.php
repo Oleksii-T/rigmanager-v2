@@ -98,9 +98,8 @@ class StripeService
                 'email' => $user->email
             ]);
 
-            $user->update([
-                'stripe_id' => $customer->id
-            ]);
+            $user->stripe_id = $customer->id;
+            $user->save();
         }
 
         return $user;

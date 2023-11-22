@@ -148,11 +148,14 @@ class Setting extends Model
     public static function set($key, $value)
     {
         try {
+            $value = $value
+                ? is_string($value) ? ['value' => $value] : $value
+                : ['value' => $value];
             self::updateOrCreate([
                 'key' => $key
             ], [
                 'key' => $key,
-                'data' => is_string($value) ? ['value' => $value] : $value
+                'data' => $value
             ]);
 
             return true;

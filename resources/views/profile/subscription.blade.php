@@ -11,7 +11,6 @@
 @endsection
 
 @section('content')
-    <span class="hidden" data-categoryid="{{$category->id??null}}" page-data></span>
     <div class="main-block">
         <x-profile.nav active='fav'/>
         <div class="content">
@@ -20,7 +19,6 @@
                 <div class="pack-side">
                     <div class="pack-name">Activated subscription «<span class="orange">Pro</span>»</div>
                     <div class="pack-text"><a class="not-ready" href="#">Cancel subscription</a></div>
-
                 </div>
                 <div class="pack-button">
                     <a href="{{route('plans.index')}}" class="button button-light">Change plan</a>
@@ -41,9 +39,9 @@
                             <th>Payment</th>
                             <th>Status</th>
                         </tr>
-                        <tr><td>00000 <span class="history-table-date">2021-02-28</span></td>
+                        <tr><td>00000 <span class="history-table-date">2023-06-01</span></td>
                         <td>Pro</td>
-                        <td>2021-02-28</td>
+                        <td>2023-06-01</td>
                         <td></td>
                         <td>0</td>
                         <td><span class="history-status history-status-active">Active</span></td>
@@ -57,6 +55,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{asset('js/posts-filter.js')}}"></script>
-    <script src="{{asset('js/posts.js')}}"></script>
+
 @endsection

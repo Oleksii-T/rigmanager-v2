@@ -14,12 +14,12 @@ class SubscriptionPlanController extends Controller
         $plans = SubscriptionPlan::all();
         $plans = [
             'premium' => [
-                'monthly' => $plans->where('id', 3)->first(),
-                'yearly' => $plans->where('id', 4)->first(),
-            ],
-            'commercial' => [
                 'monthly' => $plans->where('id', 1)->first(),
                 'yearly' => $plans->where('id', 2)->first(),
+            ],
+            'commercial' => [
+                'monthly' => $plans->where('id', 3)->first(),
+                'yearly' => $plans->where('id', 4)->first(),
             ]
         ];
 

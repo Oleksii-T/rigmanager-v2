@@ -1,21 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SocialAuthController;
-use App\Http\Controllers\PageController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\SubscriptionPlanController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ImportController;
+use App\Http\Controllers\MailerController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\StripeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AttachmentController;
-use App\Http\Controllers\MailerController;
-use App\Http\Controllers\StripeController;
-use App\Http\Controllers\ImportController;
+use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\SubscriptionPlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +61,6 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::put('blog/{blog}/view', [BlogController::class, 'view'])->name('blog.view');
 
     Route::get('plans', [SubscriptionPlanController::class, 'index'])->name('plans.index');
-    Route::get('plans/{subscription_plan}/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.show');
 
     Route::get('contact-us', [FeedbackController::class, 'create'])->name('feedbacks.create');
     Route::post('contact-us', [FeedbackController::class, 'store'])->middleware('throttle:feedbacks', 'recaptcha')->name('feedbacks.store');
@@ -75,6 +76,15 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::middleware('auth')->group(function () {
 
         Route::middleware('verified')->group(function () {
+            Route::get('plans/{subscription_plan}/subscribe', [SubscriptionPlanController::class, 'show'])->name('plans.show');
+
+            // Subscriptions
+            Route::prefix('subscriptions')->name('subscriptions.')->group(function () {
+                Route::post('', [SubscriptionController::class, 'store'])->name('store');
+                Route::post('{subscription}/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
+            });
+
+            Route::post('payment-methods', [PaymentMethodController::class, 'store']);
 
             // Subscription Stripe
             Route::prefix('stripe')->group(function () {

@@ -16,8 +16,6 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        $settings = $request->s;
-
         foreach ($request->s as $key => $value) {
             Setting::set($key, $value);
         }
