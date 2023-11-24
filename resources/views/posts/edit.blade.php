@@ -7,7 +7,7 @@
 @endsection
 
 @section('bc')
-    <x-bci :text="trans('ui.myPosts')" :href="route('')" i="2" />
+    <x-bci :text="trans('ui.myPosts')" :href="route('profile.posts')" i="2" />
     <x-bci :text="$post->title" :href="route('posts.show', $post)" i="3" />
     <x-bci :text="trans('ui.postSettings')" i="4" islast="1" />
 @endsection

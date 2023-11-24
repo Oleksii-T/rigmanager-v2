@@ -18,6 +18,9 @@ class Chat extends Component
 
     public $chatWith;
 
+    #[Locked]
+    public $messageError;
+
     public function render()
     {
         $this->log("Render. chatting with: $this->chatWith");
@@ -51,9 +54,17 @@ class Chat extends Component
 
     public function sendMessage()
     {
+        $this->messageError = '';
         if (!$this->message) {
+            $this->messageError = 'Message is required';
             return;
         }
+
+        if (!auth()->user()->isSub()) {
+            $this->messageError = 'A subscriptoion required for this action. Learn more at <a href="/plans" style="color:#ff8d11">Paid plans</a> page.';
+            return;
+        }
+
         Message::create([
             'user_id' => auth()->id(),
             'reciever_id' => $this->chatWith,

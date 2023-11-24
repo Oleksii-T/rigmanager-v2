@@ -45,7 +45,7 @@
 					</div>
 				</div>
 				<!--start column-->
-				<div class="sub-col {{!$currentUser || !$currentUser->sub() ? 'sub-active' : ''}}">
+				<div class="sub-col {{!$currentUser || !$currentUser->isSub() ? 'sub-active' : ''}}">
 					<div class="sub-top">
 						<div class="sub-name">
 							<b>Standart</b>
@@ -70,7 +70,7 @@
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
 				</div>
 				<!--standart column-->
-				<div class="sub-col {{$currentUser?->sub(1, 'month') ? 'sub-active' : ''}}">
+				<div class="sub-col {{$currentUser?->isSub(1, 'month') ? 'sub-active' : ''}}">
 					<div class="sub-top">
 						<div class="sub-name">
 							<b>{{$plans[1]['month']->title}}</b>
@@ -94,19 +94,19 @@
                         <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="0" />
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
-					@if ($currentUser?->sub(1, 'month'))
+					@if ($currentUser?->isSub(1, 'month'))
 						<button href="#" class="sub-button interval-toggle">{{__('ui.chosen')}}</button>
 					@else
                         <a href="{{route('plans.show', $plans[1]['month'])}}" class="sub-button interval-toggle">{{__('ui.choose')}}</a>
 					@endif
-					@if ($currentUser?->sub(1, 'year'))
+					@if ($currentUser?->isSub(1, 'year'))
 						<button href="#" class="sub-button interval-toggle d-none">{{__('ui.chosen')}}</button>
 					@else
                         <a href="{{route('plans.show', $plans[1]['year'])}}" class="sub-button interval-toggle d-none">{{__('ui.choose')}}</a>
 					@endif
 				</div>
 				<!--pro column-->
-				<div class="sub-col {{$currentUser?->sub(2, 'month') ? 'sub-active' : ''}}">
+				<div class="sub-col {{$currentUser?->isSub(2, 'month') ? 'sub-active' : ''}}">
 					<div class="sub-top">
 						<div class="sub-name">
 							<b>{{$plans[2]['month']->title}}</b>
@@ -130,12 +130,12 @@
                         <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="1" />
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
-					@if ($currentUser?->sub(2, 'month'))
+					@if ($currentUser?->isSub(2, 'month'))
                         <button href="#" class="sub-button interval-toggle">{{__('ui.chosen')}}</button>
                     @else
                         <a href="{{route('plans.show', $plans[2]['month'])}}" class="sub-button interval-toggle">{{__('ui.choose')}}</a>
 					@endif
-					@if ($currentUser?->sub(2, 'year'))
+					@if ($currentUser?->isSub(2, 'year'))
                         <button href="#" class="sub-button interval-toggle d-none">{{__('ui.chosen')}}</button>
                     @else
                         <a href="{{route('plans.show', $plans[2]['year'])}}" class="sub-button interval-toggle d-none">{{__('ui.choose')}}</a>

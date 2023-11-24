@@ -22,9 +22,7 @@ class SubscriptionPlanController extends Controller
             ]
         ];
 
-        $showMonthlySubs = !$user || !$user->sub() || $user->sub(null, 'month');
-
-        return view('subscription-plans.index', compact('plans', 'showMonthlySubs'));
+        return view('subscription-plans.index', compact('plans'));
     }
 
     public function show(Request $request, SubscriptionPlan $subscriptionPlan)

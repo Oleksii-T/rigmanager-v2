@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
-use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\ProfilePasswordRequest;
 use App\Actions\Fortify\PasswordValidationRules;
 
@@ -177,6 +176,11 @@ class ProfileController extends Controller
 
         switch ($request->action) {
             case 'activete':
+
+                if ($this->reachedPostsLimit($user, $count-1)) {
+                    return $this->subscriptionErrorResponse(2);
+                }
+
                 $message = "$count posts activated";//! TRANSLATE
                 $query->update([
                     'is_active' => true
@@ -196,9 +200,16 @@ class ProfileController extends Controller
                 break;
             case 'recover':
                 $message = "$count posts recovered";//! TRANSLATE
-                $query->update([
+
+                $data = [
                     'is_trashed' => false
-                ]);
+                ];
+
+                if (!$user->isSub(2)) {
+                    $data['is_active'] = false;
+                }
+
+                $query->update($data);
                 break;
             default:
                 return $this->jsonError('Invalid action');//! TRANSLATE
@@ -249,7 +260,11 @@ class ProfileController extends Controller
 
     public function subscription(Request $request)
     {
-        return view('profile.subscription');
+        $user = auth()->user();
+        $sub = $user->activeSubscription();
+        $cycles = $sub?->cycles()->with('subscription')->latest()->get() ?? [];
+
+        return view('profile.subscription', compact('sub', 'cycles'));
     }
 
     /**

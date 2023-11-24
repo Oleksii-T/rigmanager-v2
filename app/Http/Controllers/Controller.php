@@ -2,44 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Traits\JsonResponsable;
+use App\Models\SubscriptionPlan;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, JsonResponsable;
 
-    /**
-     * Format of success json response for all ajax\axios requests
-     *
-     */
-    public function jsonSuccess($msg='', $data=null): JsonResponse
+    protected function reachedPostsLimit($user, $fix=0)
     {
-        $resp = [
-            'success' => true,
-            'data' => $data,
-            'message' => $msg
-        ];
-        return response()->json($resp);
-    }
+        $activePosts = $user->posts()->active()->where('is_trashed', false)->count() + $fix;
 
-    /**
-     * Format of error json response for all ajax\axios requests
-     *
-     */
-    public function jsonError($msg='Server Error', $data=null, $code=500): JsonResponse
-    {
-        if ($code == 422) {
-            return response()->json(['message'=>$msg,'errors' => $data], $code);
-        }
-        $res = [
-            'success' => false,
-            'data' => $data,
-            'message' => $msg
-        ];
-        return response()->json($res, $code);
+        return $activePosts >= SubscriptionPlan::MAX_POSTS_FOR_LEVEL_1 && !$user->isSub(2);
     }
 }

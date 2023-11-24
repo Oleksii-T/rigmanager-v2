@@ -23,6 +23,8 @@ class SubscriptionPlan extends Model
         'slug'
     ];
 
+    const MAX_POSTS_FOR_LEVEL_1 = 10;
+
     protected $fillable = [
         'stripe_id',
         'level',

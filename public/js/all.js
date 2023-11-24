@@ -353,7 +353,7 @@ $(document).ready(function () {
         e.stopPropagation();
     })
 
-    let flash = $('[flash-notif-data]').data('flash');
+    let flash = $('[data-flashnotif]').data('flashnotif');
     if (flash) {
         if (flash.level == 'success') {
             showToast(flash.message);
@@ -444,7 +444,7 @@ $(document).ready(function () {
             },
             error: function(response) {
                 button.removeClass('loading');
-                showToast(response.responseJSON.message, false);
+                showServerError(response);
             }
         });
     });
@@ -581,6 +581,12 @@ $(document).ready(function () {
         });
     })
 
+    // show subscription required modal
+    $('.sub-required-modal').click(function(e) {
+        e.preventDefault();
+        showSubRequiredModal();
+    })
+
     // close page assist
     $('.page-assist .pa-close').click(function(e) {
         e.preventDefault();
@@ -676,6 +682,14 @@ function fullLoader(show=true) {
 function showServerError(response) {
     fullLoader(false);
 
+    let msg = response.responseJSON?.message;
+    msg = msg ? msg : response.statusText;
+
+    if (response.status == 402) {
+        showSubRequiredModal(msg);
+        return;
+    }
+
     if (response.status == 422) {
         swal.close();
         let r = response.responseJSON ?? JSON.parse(response.responseText)
@@ -712,11 +726,20 @@ function showServerError(response) {
         if (input.length && !isScrolledIntoView(input)) {
             animatedScroll(input, 50);
         }
-    } else {
-        let msg = response.responseJSON?.message;
-        msg = msg ? msg : response.statusText;
-        showPopUp(null, msg ? msg : null, false);
+        return;
     }
+
+    showPopUp(null, msg ? msg : null, false);
+}
+
+// subscription required modal
+function showSubRequiredModal(msg='A subscriptoion required for this action.') {
+    swal.fire({
+        html: `<h2 class="swal2-title" style="padding: 0 0 24px 0">${msg}</h2>
+            <p>Learn more at <a href="/plans" >Paid plans</a> page.</p>`,
+        showConfirmButton: false,
+        showCancelButton: true,
+    });
 }
 
 // check is element in user`s viewport

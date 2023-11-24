@@ -2,20 +2,20 @@
 
 namespace App\Providers;
 
-use App\Actions\Fortify\CreateNewUser;
-use App\Actions\Fortify\ResetUserPassword;
-use App\Actions\Fortify\UpdateUserPassword;
-use App\Actions\Fortify\UpdateUserProfileInformation;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
+use App\Traits\JsonResponsable;
+use App\Actions\Fortify\CreateNewUser;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Cache\RateLimiting\Limit;
+use App\Actions\Fortify\ResetUserPassword;
+use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Contracts\RegisterResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
+
     /**
      * Register any application services.
      *
@@ -41,17 +41,15 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
         $this->app->instance(LoginResponse::class, new class implements LoginResponse {
+            use JsonResponsable;
+
             public function toResponse($request)
             {
                 if (!$request->ajax()) {
                     return redirect()->route('index');
                 }
-                return response()->json([
-                    'success' => true,
-                    'data' => [
-                        'redirect' => route('index')
-                    ],
-                    'message' => 'Logged in successfully'
+                return $this->jsonSuccess('Logged in successfully', [
+                    'redirect' => route('index')
                 ]);
             }
         });
@@ -66,14 +64,12 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.register');
         });
         $this->app->instance(RegisterResponse::class, new class implements RegisterResponse {
+            use JsonResponsable;
+
             public function toResponse($request)
             {
-                return response()->json([
-                    'success' => true,
-                    'data' => [
-                        'redirect' => route('index')
-                    ],
-                    'message' => 'Registered successfully'
+                return $this->jsonSuccess('Registered successfully', [
+                    'redirect' => route('index')
                 ]);
             }
         });

@@ -260,6 +260,14 @@
     flex: 1;
 }
 
+.sub-required-modal {
+    cursor: pointer !important;
+}
+.blurred {
+    color: transparent;
+    text-shadow: 0 0 7px #ff8d11;
+}
+
 /* help icon */
 .help-tooltip-icon {
     width: 18px;

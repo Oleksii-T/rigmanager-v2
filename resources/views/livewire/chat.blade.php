@@ -77,7 +77,7 @@
                                 @endforeach
                             </div>
                             <form wire:submit.debounce="sendMessage" class="chat-send-form">
-                                <div>
+                                <div class="chat-send-form-w">
                                     <textarea type="text" wire:model="message" placeholder="Type a message..."></textarea>
                                     <button type="submit" class="header-button loading-el" >
                                         <span class="loading-el-l">
@@ -87,12 +87,8 @@
                                             @lang('ui.chatSend')
                                         </span>
                                     </button>
-                                    @error('message')
-                                        <div>
-                                            <span class="input-error">{{ $message }}</span>
-                                        </div>
-                                    @enderror
                                 </div>
+                                <div class="form-error">{!! $messageError !!}</div>
                             </form>
                         </div>
                     @endif

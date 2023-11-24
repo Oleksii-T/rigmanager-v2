@@ -67,6 +67,11 @@ class PostController extends Controller
     public function store(PostRequest $request, TranslationService $translator)
     {
         $user = auth()->user();
+
+        if ($this->reachedPostsLimit($user)) {
+            return $this->subscriptionErrorResponse(2);
+        }
+
         $input = $request->validated();
         $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
         if (($input['cost_to']??false) && !($input['cost_from']??false)) {
@@ -198,7 +203,6 @@ class PostController extends Controller
         $input['origin_lang'] = $textLocale;
         $input['status'] = 'pending';
         $input['is_tba'] = $input['is_tba']??false;
-        $input['is_active']= true;
         $input['slug'] = [
             $textLocale => makeSlug($input['title'], Post::allSlugs($post->id))
         ];
@@ -269,6 +273,9 @@ class PostController extends Controller
             $post->is_active = false;
             $message = 'Post deactivated';//! TRANSLATE
         } else {
+            if ($this->reachedPostsLimit($user)) {
+                return $this->subscriptionErrorResponse(2);
+            }
             $post->is_active = true;
             $message = 'Post activated';//! TRANSLATE
         }
@@ -348,6 +355,11 @@ class PostController extends Controller
         $user = auth()->user();
 
         abort_if($post->user_id != $user->id, 403);
+
+        if ($post->is_active && $this->reachedPostsLimit($user)) {
+            $post->is_active = false;
+            $post->save();
+        }
 
         $post->update([
             'is_trashed' => false

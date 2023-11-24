@@ -215,7 +215,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->activeSubscription;
     }
 
-    public function sub(?int $level=null, ?string $interval=null)
+    public function isSub(?int $level=null, ?string $interval=null)
     {
         $sub = $this->activeSubscription();
 

@@ -19,7 +19,7 @@
             <div class="form-block">
                 <form action="{{route('mailers.update', $mailer)}}" method="POST" id="form-mailer" class="general-ajax-submit">
                     @csrf
-                    @method('PATCH')
+                    @method('PUT')
                     <fieldset>
                         <div class="form-section">
                             <label class="label">@lang('ui.mailerTitle') <span class="orange">*</span></label>

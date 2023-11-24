@@ -2,7 +2,7 @@
 
 @section('meta')
 	<title>{{$post->title . ' - ' . $post->category->name . ' ' . __('meta.title.post.show')}}</title>
-	<meta name="description" content="{{$post->cost_readable . ': ' . (strlen($post->description)>90 ? substr($post->description, 0, 90) . '...' : $post->description)}}">
+	<meta name="description" content="{{(strlen($post->description)>90 ? substr($post->description, 0, 90) . '...' : $post->description)}}">
     <meta name="robots" content="index, follow">
 @endsection
 
@@ -205,7 +205,11 @@
                 @if ($post->cost_readable)
                     <div class="prod-info-item">
                         <div class="prod-info-name">{{__('ui.cost')}}</div>
-                        <div class="prod-info-text">{{$post->cost_readable}}</div>
+                        @if ($currentUser && $currentUser->isSub())
+                            <div class="prod-info-text">{{$post->cost_readable}}</div>
+                        @else
+                            <div class="prod-info-text blurred sub-required-modal">00.000,00</div>
+                        @endif
                     </div>
                 @endif
                 <div class="prod-info-item">

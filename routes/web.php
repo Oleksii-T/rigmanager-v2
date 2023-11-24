@@ -92,7 +92,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
             });
 
             Route::prefix('users')->name('users.')->group(function () {
-                Route::get('{user}/contacts', [UserController::class, 'contacts'])->name('contacts');
+                Route::get('{user}/contacts', [UserController::class, 'contacts'])->name('contacts')->middleware('sub');
             });
 
             Route::prefix('imports')->name('imports.')->group(function () {
@@ -103,9 +103,9 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('{import}/download', [ImportController::class, 'download'])->name('download');
                 Route::post('{import}/posts/delete', [ImportController::class, 'postsDelete'])->name('posts.delete');
                 Route::post('{import}/posts/deactivate', [ImportController::class, 'postsDeactivate'])->name('posts.deactivate');
-                Route::post('{import}/posts/activate', [ImportController::class, 'postsActivate'])->name('posts.activate');
-                Route::post('prep', [ImportController::class, 'prepareStore'])->name('prep-store');
-                Route::post('', [ImportController::class, 'store'])->name('store');
+                Route::post('{import}/posts/activate', [ImportController::class, 'postsActivate'])->name('posts.activate')->middleware('sub:2');
+                Route::post('prep', [ImportController::class, 'prepareStore'])->name('prep-store')->middleware('sub:2');
+                Route::post('', [ImportController::class, 'store'])->name('store')->middleware('sub:2');
             });
 
             Route::prefix('posts')->name('posts.')->group(function () {
@@ -113,14 +113,14 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('{post}/edit', [PostController::class, 'edit'])->name('edit');
                 Route::get('{post}/views', [PostController::class, 'views'])->name('views');
                 Route::get('{post}/translations', [PostController::class, 'translationsEdit'])->name('translations.edit');
-                Route::post('', [PostController::class, 'store'])->name('store');
+                Route::post('', [PostController::class, 'store'])->name('store')->middleware('sub');
                 Route::post('{post}/translations/report', [PostController::class, 'translationsReport'])->name('translations.report');
-                Route::post('{post}/price-request', [PostController::class, 'priceRequest'])->name('price-request');
+                Route::post('{post}/price-request', [PostController::class, 'priceRequest'])->name('price-request')->middleware('sub');
                 Route::put('{post}/add-to-fav', [PostController::class, 'addToFav'])->name('add-to-fav');
-                Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle');
-                Route::put('{post}/translations', [PostController::class, 'translationsUpdate'])->name('translations.update');
-                Route::put('{post}', [PostController::class, 'update'])->name('update');
-                Route::put('{post}/recover', [PostController::class, 'recover'])->name('recover');
+                Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle')->middleware('sub');
+                Route::put('{post}/translations', [PostController::class, 'translationsUpdate'])->name('translations.update')->middleware('sub');
+                Route::put('{post}', [PostController::class, 'update'])->name('update')->middleware('sub');
+                Route::put('{post}/recover', [PostController::class, 'recover'])->name('recover')->middleware('sub');
                 Route::delete('{post}/trash', [PostController::class, 'trash'])->name('trash');
                 Route::delete('{post}', [PostController::class, 'destroy'])->name('destroy');
             });
@@ -128,14 +128,13 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
             Route::prefix('mailers')->name('mailers.')->group(function () {
                 Route::get('', [MailerController::class, 'index'])->name('index');
                 Route::get('{mailer}/edit', [MailerController::class, 'edit'])->name('edit');
-                Route::post('', [MailerController::class, 'store'])->name('store');
+                Route::post('', [MailerController::class, 'store'])->name('store')->middleware('sub');
                 Route::put('deactivate', [MailerController::class, 'deactivate'])->name('deactivate');
-                Route::put('{mailer}/toggle-active', [MailerController::class, 'toggle'])->name('toggle');
-                Route::put('{mailer}', [MailerController::class, 'update'])->name('update');
+                Route::put('{mailer}/toggle-active', [MailerController::class, 'toggle'])->name('toggle')->middleware('sub');
+                Route::put('{mailer}', [MailerController::class, 'update'])->name('update')->middleware('sub');
                 Route::delete('', [MailerController::class, 'destroyAll'])->name('destroy-all');
                 Route::delete('{mailer}', [MailerController::class, 'destroy'])->name('destroy');
             });
-            Route::resource('mailers', MailerController::class)->except('show');
 
             Route::prefix('profile')->name('profile.')->group(function () {
                 Route::get('/', [ProfileController::class, 'index'])->name('index');

@@ -108,7 +108,7 @@ if (!function_exists('dlog')) {
 // add flash notif for user
 if (!function_exists('flash')) {
     function flash(string $message, $type=true) {
-        session()->flash($type ? 'message-success' : 'messsage-error', $message);
+        session()->flash($type ? 'message-success' : 'message-error', $message);
     }
 }
 

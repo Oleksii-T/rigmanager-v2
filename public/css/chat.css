@@ -147,7 +147,7 @@
 .chat-send-form{
     padding-right: 25px;
 }
-.chat-send-form > div{
+.chat-send-form .chat-send-form-w{
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -155,6 +155,10 @@
     border: 1px solid #505050;
     border-radius: 8px;
     margin-right: 25px;
+}
+.chat-send-form .form-error{
+    margin: 0;
+    font-size: 90%;
 }
 .chat-send-form textarea{
     color: white;

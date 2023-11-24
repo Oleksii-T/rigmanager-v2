@@ -76,7 +76,7 @@
 </head>
 <body>
 	<div id="wrapper">
-        <div class="hidden" data-flash="{{json_encode(getActiveFlash())}}" flash-notif-data></div>
+        <div class="hidden" data-flashnotif="{{json_encode(getActiveFlash())}}"></div>
 		@yield('page-content')
 		<footer class="footer">
 			<div class="holder">

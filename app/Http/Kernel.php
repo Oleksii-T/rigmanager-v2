@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'is-admin' => \App\Http\Middleware\isAdmin::class,
         'save-activity' => \App\Http\Middleware\SaveActivity::class,
         'recaptcha' => \App\Http\Middleware\Recaptcha::class,
+        'sub' => \App\Http\Middleware\Subscribed::class,
 
         'localize'                => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
         'localizationRedirect'    => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,

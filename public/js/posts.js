@@ -77,8 +77,7 @@ $(document).ready(function() {
                     showServerSuccess(response);
                 },
                 error: function(response) {
-                    fullLoader(false);
-                    showPopUp('Error', response.responseJSON.message, false);
+                    showServerError(response);
                 }
             });
         });
