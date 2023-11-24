@@ -260,6 +260,22 @@
     flex: 1;
 }
 
+/* help icon */
+.help-tooltip-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+}
+.help-tooltip-icon svg{
+    vertical-align:text-bottom;
+}
+.help-tooltip-icon svg path {
+    transition: all .3s linear;
+}
+.help-tooltip-icon:hover svg path{
+    fill: #fff;
+}
+
 /* bootstrap-ish  */
 .d-none {
     display: none !important;

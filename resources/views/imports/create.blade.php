@@ -53,22 +53,6 @@
             text-decoration: underline
         }
 
-        /* help icon */
-        .help-tooltip-icon {
-            width: 18px;
-            height: 18px;
-            display: inline-block;
-        }
-        .help-tooltip-icon svg{
-            vertical-align:text-bottom;
-        }
-        .help-tooltip-icon svg path {
-            transition: all .3s linear;
-        }
-        .help-tooltip-icon:hover svg path{
-            fill: #fff;
-        }
-
         /* column select alert */
         .select-block.has-error .ui-selectmenu-button span.ui-selectmenu-text{
             border: 1px solid red;

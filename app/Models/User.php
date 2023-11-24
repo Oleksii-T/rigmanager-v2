@@ -10,6 +10,7 @@ use App\Traits\LogsActivityBasic;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -17,6 +18,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasAttachments, Notifiable, Viewable, LogsActivityBasic;
 
     const ONLINE_MINUTES = 5;
+
+    private $activeSubscription = 0;
 
     /**
      * The attributes that are mass assignable.
@@ -200,10 +203,45 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->paymentMethods()->where('is_default', 1)->first();
     }
 
+    // subscription is actve if it has active(payed) cycle, even if sub is canceled
     public function activeSubscription()
     {
-        // subscription is actve if it has active(payed) cycle, even if sub is canceled
-        return $this->subscriptions()->whereHas('cycle')->get()->first();
+        if ($this->activeSubscription !== 0) {
+            return $this->activeSubscription;
+        }
+
+        $this->activeSubscription = $this->subscriptions()->whereHas('cycle')->with('plan')->get()->first();
+
+        return $this->activeSubscription;
+    }
+
+    public function sub(?int $level=null, ?string $interval=null)
+    {
+        $sub = $this->activeSubscription();
+
+        if (!$sub) {
+            return false;
+        }
+
+        if (!$level && !$interval) {
+            return true;
+        }
+
+        $plan = $sub->plan;
+
+        if ($level && $interval) {
+            return $plan->level == $level && $plan->interval == $interval;
+        }
+
+        if ($level) {
+            return $plan->level == $level;
+        }
+
+        if ($interval) {
+            return $plan->interval == $interval;
+        }
+
+        return false;
     }
 
     public static function dataTable($query)

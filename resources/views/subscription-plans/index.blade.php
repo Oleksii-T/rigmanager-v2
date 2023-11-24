@@ -15,253 +15,131 @@
 		<x-informations-nav active='plans'/>
 
 		<div class="content">
-			<h1>{{__('ui.footerSubscription')}}</h1>
-			@if (Session::has('subscription-required'))
-				<div class="content-top-text content-top-error">{{ Session::get('subscription-required') }}</div>
-			@endif
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <h1>{{__('ui.footerSubscription')}}</h1>
+                <div class="tumbler">
+                    <a href="#" class="tumbler-left plan-interval-toggle active">Monthly</a>
+                    <span class="tumbler-block"></span>
+                    <a href="#" class="tumbler-right plan-interval-toggle">Yearly</a>
+                </div>
+            </div>
 			<div class="content-top-text">{{__('ui.plansFreeAccessTitle')}}
-				<a href="{{route('faq')}}#cost">{{__('ui.readMoreAboutPlans')}}</a></div>
+				<a href="{{route('feedbacks.create')}}">{{__('ui.askAboutPlans')}}</a>
+            </div>
 			<div class="sub">
 				<!--functionality name column-->
 				<div class="sub-side">
 					<div class="sub-info">
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.plansBrowse')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.plansSearch')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.plansFilter')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.plansFav')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.plansTranslate')}} <a href="{{route('faq')}}#WhatIsAutoTranslator">?</a></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.plansContacts')}}</div>
-						</div>
-						<div class="sub-info-item with-help">
-							<div class="sub-info-text">{{__('ui.publishPosts')}}
-							<span>{{__('ui.publishPosts1Help')}}</span></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.plansMailer')}} <a href="{{route('faq')}}#WhatIsMailer">?</a></div>
-						</div>
-						<div class="sub-info-item with-help">
-							<div class="sub-info-text">{{__('ui.publishPosts')}}
-								<span>{{__('ui.publishPosts2Help')}}</span></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.publishTenders')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.plansPostImport')}} <a href="{{route('faq')}}#WhatIsImport">?</a></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-info-text">{{__('ui.plansPostTracking')}}</div>
-						</div>
+                        <x-subf text="ui.plansBrowse" helpText="ui.plansBrowseHelp" />
+                        <x-subf text="ui.plansFav" />
+                        <x-subf text="ui.seeCosts" helpText="ui.seeCostsHelp" />
+                        <x-subf text="ui.plansContacts" helpText="ui.plansContactsHelp" />
+                        <x-subf text="ui.plansPriceRequests" helpText="ui.plansPriceRequestsHelp" />
+                        <x-subf text="ui.limitedPublishing" helpText="ui.limitedPublishingHelp" />
+                        <x-subf text="ui.plansTranslate" helpFaq="WhatIsAutoTranslator" />
+                        <x-subf text="ui.plansMailer" helpFaq="WhatIsMailer" />
+                        <x-subf text="ui.plansMessages" helpText="ui.plansMessagesHelp" />
+                        <x-subf text="ui.publishPosts" />
+                        <x-subf text="ui.plansPostImport" helpFaq="WhatIsImport" />
+                        <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" />
 					</div>
 				</div>
 				<!--start column-->
-				<div class="sub-col {{auth()->user() && !auth()->user()->is_standart ? 'sub-active' : ''}}">
+				<div class="sub-col {{!$currentUser || !$currentUser->sub() ? 'sub-active' : ''}}">
 					<div class="sub-top">
 						<div class="sub-name">
-							<b>Start</b>
-							{{__('ui.account')}}
+							<b>Standart</b>
 						</div>
 						<div class="sub-price">{{__('ui.free')}}</div>
 						<div class="sub-text">{{__('ui.plansStartAccHelp')}}</div>
 					</div>
 					<div class="sub-info">
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansBrowse')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansSearch')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansFilter')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansFav')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansTranslate')}} <a href="{{route('faq')}}#WhatIsAutoTranslator">?</a></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.plansContacts')}}</div>
-						</div>
-						<div class="sub-info-item with-help">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.publishPosts')}}
-								<span>{{__('ui.publishPosts1Help')}}</span></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.plansMailer')}} <a href="{{route('faq')}}#WhatIsMailer">?</a></div>
-						</div>
-						<div class="sub-info-item with-help">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.publishPosts')}}
-								<span>{{__('ui.publishPosts2Help')}}</span></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.publishTenders')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.plansPostImport')}} <a href="{{route('faq')}}#WhatIsImport">?</a></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.plansPostTracking')}}</div>
-						</div>
+                        <x-subf text="ui.plansBrowse" helpText="ui.plansBrowseHelp" check="1" />
+                        <x-subf text="ui.plansFav" check="1" />
+                        <x-subf text="ui.seeCosts" helpText="ui.seeCostsHelp" check="0" />
+                        <x-subf text="ui.plansContacts" helpText="ui.plansContactsHelp" check="0" />
+                        <x-subf text="ui.plansPriceRequests" helpText="ui.plansPriceRequestsHelp" check="0" />
+                        <x-subf text="ui.limitedPublishing" helpText="ui.limitedPublishingHelp" check="0" />
+                        <x-subf text="ui.plansTranslate" helpFaq="WhatIsAutoTranslator" check="0" />
+                        <x-subf text="ui.plansMailer" helpFaq="WhatIsMailer" check="0" />
+                        <x-subf text="ui.plansMessages" helpText="ui.plansMessagesHelp" check="0" />
+                        <x-subf text="ui.publishPosts" check="0" />
+                        <x-subf text="ui.plansPostImport" helpFaq="WhatIsImport" check="0" />
+                        <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="0" />
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
 				</div>
 				<!--standart column-->
-				<div class="sub-col {{auth()->user() && auth()->user()->is_standart && !auth()->user()->is_pro ? 'sub-active' : ''}}">
+				<div class="sub-col {{$currentUser?->sub(1, 'month') ? 'sub-active' : ''}}">
 					<div class="sub-top">
 						<div class="sub-name">
-							<b>Standart</b>
-							{{__('ui.account')}}
+							<b>{{$plans[1]['month']->title}}</b>
 						</div>
-						<div class="sub-price">??? ₴ / {{__('ui.mon')}}</div>
-						<div class="sub-text">{{__('ui.plansStandartAccHelp')}}</div>
+						<div class="sub-price interval-toggle">${{$plans[1]['month']->price}} / {{__('ui.month')}}</div>
+						<div class="sub-price interval-toggle d-none">${{$plans[1]['year']->price}} / {{__('ui.year')}}</div>
+						<div class="sub-text">{{$plans[1]['month']->description}}</div>
 					</div>
 					<div class="sub-info">
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansBrowse')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansSearch')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansFilter')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansFav')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansTranslate')}} <a href="{{route('faq')}}#WhatIsAutoTranslator">?</a></div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansContacts')}}</div>
-						</div>
-						<div class="sub-info-item with-help">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.publishPosts')}}
-								<span>{{__('ui.publishPosts1Help')}}</span></div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansMailer')}} <a href="{{route('faq')}}#WhatIsMailer">?</a></div>
-						</div>
-						<div class="sub-info-item with-help">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.publishPosts')}}
-								<span>{{__('ui.publishPosts2Help')}}</span></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.publishTenders')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.plansPostImport')}} <a href="{{route('faq')}}#WhatIsImport">?</a></div>
-						</div>
-						<div class="sub-info-item">
-							<div class="sub-no"></div>
-							<div class="sub-info-text">{{__('ui.plansPostTracking')}}</div>
-						</div>
+                        <x-subf text="ui.plansBrowse" helpText="ui.plansBrowseHelp" check="1" />
+                        <x-subf text="ui.plansFav" check="1" />
+                        <x-subf text="ui.seeCosts" helpText="ui.seeCostsHelp" check="1" />
+                        <x-subf text="ui.plansContacts" helpText="ui.plansContactsHelp" check="1" />
+                        <x-subf text="ui.plansPriceRequests" helpText="ui.plansPriceRequestsHelp" check="1" />
+                        <x-subf text="ui.limitedPublishing" helpText="ui.limitedPublishingHelp" check="1" />
+                        <x-subf text="ui.plansTranslate" helpFaq="WhatIsAutoTranslator" check="1" />
+                        <x-subf text="ui.plansMailer" helpFaq="WhatIsMailer" check="1" />
+                        <x-subf text="ui.plansMessages" helpText="ui.plansMessagesHelp" check="1" />
+                        <x-subf text="ui.publishPosts" check="0" />
+                        <x-subf text="ui.plansPostImport" helpFaq="WhatIsImport" check="0" />
+                        <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="0" />
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
-					@if (auth()->user() && auth()->user()->is_standart && !auth()->user()->is_pro)
-						<button href="" class="sub-button">{{__('ui.chosen')}}</button>
+					@if ($currentUser?->sub(1, 'month'))
+						<button href="#" class="sub-button interval-toggle">{{__('ui.chosen')}}</button>
 					@else
-                        <a href="{{route('plans.show', $plans['premium']['monthly'])}}" class="sub-button">{{__('ui.choose')}}</a>
+                        <a href="{{route('plans.show', $plans[1]['month'])}}" class="sub-button interval-toggle">{{__('ui.choose')}}</a>
+					@endif
+					@if ($currentUser?->sub(1, 'year'))
+						<button href="#" class="sub-button interval-toggle d-none">{{__('ui.chosen')}}</button>
+					@else
+                        <a href="{{route('plans.show', $plans[1]['year'])}}" class="sub-button interval-toggle d-none">{{__('ui.choose')}}</a>
 					@endif
 				</div>
 				<!--pro column-->
-				<div class="sub-col {{auth()->user() && auth()->user()->is_pro ? 'sub-active' : ''}}">
+				<div class="sub-col {{$currentUser?->sub(2, 'month') ? 'sub-active' : ''}}">
 					<div class="sub-top">
 						<div class="sub-name">
-							<b>Pro</b>
-							{{__('ui.account')}}
+							<b>{{$plans[2]['month']->title}}</b>
 						</div>
-						<div class="sub-price">??? ₴ / {{__('ui.mon')}}</div>
-						<div class="sub-text">{{__('ui.plansProAccHelp')}}</div>
+						<div class="sub-price interval-toggle">${{$plans[2]['month']->price}} / {{__('ui.month')}}</div>
+						<div class="sub-price interval-toggle d-none">${{$plans[2]['year']->price}} / {{__('ui.year')}}</div>
+						<div class="sub-text">{{$plans[2]['month']->description}}</div>
 					</div>
 					<div class="sub-info">
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansBrowse')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansSearch')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansFilter')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansFav')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansTranslate')}} <a href="{{route('faq')}}#WhatIsAutoTranslator">?</a></div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansContacts')}}</div>
-						</div>
-						<div class="sub-info-item with-help">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.publishPosts')}}
-								<span>{{__('ui.publishPosts1Help')}}</span></div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansMailer')}} <a href="{{route('faq')}}#WhatIsMailer">?</a></div>
-						</div>
-						<div class="sub-info-item with-help">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.publishPosts')}}
-								<span>{{__('ui.publishPosts2Help')}}</span></div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.publishTenders')}}</div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansPostImport')}} <a href="{{route('faq')}}#WhatIsImport">?</a></div>
-						</div>
-						<div class="sub-info-item">
-							<img src="{{asset('icons/sub-check.svg')}}" alt="">
-							<div class="sub-info-text">{{__('ui.plansPostTracking')}}</div>
-						</div>
+                        <x-subf text="ui.plansBrowse" helpText="ui.plansBrowseHelp" check="1" />
+                        <x-subf text="ui.plansFav" check="1" />
+                        <x-subf text="ui.seeCosts" helpText="ui.seeCostsHelp" check="1" />
+                        <x-subf text="ui.plansContacts" helpText="ui.plansContactsHelp" check="1" />
+                        <x-subf text="ui.plansPriceRequests" helpText="ui.plansPriceRequestsHelp" check="1" />
+                        <x-subf text="ui.limitedPublishing" helpText="ui.limitedPublishingHelp" check="1" />
+                        <x-subf text="ui.plansTranslate" helpFaq="WhatIsAutoTranslator" check="1" />
+                        <x-subf text="ui.plansMailer" helpFaq="WhatIsMailer" check="1" />
+                        <x-subf text="ui.plansMessages" helpText="ui.plansMessagesHelp" check="1" />
+                        <x-subf text="ui.publishPosts" check="1" />
+                        <x-subf text="ui.plansPostImport" helpFaq="WhatIsImport" check="1" />
+                        <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="1" />
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
-                    <a href="{{route('plans.show', $plans['commercial']['monthly'])}}" class="sub-button">{{__('ui.choose')}}</a>
+					@if ($currentUser?->sub(2, 'month'))
+                        <button href="#" class="sub-button interval-toggle">{{__('ui.chosen')}}</button>
+                    @else
+                        <a href="{{route('plans.show', $plans[2]['month'])}}" class="sub-button interval-toggle">{{__('ui.choose')}}</a>
+					@endif
+					@if ($currentUser?->sub(2, 'year'))
+                        <button href="#" class="sub-button interval-toggle d-none">{{__('ui.chosen')}}</button>
+                    @else
+                        <a href="{{route('plans.show', $plans[2]['year'])}}" class="sub-button interval-toggle d-none">{{__('ui.choose')}}</a>
+					@endif
 				</div>
 			</div>
 		</div>

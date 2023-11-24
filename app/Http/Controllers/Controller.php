@@ -33,7 +33,7 @@ class Controller extends BaseController
     public function jsonError($msg='Server Error', $data=null, $code=500): JsonResponse
     {
         if ($code == 422) {
-            return response()->json(['errors' => $errorMsg], $code);
+            return response()->json(['message'=>$msg,'errors' => $data], $code);
         }
         $res = [
             'success' => false,

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('subscription_plans', function (Blueprint $table) {
             $table->id();
             $table->string('stripe_id')->unique();
+            $table->smallInteger('level');
             $table->float('price', 9, 2);
             $table->string('interval');
             $table->integer('trial');

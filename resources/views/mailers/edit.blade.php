@@ -7,7 +7,7 @@
 @endsection
 
 @section('bc')
-    <x-bci :text="trans('mailers.index')" :href="{{route('')}}" i="2" />
+    <x-bci :text="trans('ui.mailer')" :href="route('mailers.index')" i="2" />
     <x-bci :text="trans('ui.editing')" i="3" islast="1" />
 @endsection
 

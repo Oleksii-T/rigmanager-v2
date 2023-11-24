@@ -1891,6 +1891,7 @@ textarea.form-error {
 	line-height: 24px;
 }
 .tumbler-block {
+    cursor: pointer;
 	position: relative;
 	display: block;
 	width: 24px;
@@ -2762,13 +2763,6 @@ article ul li:before {
 .sub-side .sub-info-text {
 	display: block;
 	font-size: 14px;
-}
-.sub-info-text span{
-	display: block;
-	font-size: 12px;
-	white-space: pre-line;
-	text-decoration: underline;
-	margin-left: 3px;
 }
 .sub-button {
 	display: -webkit-box;

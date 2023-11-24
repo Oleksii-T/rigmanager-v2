@@ -237,6 +237,18 @@ $(document).ready(function () {
 		infinite: false
 	});
 
+    // toggle switche on click
+    $('.tumbler-block').click(function(e) {
+        e.preventDefault();
+        $(this).siblings('a:not(.active)').trigger('click');
+    })
+
+    // toggle plat interval on prices page
+    $('.plan-interval-toggle').click(function(e) {
+        e.preventDefault();
+        $('.interval-toggle').toggleClass('d-none');
+    })
+
 	// sub mob dropdown
 	$(document).on('click','.sub-mob',function(e){
 		e.preventDefault();

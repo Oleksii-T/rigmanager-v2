@@ -25,6 +25,7 @@ class SubscriptionPlan extends Model
 
     protected $fillable = [
         'stripe_id',
+        'level',
         'price',
         'interval',
         'trial'

@@ -10,20 +10,21 @@ class SubscriptionPlanController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $activeSub = $user?->activeSubscription();
         $plans = SubscriptionPlan::all();
         $plans = [
-            'premium' => [
-                'monthly' => $plans->where('id', 1)->first(),
-                'yearly' => $plans->where('id', 2)->first(),
+            1 => [
+                'month' => $plans->where('level', 1)->where('interval', 'month')->first(),
+                'year' => $plans->where('level', 1)->where('interval', 'year')->first(),
             ],
-            'commercial' => [
-                'monthly' => $plans->where('id', 3)->first(),
-                'yearly' => $plans->where('id', 4)->first(),
+            2 => [
+                'month' => $plans->where('level', 2)->where('interval', 'month')->first(),
+                'year' => $plans->where('level', 2)->where('interval', 'year')->first(),
             ]
         ];
 
-        return view('subscription-plans.index', compact('plans', 'activeSub'));
+        $showMonthlySubs = !$user || !$user->sub() || $user->sub(null, 'month');
+
+        return view('subscription-plans.index', compact('plans', 'showMonthlySubs'));
     }
 
     public function show(Request $request, SubscriptionPlan $subscriptionPlan)

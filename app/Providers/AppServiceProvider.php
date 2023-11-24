@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
                 'csrf' => csrf_token(),
                 'route_name' => \Route::currentRouteName(),
                 'translations' => [],
-                'stripe_public_key' => Setting::get('stripe_public_key'),
+                'stripe_public_key' => Setting::get('stripe_public_key', true, true),
                 'recaptcha_key' => config('services.recaptcha.public_key'),
                 'page_assists_config' => [
                     'importValidationErrors' => [
