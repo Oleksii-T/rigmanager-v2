@@ -262,7 +262,7 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
         $sub = $user->activeSubscription();
-        $cycles = $sub?->cycles()->with('subscription')->latest()->get() ?? [];
+        $cycles = $user->subscriptionCycles()->latest()->get();
 
         return view('profile.subscription', compact('sub', 'cycles'));
     }

@@ -3,9 +3,11 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
+use App\Models\Notification;
 use App\Models\Subscription;
 use App\Services\StripeService;
 use Illuminate\Console\Command;
+use App\Enums\NotificationGroup;
 use Illuminate\Support\Facades\Log;
 
 class CheckSubscription extends Command
@@ -48,6 +50,7 @@ class CheckSubscription extends Command
                     continue;
                 }
 
+                $user = $subscription->user;
                 $stripeSub = $stripeService->getSubscription($subscription->stripe_id);
                 $stripeSubStatus = $stripeSub->status;
                 $nextDate = Carbon::createFromTimestamp($stripeSub->current_period_start);
@@ -58,19 +61,36 @@ class CheckSubscription extends Command
 
                     if ($stripeSubStatus != 'active') {
                         // stripe can not renew subscription automaticaly
-                        $activeCycle->deactivate();
                         $subscription->cancel();
+                        $activeCycle->deactivate();
+
+                        Notification::make($user->id, NotificationGroup::SUB_TERMINATED_CAUSE_STRIPE, [
+                            'vars' => [
+                                'title' => $subscription->plan->title,
+                            ]
+                        ], $subscription);
+
                         continue;
                     }
 
-                    $subscription->update([ // move from trialing to active status
-                        'status' => 'active'
-                    ]);
+                    if ($subscription->status != 'active') {
+                        // move from trialing to active status
+                        $subscription->update([
+                            'status' => 'active'
+                        ]);
+                    }
+
                     $activeCycle->deactivate();
-                    $c = $subscription->cycles()->create([
+                    $cycle = $subscription->cycles()->create([
                         'is_active' => true,
                         'expire_at' => $nextDate
                     ]);
+
+                    Notification::make($user->id, NotificationGroup::SUB_EXTENDED, [
+                        'vars' => [
+                            'title' => $subscription->plan->title,
+                        ]
+                    ], $cycle);
 
                     continue;
                 }
@@ -87,6 +107,12 @@ class CheckSubscription extends Command
                 $activeCycle = $subscription->cycle;
                 if ($activeCycle && $activeCycle->expire_at < $now) {
                     $activeCycle->deactivate();
+
+                    Notification::make($user->id, NotificationGroup::SUB_CANCELED_EXPIRED, [
+                        'vars' => [
+                            'title' => $subscription->plan->title,
+                        ]
+                    ], $activeCycle);
                 }
             }
         } catch (\Throwable $th) {

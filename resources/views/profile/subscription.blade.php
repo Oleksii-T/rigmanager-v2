@@ -18,8 +18,18 @@
             <div class="pack">
                 <div class="pack-side">
                     @if ($sub)
-                        <div class="pack-name">Activated subscription «<span class="orange">{{$sub->plan->title}}</span>»</div>
-                        <div class="pack-text"><a class="not-ready" href="#">Cancel subscription</a></div>
+                        <div class="pack-name">Active subscription «<span class="orange">{{$sub->plan->title}}</span>»</div>
+                        <div class="pack-text">
+                            @if ($sub->status == 'canceled')
+                                <span>Subscription is canceled. It will not be prolonged.</span>
+                            @else
+                                <form action="{{route('subscriptions.cancel')}}" method="POST" class="general-ajax-submit show-full-loader ask" data-asktitle="Are you sure?" data-asktext="Please, consider contacting us if you have any complaints about paid experience.
+                                Subscription will active to the end of current paid cycle." data-askyes="Yes, cancel" data-askno="Nevemind">
+                                    @csrf
+                                    <button type="submit" class="cancel-sub-btn">Cancel subscription</button>
+                                </form>
+                            @endif
+                        </div>
                     @else
                         <div class="pack-name">{{__('ui.planActivated')}} «<span class="orange">{{__('ui.planStart')}}</span>»</div>
                         <div class="pack-text"><span class="pack-text-min">{{__('ui.planStartChoosedHelp')}}</span></div>
@@ -38,7 +48,7 @@
                     <table>
                         <tbody>
                             <tr>
-                                <th>№ Operation</th>
+                                <th>Invoice</th>
                                 <th>Type</th>
                                 <th>From</th>
                                 <th>To</th>
@@ -47,11 +57,21 @@
                             </tr>
                             @forelse ($cycles as $cycle)
                                 <tr>
-                                    <td>{{$cycle->id}} <span class="history-table-date">?</span></td>
+                                    <td>
+                                        @if ($cycle->invoice)
+                                            <form action="{{route('subscriptions.invoice-url', $cycle)}}" method="post" class="general-ajax-submit">
+                                                @csrf
+                                                <button type="submit">{{$cycle->invoice['number']}}</button>
+                                            </form>
+                                        @else
+                                            {{str_pad($cycle->id, 4, '0', STR_PAD_LEFT)}}
+                                        @endif
+                                        {{-- <span class="history-table-date">{{str_pad($cycle->id, 4, '0', STR_PAD_LEFT)}}</span> --}}
+                                    </td>
                                     <td>{{$cycle->subscription->plan->title}}</td>
                                     <td>{{$cycle->created_at->format('Y-m-d')}}</td>
                                     <td>{{$cycle->expire_at->format('Y-m-d')}}</td>
-                                    <td>{{$cycle->price}}</td>
+                                    <td>{{'$' . number_format($cycle->price)}}</td>
                                     <td>
                                         @if ($cycle->is_active)
                                             <span class="history-status history-status-active">Active</span>

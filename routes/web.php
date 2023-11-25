@@ -81,7 +81,8 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
             // Subscriptions
             Route::prefix('subscriptions')->name('subscriptions.')->group(function () {
                 Route::post('', [SubscriptionController::class, 'store'])->name('store');
-                Route::post('{subscription}/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
+                Route::post('cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
+                Route::post('invoice/{subscriptionCycle}', [SubscriptionController::class, 'invoiceUrl'])->name('invoice-url');
             });
 
             Route::post('payment-methods', [PaymentMethodController::class, 'store']);

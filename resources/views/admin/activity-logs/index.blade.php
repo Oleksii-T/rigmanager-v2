@@ -175,6 +175,10 @@
                                     <em>contacts</em>:
                                     user contacts been requested.
                                 </li>
+                                <li>
+                                    <em>get-invoice</em>:
+                                    user asked for invoice.
+                                </li>
                             </ul>
                         </li>
                         <li>

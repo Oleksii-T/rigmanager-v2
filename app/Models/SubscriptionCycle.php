@@ -12,12 +12,15 @@ class SubscriptionCycle extends Model
 
     protected $fillable = [
         'subscription_id',
+        'invoice',
         'is_active',
+        'price',
         'expire_at'
     ];
 
     protected $casts = [
-        'expire_at' => 'datetime'
+        'expire_at' => 'datetime',
+        'invoice' => 'array'
     ];
 
     public function user()
@@ -30,9 +33,15 @@ class SubscriptionCycle extends Model
         return $this->belongsTo(Subscription::class);
     }
 
-    public function deactivate()
+    public function deactivate($expireNow=false)
     {
-        $this->update(['is_active' => false]);
+        $data = ['is_active' => false];
+
+        if ($expireNow) {
+            $data['expire_at'] = now();
+        }
+
+        $this->update($data);
     }
 
     public static function dataTable($query)

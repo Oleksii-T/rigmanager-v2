@@ -233,9 +233,18 @@ class StripeService
         $this->stripe->subscriptions->update($sId, $data);
     }
 
-    public function getInvoice($id)
+    /**
+     * @param $invoiceId
+     * @return array|\Stripe\Invoice
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public function getInvoice($invoiceId)
     {
-        return $this->stripe->invoices->retrieve($id, []);
+        if (!$invoiceId) {
+            return [];
+        }
+
+        return $this->stripe->invoices->retrieve($invoiceId, []);
     }
 
     public function setupIntent($customerId)
@@ -245,6 +254,16 @@ class StripeService
             'usage' => 'off_session',
             'customer' => $customerId
         ]);
+    }
+
+    public function paymentIntent($paymentIntentId)
+    {
+        return $this->stripe->paymentIntents->retrieve($paymentIntentId);
+    }
+
+    public function charge($chargeId)
+    {
+        return $this->stripe->charges->retrieve($chargeId);
     }
 
 	public function attachMethodToCustomer($customerId, $payment_method){

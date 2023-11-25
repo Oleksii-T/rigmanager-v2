@@ -41,7 +41,7 @@
                         <x-subf text="ui.plansMessages" helpText="ui.plansMessagesHelp" />
                         <x-subf text="ui.publishPosts" />
                         <x-subf text="ui.plansPostImport" helpFaq="WhatIsImport" />
-                        <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" />
+                        {{-- <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" /> --}}
 					</div>
 				</div>
 				<!--start column-->
@@ -65,7 +65,7 @@
                         <x-subf text="ui.plansMessages" helpText="ui.plansMessagesHelp" check="0" />
                         <x-subf text="ui.publishPosts" check="0" />
                         <x-subf text="ui.plansPostImport" helpFaq="WhatIsImport" check="0" />
-                        <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="0" />
+                        {{-- <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="0" /> --}}
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
 				</div>
@@ -91,7 +91,7 @@
                         <x-subf text="ui.plansMessages" helpText="ui.plansMessagesHelp" check="1" />
                         <x-subf text="ui.publishPosts" check="0" />
                         <x-subf text="ui.plansPostImport" helpFaq="WhatIsImport" check="0" />
-                        <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="0" />
+                        {{-- <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="0" /> --}}
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
 					@if ($currentUser?->isSub(1, 'month'))
@@ -127,7 +127,7 @@
                         <x-subf text="ui.plansMessages" helpText="ui.plansMessagesHelp" check="1" />
                         <x-subf text="ui.publishPosts" check="1" />
                         <x-subf text="ui.plansPostImport" helpFaq="WhatIsImport" check="1" />
-                        <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="1" />
+                        {{-- <x-subf text="ui.plansPostTracking" helpText="ui.plansPostTrackingHelp" check="1" /> --}}
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
 					@if ($currentUser?->isSub(2, 'month'))

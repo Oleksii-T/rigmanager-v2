@@ -3097,6 +3097,12 @@ article ul li:before {
 	vertical-align: top;
 	border-bottom: 1px solid #282828;
 }
+.history-table td button {
+    cursor: pointer;
+	color: #fff;
+	line-height: 22px;
+	vertical-align: top;
+}
 .history-table th:first-child,
 .history-table td:first-child {
 	padding-left: 50px;

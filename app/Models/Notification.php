@@ -69,8 +69,10 @@ class Notification extends Model
             NotificationGroup::SUB_CREATED->value => NotificationType::SUCCESS,
             NotificationGroup::SUB_CANCELED->value => NotificationType::DANGER,
             NotificationGroup::SUB_END_SOON->value => NotificationType::WARNING,
-            NotificationGroup::SUB_ENDED->value => NotificationType::DANGER,
+            NotificationGroup::SUB_TERMINATED_CAUSE_STRIPE->value => NotificationType::DANGER,
             NotificationGroup::SUB_EXTENDED->value => NotificationType::SUCCESS,
+            NotificationGroup::SUB_CANCELED_TERMINATED->value => NotificationType::DANGER,
+            NotificationGroup::SUB_CANCELED_EXPIRED->value => NotificationType::WARNING,
             default => NotificationType::INFO
         };
 

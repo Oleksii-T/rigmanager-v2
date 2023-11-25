@@ -64,8 +64,8 @@ class DevController extends Controller
 
     private function test()
     {
-        $post = Post::find(356);
-        $d = $post->favoriteBy->first()->toArray();
+        $user = auth()->user();
+        $d = $user->subscriptionCycles;
 
         $this->d($d);
     }

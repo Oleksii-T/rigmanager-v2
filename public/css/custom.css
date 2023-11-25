@@ -260,6 +260,17 @@
     flex: 1;
 }
 
+.cancel-sub-btn {
+    cursor: pointer;
+    color: #ff8d11;
+    text-decoration: underline;
+    transition: all .3s linear;
+
+}
+.cancel-sub-btn:hover {
+    text-decoration: none;
+}
+
 .sub-required-modal {
     cursor: pointer !important;
 }

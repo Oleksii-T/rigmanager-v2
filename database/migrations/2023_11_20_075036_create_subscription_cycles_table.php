@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('subscription_cycles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('subscription_id')->constrained('subscriptions')->cascadeOnDelete();
+            $table->json('invoice')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->float('price', 9, 2);
             $table->dateTime('expire_at');
             $table->timestamps();
         });

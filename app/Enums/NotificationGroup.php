@@ -23,9 +23,11 @@ enum NotificationGroup:int
     case SUB_CREATED = 12;
     case SUB_CANCELED = 13;
     case SUB_END_SOON = 14;
-    case SUB_ENDED = 15;
+    case SUB_TERMINATED_CAUSE_STRIPE = 15;
     case SUB_EXTENDED = 16;
     case PRICE_REQ_RECIEVED = 17;
+    case SUB_CANCELED_TERMINATED = 18;
+    case SUB_CANCELED_EXPIRED = 19;
 
     public static function getReadable($val)
     {
@@ -43,11 +45,13 @@ enum NotificationGroup:int
             self::POST_APPROVED => 'Post Approved',
             self::POST_REJECTED => 'Post Rejected',
             self::SUB_CREATED => 'Sub created',
-            self::SUB_CANCELED => 'Sub canceed',
+            self::SUB_CANCELED => 'Sub canceled',
             self::SUB_END_SOON => 'Sub end soon',
-            self::SUB_ENDED => 'Sub ended',
+            self::SUB_TERMINATED_CAUSE_STRIPE => 'Sub terminated cause payment error',
             self::SUB_EXTENDED => 'Sub extended',
             self::PRICE_REQ_RECIEVED => 'Price request recieved',
+            self::SUB_CANCELED_TERMINATED => 'Sub canceled terminated',
+            self::SUB_CANCELED_EXPIRED => 'Sub canceled expired',
         };
     }
 

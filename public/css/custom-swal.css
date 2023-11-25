@@ -41,3 +41,6 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
 div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
     border-radius: 8px !important;
 }
+.swal2-html-container {
+    white-space: pre-line;
+}

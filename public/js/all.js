@@ -306,10 +306,6 @@ $(document).ready(function () {
             formData.append('g-recaptcha-response', token);
         }
 
-        if (form.hasClass('show-full-loader')) {
-            fullLoader();
-        }
-
         if (form.hasClass('ask')) {
             swal.fire({
                 title: form.data('asktitle'),
@@ -321,10 +317,17 @@ $(document).ready(function () {
                 cancelButtonText: form.data('askno')
             }).then((result) => {
                 if (result.value) {
+                    if (form.hasClass('show-full-loader')) {
+                        fullLoader();
+                    }
                     ajaxSubmit(form, formData, button);
                 }
             });
             return;
+        }
+
+        if (form.hasClass('show-full-loader')) {
+            fullLoader();
         }
 
         ajaxSubmit(form, formData, button);
@@ -758,6 +761,10 @@ function showServerSuccess(response) {
     if (response.success) {
         if (response.data?.redirect) {
             window.location.href = response.data.redirect;
+        } else if (response.data?.open) {
+            window.open(response.data.open, '_blank').focus();
+        } else if (response.data?.reload) {
+            window.location.reload();
         } else if (response.message) {
             showToast(response.message);
         }
