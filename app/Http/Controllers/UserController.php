@@ -11,7 +11,7 @@ class UserController extends Controller
     public function show(Request $request, User $user)
     {
         $currentUser = auth()->user();
-        $info = $currentUser->info;
+        $info = $user->info;
         $hasChat = $currentUser?->hasChatWith($user->id);
         $posts = $user->posts()->visible()->latest()->limit(11)->get();
         $totalPosts = $user->posts()->visible()->count();

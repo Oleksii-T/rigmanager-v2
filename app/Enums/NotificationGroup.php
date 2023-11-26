@@ -26,9 +26,15 @@ enum NotificationGroup:int
     case SUB_TERMINATED_CAUSE_STRIPE = 15;
     case SUB_EXTENDED = 16;
     case PRICE_REQ_RECIEVED = 17;
-    case SUB_CANCELED_TERMINATED = 18;
+    case SUB_CANCELED_TERMINATED_CAUSE_NEW = 18;
     case SUB_CANCELED_EXPIRED = 19;
+    case SUB_TERMINATED_CAUSE_NEW = 20;
+    case SUB_TERMINATED_INCOMPLETE = 21;
+    case SUB_CREATED_INCOMPLETE = 22;
+    case SUB_EXTENDED_INCOMPLETE = 23;
+    case SUB_INCOMPLETE_PAID = 24;
 
+    // for admin
     public static function getReadable($val)
     {
         return match ($val) {
@@ -50,8 +56,13 @@ enum NotificationGroup:int
             self::SUB_TERMINATED_CAUSE_STRIPE => 'Sub terminated cause payment error',
             self::SUB_EXTENDED => 'Sub extended',
             self::PRICE_REQ_RECIEVED => 'Price request recieved',
-            self::SUB_CANCELED_TERMINATED => 'Sub canceled terminated',
+            self::SUB_CANCELED_TERMINATED_CAUSE_NEW => 'Sub canceled terminated because of new sub',
             self::SUB_CANCELED_EXPIRED => 'Sub canceled expired',
+            self::SUB_TERMINATED_CAUSE_NEW => 'Sub terminated because of new sub',
+            self::SUB_TERMINATED_INCOMPLETE => 'Sub terminated incomplete',
+            self::SUB_CREATED_INCOMPLETE => 'Sub created as incomplete',
+            self::SUB_EXTENDED_INCOMPLETE => 'Sub extended as incomplete',
+            self::SUB_INCOMPLETE_PAID => 'Sub incomplete paid',
         };
     }
 

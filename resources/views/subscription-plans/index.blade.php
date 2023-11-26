@@ -48,7 +48,7 @@
 				<div class="sub-col {{!$currentUser || !$currentUser->isSub() ? 'sub-active' : ''}}">
 					<div class="sub-top">
 						<div class="sub-name">
-							<b>Standart</b>
+							<b>Free</b>
 						</div>
 						<div class="sub-price">{{__('ui.free')}}</div>
 						<div class="sub-text">{{__('ui.plansStartAccHelp')}}</div>
@@ -70,7 +70,7 @@
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
 				</div>
 				<!--standart column-->
-				<div class="sub-col {{$currentUser?->isSub(1, 'month') ? 'sub-active' : ''}}">
+				<div class="sub-col {{$currentUser?->isSub(1) ? 'sub-active' : ''}}">
 					<div class="sub-top">
 						<div class="sub-name">
 							<b>{{$plans[1]['month']->title}}</b>
@@ -95,18 +95,18 @@
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
 					@if ($currentUser?->isSub(1, 'month'))
-						<button href="#" class="sub-button interval-toggle">{{__('ui.chosen')}}</button>
+                        <x-sub-cancel-form class="interval-toggle" btnclass="sub-button" />
 					@else
                         <a href="{{route('plans.show', $plans[1]['month'])}}" class="sub-button interval-toggle">{{__('ui.choose')}}</a>
 					@endif
 					@if ($currentUser?->isSub(1, 'year'))
-						<button href="#" class="sub-button interval-toggle d-none">{{__('ui.chosen')}}</button>
+                        <x-sub-cancel-form class="interval-toggle d-none" btnclass="sub-button" />
 					@else
                         <a href="{{route('plans.show', $plans[1]['year'])}}" class="sub-button interval-toggle d-none">{{__('ui.choose')}}</a>
 					@endif
 				</div>
 				<!--pro column-->
-				<div class="sub-col {{$currentUser?->isSub(2, 'month') ? 'sub-active' : ''}}">
+				<div class="sub-col {{$currentUser?->isSub(2) ? 'sub-active' : ''}}">
 					<div class="sub-top">
 						<div class="sub-name">
 							<b>{{$plans[2]['month']->title}}</b>
@@ -131,12 +131,12 @@
 					</div>
 					<a href="" class="sub-mob">{{__('ui.details')}}</a>
 					@if ($currentUser?->isSub(2, 'month'))
-                        <button href="#" class="sub-button interval-toggle">{{__('ui.chosen')}}</button>
+                        <x-sub-cancel-form class="interval-toggle" btnclass="sub-button" />
                     @else
                         <a href="{{route('plans.show', $plans[2]['month'])}}" class="sub-button interval-toggle">{{__('ui.choose')}}</a>
 					@endif
 					@if ($currentUser?->isSub(2, 'year'))
-                        <button href="#" class="sub-button interval-toggle d-none">{{__('ui.chosen')}}</button>
+                        <x-sub-cancel-form class="interval-toggle d-none" btnclass="sub-button" />
                     @else
                         <a href="{{route('plans.show', $plans[2]['year'])}}" class="sub-button interval-toggle d-none">{{__('ui.choose')}}</a>
 					@endif

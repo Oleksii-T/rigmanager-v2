@@ -168,6 +168,8 @@ class StripeService
                 ['price' => $subscriptionId],
             ],
             'expand' => ['latest_invoice.payment_intent'],
+            // 'payment_behavior' => 'allow_incomplete', // default for stripe
+            // 'collection_method' => 'charge_automatically', // default for stripe
             'trial_from_plan' => true
         ];
 
@@ -183,7 +185,9 @@ class StripeService
     {
         return $this->stripe->subscriptions->retrieve(
             $subscriptionId,
-            []
+            [
+                'expand' => ['latest_invoice.payment_intent'],
+            ]
         );
     }
 
@@ -272,4 +276,9 @@ class StripeService
             ['customer' => $customerId]
         );
 	}
+
+    public function getEvent($eId)
+    {
+        return $this->stripe->events->retrieve($eId);
+    }
 }

@@ -215,7 +215,7 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->activeSubscription;
         }
 
-        $this->activeSubscription = $this->subscriptions()->whereHas('cycle')->with('plan')->get()->first();
+        $this->activeSubscription = $this->subscriptions()->whereIn('status', ['canceled', 'active', 'incomplete'])->whereHas('cycle')->with('plan')->get()->first();
 
         return $this->activeSubscription;
     }

@@ -3019,6 +3019,15 @@ article ul li:before {
 .pack-button .button-light:hover {
 	border: 1px solid #ff8d11;
 }
+.pack.default{
+	background: #1f1f1f;
+}
+.pack.warning{
+	background: #8a6800;
+}
+.pack.danger{
+	background: #b0341a;
+}
 /************************* history *************************/
 .history {
 	overflow: hidden;

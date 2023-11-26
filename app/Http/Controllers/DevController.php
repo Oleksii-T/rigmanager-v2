@@ -64,10 +64,10 @@ class DevController extends Controller
 
     private function test()
     {
-        $user = auth()->user();
-        $d = $user->subscriptionCycles;
+        $c = \App\Models\SubscriptionCycle::find(11);
+        $d = $c->plan;
 
-        $this->d($d);
+        dd($d);
     }
 
     // dummy method

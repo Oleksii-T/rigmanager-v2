@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\StripeService;
+use App\Enums\NotificationGroup;
 use Yajra\DataTables\DataTables;
 use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
@@ -17,10 +19,12 @@ class Subscription extends Model
         'status'
     ];
 
+    // based on Stripe statuses
     CONST STATUSES = [
-        'pending',
+        'trialing',
+        'incomplete',
         'active',
-        'canceled'
+        'canceled',
     ];
 
     public function user()

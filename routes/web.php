@@ -32,6 +32,12 @@ use App\Http\Controllers\SubscriptionPlanController;
 
 Route::any('dev/{action}', [\App\Http\Controllers\DevController::class, 'action']);
 
+
+// Webhooks
+Route::prefix('webhooks')->group(function () {
+    Route::any('stripe', [StripeController::class, 'webhook']);
+});
+
 Route::get('auth/social/{provider}', [SocialAuthController::class, 'redirect'])->name('auth.social');
 Route::get('auth/callback/{provider}', [SocialAuthController::class, 'callback']);
 

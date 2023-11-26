@@ -15,7 +15,23 @@
         <x-profile.nav active='fav'/>
         <div class="content">
             <h1>My subscription</h1>
-            <div class="pack">
+            @if ($sub && $sub->status == 'incomplete')
+                <div class="pack danger">
+                    <div class="pack-side">
+                        <div class="pack-name">We did not received the payment for your new subscription.</div>
+                        <span>
+                            <b>One</b> day of payment processing is allowed, othervice subscription will be canceled.<br>
+                            The invoice with payment link can be downloaded by clicking on Invoice Number in the table below.<br>
+                            Please, contact us if you have any questions.
+                        </span>
+                        <br>
+                    </div>
+                    <div class="pack-button">
+                        <a href="{{route('feedbacks.create')}}" class="button button-light">Contact us</a>
+                    </div>
+                </div>
+            @endif
+            <div class="pack {{$sub ? ($sub->status == 'canceled' ? 'warning' : '') : 'default'}}">
                 <div class="pack-side">
                     @if ($sub)
                         <div class="pack-name">Active subscription «<span class="orange">{{$sub->plan->title}}</span>»</div>
@@ -23,15 +39,11 @@
                             @if ($sub->status == 'canceled')
                                 <span>Subscription is canceled. It will not be prolonged.</span>
                             @else
-                                <form action="{{route('subscriptions.cancel')}}" method="POST" class="general-ajax-submit show-full-loader ask" data-asktitle="Are you sure?" data-asktext="Please, consider contacting us if you have any complaints about paid experience.
-                                Subscription will active to the end of current paid cycle." data-askyes="Yes, cancel" data-askno="Nevemind">
-                                    @csrf
-                                    <button type="submit" class="cancel-sub-btn">Cancel subscription</button>
-                                </form>
+                                <x-sub-cancel-form btnclass="cancel-sub-btn" btntext="Cancel subscription" />
                             @endif
                         </div>
                     @else
-                        <div class="pack-name">{{__('ui.planActivated')}} «<span class="orange">{{__('ui.planStart')}}</span>»</div>
+                        <div class="pack-name">Subscription is not active</div>
                         <div class="pack-text"><span class="pack-text-min">{{__('ui.planStartChoosedHelp')}}</span></div>
                     @endif
                 </div>
@@ -48,7 +60,12 @@
                     <table>
                         <tbody>
                             <tr>
-                                <th>Invoice</th>
+                                <th>
+                                    Invoice
+                                    <span class="help-tooltip-icon" title="Click the invoice number to download invoice or to get payment receipt">
+                                        @svg('icons/info.svg')
+                                    </span>
+                                </th>
                                 <th>Type</th>
                                 <th>From</th>
                                 <th>To</th>
@@ -68,7 +85,7 @@
                                         @endif
                                         {{-- <span class="history-table-date">{{str_pad($cycle->id, 4, '0', STR_PAD_LEFT)}}</span> --}}
                                     </td>
-                                    <td>{{$cycle->subscription->plan->title}}</td>
+                                    <td>{{$cycle->plan->title}}</td>
                                     <td>{{$cycle->created_at->format('Y-m-d')}}</td>
                                     <td>{{$cycle->expire_at->format('Y-m-d')}}</td>
                                     <td>{{'$' . number_format($cycle->price)}}</td>

@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Yajra\DataTables\DataTables;
 use App\Traits\LogsActivityBasic;
+use App\Services\SubscriptionService;
 use Illuminate\Database\Eloquent\Model;
 
 class SubscriptionCycle extends Model
 {
-    use LogsActivityBasic;
+    use LogsActivityBasic, \Znck\Eloquent\Traits\BelongsToThrough;
 
     protected $fillable = [
         'subscription_id',
@@ -28,12 +29,17 @@ class SubscriptionCycle extends Model
         return $this->belongsToThrough(User::class, Subscription::class);
     }
 
+    public function plan()
+    {
+        return $this->belongsToThrough(SubscriptionPlan::class, Subscription::class);
+    }
+
     public function subscription()
     {
         return $this->belongsTo(Subscription::class);
     }
 
-    public function deactivate($expireNow=false)
+    public function deactivate($expireNow=false, $disablePaidFuntionalities=true)
     {
         $data = ['is_active' => false];
 
@@ -42,6 +48,10 @@ class SubscriptionCycle extends Model
         }
 
         $this->update($data);
+
+        if ($disablePaidFuntionalities) {
+            SubscriptionService::disablePaidFuntionalities($this->user);
+        }
     }
 
     public static function dataTable($query)
