@@ -21,6 +21,7 @@ class SubscriptionPlanController extends Controller
             redirect()->route('admin.settings.index')->with('error', $e->getMessage())->send();
         }
     }
+
     public function index(Request $request)
     {
         if (!$request->ajax()) {

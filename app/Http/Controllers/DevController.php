@@ -64,8 +64,7 @@ class DevController extends Controller
 
     private function test()
     {
-        $c = \App\Models\SubscriptionCycle::find(11);
-        $d = $c->plan;
+        $d = [];
 
         dd($d);
     }

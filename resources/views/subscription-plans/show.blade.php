@@ -11,6 +11,24 @@
     <x-bci :text="$subscriptionPlan->title . ' plan'" i="3" islast="1" />
 @endsection
 
+@section('style')
+    <style>
+        .payment-field {
+            display: block;
+            /* width: 100%; */
+            height: 44px;
+            padding: 0 15px;
+            margin: 0 0 27px;
+            font-size: 16px;
+            color: #999999;
+            background: none;
+            border: 1px solid #505050;
+            border-radius: 8px;
+            transition: all 0.3s linear;
+        }
+    </style>
+@endsection
+
 @section('content')
 	<div class="main-block">
 		<x-informations-nav active='plans'/>
@@ -23,17 +41,34 @@
                     @csrf
                     <span class="d-none" id="user-data" data-email="{{$currentUser->email}}"  data-name="{{$currentUser->name}}" data-plan="{{$subscriptionPlan->id}}"></span>
                     <div class="porfile-change__form-group">
-                        <div>
-                            <label for="email">Card</label>
-                            <div id="cardNumber"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="label">Card</label>
+                                <div class="payment-field" id="cardNumber"></div>
+                            </div>
                         </div>
-                        <div>
-                            <label for="password">Expiration</label>
-                            <div id="cardExp"></div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label">Expiration</label>
+                                <div class="payment-field" id="cardExp"></div>
+                            </div>
+                            <div class="col-6" style="padding-left: 10px">
+                                <label class="label">CVC</label>
+                                <div class="payment-field" id="cardCVC"></div>
+                            </div>
                         </div>
-                        <div>
-                            <label for="password">CVC</label>
-                            <div id="cardCVC"></div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label">Cardholder name</label>
+                                <input class="input" name="cardhoder_name" type="text" required>
+                            </div>
+
+                            <div class="col-6" style="padding-left: 10px">
+                                <label class="label">Address</label>
+                                <input class="input" name="billing_address" type="text" required>
+                            </div>
                         </div>
                     </div>
                     <div>

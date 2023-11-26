@@ -34,6 +34,7 @@ class SubscriptionPlanRequest extends FormRequest
             'slug.en' => ['required', 'string', 'max:255'],
             'description' => ['required', 'array'],
             'description.en' => ['required', 'string', 'max:5000'],
+            'level' => ['required', 'integer'],
             'trial' => ['required', 'integer', 'min:0', 'max:999'],
         ];
 

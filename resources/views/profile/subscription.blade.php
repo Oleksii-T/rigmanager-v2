@@ -56,7 +56,7 @@
                 <div class="history-top">
                     <div class="history-title">History</div>
                 </div>
-                <div class="history-table">
+                <div class="history-table" style="margin-bottom:20px">
                     <table>
                         <tbody>
                             <tr>
@@ -106,6 +106,9 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+                <div class="pagination-field">
+                    {{ $cycles->appends(request()->input())->links() }}
                 </div>
             </div>
 

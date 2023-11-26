@@ -30,21 +30,21 @@
                             <span data-input="title" class="input-error"></span>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Price ({{\App\Models\Setting::get('currency_sign')}})</label>
                             <input name="price" type="text" class="form-control" value="{{$subscriptionPlan->price}}" readonly>
                             <span data-input="price" class="input-error"></span>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Trial days</label>
                             <input name="trial" type="number" class="form-control" value="{{$subscriptionPlan->trial}}">
                             <span data-input="trial" class="input-error"></span>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Interval</label>
                             <select class="form-control" name="interval" readonly>
@@ -53,6 +53,16 @@
                                 @endforeach
                             </select>
                             <span data-input="role" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Level</label>
+                            <select name="level" class="form-control">
+                                <option value="1" @selected($subscriptionPlan->level==1)>1</option>
+                                <option value="2" @selected($subscriptionPlan->level==2)>2</option>
+                            </select>
+                            <span data-input="trial" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-12">

@@ -89,7 +89,7 @@ class StripePayment {
             type: 'card',
             card: this.card,
             billing_details: {
-                name: $("#user-data").data('name'),
+                name: $('[name="cardhoder_name"]').val(),
                 email: $("#user-data").data('email'),
             },
         });
