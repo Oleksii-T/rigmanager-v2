@@ -91,6 +91,14 @@ class StripePayment {
             billing_details: {
                 name: $('[name="cardhoder_name"]').val(),
                 email: $("#user-data").data('email'),
+                address: {
+                    country: $('[name="country"]').val(),
+                    city: $('[name="city"]').val(),
+                    line1: $('[name="line1"]').val(),
+                    line2: $('[name="line2"]').val(),
+                    postal_code: $('[name="postal_code"]').val(),
+                    state: $('[name="state"]').val(),
+                }
             },
         });
 
