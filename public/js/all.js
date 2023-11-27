@@ -1,5 +1,20 @@
 $(document).ready(function () {
     $('.select2').select2();
+    $('.daterangepicker-mult').daterangepicker({
+        startDate: moment().subtract(1, 'months'),
+        endDate: moment(),
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        locale: {
+            format: 'YYYY-MM-DD'
+        }
+    });
     let urlSearchParams = new URLSearchParams(window.location.search);
 
     // autocomplete global search
@@ -515,45 +530,6 @@ $(document).ready(function () {
             },
         });
     }
-
-    // load more notification in profile section
-    $(document).on('click', '.load-more-notifications', function (e) {
-        e.preventDefault();
-        let button = $(this);
-        let waitClass = 'cursor-wait';
-        if (button.hasClass(waitClass)) {
-            return;
-        }
-        let url = button.attr('href');
-        button.addClass(waitClass);
-        $.ajax({
-            url,
-            success: (response)=>{
-                button.closest('tr').remove();
-                $('.notifications-table').append(response.data.html);
-                button.removeClass(waitClass);
-            },
-            error: function(response) {
-                showServerError(response);
-                button.removeClass(waitClass);
-            }
-        });
-    })
-
-    // read notification in profile section
-    $(document).on('submit', '.notification-read', function (e) {
-        e.preventDefault();
-        let form = $(this);
-        let button = $(this).find('button[type=submit]');
-        let formData = new FormData(this);
-        if (button.hasClass('cursor-wait')) {
-            return;
-        }
-        ajaxSubmit(form, formData, button, function(response) {
-            form.remove();
-            showToast(response.message);
-        });
-    })
 
     //user adds post to favourites
     $(document).on('click', '.add-to-fav', function (e) {

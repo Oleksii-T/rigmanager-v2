@@ -3050,7 +3050,7 @@ article ul li:before {
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
-	width: 470px;
+	/* width: 470px; */
 }
 .history-form-input {
 	flex: 1;

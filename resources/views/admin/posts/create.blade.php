@@ -31,6 +31,20 @@
                             <span data-input="slug" class="input-error"></span>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Meta Title</label>
+                            <x-admin.multi-lang-input name="meta_title" />
+                            <span data-input="meta_title" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Meta Description</label>
+                            <x-admin.multi-lang-input name="meta_description" />
+                            <span data-input="meta_description" class="input-error"></span>
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Description</label>

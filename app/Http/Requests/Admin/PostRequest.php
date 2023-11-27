@@ -31,9 +31,13 @@ class PostRequest extends FormRequest
         return [
             'title' => ['required', 'array'],
             'title.en' => ['required', 'string', 'max:255'],
+            'meta_title' => ['required', 'array'],
+            'meta_title.en' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'array', new ValidSlug(Post::class, $model->id??null)],
             'description' => ['required', 'array'],
             'description.en' => ['required', 'string', 'max:5000'],
+            'meta_description' => ['required', 'array'],
+            'meta_description.en' => ['required', 'string', 'max:5000'],
             'user_id' => ['required', 'exists:users,id'],
             'category_id' => ['required', 'exists:categories,id'],
             'origin_lang' => ['required', 'string'],
