@@ -4,7 +4,6 @@ namespace App\Listeners;
 
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Queue\InteractsWithQueue;
-use Spatie\Activitylog\Contracts\Activity;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class LogUserLogout
@@ -30,9 +29,7 @@ class LogUserLogout
     {
         activity('users')
             ->event('logout')
-            ->tap(function(Activity $activity) {
-                $activity->properties = infoForActivityLog();
-            })
+            ->withProperties(infoForActivityLog())
             ->log('');
     }
 

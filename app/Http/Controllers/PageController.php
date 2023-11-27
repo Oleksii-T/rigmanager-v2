@@ -76,9 +76,7 @@ class PageController extends Controller
     {
         activity('page-assists')
             ->event($request->type)
-            ->tap(function(\Spatie\Activitylog\Contracts\Activity $activity) {
-                $activity->properties = infoForActivityLog();
-            })
+            ->withProperties(infoForActivityLog())
             ->log('');
     }
 }

@@ -36,9 +36,7 @@ class UserController extends Controller
         activity('users')
             ->event('contacts')
             ->on($user)
-            ->tap(function(\Spatie\Activitylog\Contracts\Activity $activity) {
-                $activity->properties = infoForActivityLog();
-            })
+            ->withProperties(infoForActivityLog())
             ->log('');
 
         return $this->jsonSuccess('', [

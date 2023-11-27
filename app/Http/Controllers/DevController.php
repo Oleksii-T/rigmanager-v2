@@ -64,7 +64,9 @@ class DevController extends Controller
 
     private function test()
     {
-        $d = [];
+        $d = infoForActivityLog() + [
+            'is_fake' => true
+        ];
 
         dd($d);
     }

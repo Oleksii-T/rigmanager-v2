@@ -280,9 +280,7 @@ class SubscriptionService
         activity('users')
             ->event('get-invoice')
             ->on($subscriptionCycle)
-            ->tap(function(\Spatie\Activitylog\Contracts\Activity $activity) {
-                $activity->properties = infoForActivityLog();
-            })
+            ->withProperties(infoForActivityLog())
             ->log('');
 
         return $url;

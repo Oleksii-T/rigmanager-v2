@@ -4,7 +4,6 @@ namespace App\Listeners;
 
 use Illuminate\Auth\Events\Login;
 use Illuminate\Queue\InteractsWithQueue;
-use Spatie\Activitylog\Contracts\Activity;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class LogUserLogin
@@ -30,9 +29,7 @@ class LogUserLogin
     {
         activity('users')
             ->event('login')
-            ->tap(function(Activity $activity) {
-                $activity->properties = infoForActivityLog();
-            })
+            ->withProperties(infoForActivityLog())
             ->log('');
     }
 

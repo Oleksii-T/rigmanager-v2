@@ -16,11 +16,9 @@ trait Viewable
         activity('models')
             ->on($this)
             ->event('view')
-            ->tap(function(\Spatie\Activitylog\Contracts\Activity $activity) {
-                $activity->properties = infoForActivityLog([
-                    'is_fake' => false
-                ]);
-            })
+            ->withProperties(infoForActivityLog() + [
+                'is_fake' => false
+            ])
             ->log('');
     }
 

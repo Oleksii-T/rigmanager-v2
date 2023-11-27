@@ -23,7 +23,7 @@ trait LogsActivityBasic
     public function tapActivity(Activity $activity, string $eventName)
     {
         $props = $activity->properties->toArray();
-        $props['general_info'] = infoForActivityLog();
+        $props = array_merge($props, infoForActivityLog());
         $activity->properties = collect($props);
     }
 }

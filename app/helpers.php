@@ -167,7 +167,7 @@ if (!function_exists('currencies')) {
 
 // get general info for activity log creation
 if (!function_exists('infoForActivityLog')) {
-    function infoForActivityLog($custom=[]) {
+    function infoForActivityLog() {
         $location = null;
         $ip = request()->ip();
         $agentString = request()->header('User-Agent');
@@ -205,9 +205,7 @@ if (!function_exists('infoForActivityLog')) {
             'agent_info' => $agentInfo
         ];
 
-        $info = array_merge($info, $custom);
-
-        return $info;
+        return ['general_info' => $info];
     }
 }
 
