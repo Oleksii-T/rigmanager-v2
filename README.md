@@ -18,20 +18,22 @@ Also, our resource can act as a tool for analyzing the market, available offers 
 
 - Default and social authentication;
 - Responsive frontend;
-- Posts bulk importing via XLSX file;
+- Importing via .XLSX;
 - Mailing system;
-- Drag and drop img uploading for each post;
-- Posts img optimization;
-- Document uploading for each post;
-- Searching and Filtering;
-- Wide categories system;
+- Drag&Drop image uploading;
+- Image optimization;
+- Document uploading;
+- Searching with autofill;
+- Filtering;
+- Categorization;
 - Localization;
-- Automatic translation of post content to other app languages (with edit possibility).
-- Live chat
-- Notifications system
-- Build-in price request
-- Blog
-- Admin Panel
+- Auto-translations.
+- Live chat;
+- Notifications;
+- Price requests;
+- Subscriptions;
+- Blog;
+- Admin Panel.
 
 > For more information read [About us](https://rigmanagers.com/about) and [FAQ](https://rigmanagers.com/faq) pages.
 
