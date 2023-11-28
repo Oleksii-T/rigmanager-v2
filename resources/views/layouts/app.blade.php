@@ -169,15 +169,24 @@
     <script type="text/javascript" src="{{ asset('js/jquery.validate-additional.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/dropzone.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-	<script src="{{asset('js/slick.min.js')}}"></script>
-	<script src="{{asset('js/jquery-ui-2.min.js')}}"></script>
-	<script src="{{asset('js/typeahead.bundle.js')}}"></script>
-	<script src="{{asset('js/all.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render={{config('services.recaptcha.public_key')}}"></script>
+	<script src="{{asset('js/slick.min.js')}}"></script>
+	<script src="{{asset('js/jquery-ui-2.min.js')}}"></script>
+	<script src="{{asset('js/typeahead.bundle.js')}}"></script>
     @vite('resources/js/app.js')
+
+    <script type="text/javascript">
+        window.Laravel = {!!$LaravelDataForJS!!};
+        console.log(`window.Laravel`, window.Laravel); //! LOG
+        console.slog = (...args) => console.log("🟢", ...args);
+        console.elog = (...args) => console.log("🔴", ...args);
+        console.ilog = (...args) => console.log("🔵", ...args);
+    </script>
+
+	<script src="{{asset('js/all.js')}}"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9RPT79VDXE"></script>
@@ -191,10 +200,6 @@
         </script>
     @endif
 
-	<script type="text/javascript">
-        window.Laravel = {!!$LaravelDataForJS!!};
-        console.log(`window.Laravel`, window.Laravel); //! LOG
-    </script>
     @yield('scripts')
 
     <noscript>

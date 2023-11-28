@@ -597,7 +597,7 @@ Cancel at any time, for any reason.',
         or change subscription:',
     'planCancel' => 'Cancel subscription',
     'planCancelModalText' => 'Please, consider contacting us if you have any complaints about paid experience.
-    Subscription will active to the end of current paid cycle.',
+    Subscription will be active to the end of paid perid.',
     'planCancelModalTitle' => 'Are you sure?',
     'planCancelModalYes' => 'Yes, cancel',
     'planCancelModalNo' => 'Nevemind',

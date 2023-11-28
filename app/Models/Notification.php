@@ -68,16 +68,17 @@ class Notification extends Model
             NotificationGroup::POST_REJECTED->value => NotificationType::DANGER,
             NotificationGroup::SUB_CREATED->value => NotificationType::SUCCESS,
             NotificationGroup::SUB_CANCELED->value => NotificationType::DANGER,
-            NotificationGroup::SUB_END_SOON->value => NotificationType::WARNING,
-            NotificationGroup::SUB_TERMINATED_CAUSE_STRIPE->value => NotificationType::DANGER,
+            NotificationGroup::SUB_END_TOMORROW->value => NotificationType::WARNING,
+            NotificationGroup::SUB_EXTENTION_FAILED->value => NotificationType::DANGER,
             NotificationGroup::SUB_EXTENDED->value => NotificationType::SUCCESS,
             NotificationGroup::SUB_CANCELED_TERMINATED_CAUSE_NEW->value => NotificationType::DANGER,
             NotificationGroup::SUB_CANCELED_EXPIRED->value => NotificationType::WARNING,
             NotificationGroup::SUB_TERMINATED_CAUSE_NEW->value => NotificationType::DANGER,
-            NotificationGroup::SUB_TERMINATED_INCOMPLETE->value => NotificationType::DANGER,
+            NotificationGroup::SUB_INCOMPLETED_EXPIRED->value => NotificationType::DANGER,
             NotificationGroup::SUB_CREATED_INCOMPLETE->value => NotificationType::WARNING,
             NotificationGroup::SUB_EXTENDED_INCOMPLETE->value => NotificationType::WARNING,
-            NotificationGroup::SUB_INCOMPLETE_PAID->value => NotificationType::SUCCESS,
+            NotificationGroup::SUB_INCOMPLETED_PAID->value => NotificationType::SUCCESS,
+            NotificationGroup::SUB_END_NEXT_WEEK->value => NotificationType::WARNING,
             default => NotificationType::INFO
         };
 

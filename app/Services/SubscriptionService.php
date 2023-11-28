@@ -6,8 +6,9 @@ use Carbon\Carbon;
 use App\Models\Notification;
 use App\Models\Subscription;
 use App\Services\StripeService;
-use App\Enums\NotificationGroup as NG;
 use App\Models\SubscriptionPlan;
+use Illuminate\Support\Facades\Mail;
+use App\Enums\NotificationGroup as NG;
 
 class SubscriptionService
 {
@@ -105,7 +106,7 @@ class SubscriptionService
                 $subscription->cancel();
                 $activeCycle->deactivate();
 
-                self::makeNotif($user, NG::SUB_TERMINATED_CAUSE_STRIPE, $subscription->plan, $subscription);
+                self::makeNotif($user, NG::SUB_EXTENTION_FAILED, $subscription->plan, $subscription);
 
                 continue;
             }
@@ -181,7 +182,7 @@ class SubscriptionService
             $subscription->cancel();
             $cycle->deactivate(true);
 
-            self::makeNotif($user, NG::SUB_TERMINATED_INCOMPLETE, $subscription->plan, $subscription);
+            self::makeNotif($user, NG::SUB_INCOMPLETED_EXPIRED, $subscription->plan, $subscription);
         }
     }
 
@@ -236,7 +237,7 @@ class SubscriptionService
             ]
         ]);
 
-        self::makeNotif($user, NG::SUB_INCOMPLETE_PAID, $subscription->plan, $cycle);
+        self::makeNotif($user, NG::SUB_INCOMPLETED_PAID, $subscription->plan, $cycle);
     }
 
     public static function cancel()
@@ -286,6 +287,32 @@ class SubscriptionService
         return $url;
     }
 
+    public static function sendPreliminaryNotifs()
+    {
+        $now = now();
+        $subscriptions = Subscription::query()
+            ->where('status', 'active')
+            ->whereHas('cycle')
+            ->with(['user', 'cycle', 'plan'])
+            ->get();
+
+        foreach ($subscriptions as $subscription) {
+            $cycle = $subscription->cycle;
+            $exp = $cycle->expire_at;
+            $isCanceled = $subscription->isCanceled();
+
+            if ($exp->addDays(7)->isSameDay($now)) {
+                $group = $isCanceled ? NG::SUB_END_NEXT_WEEK : NG::SUB_RENEW_NEXT_WEEK;
+                self::makeNotif($subscription->user, $group, $subscription->plan, $cycle);
+            }
+
+            if ($exp->addDay()->isSameDay($now)) {
+                $group = $isCanceled ? NG::SUB_END_TOMORROW : NG::SUB_RENEW_TOMORROW;
+                self::makeNotif($subscription->user, $group, $subscription->plan, $cycle);
+            }
+        }
+    }
+
     private static function makeNotif($user, $group, $plan, $resource)
     {
         Notification::make($user->id, $group, [
@@ -293,5 +320,45 @@ class SubscriptionService
                 'title' => $plan->title
             ]
         ], $resource);
+
+        if ($group == NG::SUB_CREATED_INCOMPLETE || $group == NG::SUB_CREATED) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\Created($resource, $group));
+        }
+
+        if ($group == NG::SUB_CANCELED_TERMINATED_CAUSE_NEW || $group == NG::SUB_TERMINATED_CAUSE_NEW) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\CanceledCauseNew($resource, $group));
+        }
+
+        if ($group == NG::SUB_EXTENDED_INCOMPLETE || $group == NG::SUB_EXTENDED) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\Extended($resource, $group));
+        }
+
+        if ($group == NG::SUB_EXTENTION_FAILED) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\ExtentionFailed($resource));
+        }
+
+        if ($group == NG::SUB_CANCELED_EXPIRED) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\CanceledExpired($resource));
+        }
+
+        if ($group == NG::SUB_INCOMPLETED_EXPIRED) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\IncompletedExpired($resource));
+        }
+
+        if ($group == NG::SUB_INCOMPLETED_PAID) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\IncompletedPaid($resource));
+        }
+
+        if ($group == NG::SUB_CANCELED) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\Canceled($resource));
+        }
+
+        if ($group == NG::SUB_END_NEXT_WEEK || $group == NG::SUB_RENEW_NEXT_WEEK) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\EndNextWeek($resource, $group));
+        }
+
+        if ($group == NG::SUB_END_TOMORROW || $group == NG::SUB_RENEW_TOMORROW) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\EndTomorrow($resource, $group));
+        }
     }
 }

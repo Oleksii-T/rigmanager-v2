@@ -46,6 +46,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('subscriptions:extend')->twiceDaily(1, 13);
         $schedule->command('subscriptions:deactivate-canceled')->hourly();
         $schedule->command('subscriptions:deactivate-incomplete')->hourly();
+        $schedule->command('subscriptions:preliminary-notifs')->daily();
     }
 
     /**

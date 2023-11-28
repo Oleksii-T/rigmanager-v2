@@ -22,17 +22,20 @@ enum NotificationGroup:int
     case POST_REJECTED = 11;
     case SUB_CREATED = 12;
     case SUB_CANCELED = 13;
-    case SUB_END_SOON = 14;
-    case SUB_TERMINATED_CAUSE_STRIPE = 15;
+    case SUB_END_TOMORROW = 14;
+    case SUB_EXTENTION_FAILED = 15;
     case SUB_EXTENDED = 16;
     case PRICE_REQ_RECIEVED = 17;
     case SUB_CANCELED_TERMINATED_CAUSE_NEW = 18;
     case SUB_CANCELED_EXPIRED = 19;
     case SUB_TERMINATED_CAUSE_NEW = 20;
-    case SUB_TERMINATED_INCOMPLETE = 21;
+    case SUB_INCOMPLETED_EXPIRED = 21;
     case SUB_CREATED_INCOMPLETE = 22;
     case SUB_EXTENDED_INCOMPLETE = 23;
-    case SUB_INCOMPLETE_PAID = 24;
+    case SUB_INCOMPLETED_PAID = 24;
+    case SUB_RENEW_NEXT_WEEK = 25;
+    case SUB_RENEW_TOMORROW = 26;
+    case SUB_END_NEXT_WEEK = 27;
 
     // for admin
     public static function getReadable($val)
@@ -52,17 +55,20 @@ enum NotificationGroup:int
             self::POST_REJECTED => 'Post Rejected',
             self::SUB_CREATED => 'Sub created',
             self::SUB_CANCELED => 'Sub canceled',
-            self::SUB_END_SOON => 'Sub end soon',
-            self::SUB_TERMINATED_CAUSE_STRIPE => 'Sub terminated cause payment error',
+            self::SUB_END_TOMORROW => 'Sub end soon',
+            self::SUB_EXTENTION_FAILED => 'Sub extention failed cause payment error',
             self::SUB_EXTENDED => 'Sub extended',
             self::PRICE_REQ_RECIEVED => 'Price request recieved',
             self::SUB_CANCELED_TERMINATED_CAUSE_NEW => 'Sub canceled terminated because of new sub',
             self::SUB_CANCELED_EXPIRED => 'Sub canceled expired',
             self::SUB_TERMINATED_CAUSE_NEW => 'Sub terminated because of new sub',
-            self::SUB_TERMINATED_INCOMPLETE => 'Sub terminated incomplete',
+            self::SUB_INCOMPLETED_EXPIRED => 'Sub terminated incomplete',
             self::SUB_CREATED_INCOMPLETE => 'Sub created as incomplete',
             self::SUB_EXTENDED_INCOMPLETE => 'Sub extended as incomplete',
-            self::SUB_INCOMPLETE_PAID => 'Sub incomplete paid',
+            self::SUB_INCOMPLETED_PAID => 'Sub incomplete paid',
+            self::SUB_RENEW_NEXT_WEEK => 'Sub renew next week',
+            self::SUB_RENEW_TOMORROW => 'Sub renew tomorrow',
+            self::SUB_END_NEXT_WEEK => 'Sub end next week',
         };
     }
 

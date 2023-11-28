@@ -206,6 +206,13 @@
                     Causer: entity which caused the log. generally - logged in user.
                     <br>
                     Subject: entiry on which log event occurred. generally - model.
+                    <br>
+                    <br>
+                    Activity logs role in app logic:
+                    <ul>
+                        <li>Views  visualization</li>
+                        <li>Subscription notification send tracking</li>
+                    </ul>
                 </div>
             </div>
         </div>
