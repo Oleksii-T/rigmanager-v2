@@ -64,14 +64,32 @@ class DevController extends Controller
 
     private function test()
     {
-        $d = infoForActivityLog() + [
-            'is_fake' => true
-        ];
+        $d = [];
 
         dd($d);
     }
 
-    // dummy method
+    private function showScrapedCashedFiles()
+    {
+        $files = [
+            // 'lakepetro' => storage_path('scraper_jsons/lakepetro.json'),
+            // 'oilmanchina' => storage_path('scraper_jsons/oilmanchina.json'),
+            // 'goldenman' => storage_path('scraper_jsons/goldenman.json'),
+            'rsdst' => storage_path('scraper_jsons/rsdst.json'),
+        ];
+
+        foreach ($files as $author => $file) {
+            $json = file_get_contents($file);
+            $scrapedPosts = json_decode($json, true);
+
+            foreach ($scrapedPosts as $url => $p) {
+
+            }
+
+            $this->d($scrapedPosts);
+        }
+    }
+
     private function example()
     {
         $this->enableQueryLog();

@@ -37,6 +37,7 @@ class Post extends Model
         'manufacturer',
         'manufacture_date',
         'part_number',
+        'scraped_url'
     ];
 
     protected $appends = self::TRANSLATABLES + [
@@ -306,8 +307,8 @@ class Post extends Model
         foreach ($costs as $type => $cost) {
             if (!$cost) {
                 $this->costs()->where('type', $type)->delete();
-                return;
-            }
+                continue;
+            };
 
             foreach (currencies() as $currency => $symbol) {
                 PostCost::updateOrCreate(
