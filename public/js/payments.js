@@ -5,8 +5,24 @@ let stripePayment = new StripePayment();
 $(document).ready(function () {
     $('form.subscribe-form').on('submit', async function (e) {
         e.preventDefault();
+
+        // loading effects may show with delay because JS DOM updation priorities
+
         loading();
+
+        let btn = $(this).find('button[type=submit]');
+        let wClass = 'cursor-wait'
         let response;
+
+        if (btn.hasClass(wClass)) {
+            return;
+        }
+
+        btn.addClass(wClass);
+
+        setTimeout(() => {
+            btn.removeClass(wClass);
+        }, 500);
 
         try {
             response = await stripePayment.createPaymentMethod();

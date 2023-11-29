@@ -27,6 +27,7 @@ div:where(.swal2-container) div:where(.swal2-timer-progress-bar) {
 div:where(.swal2-container) div:where(.swal2-popup) {
     background-color: #28282826 !important;
     backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
     border-radius: 8px !important;
     border: 1px solid #505050 !important;
     color: white !important;

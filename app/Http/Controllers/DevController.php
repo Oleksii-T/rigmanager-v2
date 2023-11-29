@@ -129,6 +129,10 @@ class DevController extends Controller
         $t = request()->type;
         $email = request()->email;
 
+        if ($t == 'welcome') {
+            $user = User::find(1);
+            $mail = new \App\Mail\WelcomeMail($user);
+        }
         if ($t == 'password-reset') {
             $url = url('');
             $mail = new \App\Mail\PasswordReset($url);

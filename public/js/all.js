@@ -387,13 +387,6 @@ $(document).ready(function () {
         $('input[name=author_name]').val('');
     });
 
-    // submit import creat form when import file uploaded
-    $('#import-file').change(function(e) {
-        e.preventDefault();
-        console.log('trigger submit'); //! LOG
-        $(this).closest('form').trigger('submit');
-    })
-
     // trigger element by click manuly
     $('[data-trigger]').click(function() {
         $($(this).data('trigger')).trigger('click');
@@ -643,7 +636,7 @@ function showPopUp(title=null, text=null, role) {
 }
 
 //show loading unclosable popup
-function loading(text='Request processing...') {
+async function loading(text='Request processing...') {
     swal.fire({
         title: 'Wait!',
         text: text,
@@ -762,7 +755,6 @@ function animatedScroll(el, more=0) {
 
 // faq dropdown
 function toggleFaqText(item) {
-    console.log(`toggle el`, item); //! LOG
 	if(item.hasClass('active')){
 		$('.faq-hidden').slideUp();
 		$('.faq-top').removeClass('active');

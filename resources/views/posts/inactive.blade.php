@@ -2,7 +2,7 @@
 
 @section('meta')
 	<title>{{$post->meta_title}}</title>
-	<meta name="description" content="{{$$post->meta_description}}">
+	<meta name="description" content="{{$post->meta_description}}">
     <meta name="robots" content="index, follow">
 @endsection
 

@@ -72,11 +72,7 @@ class ProcessPostImages implements ShouldQueue
     {
         $resizes = Attachment::POST_IMG_RESIZES;
         foreach ($resizes as $w => $h) {
-            $path = ProcessImageService::resize($w, $w, $image->path);
-
-            if ($this->doWaterMark) {
-                ProcessImageService::watermark($path);
-            }
+            ProcessImageService::resize($w, $w, $image->path);
         }
     }
 }

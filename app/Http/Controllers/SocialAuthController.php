@@ -28,6 +28,8 @@ class SocialAuthController extends Controller
                 'email' => $socialUser->email,
                 'last_active_at' => now(),
             ]);
+
+            event(new \Illuminate\Auth\Events\Verified($user));
         }
 
         if (!$user->email_verified_at) {

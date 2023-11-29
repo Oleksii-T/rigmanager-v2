@@ -83,9 +83,9 @@ return [
 
         'local' => [
 
-            'type' => 'country',
+            'type' => 'city',
 
-            'path' => database_path('maxmind/GeoLite2-Country.mmdb'),
+            'path' => database_path('maxmind/GeoLite2-City.mmdb'),
 
         ],
 

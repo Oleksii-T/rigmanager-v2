@@ -178,14 +178,14 @@ class Post extends Model
         return $this->getTranslatedAttr(__FUNCTION__);
     }
 
-    public function meta_title(): Attribute
+    public function metaTitle(): Attribute
     {
-        return $this->getTranslatedAttr(__FUNCTION__);
+        return $this->getTranslatedAttr('meta_title');
     }
 
-    public function meta_description(): Attribute
+    public function metaDescription(): Attribute
     {
-        return $this->getTranslatedAttr(__FUNCTION__);
+        return $this->getTranslatedAttr('meta_description');
     }
 
     public function countryReadable(): Attribute

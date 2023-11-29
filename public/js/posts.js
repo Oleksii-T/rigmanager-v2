@@ -27,6 +27,8 @@ $(document).ready(function() {
         let url = $(this).data('url');
         let postTitle = $(this).data('ptitle');
         let userName = $(this).data('uname');
+        let myName = window.Laravel.user?.name ?? 'Guest';
+        let myEmail = window.Laravel.user?.email ?? 'example@mail.com';
 
         swal.fire({
             title: window.Laravel.translations.ui_tba_modal.title,
@@ -46,9 +48,9 @@ $(document).ready(function() {
             "\n\n" +
             'I’m looking forward to your reply.' +
             "\n" +
-            window.Laravel.user.name +
+            myName +
             "\n" +
-            window.Laravel.user.email,
+            myEmail,
             confirmButtonText: window.Laravel.translations.ui_tba_modal.confirm,
             cancelButtonText: window.Laravel.translations.ui_tba_modal.cancel,
             preConfirm: (value) => {

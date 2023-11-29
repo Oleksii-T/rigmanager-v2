@@ -159,9 +159,17 @@
         let timesErrorOccured = 0;
 
         $(document).ready(function () {
+
+            // submit import creat form when import file uploaded
+            $('#import-file').change(function(e) {
+                e.preventDefault();
+                $(this).closest('form').trigger('submit');
+            })
+
             $('.back-to-file').click(function(e) {
                 e.preventDefault();
                 $('.import-top').toggleClass('d-none');
+                $('#import-file').val('');
             })
 
             // check required column select and calumn dublicates
@@ -244,7 +252,6 @@
                 }
                 fullLoader();
                 ajaxSubmit(form, formData, button, null, function (response) {
-                    console.log(`custom error callback`); //! LOG
                     button.removeClass('cursor-wait');
                     showServerError(response);
                     if (response.status == 422) {
