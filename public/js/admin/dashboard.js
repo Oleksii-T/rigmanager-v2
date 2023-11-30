@@ -56,15 +56,18 @@ function drawChart(chartItem) {
             if (chartItem.hasDatasets) {
                 let i = 0;
                 let colors = [
-                    '#1AA7F6', // blue
-                    '#1DE183', // light green
-                    '#e1bd1d', // yellow
-                    '#2d1de1', // blue
-                    '#e1371d', // red
-                    '#1de1de', // cyan
-                    '#a300ff', // purple
-                    '#ff8a00', // orange
-                    '#ff00a3', // pink
+                    '#FF0000', // Bright Red
+                    '#0000FF', // Deep Blue
+                    '#00FF00', // Vivid Green
+                    '#FFFF00', // Bright Yellow
+                    '#800080', // Deep Purple
+                    '#FFA500', // Orange
+                    '#87CEEB', // Sky Blue
+                    '#FFC0CB', // Pink
+                    '#006400', // Dark Green
+                    '#D2691E', // Chocolate Brown
+                    '#007BA7', // Cerulean
+                    '#FF00FF', // Magenta
                 ];
 
                 for (const key in data) {

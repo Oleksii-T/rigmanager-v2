@@ -1154,7 +1154,7 @@
     --}}
     <div class="row">
         <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #1AA7F6 1.91%, #57C3FF 95.64%);">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #FF0000 1.91%, #ff5050 95.64%);">
                 <div class="inner">
                     <h3>Users: {{$usersNumbers['total']}}</h3>
                     <p>Online: <b>{{$usersNumbers['online']}}</b></p>
@@ -1190,77 +1190,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #1DE183 1.91%, #5CECA7 95.64%);">
-                <div class="inner">
-                    <h3>Notifications: {{$notificationViewsNumbers['total']}}</h3>
-                    <p>-</p>
-                    <div class="row">
-                        <p class="col-4">
-                            Last 1d: <b>{{$notificationViewsNumbers['1d']}}</b>
-                            <br>
-                            Last 2d: <b>{{$notificationViewsNumbers['2d']}}</b>
-                            <br>
-                        </p>
-                        <p class="col-4">
-                            Last 1w: <b>{{$notificationViewsNumbers['2w']}}</b>
-                            <br>
-                            Last 2w: <b>{{$notificationViewsNumbers['2w']}}</b>
-                            <br>
-                        </p>
-                        <p class="col-4">
-                            Last 1m: <b>{{$notificationViewsNumbers['1m']}}</b>
-                            <br>
-                            Last 2m: <b>{{$notificationViewsNumbers['2m']}}</b>
-                            <br>
-                        </p>
-                    </div>
-                </div>
-                <div class="icon">
-                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #1DE183 1.91%, #5CECA7 95.64%);">
-                <div class="inner">
-                    <h3>Messages: {{$messagesNumbers['total']}}</h3>
-                    <p>-</p>
-                    <div class="row">
-                        <p class="col-4">
-                            Last 1d: <b>{{$messagesNumbers['1d']}}</b>
-                            <br>
-                            Last 2d: <b>{{$messagesNumbers['2d']}}</b>
-                            <br>
-                        </p>
-                        <p class="col-4">
-                            Last 1w: <b>{{$messagesNumbers['2w']}}</b>
-                            <br>
-                            Last 2w: <b>{{$messagesNumbers['2w']}}</b>
-                            <br>
-                        </p>
-                        <p class="col-4">
-                            Last 1m: <b>{{$messagesNumbers['1m']}}</b>
-                            <br>
-                            Last 2m: <b>{{$messagesNumbers['2m']}}</b>
-                            <br>
-                        </p>
-                    </div>
-                </div>
-                <div class="icon">
-                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #1DE183 1.91%, #5CECA7 95.64%);">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #0000FF 1.91%, #5050ff 95.64%);">
                 <div class="inner">
                     <h3>Posts: {{$postsNumbers['total']}}</h3>
                     <p>Inactive: <b>{{$postsNumbers['inactive']}}</b></p>
@@ -1295,77 +1225,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #1DE183 1.91%, #5CECA7 95.64%);">
-                <div class="inner">
-                    <h3>Posts Views: {{$postViewsNumbers['total']}}</h3>
-                    <p>-</p>
-                    <div class="row">
-                        <p class="col-4">
-                            Last 1d: <b>{{$postViewsNumbers['1d']}}</b>
-                            <br>
-                            Last 2d: <b>{{$postViewsNumbers['2d']}}</b>
-                            <br>
-                        </p>
-                        <p class="col-4">
-                            Last 1w: <b>{{$postViewsNumbers['2w']}}</b>
-                            <br>
-                            Last 2w: <b>{{$postViewsNumbers['2w']}}</b>
-                            <br>
-                        </p>
-                        <p class="col-4">
-                            Last 1m: <b>{{$postViewsNumbers['1m']}}</b>
-                            <br>
-                            Last 2m: <b>{{$postViewsNumbers['2m']}}</b>
-                            <br>
-                        </p>
-                    </div>
-                </div>
-                <div class="icon">
-                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #1DE183 1.91%, #5CECA7 95.64%);">
-                <div class="inner">
-                    <h3>Blog Views: {{$blogViewsNumbers['total']}}</h3>
-                    <p>-</p>
-                    <div class="row">
-                        <p class="col-4">
-                            Last 1d: <b>{{$blogViewsNumbers['1d']}}</b>
-                            <br>
-                            Last 2d: <b>{{$blogViewsNumbers['2d']}}</b>
-                            <br>
-                        </p>
-                        <p class="col-4">
-                            Last 1w: <b>{{$blogViewsNumbers['2w']}}</b>
-                            <br>
-                            Last 2w: <b>{{$blogViewsNumbers['2w']}}</b>
-                            <br>
-                        </p>
-                        <p class="col-4">
-                            Last 1m: <b>{{$blogViewsNumbers['1m']}}</b>
-                            <br>
-                            Last 2m: <b>{{$blogViewsNumbers['2m']}}</b>
-                            <br>
-                        </p>
-                    </div>
-                </div>
-                <div class="icon">
-                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #e1bd1d 1.91%, #ece25c 95.64%);">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #00FF00 1.91%, #48ff48 95.64%);">
                 <div class="inner">
                     <h3>Mailers: {{$mailersNumbers['total']}}</h3>
                     <p>Inactive: <b>{{$mailersNumbers['inactive']}}</b></p>
@@ -1400,8 +1260,8 @@
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #2d1de1 1.91%, #5e5cec 95.64%);">
-                <div class="inner">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #FFFF00 1.91%, #ffff43 95.64%);">
+                <div class="inner" style="color:rgb(44, 44, 44)">
                     <h3>Imports: {{$importsNumbers['total']}}</h3>
                     <p>Success: <b>{{$importsNumbers['success']}}</b></p>
                     <div class="row">
@@ -1435,7 +1295,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #e1371d 1.91%, #ec6f5c 95.64%);">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #800080 1.91%, #7c1a7c 95.64%);">
                 <div class="inner">
                     <h3>Feedbacks: {{$feedbacksNumbers['total']}}</h3>
                     <p>From users: <b>{{$feedbacksNumbers['from-users']}}</b></p>
@@ -1470,27 +1330,202 @@
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
-            <div class="small-box" style="background: linear-gradient(94.79deg, #1de1de 1.91%, #5ce9ec 95.64%);">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #FFA500 1.91%, #ffc760 95.64%);">
                 <div class="inner">
-                    <h3>Subscriptions: ?</h3>
+                    <h3>Posts Views: {{$postViewsNumbers['total']}}</h3>
+                    <p>-</p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$postViewsNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$postViewsNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$postViewsNumbers['2w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$postViewsNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$postViewsNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$postViewsNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #87CEEB 1.91%, #c4e7f5 95.64%);">
+                <div class="inner">
+                    <h3>Blog Views: {{$blogViewsNumbers['total']}}</h3>
+                    <p>-</p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$blogViewsNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$blogViewsNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$blogViewsNumbers['2w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$blogViewsNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$blogViewsNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$blogViewsNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #FFC0CB 1.91%, #ffd6d6 95.64%);">
+                <div class="inner">
+                    <h3>User Views: {{$userViewsNumbers['total']}}</h3>
+                    <p>-</p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$userViewsNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$userViewsNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$userViewsNumbers['2w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$userViewsNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$userViewsNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$userViewsNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #006400 1.91%, #258825 95.64%);">
+                <div class="inner">
+                    <h3>Notifications: {{$notificationViewsNumbers['total']}}</h3>
+                    <p>-</p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$notificationViewsNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$notificationViewsNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$notificationViewsNumbers['2w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$notificationViewsNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$notificationViewsNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$notificationViewsNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #D2691E 1.91%, #e59154 95.64%);">
+                <div class="inner">
+                    <h3>Messages: {{$messagesNumbers['total']}}</h3>
+                    <p>-</p>
+                    <div class="row">
+                        <p class="col-4">
+                            Last 1d: <b>{{$messagesNumbers['1d']}}</b>
+                            <br>
+                            Last 2d: <b>{{$messagesNumbers['2d']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1w: <b>{{$messagesNumbers['2w']}}</b>
+                            <br>
+                            Last 2w: <b>{{$messagesNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$messagesNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$messagesNumbers['2m']}}</b>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.535 15.32L42.1775 8.9625C41.24 8.0275 39.97 7.5 38.6425 7.5H22.5C19.7375 7.5 17.5 9.7375 17.5 12.5V39.285C17.5 42.0475 19.7375 44.285 22.5 44.285H45C47.7625 44.285 50 42.0475 50 39.285V18.8575C50 17.53 49.4725 16.26 48.535 15.32V15.32Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M50 20H40C38.62 20 37.5 18.88 37.5 17.5V7.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M42.5 44.285V47.5C42.5 50.2625 40.2625 52.5 37.5 52.5H15C12.2375 52.5 10 50.2625 10 47.5V20C10 17.2375 12.2375 15 15 15H17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box" style="background: linear-gradient(94.79deg, #007BA7 1.91%, #3199bf 95.64%);">
+                <div class="inner">
+                    <h3>Subscriptions: {{$subscriptionsNumbers['total']}}</h3>
                     <p>-<b></b></p>
                     <div class="row">
                         <p class="col-4">
-                            Last 1d: <b>?</b>
+                            Last 1d: <b>{{$subscriptionsNumbers['1d']}}</b>
                             <br>
-                            Last 2d: <b>?</b>
-                            <br>
-                        </p>
-                        <p class="col-4">
-                            Last 1w: <b>?</b>
-                            <br>
-                            Last 2w: <b>?</b>
+                            Last 2d: <b>{{$subscriptionsNumbers['2d']}}</b>
                             <br>
                         </p>
                         <p class="col-4">
-                            Last 1m: <b>?</b>
+                            Last 1w: <b>{{$subscriptionsNumbers['2w']}}</b>
                             <br>
-                            Last 2m: <b>?</b>
+                            Last 2w: <b>{{$subscriptionsNumbers['2w']}}</b>
+                            <br>
+                        </p>
+                        <p class="col-4">
+                            Last 1m: <b>{{$subscriptionsNumbers['1m']}}</b>
+                            <br>
+                            Last 2m: <b>{{$subscriptionsNumbers['2m']}}</b>
                             <br>
                         </p>
                     </div>
@@ -1525,7 +1560,7 @@
     </div>
     <div class="row">
         {{-- Users per country chart --}}
-        <div class="col-6">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Users per country</h3>
@@ -1541,7 +1576,7 @@
     </div>
     <div class="row">
         {{-- Posts per origin locale chart --}}
-        <div class="col-6">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Posts per origin locale</h3>
@@ -1554,57 +1589,13 @@
                 </div>
             </div>
         </div>
-        {{-- Global post views --}}
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"> Global post views</h3>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content p-0">
-                        <div class="chart" id="revenue-chart">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="row">
-        {{-- Mailer created chart --}}
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Mailer Created</h3>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content p-0">
-                        <div class="chart" id="revenue-chart">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         {{-- Mailer emails chart --}}
-        <div class="col-6">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Mailer emails</h3>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content p-0">
-                        <div class="chart" id="revenue-chart">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        {{-- Feedbacks created chart --}}
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Feedbacks Created</h3>
                 </div>
                 <div class="card-body">
                     <div class="tab-content p-0">
@@ -1697,6 +1688,85 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
+                    <h3 class="card-title">Top users by post views count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Posts</th>
+                                <th>Last active at</th>
+                                <th>Created at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top users been viewed</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Posts</th>
+                                <th>Last active at</th>
+                                <th>Created at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top users by contact requests count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Posts</th>
+                                <th>Last active at</th>
+                                <th>Created at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
                     <h3 class="card-title">Top posts by views count</h3>
                 </div>
                 <div class="card-body">
@@ -1707,6 +1777,35 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top posts by price requests count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="posts-table" class="table table-bordered table-striped">
+                        <x-admin.posts-table />
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top useless posts <small>(3d without views since last update)</small></h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <x-admin.posts-table />
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
@@ -1723,6 +1822,61 @@
                                 <th>Sub-categories</th>
                                 <th>Posts</th>
                                 <th>Is Active</th>
+                                <th>Created_at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top categories by post views count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>Name</th>
+                                <th>Parent</th>
+                                <th>Sub-categories</th>
+                                <th>Posts</th>
+                                <th>Is Active</th>
+                                <th>Created_at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top mailers by emails send count</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>User</th>
+                                <th>Title</th>
+                                <th>Active</th>
+                                <th>Posts Emailed #</th>
+                                <th>Last Mail At</th>
                                 <th>Created_at</th>
                                 <th class="actions-column-2">Actions</th>
                             </tr>
@@ -1761,15 +1915,24 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Top useless posts <small>(3d without views since last update)</small></h3>
+                    <h3 class="card-title">Top feedbacks by type</h3>
                 </div>
                 <div class="card-body">
                     <table id="users-table" class="table table-bordered table-striped">
-                        <x-admin.posts-table />
+                        <thead>
+                            <tr>
+                                <th class="ids-column">ID</th>
+                                <th>Created_at</th>
+                                <th class="actions-column-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>

@@ -11,6 +11,7 @@ use App\Models\Mailer;
 use App\Models\Message;
 use App\Models\Feedback;
 use App\Models\Notification;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -29,7 +30,9 @@ class DashboardController extends Controller
             'messagesNumbers' => $this->getMessagesNumbers(),
             'postViewsNumbers' => $this->getPostViewsNumbers(),
             'blogViewsNumbers' => $this->getBlogViewsNumbers(),
+            'userViewsNumbers' => $this->getUserViewsNumbers(),
             'notificationViewsNumbers' => $this->getNotificationViewsNumbers(),
+            'subscriptionsNumbers' => $this->getSubscriptionsNumbers(),
         ];
 
         return view('admin.index', $data);
@@ -78,6 +81,10 @@ class DashboardController extends Controller
                 'label' => 'Messages',
                 'data' => $this->constructChartData(Message::query())
             ],
+            [
+                'label' => 'Subscriptions',
+                'data' => $this->constructChartData(Subscription::query())
+            ],
         ];
 
         return $this->jsonSuccess('', $result);
@@ -102,8 +109,9 @@ class DashboardController extends Controller
         $diff = $from->diffInDays($to);
 
         for ($i=0; $i < $diff+1; $i++) {
-            $result[] = [
-                'x' => (clone $from)->addDays($i)->timestamp * 1000,
+            $date = (clone $from)->addDays($i)->timestamp * 1000;
+            $result[$date] = [
+                'x' => $date,
                 'y' => 0
             ];
         }
@@ -111,10 +119,7 @@ class DashboardController extends Controller
         // fill actual data
         foreach ($models as $model) {
             $date = Carbon::parse($model->date)->timestamp * 1000;
-            $result[] = [
-                'x' => $date,
-                'y' => $model->count
-            ];
+            $result[$date]['y'] = $model->count;
         }
 
         usort($result, fn ($a, $b) => $a['x'] <=> $b['x']);
@@ -186,6 +191,20 @@ class DashboardController extends Controller
         return $data;
     }
 
+    private function getUserViewsNumbers()
+    {
+        $models = Activity::query()
+            ->where('log_name', 'models')
+            ->where('event', 'view')
+            ->where('properties->is_fake', false)
+            ->where('subject_type', User::class)
+            ->get();
+        $data = $this->getDataByCreatedAt($models);
+        $data['total'] = $models->count();
+
+        return $data;
+    }
+
     private function getPostViewsNumbers()
     {
         $models = Activity::query()
@@ -212,6 +231,15 @@ class DashboardController extends Controller
     private function getMessagesNumbers()
     {
         $models = Message::all();
+        $data = $this->getDataByCreatedAt($models);
+        $data['total'] = $models->count();
+
+        return $data;
+    }
+
+    private function getSubscriptionsNumbers()
+    {
+        $models = Subscription::all();
         $data = $this->getDataByCreatedAt($models);
         $data['total'] = $models->count();
 
