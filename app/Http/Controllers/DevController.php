@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Facades\DumperServiceFacade as Dumper;
 
 /**
  * Controller for developers use only
