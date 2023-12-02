@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="main-block">
-        <x-profile.nav active='fav'/>
+        <x-profile.nav active='subscription'/>
         <div class="content">
             <h1>My subscription</h1>
             @if ($sub && $sub->status == 'incomplete')

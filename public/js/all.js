@@ -1,3 +1,17 @@
+var waitClass = 'cursor-wait';
+
+$.fn.lock = function() {
+    this.addClass(waitClass);
+    return this;
+}
+$.fn.isLocked = function() {
+    return this.hasClass(waitClass);
+}
+$.fn.unlock = function() {
+    this.removeClass(waitClass);
+    return this;
+}
+
 $(document).ready(function () {
     $('.select2').select2();
     $('.daterangepicker-mult').daterangepicker({

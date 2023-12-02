@@ -174,7 +174,9 @@ if (!function_exists('infoForActivityLog')) {
         $agentInfo = [];
 
         try {
-            $location = \Stevebauman\Location\Facades\Location::get($ip)->countryCode;
+            $location = config('location.testing.enabled')
+                ? null
+                : \Stevebauman\Location\Facades\Location::get($ip)->countryCode;
         } catch (\Throwable $th) {
             \Log::error('Can not detect location for activity log: ' . $th->getMessage());
         }

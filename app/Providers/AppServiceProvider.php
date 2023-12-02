@@ -161,5 +161,9 @@ class AppServiceProvider extends ServiceProvider
         config(['adminlte.menu'=> $adminlteMenus]);
 
         Paginator::defaultView('components.pagination');
+
+        $this->app->singleton('dumper', function ($app) {
+            return new \App\Services\DumperService();
+        });
     }
 }

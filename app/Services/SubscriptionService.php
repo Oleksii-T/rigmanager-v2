@@ -7,8 +7,10 @@ use App\Models\Notification;
 use App\Models\Subscription;
 use App\Services\StripeService;
 use App\Models\SubscriptionPlan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Enums\NotificationGroup as NG;
+use App\Facades\DumperServiceFacade as Dumper;
 
 class SubscriptionService
 {
@@ -41,7 +43,7 @@ class SubscriptionService
                 self::makeNotif($user, NG::SUB_TERMINATED_CAUSE_NEW, $activeSub->plan, $activeSub);
             }
 
-            $activeSub->cycle->deactivate(true);
+            $activeSub->cycle->deactivate(true, false);
         }
 
         $cycle = $sub->cycles()->create([
@@ -51,7 +53,7 @@ class SubscriptionService
                 'number' => $invoice['number'],
                 'payment_intent_id' => $invoice['payment_intent']['id']
             ],
-            'price' => $subscriptionPlan->price,
+            'price' => $invoice['amount_paid']/100,
             'expire_at' => Carbon::createFromTimestamp($subscription['current_period_end'])
         ]);
 
@@ -67,10 +69,41 @@ class SubscriptionService
 
     public static function extend()
     {
+        $validStatuses = ['trialing', 'active'];
+
+        foreach (Subscription::whereIn('status', $validStatuses)->get() as $subscription) {
+            DB::beginTransaction();
+
+            // dlog("start tranlsaction for #$subscription->id"); //! LOG
+
+            try {
+                self::extendHelper($subscription, $validStatuses);
+            } catch (\Throwable $th) {
+                dlog("ERROR"); //! LOG
+                \Log::error("Error when extending #$subscription->id subscription: " . $th->getMessage() . '. Trace: ' . $th->getTraceAsString());
+                DB::rollBack();
+                continue;
+            }
+
+            DB::commit();
+        }
+    }
+
+    public static function extendwithDump($dump=true)
+    {
         $stripeService = new StripeService();
         $validStatuses = ['trialing', 'active'];
 
         foreach (Subscription::whereIn('status', $validStatuses)->get() as $subscription) {
+
+            if ($dump && $subscription->id != 14) {
+                // continue;
+            }
+
+            if ($dump) {
+                Dumper::add("Process sub #$subscription->id");
+            }
+
             if (!$subscription->stripe_id) {
                 continue;
             }
@@ -78,22 +111,39 @@ class SubscriptionService
             $user = $subscription->user;
             $stripeSub = $stripeService->getSubscription($subscription->stripe_id);
             $stripeSubStatus = $stripeSub->status;
-            $nextDate = Carbon::createFromTimestamp($stripeSub->current_period_start);
+            $stripeExpDate = Carbon::createFromTimestamp($stripeSub->current_period_end);
             $activeCycle = $subscription->cycle;
 
-            if ($activeCycle->expire_at >= $nextDate) {
+            if ($dump) {
+                Dumper::add("stripeSubStatus: $stripeSubStatus | activeCycle->expire_at: $activeCycle->expire_at vs stripeExpDate: $stripeExpDate");
+            }
+
+            if ($activeCycle->expire_at == $stripeExpDate) {
+
+                Dumper::add('within payed period', 1);
+
                 // we are within paid subscription period
 
                 if (!in_array($stripeSubStatus, $validStatuses)) {
                     // Subscription was canceled in stripe within a active cycle.
                     // So deactivate it on out side as well.
 
-                    $subscription->cancel();
+                    if ($dump) {
+                        Dumper::add('cancel sub', 2);
+                    } else {
+                        $subscription->cancel();
+                    }
 
                     //TODO: notification
+                } else {
+                    Dumper::add('sub is active', 2);
                 }
 
                 continue;
+            }
+
+            if ($dump) {
+                Dumper::add('NOT within payed period', 1);
             }
 
             // current cycle should be renewed
@@ -103,13 +153,25 @@ class SubscriptionService
             //? trialing can not occure here.
             if ($stripeSubStatus != 'active' && $stripeSubStatus != 'incomplete') {
                 // stripe can not renew subscription automaticaly
-                $subscription->cancel();
-                $activeCycle->deactivate();
 
-                self::makeNotif($user, NG::SUB_EXTENTION_FAILED, $subscription->plan, $subscription);
+
+                if ($dump) {
+                    Dumper::add('extend fail', 2);
+                } else {
+                    $subscription->cancel();
+                    $activeCycle->deactivate();
+
+                    self::makeNotif($user, NG::SUB_EXTENTION_FAILED, $subscription->plan, $subscription);
+                }
 
                 continue;
             }
+
+            if ($dump) {
+                Dumper::add('extend success', 2);
+                continue;
+            }
+
 
             // update status. For example: trialing->active or active->incomplete
             $subscription->update([
@@ -124,7 +186,7 @@ class SubscriptionService
                     'number' => $stripeSub->invoice['number'],
                     'payment_intent_id' => $stripeSub->invoice['payment_intent']
                 ],
-                'expire_at' => $nextDate
+                'expire_at' => $stripeExpDate
             ]);
 
             self::makeNotif(
@@ -234,7 +296,8 @@ class SubscriptionService
                 'id' => $invoice['id'],
                 'number' => $invoice['number'],
                 'payment_intent_id' => $invoice['payment_intent']
-            ]
+            ],
+            'price' => $invoice['amount_paid']/100,
         ]);
 
         self::makeNotif($user, NG::SUB_INCOMPLETED_PAID, $subscription->plan, $cycle);
@@ -360,5 +423,92 @@ class SubscriptionService
         if ($group == NG::SUB_END_TOMORROW || $group == NG::SUB_RENEW_TOMORROW) {
             Mail::to($user)->send(new \App\Mail\Subscriptions\EndTomorrow($resource, $group));
         }
+    }
+
+    private static function extendHelper($subscription, $validStatuses)
+    {
+        // dlog("SubscriptionService@extendHelper"); //! LOG
+
+        $stripeService = new StripeService();
+
+        if (!$subscription->stripe_id) {
+            return;
+        }
+
+        $user = $subscription->user;
+        $stripeSub = $stripeService->getSubscription($subscription->stripe_id);
+        $stripeSubStatus = $stripeSub->status;
+        $stripeExpDate = Carbon::createFromTimestamp($stripeSub->current_period_end);
+        $activeCycle = $subscription->cycle;
+        $invoice = $stripeSub['latest_invoice']??[];
+
+        // dlog(" got sub: " . json_encode($stripeSub)); //! LOG
+
+        if ($activeCycle->expire_at == $stripeExpDate) {
+            // we are within paid subscription period
+
+            dlog(" within payed period"); //! LOG
+
+            if (!in_array($stripeSubStatus, $validStatuses)) {
+                // Subscription was canceled in stripe within a active cycle.
+                // So deactivate it on out side as well.
+
+                $subscription->cancel();
+
+                //TODO: notification
+            }
+
+            return;
+        }
+
+        // dlog(" need to renew"); //! LOG
+
+        // current cycle should be renewed
+
+        // stripe possible statuses: incomplete, incomplete_expired, trialing, active, past_due, canceled, unpaid
+        // only 'active' and 'incomplete' are treated as success.
+        //? trialing can not occure here.
+        if ($stripeSubStatus != 'active' && $stripeSubStatus != 'incomplete') {
+            // stripe can not renew subscription automaticaly
+
+            // dlog(" cancel"); //! LOG
+
+            $subscription->cancel();
+            $activeCycle->deactivate();
+
+            self::makeNotif($user, NG::SUB_EXTENTION_FAILED, $subscription->plan, $subscription);
+
+            // dlog(" cancel done"); //! LOG
+
+            return;
+        }
+
+        // dlog(" renew"); //! LOG
+
+        // update status. For example: trialing->active or active->incomplete
+        $subscription->update([
+            'status' => $stripeSubStatus
+        ]);
+
+        $activeCycle->deactivate(false, false);
+        $cycle = $subscription->cycles()->create([
+            'is_active' => true,
+            'invoice' => [
+                'id' => $invoice['id'],
+                'number' => $invoice['number'],
+                'payment_intent_id' => $invoice['payment_intent']
+            ],
+            'price' => $invoice['amount_paid']/100,
+            'expire_at' => $stripeExpDate
+        ]);
+
+        self::makeNotif(
+            $user,
+            $stripeSubStatus == 'active' ? NG::SUB_EXTENDED : NG::SUB_EXTENDED_INCOMPLETE,
+            $subscription->plan,
+            $cycle
+        );
+
+        // dlog(" renew done"); //! LOG
     }
 }
