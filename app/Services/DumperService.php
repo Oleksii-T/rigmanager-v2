@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Facade;
-
-class DumperService extends Facade
+class DumperService
 {
     private array $data = [];
 
@@ -12,12 +10,6 @@ class DumperService extends Facade
     {
 
     }
-
-    protected static function getFacadeAccessor()
-    {
-        return 'dumper'; // This should match the binding in the service provider
-    }
-
 
     public function add($string, $level=0)
     {

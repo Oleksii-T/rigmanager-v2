@@ -1540,6 +1540,7 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         {{-- models created chart --}}
         <div class="col-12">
@@ -1553,39 +1554,32 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <canvas id="models-created" data-url="{{route('admin.charts.models-created')}}"></canvas>
+                    <canvas id="models-created" data-url="{{route('admin.get-chart', 'models-created')}}"></canvas>
                 </div>
             </div>
         </div>
     </div>
+    
     <div class="row">
         {{-- Users per country chart --}}
-        <div class="col-12">
+        <div class="col-3">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Users per country</h3>
                 </div>
                 <div class="card-body">
-                    <div class="tab-content p-0">
-                        <div class="chart" id="revenue-chart">
-                        </div>
-                    </div>
+                    <canvas id="user-per-country" data-url="{{route('admin.get-chart', 'users-per-country')}}"></canvas>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
         {{-- Posts per origin locale chart --}}
-        <div class="col-12">
+        <div class="col-3">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Posts per origin locale</h3>
                 </div>
                 <div class="card-body">
-                    <div class="tab-content p-0">
-                        <div class="chart" id="revenue-chart">
-                        </div>
-                    </div>
+                    <canvas id="posts-per-locale" data-url="{{route('admin.get-chart', 'posts-per-locale')}}"></canvas>
                 </div>
             </div>
         </div>
@@ -1596,62 +1590,93 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Mailer emails</h3>
+                    <div class="card-tools" style="width: 185px">
+                        <div class="input-group">
+                            <input type="text" name="period" class="form-control daterangepicker-mult">
+                </div>
                 </div>
                 <div class="card-body">
                     <div class="tab-content p-0">
                         <div class="chart" id="revenue-chart">
                         </div>
+                <div class="card-body">
+                    <div class="tab-content p-0">
+                        <div class="chart" id="revenue-chart">
                     </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="mailer-emails" data-url="{{route('admin.get-chart', 'mailer-emails')}}"></canvas>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Top users by posts count</h3>
                 </div>
                 <div class="card-body">
-                    <table id="users-table" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
-                                <th>Email</th>
-                                <th>Name</th>
+                                <th>User</th>
                                 <th>Posts</th>
                                 <th>Last active at</th>
                                 <th>Created at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($usersByPostsCount as $user)
+                                <tr>
+                                    <th>
+                                        {{$user->id}}:
+                                        <a href="{{route("admin.users.show", $user)}}">
+                                            {{$user->name}}
+                                        </a>
+                                        {{"<$user->email>"}}
+                                    </th>
+                                    <th>{{$user->posts_count}}</th>
+                                    <th>{{$user->last_active_at->diffForHumans()}}</th>
+                                    <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Top users by mailers count</h3>
                 </div>
                 <div class="card-body">
-                    <table id="users-table" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
-                                <th>Email</th>
-                                <th>Name</th>
-                                <th>Posts</th>
+                                <th>User</th>
+                                <th>Mailers</th>
                                 <th>Last active at</th>
                                 <th>Created at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($usersByMailersCount as $user)
+                                <tr>
+                                    <th>
+                                        {{$user->id}}:
+                                        <a href="{{route("admin.users.show", $user)}}">
+                                            {{$user->name}}
+                                        </a>
+                                        {{"<$user->email>"}}
+                                    </th>
+                                    <th>{{$user->mailers_count}}</th>
+                                    <th>{{$user->last_active_at->diffForHumans()}}</th>
+                                    <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -1659,33 +1684,42 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Top users by imports count</h3>
                 </div>
                 <div class="card-body">
-                    <table id="users-table" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
-                                <th>Email</th>
-                                <th>Name</th>
-                                <th>Posts</th>
+                                <th>User</th>
+                                <th>Imports</th>
                                 <th>Last active at</th>
                                 <th>Created at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($usersByImportsCount as $user)
+                                <tr>
+                                    <th>
+                                        {{$user->id}}:
+                                        <a href="{{route("admin.users.show", $user)}}">
+                                            {{$user->name}}
+                                        </a>
+                                        {{"<$user->email>"}}
+                                    </th>
+                                    <th>{{$user->imports_count}}</th>
+                                    <th>{{$user->last_active_at->diffForHumans()}}</th>
+                                    <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Top users by post views count</h3>
@@ -1694,16 +1728,27 @@
                     <table id="users-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
-                                <th>Email</th>
-                                <th>Name</th>
-                                <th>Posts</th>
+                                <th>User</th>
+                                <th>Post Views</th>
                                 <th>Last active at</th>
                                 <th>Created at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($usersByPostViewsCount as $user)
+                                <tr>
+                                    <th>
+                                        {{$user->id}}:
+                                        <a href="{{route("admin.users.show", $user->id)}}">
+                                            {{$user->name}}
+                                        </a>
+                                        {{"<$user->email>"}}
+                                    </th>
+                                    <th>{{$user->total_views}}</th>
+                                    <th>{{\Carbon\Carbon::parse($user->last_active_at)->diffForHumans()}}</th>
+                                    <th>{{\Carbon\Carbon::parse($user->created_at)->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

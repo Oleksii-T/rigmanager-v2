@@ -16,7 +16,8 @@ class UserController extends Controller
             return view('admin.users.index');
         }
 
-        $users = User::query();
+        $users = User::query()
+            ->withCount('posts');
 
         if ($request->role !== null) {
             $users->whereHas('roles', function($q) use ($request){

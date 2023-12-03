@@ -259,9 +259,6 @@ class User extends Authenticatable implements MustVerifyEmail
             ->addColumn('name', function ($model) {
                 return $model->name;
             })
-            ->addColumn('posts', function ($model) {
-                return $model->posts->count();
-            })
             ->editColumn('last_active_at', function ($model) {
                 return $model->last_active_at->diffForHumans();
             })

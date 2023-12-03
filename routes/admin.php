@@ -33,11 +33,7 @@ Route::middleware('is-admin')->group(function () {
     });
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('index');
-    Route::prefix('charts')->name('charts.')->group(function () {
-        Route::get('users-created', [DashboardController::class, 'usersCreated'])->name('users-created');
-        Route::get('posts-created', [DashboardController::class, 'postsCreated'])->name('posts-created');
-        Route::get('models-created', [DashboardController::class, 'modelsCreated'])->name('models-created');
-    });
+    Route::get('chart/{type}', [DashboardController::class, 'getChart'])->name('get-chart');
 
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');

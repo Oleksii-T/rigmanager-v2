@@ -1,3 +1,18 @@
+var colors = [
+    '#FF0000', // Bright Red
+    '#0000FF', // Deep Blue
+    '#00FF00', // Vivid Green
+    '#FFFF00', // Bright Yellow
+    '#800080', // Deep Purple
+    '#FFA500', // Orange
+    '#87CEEB', // Sky Blue
+    '#FFC0CB', // Pink
+    '#006400', // Dark Green
+    '#D2691E', // Chocolate Brown
+    '#007BA7', // Cerulean
+    '#FF00FF', // Magenta
+];
+
 $(document).ready(function () {
     // set up object to store all charts
     let charts = {
@@ -10,7 +25,49 @@ $(document).ready(function () {
                 options: getChartTimeOptions()
             })
         },
-
+        usersPerCountry: {
+            elem: $('#user-per-country'),
+            hasDatasets: false,
+            chart: new Chart($('#user-per-country'), {
+                type: 'pie',
+                data: {
+                    datasets: [{backgroundColor: colors}]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {position: 'top',},
+                        title: {display: false}
+                    }
+                }
+            })
+        },
+        postsPerLocale: {
+            elem: $('#posts-per-locale'),
+            hasDatasets: false,
+            chart: new Chart($('#posts-per-locale'), {
+                type: 'pie',
+                data: {
+                    datasets: [{backgroundColor: colors}]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {position: 'top',},
+                        title: {display: false}
+                    }
+                }
+            })
+        },
+        mailerEmails: {
+            elem: $('#mailer-emails'),
+            hasDatasets: false,
+            chart: new Chart($('#mailer-emails'), {
+                type: 'line',
+                data: {datasets: [{}]},
+                options: getChartTimeOptions()
+            })
+        },
     };
 
     // initial draw of charts
@@ -55,21 +112,6 @@ function drawChart(chartItem) {
 
             if (chartItem.hasDatasets) {
                 let i = 0;
-                let colors = [
-                    '#FF0000', // Bright Red
-                    '#0000FF', // Deep Blue
-                    '#00FF00', // Vivid Green
-                    '#FFFF00', // Bright Yellow
-                    '#800080', // Deep Purple
-                    '#FFA500', // Orange
-                    '#87CEEB', // Sky Blue
-                    '#FFC0CB', // Pink
-                    '#006400', // Dark Green
-                    '#D2691E', // Chocolate Brown
-                    '#007BA7', // Cerulean
-                    '#FF00FF', // Magenta
-                ];
-
                 for (const key in data) {
                     data[key].backgroundColor = colors[i];
                     data[key].borderColor = colors[i];
@@ -77,6 +119,9 @@ function drawChart(chartItem) {
                 }
 
                 chartItem.chart.data.datasets = data;
+            } else if (chartItem.chart.config._config.type == 'pie') {
+                chartItem.chart.data.labels = Object.keys(data);
+                chartItem.chart.data.datasets[0].data = Object.values(data);
             } else {
                 chartItem.chart.data.datasets[0].data = data;
             }
@@ -88,4 +133,3 @@ function drawChart(chartItem) {
         }
     });
 }
-

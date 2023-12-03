@@ -12,7 +12,7 @@ $(document).ready(function () {
             { data: 'id', name: 'id' },
             { data: 'email', name: 'email' },
             { data: 'name', name: 'name' },
-            { data: 'posts', name: 'posts' },
+            { data: 'posts_count', name: 'posts_count' },
             { data: 'last_active_at', name: 'last_active_at' },
             { data: 'created_at', name: 'created_at', searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
