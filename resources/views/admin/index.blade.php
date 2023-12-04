@@ -1583,6 +1583,17 @@
                 </div>
             </div>
         </div>
+        {{-- Notifications by group --}}
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Notifications by group</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="notifications-by-groups" data-url="{{route('admin.get-chart', 'notifications-by-groups')}}"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         {{-- Mailer emails chart --}}
@@ -1756,7 +1767,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Top users been viewed</h3>
@@ -1765,24 +1776,33 @@
                     <table id="users-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
-                                <th>Email</th>
-                                <th>Name</th>
-                                <th>Posts</th>
+                                <th>User</th>
+                                <th>Views</th>
                                 <th>Last active at</th>
                                 <th>Created at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($usersByViewsCount as $user)
+                                <tr>
+                                    <th>
+                                        {{$user->id}}:
+                                        <a href="{{route("admin.users.show", $user->id)}}">
+                                            {{$user->name}}
+                                        </a>
+                                        {{"<$user->email>"}}
+                                    </th>
+                                    <th>{{$user->views_count}}</th>
+                                    <th>{{$user->last_active_at->diffForHumans()}}</th>
+                                    <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Top users by contact requests count</h3>
@@ -1791,16 +1811,27 @@
                     <table id="users-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
-                                <th>Email</th>
-                                <th>Name</th>
-                                <th>Posts</th>
+                                <th>User</th>
+                                <th>Views</th>
                                 <th>Last active at</th>
                                 <th>Created at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($usersByContactViewsCount as $user)
+                                <tr>
+                                    <th>
+                                        {{$user->id}}:
+                                        <a href="{{route("admin.users.show", $user)}}">
+                                            {{$user->name}}
+                                        </a>
+                                        {{"<$user->email>"}}
+                                    </th>
+                                    <th>{{$user->total_views}}</th>
+                                    <th>{{$user->last_active_at->diffForHumans()}}</th>
+                                    <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -1815,8 +1846,39 @@
                     <h3 class="card-title">Top posts by views count</h3>
                 </div>
                 <div class="card-body">
-                    <table id="posts-table" class="table table-bordered table-striped">
-                        <x-admin.posts-table />
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>User</th>
+                                <th>Views Count</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Is Active</th>
+                                <th>Updated at</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($postsByViewsCount as $post)
+                                <tr>
+                                    <th>
+                                        {{$post->id}}:
+                                        <a href="{{route('admin.posts.show', $post)}}">{{$post->title}}</a>
+                                    </th>
+                                    <th>
+                                        {{$post->user->id}}:
+                                        <a href="{{route("admin.users.show", $post->user)}}">
+                                            {{$post->user->name}}
+                                        </a>
+                                    </th>
+                                    <th>{{$post->views_count}}</th>
+                                    <th>{{$post->category->name}}</th>
+                                    <th>{{$post->status}}</th>
+                                    <th>{{$post->is_active ? '+' : '-'}}</th>
+                                    <th>{{$user->updated_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -1830,7 +1892,38 @@
                 </div>
                 <div class="card-body">
                     <table id="posts-table" class="table table-bordered table-striped">
-                        <x-admin.posts-table />
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>User</th>
+                                <th>Price Requests</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Is Active</th>
+                                <th>Updated at</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($postsByPriceRequestsCount as $post)
+                                <tr>
+                                    <th>
+                                        {{$post->id}}:
+                                        <a href="{{route('admin.posts.show', $post)}}">{{$post->title}}</a>
+                                    </th>
+                                    <th>
+                                        {{$post->user->id}}:
+                                        <a href="{{route("admin.users.show", $post->user)}}">
+                                            {{$post->user->name}}
+                                        </a>
+                                    </th>
+                                    <th>{{$post->total_views}}</th>
+                                    <th>{{$post->category->name}}</th>
+                                    <th>{{$post->status}}</th>
+                                    <th>{{$post->is_active ? '+' : '-'}}</th>
+                                    <th>{{$user->updated_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -1840,11 +1933,87 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Top useless posts <small>(3d without views since last update)</small></h3>
+                    <h3 class="card-title">Top posts by oldest view</h3>
                 </div>
                 <div class="card-body">
                     <table id="users-table" class="table table-bordered table-striped">
-                        <x-admin.posts-table />
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>User</th>
+                                <th>Last View</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Is Active</th>
+                                <th>Updated at</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($postsByOldestView as $post)
+                                <tr>
+                                    <th>
+                                        {{$post->id}}:
+                                        <a href="{{route('admin.posts.show', $post)}}">{{$post->title}}</a>
+                                    </th>
+                                    <th>
+                                        {{$post->user->id}}:
+                                        <a href="{{route("admin.users.show", $post->user)}}">
+                                            {{$post->user->name}}
+                                        </a>
+                                    </th>
+                                    <th>{{$post->last_activity_at}}</th>
+                                    <th>{{$post->category->name}}</th>
+                                    <th>{{$post->status}}</th>
+                                    <th>{{$post->is_active ? '+' : '-'}}</th>
+                                    <th>{{$user->updated_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Top oldest posts without views</h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Is Active</th>
+                                <th>Created at</th>
+                                <th>Updated at</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($postsWithoutViews as $post)
+                                <tr>
+                                    <th>
+                                        {{$post->id}}:
+                                        <a href="{{route('admin.posts.show', $post)}}">{{$post->title}}</a>
+                                    </th>
+                                    <th>
+                                        {{$post->user->id}}:
+                                        <a href="{{route("admin.users.show", $post->user)}}">
+                                            {{$post->user->name}}
+                                        </a>
+                                    </th>
+                                    <th>{{$post->category->name}}</th>
+                                    <th>{{$post->status}}</th>
+                                    <th>{{$post->is_active ? '+' : '-'}}</th>
+                                    <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                    <th>{{$user->updated_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -1861,17 +2030,28 @@
                     <table id="users-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
                                 <th>Name</th>
                                 <th>Parent</th>
-                                <th>Sub-categories</th>
-                                <th>Posts</th>
+                                <th>Posts count</th>
                                 <th>Is Active</th>
                                 <th>Created_at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($categoriesByPostsCount as $category)
+                                <tr>
+                                    <th>
+                                        {{$category->id}}
+                                        <a href="{{route('admin.categories.show', $category)}}">
+                                            {{$category->name}}
+                                        </a>
+                                    </th>
+                                    <th>{{$category->parent->name??'-'}}</th>
+                                    <th>{{$category->posts_count}}</th>
+                                    <th>{{$category->is_active ? '+' : '-'}}</th>
+                                    <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -1888,17 +2068,30 @@
                     <table id="users-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
                                 <th>Name</th>
                                 <th>Parent</th>
-                                <th>Sub-categories</th>
-                                <th>Posts</th>
+                                <th>Total Post Views</th>
+                                <th>Posts count</th>
                                 <th>Is Active</th>
                                 <th>Created_at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($categoriesByPostsViews as $category)
+                                <tr>
+                                    <th>
+                                        {{$category->id}}
+                                        <a href="{{route('admin.categories.show', $category)}}">
+                                            {{$category->name}}
+                                        </a>
+                                    </th>
+                                    <th>{{$category->parent->name??'-'}}</th>
+                                    <th>{{$category->total_views}}</th>
+                                    <th>{{$category->posts()->count()}}</th>
+                                    <th>{{$category->is_active ? '+' : '-'}}</th>
+                                    <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -1916,17 +2109,41 @@
                     <table id="users-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
-                                <th>User</th>
                                 <th>Title</th>
+                                <th>User</th>
                                 <th>Active</th>
-                                <th>Posts Emailed #</th>
+                                <th>Emails Send</th>
+                                <th>Posts Emailed</th>
                                 <th>Last Mail At</th>
                                 <th>Created_at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($mailersByEmails as $mailer)
+                                <tr>
+                                    <th>
+                                        {{$mailer->id}}:
+                                        <a href="{{route('admin.mailers.edit', $mailer)}}">
+                                            {{$mailer->title}}
+                                        </a>
+                                    </th>
+                                    <th>
+                                        {{$mailer->user->id}}:
+                                        <a href="{{route('admin.users.edit', $mailer->user)}}">
+                                            {{$mailer->user->name}}
+                                        </a>
+                                    </th>
+                                    <th>{{$mailer->is_active ? '+' : '-'}}</th>
+                                    <th>{{$mailer->total_emails}}</th>
+                                    <th>
+                                        @foreach ($mailer->posts as $p)
+                                            <a href="{{route('admin.posts.edit', $p)}}">{{$p}}</a>,
+                                        @endforeach
+                                    </th>
+                                    <th>{{$mailer->last_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                    <th>{{$mailer->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -1937,46 +2154,88 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Top useless mailers <small>(3d without mails since last update)</small></h3>
+                    <h3 class="card-title">Top mailers by oldest email</h3>
                 </div>
                 <div class="card-body">
                     <table id="users-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
-                                <th>User</th>
                                 <th>Title</th>
+                                <th>User</th>
                                 <th>Active</th>
-                                <th>Posts Emailed #</th>
+                                <th>Posts Emailed</th>
                                 <th>Last Mail At</th>
                                 <th>Created_at</th>
-                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($mailersByOldestEmail as $mailer)
+                                <tr>
+                                    <th>
+                                        {{$mailer->id}}:
+                                        <a href="{{route('admin.mailers.edit', $mailer)}}">
+                                            {{$mailer->title}}
+                                        </a>
+                                    </th>
+                                    <th>
+                                        {{$mailer->user->id}}:
+                                        <a href="{{route('admin.users.edit', $mailer->user)}}">
+                                            {{$mailer->user->name}}
+                                        </a>
+                                    </th>
+                                    <th>{{$mailer->is_active ? '+' : '-'}}</th>
+                                    <th>
+                                        @foreach ($mailer->posts as $p)
+                                            <a href="{{route('admin.posts.edit', $p)}}">{{$p}}</a>,
+                                        @endforeach
+                                    </th>
+                                    <th>{{$mailer->last_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                    <th>{{$mailer->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Top feedbacks by type</h3>
+                    <h3 class="card-title">Top oldest mailers without email</h3>
                 </div>
                 <div class="card-body">
-                    <table id="users-table" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="ids-column">ID</th>
-                                <th>Created_at</th>
-                                <th class="actions-column-2">Actions</th>
+                                <th>Title</th>
+                                <th>User</th>
+                                <th>Active</th>
+                                <th>Updated at</th>
+                                <th>Created at</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($mailersWithoutEmail as $mailer)
+                                <tr>
+                                    <th>
+                                        {{$mailer->id}}:
+                                        <a href="{{route('admin.mailers.edit', $mailer)}}">
+                                            {{$mailer->title}}
+                                        </a>
+                                    </th>
+                                    <th>
+                                        {{$mailer->user->id}}:
+                                        <a href="{{route('admin.users.edit', $mailer->user)}}">
+                                            {{$mailer->user->name}}
+                                        </a>
+                                    </th>
+                                    <th>{{$mailer->is_active ? '+' : '-'}}</th>
+                                    <th>{{$mailer->updated_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                    <th>{{$mailer->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

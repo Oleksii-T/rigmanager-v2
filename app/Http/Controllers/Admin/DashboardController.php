@@ -35,6 +35,17 @@ class DashboardController extends Controller
             'usersByMailersCount' => $service->getTable('users-by-mailers-count'),
             'usersByImportsCount' => $service->getTable('users-by-imports-count'),
             'usersByPostViewsCount' => $service->getTable('users-by-post-views-count'),
+            'usersByViewsCount' => $service->getTable('users-by-views-count'),
+            'usersByContactViewsCount' => $service->getTable('users-by-contact-views-count'),
+            'postsByViewsCount' => $service->getTable('posts-by-views-count'),
+            'postsByPriceRequestsCount' => $service->getTable('posts-by-price-requests-count'),
+            'postsByOldestView' => $service->getTable('posts-by-oldest-view'),
+            'postsWithoutViews' => $service->getTable('posts-without-views'),
+            'categoriesByPostsCount' => $service->getTable('categories-by-posts-count'),
+            'categoriesByPostsViews' => $service->getTable('categories-by-posts-views'),
+            'mailersByEmails' => $service->getTable('mailers-by-emails'),
+            'mailersByOldestEmail' => $service->getTable('mailers-by-oldest-emails'),
+            'mailersWithoutEmail' => $service->getTable('mailers-without-emails'),
         ];
 
         return view('admin.index', $data);

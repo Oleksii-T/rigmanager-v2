@@ -9,6 +9,7 @@ use App\Models\Blog;
 use App\Models\Import;
 use App\Models\Mailer;
 use App\Models\Message;
+use App\Models\Category;
 use App\Models\Feedback;
 use App\Models\Notification;
 use App\Models\Subscription;
@@ -164,9 +165,22 @@ class AnalyticsService
                 $c = strtoupper($post['origin_lang']);
                 $result[$c] = $post['total'];
             }
+        } elseif ($chartType == 'notifications-by-groups') {
+            $posts = Notification::query()
+                ->select('group', DB::raw('count(*) as total'))
+                ->groupBy('group')
+                ->get()
+                ->toArray();
+            $result = [];
+
+            foreach ($posts as $post) {
+                $c = NotificationGroup::all()[$post['group']];
+                $result[$c] = $post['total'];
+            }
         } elseif ($chartType == 'mailer-emails') {
-            $query = Notification::query()
-                ->where('group', NotificationGroup::MAILER_SEND);
+            $query = Activity::query()
+                ->where('log_name', 'mailers')
+                ->where('event', 'email-send');
             $result = $this->constructChartData($query);
         } else {
             dd('Chart type undefield', $chartType);
@@ -188,17 +202,124 @@ class AnalyticsService
                 ->join('posts', 'users.id', '=', 'posts.user_id')
                 ->join('activity_log', function ($join) {
                     $join->on('posts.id', '=', 'activity_log.subject_id')
-                        ->where('activity_log.subject_type', '=', 'App\\Models\\Post')
-                        ->where('activity_log.log_name', '=', 'models')
-                        ->where('activity_log.event', '=', 'view');
+                        ->where('activity_log.subject_type', 'App\\Models\\Post')
+                        ->where('activity_log.log_name', 'models')
+                        ->where('activity_log.event', 'view');
                 })
                 ->select('users.*', DB::raw('COUNT(activity_log.id) as total_views'))
                 ->groupBy('users.id')
                 ->orderBy('total_views', 'desc')
                 ->take(5)
                 ->get();
+        } elseif ($type == 'users-by-views-count') {
+            $result = User::query()
+                ->withCount('views')
+                ->orderBy('views_count', 'desc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'users-by-contact-views-count') {
+            $result = User::query()
+                ->join('activity_log', function ($join) {
+                    $join->on('users.id', '=', 'activity_log.subject_id')
+                        ->where('activity_log.subject_type', 'App\\Models\\User')
+                        ->where('activity_log.log_name', 'users')
+                        ->where('activity_log.event', 'contacts');
+                })
+                ->select('users.*', DB::raw('COUNT(activity_log.id) as total_views'))
+                ->groupBy('users.id')
+                ->orderBy('total_views', 'desc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'posts-by-views-count') {
+            $result = Post::query()
+                ->withCount('views')
+                ->with(['user', 'category'])
+                ->orderBy('views_count', 'desc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'posts-by-price-requests-count') {
+            $result = Post::query()
+                ->join('activity_log', function ($join) {
+                    $join->on('posts.id', '=', 'activity_log.subject_id')
+                        ->where('activity_log.subject_type', 'App\\Models\\Post')
+                        ->where('activity_log.log_name', 'posts')
+                        ->where('activity_log.event', 'price-request');
+                })
+                ->select('posts.*', DB::raw('COUNT(activity_log.id) as total_views'))
+                ->groupBy('posts.id')
+                ->orderBy('total_views', 'desc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'posts-by-oldest-view') {
+            $result = Post::query()
+                ->whereHas('views')
+                ->select('posts.*')
+                ->addSelect(['last_activity_at' => Activity::select('created_at')
+                    ->whereColumn('subject_id', 'posts.id')
+                    ->where('subject_type', Post::class)
+                    ->where('event', 'view')
+                    ->orderBy('created_at', 'desc')
+                    ->limit(1)
+                ])
+                // ->whereNotNull('last_activity_at')
+                ->orderBy('last_activity_at', 'asc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'posts-without-views') {
+            $result = Post::query()
+                ->whereDoesntHave('views')
+                ->orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'categories-by-posts-count') {
+            $result = Category::query()
+                ->withCount('posts')
+                ->orderBy('posts_count', 'desc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'categories-by-posts-views') {
+            $result = Category::query()
+                ->join('posts', 'categories.id', '=', 'posts.category_id')
+                ->join('activity_log', function ($join) {
+                    $join->on('posts.id', '=', 'activity_log.subject_id')
+                        ->where('activity_log.subject_type', 'App\\Models\\Post')
+                        ->where('activity_log.log_name', 'models')
+                        ->where('activity_log.event', 'view');
+                })
+                ->select('categories.*', DB::raw('COUNT(activity_log.id) as total_views'))
+                ->groupBy('categories.id')
+                ->orderBy('total_views', 'desc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'mailers-by-emails') {
+            $result = Mailer::query()
+                ->join('activity_log', function ($join) {
+                    $join->on('mailers.id', '=', 'activity_log.subject_id')
+                        ->where('activity_log.subject_type', 'App\\Models\\Mailer')
+                        ->where('activity_log.log_name', 'mailers')
+                        ->where('activity_log.event', 'email-send');
+                })
+                ->select('mailers.*', DB::raw('COUNT(activity_log.id) as total_emails'))
+                ->groupBy('mailers.id')
+                ->orderBy('total_emails', 'desc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'mailers-by-oldest-emails') {
+            $result = Mailer::query()
+                ->whereNotNull('last_at')
+                ->orderBy('last_at', 'asc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == 'mailers-without-emails') {
+            $result = Mailer::query()
+                ->whereNull('last_at')
+                ->orderBy('created_at', 'asc')
+                ->limit(5)
+                ->get();
+        } elseif ($type == '') {
+            //
         } else {
-            abort(500, 'table type not found');
+            dd('table type not found');
         }
 
         return $result;

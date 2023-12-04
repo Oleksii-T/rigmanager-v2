@@ -347,6 +347,12 @@ class PostController extends Controller
             ]
         ], $post);
 
+        activity('posts')
+            ->event('price-request')
+            ->withProperties(infoForActivityLog())
+            ->on($post)
+            ->log('');
+
         return $this->jsonSuccess(trans('messages.tba.send'));
     }
 

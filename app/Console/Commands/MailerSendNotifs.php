@@ -75,6 +75,13 @@ class MailerSendNotifs extends Command
                     'to_mail' => null
                 ]);
 
+                activity('mailers')
+                    ->event('email-send')
+                    ->withProperties(infoForActivityLog() + [
+                        'posts' => $postsIds
+                    ])
+                    ->on($mailer)
+                    ->log('');
             }
         } catch (\Throwable $th) {
             Log::channel('commands')->error("[$this->signature] " . $th->getMessage(), [

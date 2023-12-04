@@ -182,6 +182,25 @@
                             </ul>
                         </li>
                         <li>
+                            <b>posts</b>
+                            <ul>
+                                <li>
+                                    <em>price-request</em>:
+                                    Price request send.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <b>mailers</b>
+                            <ul>
+                                <li>
+                                    <em>email-send</em>:
+                                    Email been send by Mailer.
+                                    <small>Posts ids can be found in 'properties' field.</small>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
                             <b>page-assists</b>
                             <ul>
                                 <li>

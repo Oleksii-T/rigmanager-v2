@@ -59,6 +59,23 @@ $(document).ready(function () {
                 }
             })
         },
+        notificationsByGroups: {
+            elem: $('#notifications-by-groups'),
+            hasDatasets: false,
+            chart: new Chart($('#notifications-by-groups'), {
+                type: 'pie',
+                data: {
+                    datasets: [{backgroundColor: colors}]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {position: 'top',},
+                        title: {display: false}
+                    }
+                }
+            })
+        },
         mailerEmails: {
             elem: $('#mailer-emails'),
             hasDatasets: false,

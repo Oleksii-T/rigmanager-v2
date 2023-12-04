@@ -37,7 +37,6 @@ enum NotificationGroup:int
     case SUB_RENEW_TOMORROW = 26;
     case SUB_END_NEXT_WEEK = 27;
 
-    // for admin
     public static function getReadable($val)
     {
         return match ($val) {
