@@ -1,5 +1,9 @@
 var waitClass = 'cursor-wait';
 
+console.slog = (...args) => console.log("🟢", ...args);
+console.elog = (...args) => console.log("🔴", ...args);
+console.ilog = (...args) => console.log("🔵", ...args);
+
 $.fn.lock = function() {
     this.addClass(waitClass);
     return this;
@@ -9,6 +13,14 @@ $.fn.isLocked = function() {
 }
 $.fn.unlock = function() {
     this.removeClass(waitClass);
+    return this;
+}
+$.fn.toggleClassIf = function(className, condition) {
+    if (condition) {
+        this.addClass(className);
+    } else {
+        this.removeClass(className);
+    }
     return this;
 }
 

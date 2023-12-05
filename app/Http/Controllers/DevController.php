@@ -67,8 +67,6 @@ class DevController extends Controller
     {
         $d = [];
 
-        $d[] = \App\Enums\NotificationGroup::all()[1];
-        
         dd($d);
     }
 

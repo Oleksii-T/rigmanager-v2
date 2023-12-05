@@ -305,6 +305,13 @@ class PostController extends Controller
         $executed = RateLimiter::attempt($cKey, 1, fn()=>true, 60*60*24);
         if (!$executed) {
             $avIn = ceil(RateLimiter::availableIn($cKey) / 60);
+
+            activity('users')
+                ->event('spam-price-request-for-same-post')
+                ->withProperties(infoForActivityLog())
+                ->on($post)
+                ->log('');
+
             return $this->jsonError("Price request for this post has already been sent within 24 hours. Next price request in: $avIn minutes");
         }
 
@@ -313,6 +320,13 @@ class PostController extends Controller
         $executed = RateLimiter::attempt($cKey, 5, fn() => true, 60*60*1);
         if (!$executed) {
             $avIn = ceil(RateLimiter::availableIn($cKey) / 60);
+
+            activity('users')
+                ->event('spam-price-request-for-same-author')
+                ->withProperties(infoForActivityLog())
+                ->on($post)
+                ->log('');
+
             return $this->jsonError("Five price requests for this author has already been sent within 1 hour. Next price request in: $avIn minutes");
         }
 

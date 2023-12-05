@@ -49,6 +49,11 @@ trait JsonResponsable
 
         $msg = "A $subName subscription required for this action.";
 
+        activity('users')
+            ->event('not-subscribed')
+            ->withProperties(infoForActivityLog())
+            ->log('');
+
         if (!request()->ajax()) {
             $msg .= ' Learn more at <a href="/plans" style="color:#ff8d11">Paid plans</a> page.';
             flash($msg, false);

@@ -30,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         \Illuminate\Auth\Events\Logout::class => [
             \App\Listeners\LogUserLogout::class
         ],
+        \Illuminate\Auth\Events\Failed::class => [
+            \App\Listeners\LogFailLogin::class
+        ]
     ];
 
     /**

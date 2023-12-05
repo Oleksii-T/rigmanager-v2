@@ -181,9 +181,6 @@
     <script type="text/javascript">
         window.Laravel = {!!$LaravelDataForJS!!};
         console.log(`window.Laravel`, window.Laravel); //! LOG
-        console.slog = (...args) => console.log("🟢", ...args);
-        console.elog = (...args) => console.log("🔴", ...args);
-        console.ilog = (...args) => console.log("🔵", ...args);
     </script>
 
 	<script src="{{asset('js/all.js')}}"></script>

@@ -50,6 +50,11 @@ class Handler extends ExceptionHandler
 
     protected function unauthenticated($request, $exception)
     {
+        activity('users')
+            ->event('unauthenticated')
+            ->withProperties(infoForActivityLog())
+            ->log('');
+
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json(['message' => trans('messages.401')], 401);
         }

@@ -172,6 +172,8 @@ if (!function_exists('infoForActivityLog')) {
         $ip = request()->ip();
         $agentString = request()->header('User-Agent');
         $agentInfo = [];
+        $requestParams = request()->all();
+        unset($requestParams['_token']);
 
         try {
             $location = config('location.testing.enabled')
@@ -201,10 +203,12 @@ if (!function_exists('infoForActivityLog')) {
 
         $info = [
             'ip' => $ip,
-            'agent' => $agentString,
+            'url' => request()->fullUrl(),
             'from' => request()->headers->get('referer'),
             'location' => $location,
-            'agent_info' => $agentInfo
+            'agent' => $agentString,
+            'agent_info' => $agentInfo,
+            'request_params' => $requestParams,
         ];
 
         return ['general_info' => $info];

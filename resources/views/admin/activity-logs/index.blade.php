@@ -179,6 +179,26 @@
                                     <em>get-invoice</em>:
                                     user asked for invoice.
                                 </li>
+                                <li>
+                                    <em>unauthenticated</em>:
+                                    unauthenticated error occured.
+                                </li>
+                                <li>
+                                    <em>not-subscribed</em>:
+                                    failed subscription check.
+                                </li>
+                                <li>
+                                    <em>fail-login</em>:
+                                    failed login attempt.
+                                </li>
+                                <li>
+                                    <em>spam-price-request-for-same-post</em>:
+                                    failed price request because of spam protection - 1 price request per post per day.
+                                </li>
+                                <li>
+                                    <em>spam-price-request-for-same-author</em>:
+                                    failed price request because of spam protection - 5 price request per author per hour.
+                                </li>
                             </ul>
                         </li>
                         <li>
@@ -224,13 +244,53 @@
                     </ol>
                     Causer: entity which caused the log. generally - logged in user.
                     <br>
+                    <br>
                     Subject: entiry on which log event occurred. generally - model.
                     <br>
                     <br>
+                    general_info property:
+                    <ul>
+                        <li>
+                            <em>ip</em>:
+                            the IP of client
+                            <small>request()->ip()</small>
+                        </li>
+                        <li>
+                            <em>url</em>:
+                            the requested url
+                            <small>request()->fullUrl()</small>
+                        </li>
+                        <li>
+                            <em>from</em>:
+                            url from which request was send
+                            <small>request()->headers->get('referer')</small>
+                        </li>
+                        <li>
+                            <em>location</em>:
+                            country by IP
+                            <small>stevebauman/location</small>
+                        </li>
+                        <li>
+                            <em>agent</em>:
+                            user agent of client request
+                            <small>request()->header('User-Agent')</small>
+                        </li>
+                        <li>
+                            <em>agent_info</em>:
+                            parsed user agent
+                            <small>jenssegers/agent</small>
+                        </li>
+                        <li>
+                            <em>request_params</em>:
+                            http request params. (without _token)
+                            <small>request()->all()</small>
+                        </li>
+                    </ul>
                     Activity logs role in app logic:
                     <ul>
                         <li>Views  visualization</li>
                         <li>Subscription notification send tracking</li>
+                        <li>Analitics</li>
                     </ul>
                 </div>
             </div>
