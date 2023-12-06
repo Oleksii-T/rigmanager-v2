@@ -395,6 +395,9 @@
                         </div>
                         <div class="form-button-block">
                             <button type="submit" class="button">@lang('ui.update')</button>
+                            @if (!$post->is_active)
+                            <button type="submit" name="is_active" value="1" class="button">Activate and Publish</button>
+                            @endif
                             <a href="{{route('posts.translations.edit', $post)}}" class="button">@lang('ui.editTrans')</a>
                         </div>
                     </fieldset>

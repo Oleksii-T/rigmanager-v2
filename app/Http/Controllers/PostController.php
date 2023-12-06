@@ -22,14 +22,13 @@ class PostController extends Controller
 {
     public function show(Request $request, Post $post)
     {
-        // return new \App\Mail\PostTba($post, auth()->user());
         $user = auth()->user();
+        $hasChat = $user?->hasChatWith($post->user_id);
 
         if (($post->is_trashed || !$post->is_active) && $post->user_id != $user?->id) {
-            return view('posts.inactive', compact('post'));
+            return view('posts.inactive', compact('post', 'hasChat'));
         }
 
-        $hasChat = $user?->hasChatWith($post->user_id);
         $authorPosts = Post::query()
             ->where('user_id', $post->user_id)
             ->visible()

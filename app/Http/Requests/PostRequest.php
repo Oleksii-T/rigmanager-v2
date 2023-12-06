@@ -33,6 +33,7 @@ class PostRequest extends FormRequest
             'category_id' => ['required', 'exists:categories,id'],
             'type' => ['required', 'string', Rule::in(Post::TYPES)],
             'condition' => ['nullable', 'string', Rule::in(Post::CONDITIONS)],
+            'is_active' => ['nullable', 'boolean'],
             'is_urgent' => ['nullable', 'boolean'],
             'amount' => ['nullable', 'string', 'max:70'],
             'country' => ['required', 'string', 'max:2'],

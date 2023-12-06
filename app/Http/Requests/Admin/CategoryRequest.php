@@ -29,6 +29,8 @@ class CategoryRequest extends FormRequest
         $rules = [
             'name' => ['required', 'array'],
             'name.en' => ['required', 'string', 'max:255'],
+            'fields' => ['nullable', 'array'],
+            'fields.en' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'array', new ValidSlug(Category::class, $model->id??null)],
             'category_id' => ['nullable', 'exists:categories,id'],
         ];

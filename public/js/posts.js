@@ -90,15 +90,23 @@ $(document).ready(function() {
     /********************/
 
     // submit form
-    $('#form-post').submit(function(e) {
+    $('#form-post button[type=submit]').click(function(e) {
         e.preventDefault();
-        let form = $(this);
-        let button = $(this).find('button[type=submit]');
+        let form = $(this).closest('#form-post');
+        let button = $(this);
         if (button.hasClass('cursor-wait')) {
             return;
         }
         button.addClass('cursor-wait');
-        let formData = new FormData(this);
+        let formData = new FormData(form.get(0));
+
+        if (button.attr('name')) {
+            console.slog(`is name`); //! LOG
+            formData.append(button.attr('name'), button.val());
+        } else {
+            console.elog(`no is name`, button.attr('name'), button); //! LOG
+        }
+
         let i = 0;
         images.forEach(img => {
             if (img.id) {

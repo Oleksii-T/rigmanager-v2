@@ -420,10 +420,6 @@ If you have significant amount of posts, consider using <a href="/imports" targe
     'choosePostStatus' => 'Choose post status (visibility)',
     'postActive' => 'Visible for everyone',
     'postInactive' => 'Hidden',
-    'postInactiveError' => 'Sorry, but the post author deactivated this post.
-
-        You can return here later,
-        it may be activated again soon!',
     'originPostLang' => 'This is translated post. Original language is',
     'translationCorrupted' => 'The translatatin is currapted. Original is displayed',
     'showOrigin' => 'Show origin',

@@ -42,16 +42,6 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Is Active</label>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="is_active" name="is_active" value="1" @checked($category->is_active)>
-                                <label for="is_active" class="custom-control-label">Yes</label>
-                            </div>
-                            <span data-input="is_active" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
                             <label>Parent Category</label>
                             <select class="form-control select2" name="category_id">
                                 <option value="">Select Parent Category</option>
@@ -60,6 +50,23 @@
                                 @endforeach
                             </select>
                             <span data-input="category_id" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Fields</label>
+                            <x-admin.multi-lang-input name="fields" :model="$category" textarea="1" />
+                            <span data-input="fields" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Is Active</label>
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" id="is_active" name="is_active" value="1" @checked($category->is_active)>
+                                <label for="is_active" class="custom-control-label">Yes</label>
+                            </div>
+                            <span data-input="is_active" class="input-error"></span>
                         </div>
                     </div>
                 </div>
