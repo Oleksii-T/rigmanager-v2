@@ -61,19 +61,13 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>IP</label>
-                        <input type="text" class="form-control" value="{{$feedback->ip}}" disabled>
+                        <input type="text" class="form-control" value="{{$feedback->created_ip}}" disabled>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Feedbacks from same IP</label>
-                        <input type="text" class="form-control" value="{{\App\Models\Feedback::where('ip', $feedback->ip)->count()-1}}" disabled>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>User Agent</label>
-                        <input type="text" class="form-control" value="{{$feedback->user_agent}}" disabled>
+                        <input type="text" class="form-control" value="{{$feedback->fromSameIp()}}" disabled>
                     </div>
                 </div>
             </div>

@@ -5,10 +5,23 @@ namespace App\Traits;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Contracts\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait LogsActivityBasic
 {
     use LogsActivity;
+
+    public function createdIp(): Attribute
+    {
+        return new Attribute(
+            get: function (){
+                $activity = $this->activities()->where('log_name', 'models')->where('event', 'created')->first();
+                $ip = $activity?->properties['general_info']['ip'] ?? null;
+
+                return $ip;
+            }
+        );
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

@@ -67,6 +67,15 @@ class DevController extends Controller
     {
         $d = [];
 
+        $d = \Spatie\Activitylog\Models\Activity::query()
+            ->where('log_name', 'models')
+            ->where('subject_type', \App\Models\Feedback::class)
+            ->where('event', 'created')
+            ->pluck('properties')
+            ->map(fn ($a) => $a['general_info']['ip'])
+            ->countBy()
+            ['192.168.144.1'];
+
         dd($d);
     }
 

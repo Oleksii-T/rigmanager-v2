@@ -21,8 +21,6 @@ return new class extends Migration
             $table->string('subject');
             $table->text('text');
             $table->smallInteger('status')->default(0);
-            $table->string('ip');
-            $table->string('user_agent');
             $table->timestamps();
         });
     }

@@ -25,7 +25,7 @@ class Category extends Model
     const TRANSLATABLES = [
         'name',
         'slug',
-        'fields'
+        'suggestions'
     ];
 
     protected static function boot()
@@ -74,7 +74,7 @@ class Category extends Model
         return $this->getTranslatedAttr(__FUNCTION__);
     }
 
-    public function fields(): Attribute
+    public function suggestions(): Attribute
     {
         return $this->getTranslatedAttr(__FUNCTION__);
     }

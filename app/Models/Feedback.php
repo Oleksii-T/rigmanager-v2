@@ -5,6 +5,7 @@ namespace App\Models;
 use Yajra\DataTables\DataTables;
 use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Models\Activity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Feedback extends Model
@@ -17,8 +18,6 @@ class Feedback extends Model
         'name',
         'subject',
         'status',
-        'ip',
-        'user_agent',
         'text',
     ];
 
@@ -29,6 +28,29 @@ class Feedback extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function fromSameIp($asCount=true)
+    {
+        $ip = $this->created_ip;
+
+        if (!$ip) {
+            return null;
+        }
+
+        $logs = Activity::query()
+            ->where('log_name', 'models')
+            ->where('subject_type', self::class)
+            ->where('event', 'created')
+            ->whereJsonContains('properties->general_info->ip', $ip);
+
+        if ($asCount) {
+            return $logs->count();
+        }
+
+        $ids = $logs->pluck('subject_id')->toArray();
+
+        return self::whereIn('id', $ids)->get();
     }
 
     public static function dataTable($query)
@@ -46,9 +68,11 @@ class Feedback extends Model
                     ? (substr($model->text, 0, 250) . '...')
                     : $model->text;
             })
-            ->editColumn('ip', function ($model) {
-                $count = self::where('ip', $model->ip)->count() - 1;
-                return "$model->ip ($count)";
+            ->addColumn('ip', function ($model) {
+                $ip = $model->created_ip;
+                $count = $model->fromSameIp();
+
+                return "$ip ($count)";
             })
             ->addColumn('action', function ($model) {
                 return view('admin.feedbacks.actions', compact('model'))->render();

@@ -550,6 +550,19 @@ $(document).ready(function () {
         });
     }
 
+    // copy text
+    $('[data-copy]').click(function(e) {
+        e.preventDefault();
+        let target = $(this).data('copy');
+        target = target ? target : this;
+        copyText($(target).text());
+        let message = $(this).data('message');
+        Toast.fire({
+            icon: 'success',
+            title: message??'Copied successfully'
+        });
+    });
+
     //user adds post to favourites
     $(document).on('click', '.add-to-fav', function (e) {
         e.preventDefault();
@@ -793,6 +806,16 @@ function toggleFaqText(item) {
 		item.parent().find('.faq-hidden').slideDown();
 		item.addClass('active');
 	}
+}
+
+// copy the calue
+function copyText(text) {
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
 }
 
 // show user assistant modal based on current page and time passed

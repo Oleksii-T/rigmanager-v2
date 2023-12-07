@@ -54,9 +54,9 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Fields</label>
-                            <x-admin.multi-lang-input name="fields" :model="$category" textarea="1" />
-                            <span data-input="fields" class="input-error"></span>
+                            <label>Suggestions</label>
+                            <x-admin.multi-lang-input name="suggestions" :model="$category" textarea="1" />
+                            <span data-input="suggestions" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">

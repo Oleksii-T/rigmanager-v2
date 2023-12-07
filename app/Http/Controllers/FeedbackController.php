@@ -13,7 +13,7 @@ class FeedbackController extends Controller
         return view('feedbacks.create');
     }
 
-    public function store(FeedbackRequest $request)
+    public function store(Request $request, $type=null)
     {
         $spammers = [
             '185.234.216.114',
@@ -23,10 +23,23 @@ class FeedbackController extends Controller
         ];
         abort_if(in_array($request->ip(), $spammers) || in_array($request->name, $spammers), 429);
 
-        $input = $request->validated();
+        if ($type == 'report-category-fields') {
+            $input = [
+                'subject' => 'Post Category Suggestion Report',
+                'name' => '',
+                'email' => '',
+                'text' => json_encode($request->data)
+            ];
+        } else {
+            $input = $request->validate([
+                'subject' => ['required', 'string', 'max:255'],
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'email', 'max:255'],
+                'text' => ['required', 'string', 'max:2000']
+            ]);
+        }
+
         $input['user_id'] = auth()->id();
-        $input['ip'] = $request->ip();
-        $input['user_agent'] = $request->userAgent();;
 
         Feedback::create($input);
 

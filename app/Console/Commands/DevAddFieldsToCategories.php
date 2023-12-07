@@ -55,8 +55,6 @@ class DevAddFieldsToCategories extends Command
                     $this->addFieldsForCategory($child2, $name);
                 }
             }
-
-            break; //! DEV
         }
 
         return 0;
@@ -76,17 +74,20 @@ class DevAddFieldsToCategories extends Command
         }
 
         if (!$found) {
-            $this->line("$c->id: $name - NOT FOUND for ");
+            $this->error("$c->id: $name - NOT FOUND");
             return;
         }
 
         $fields = str_replace(' ', '', $fields);
+        $fields = explode("\n", $fields);
+        $fields = array_map(fn ($f) => "$f: _____", $fields);
+        $fields = implode("\n", $fields);
 
         Translation::updateOrCreate(
             [
                 'translatable_id' => $c->id,
                 'translatable_type' => Category::class,
-                'field' => 'fields',
+                'field' => 'suggestions',
                 'locale' => 'en',
             ],
             [
@@ -450,7 +451,7 @@ class DevAddFieldsToCategories extends Command
                 Outer Diameter
                 Length
                 Tool Joint Type',
-            'Drill String > Heavy Weight Drill Pipe (HWDP)' =>
+            'Drill String > Heavy Weight Drill Pipe(HWDP)' =>
                 'Wall Thickness
                 Outer Diameter
                 Steel Grade
@@ -612,7 +613,7 @@ class DevAddFieldsToCategories extends Command
                 Diameter Range
                 Application in Soft to Medium-Hard Formations
                 Hydraulic Design for Cuttings Evacuation',
-            'Drill String > Drill Bit > TSP Bits (Thermally Stable Polycrystalline)' =>
+            'Drill String > Drill Bit > TSP Bits' =>
                 'Cutter Size and Density
                 Diameter Range
                 Application in Hard and Abrasive Formations
@@ -1045,7 +1046,7 @@ class DevAddFieldsToCategories extends Command
                 Efficiency
                 Emission Standards
                 Compatibility with Pump Unit',
-            'Mud Pump & Spare Parts > Gearbox' =>
+            'Mud Pump & Spare Parts > Gear box' =>
                 'Gear Ratio
                 Power Rating
                 Type (Helical, Bevel, etc.)
@@ -1140,7 +1141,7 @@ class DevAddFieldsToCategories extends Command
                 Material Grade
                 Coating Type
                 Length',
-            'Production Equipment & OCTG > FRP Pipe (Fiber Reinforced Plastic Pipe)' =>
+            'Production Equipment & OCTG > Fiber Reinforced Plastic Pipe (FRP Pipe)' =>
                 'Diameter
                 Pressure Rating
                 Material Composition

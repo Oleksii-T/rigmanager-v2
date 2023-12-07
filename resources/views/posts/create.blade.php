@@ -92,7 +92,7 @@
                                         <select class="styled">
                                             <option value="">@lang('ui.chooseTag')</option>
                                             @foreach ($categsFirstLevel as $c)
-                                                <option value="{{$c->id}}">{{$c->name}}</option>
+                                                <option value="{{$c->id}}" data-suggestions="{{$c->suggestions}}">{{$c->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -103,7 +103,7 @@
                                             <select class="styled">
                                                 <option value="">@lang('ui.chooseNextTag')</option>
                                                 @foreach ($secondLevel as $c)
-                                                    <option value="{{$c->id}}">{{$c->name}}</option>
+                                                    <option value="{{$c->id}}" data-suggestions="{{$c->suggestions}}">{{$c->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -115,7 +115,7 @@
                                             <select class="styled">
                                                 <option value="">@lang('ui.chooseNextTag')</option>
                                                 @foreach ($thirdLevel as $c)
-                                                    <option value="{{$c->id}}">{{$c->name}}</option>
+                                                    <option value="{{$c->id}}" data-suggestions="{{$c->suggestions}}">{{$c->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>

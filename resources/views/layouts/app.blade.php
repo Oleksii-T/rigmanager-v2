@@ -48,7 +48,7 @@
             color: #ff8d11;
             font-size: 110%;
         }
-        .pa-header span{
+        .pa-close{
             padding-top: 5px;
             width: 20px;
             height: 20px;
@@ -56,10 +56,10 @@
             justify-content: center;
             justify-items: center;
         }
-        .pa-header span svg path{
+        .pa-close svg path{
             fill: white
         }
-        .pa-header span:hover svg path{
+        .pa-close:hover svg path{
             fill: #ff8d11
         }
         .pa-content {
@@ -72,6 +72,20 @@
         }
         .pa-content a:hover{
             text-decoration: none;
+        }
+        .report-category-fields-suggestion {
+            color: #c21616;
+            cursor: pointer;
+        }
+        .cfields {
+            padding-left: 10px;
+            display: block;
+            border-left: 2px solid #505050;
+            cursor: pointer;
+            transition: all .3s linear;
+        }
+        .cfields:hover {
+            border-left: 2px solid #ff8d11;
         }
     </style>
 </head>
@@ -157,6 +171,36 @@
                 </span>
             </div>
             <div class="pa-content">@lang('ui.page-assists.postCreate.body')</div>
+        </div>
+    </div>
+
+    <div id="post-category-suggestion" class="page-assist d-none">
+        <div>
+            <div class="pa-header">
+                <b>Suggestion: fields for <span class="cname"></span></b>
+                <span class="pa-close">
+                    @svg('icons/close.svg')
+                </span>
+            </div>
+            <div class="pa-content" style="padding:0">Please consider including following information into your post:
+                <span class="cfields" title="click to copy" data-copy></span>
+                This will help other users to understand your post.
+            </div>
+            <form
+                action="{{route('feedbacks.store', 'report-category-fields')}}"
+                method="post"
+                class="general-ajax-submit with-recaptcha ask"
+                data-asktitle="Are you sure?"
+                data-asktext="We will make sure to review the issue you faced"
+                data-askno="Cancel"
+                data-askyes="Report suggestion"
+            >
+                @csrf
+                <input type="hidden" name="data[category_id]" class="cid">
+                <button type="submit" class="report-category-fields-suggestion">
+                    Report suggestion
+                </button>
+            </form>
         </div>
     </div>
 

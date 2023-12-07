@@ -5,6 +5,13 @@ $(document).ready(function() {
     let removedDocuments = [];
     let maxImages = 8;
     let maxDocuments = 8;
+    let categorySuggestion = {
+        globalCloseLimit: 10, // limit for global close popup counter
+        showPopupAfterClose: 2, // close popup counter within one page load
+        todo: true,
+        did: false,
+        description: null
+    };
 
     /* show page */
     /*************/
@@ -101,10 +108,7 @@ $(document).ready(function() {
         let formData = new FormData(form.get(0));
 
         if (button.attr('name')) {
-            console.slog(`is name`); //! LOG
             formData.append(button.attr('name'), button.val());
-        } else {
-            console.elog(`no is name`, button.attr('name'), button); //! LOG
         }
 
         let i = 0;
@@ -147,10 +151,8 @@ $(document).ready(function() {
 
     // categories select
     $(document).on('selectmenuchange', '.categories-level-selects .cat-lev-1 select', function (e) {
-        console.log(`select new first categ`); //! LOG
         let wrpr = $(this).closest('.categories-level-selects');
         let val = $(this).val();
-        console.log(` new val is `, val); //! LOG
         wrpr.find('input[name=category_id]').val(val);
 
         // hide all second and third level categories
@@ -161,15 +163,12 @@ $(document).ready(function() {
         wrpr.find(`.cat-lev-2 .select-block[data-parentcateg="${val}"]`).removeClass('d-none');
     })
     $(document).on('selectmenuchange', '.categories-level-selects .cat-lev-2 select', function (e) {
-        console.log(`select new second categ`); //! LOG
         let wrpr = $(this).closest('.categories-level-selects');
         let val = $(this).val();
 
         if (!val) {
-            console.log(`empty val`); //! LOG
             val = wrpr.find('.cat-lev-1 select').val();
         }
-        console.log(` new val is `, val); //! LOG
 
         wrpr.find('input[name=category_id]').val(val);
 
@@ -180,14 +179,11 @@ $(document).ready(function() {
         wrpr.find(`.cat-lev-3 .select-block[data-parentcateg="${val}"]`).removeClass('d-none');
     })
     $(document).on('selectmenuchange', '.categories-level-selects .cat-lev-3 select', function (e) {
-        console.log(`select new third categ`); //! LOG
         let wrpr = $(this).closest('.categories-level-selects');
         let val = $(this).val();
         if (!val) {
-            console.log(`empty val`); //! LOG
             val = wrpr.find('.cat-lev-2 .select-block:not(.d-none) select').val();
         }
-        console.log(` new val is `, val); //! LOG
         wrpr.find('input[name=category_id]').val(val);
     })
 
@@ -401,6 +397,83 @@ $(document).ready(function() {
             i++;
         });
     }
+
+    $(document).on('input', '[name="description"]', function (e) {
+        // disable category suggestion if user changed description manually after suggestion was made
+        if (categorySuggestion.did) {
+            categorySuggestion.todo = false;
+        }
+    });
+    $(document).on('selectmenuchange', '.categories-level-selects select', function (e) {
+        // show suggestion in description input or as separate popup
+
+        let option = $(this).find('option:selected');
+        let fields = option.data('suggestions');
+
+        if (!fields) {
+            return;
+        }
+
+        if (categorySuggestion.todo) {
+            // show suggestion in description input
+            let descriptionEl = $('textarea[name="description"]');
+
+            if (categorySuggestion.description === null) {
+                categorySuggestion.description = descriptionEl.val();
+            }
+
+            categorySuggestion.did = true;
+
+            let newDescription = categorySuggestion.description
+                ? categorySuggestion.description + '\n\n' + fields
+                : fields;
+
+            descriptionEl.val(newDescription);
+
+            return;
+        }
+
+        // show suggestion as separate popup
+
+        if (window.innerWidth < 750) {
+            return;
+        }
+
+        if (categorySuggestion.showPopupAfterClose <= 0) {
+            return;
+        }
+
+        if (+(localStorage.getItem('categorySuggestionCloseCounter') ?? 0) >= categorySuggestion.globalCloseLimit) {
+            return;
+        }
+
+        // suggest fields as separate popup
+        let popUp = $('#post-category-suggestion');
+        popUp.find('.cname').html(option.text());
+        popUp.find('.cfields').html(fields);
+        popUp.find('.cid').val($(this).val());
+        popUp.removeClass('d-none');
+    })
+    $('#post-category-suggestion .pa-close').click(function(e) {
+        // count how many times user closed suggestion popup
+        categorySuggestion.showPopupAfterClose--;
+
+        let closeCounter = +(localStorage.getItem('categorySuggestionCloseCounter') ?? 0);
+
+        closeCounter++;
+        localStorage.setItem('categorySuggestionCloseCounter', closeCounter);
+
+        if (closeCounter == categorySuggestion.globalCloseLimit) {
+            showToast('Post Category Suggestion popup will not be shown anymore');
+        }
+    })
+    $('#post-category-suggestion .cfields').click(function(e) {
+        // copy the suggestion fieds
+        e.preventDefault();
+        copyText($(this).text());
+        $('#post-category-suggestion').addClass('d-none');
+        showToast('Copied successfully');
+    });
 
     /* my posts page */
     /*****************/
