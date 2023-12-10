@@ -50,6 +50,7 @@ class Setting extends Model
             'name' => 'Emails to non-registered users',
             'settings' => [
                 'non_reg_send_price_req' => 'Send price requests',
+                'non_reg_send_notif_analytics_to_email' => 'Dublicate daily and weekly notifications (with post/contact/profile views) to email',
             ]
         ],
         [

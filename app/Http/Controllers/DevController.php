@@ -211,6 +211,28 @@ class DevController extends Controller
             $group = \App\Enums\NotificationGroup::SUB_RENEW_TOMORROW;
             $mail = new \App\Mail\Subscriptions\EndTomorrow($cycle, $group);
         };
+        if ($t == 'daily-posts-views-for-non-reg') {
+            $user = User::find(14);
+            $count = 17;
+            $posts = Post::whereIn('id', [527, 526])->get();
+            $mail = new \App\Mail\DailyPostViewsForNonReg($user, $count, $posts);
+        };
+        if ($t == 'daily-contact-views-for-non-reg') {
+            $user = User::find(14);
+            $count = 17;
+            $mail = new \App\Mail\DailyContactViewsForNonReg($user, $count);
+        };
+        if ($t == 'daily-profile-views-for-non-reg') {
+            $user = User::find(14);
+            $count = 17;
+            $mail = new \App\Mail\DailyProfileViewsForNonReg($user, $count);
+        };
+        if ($t == 'weekly-posts-views-for-non-reg') {
+            $user = User::find(14);
+            $count = 42;
+            $posts = Post::whereIn('id', [527, 526])->get();
+            $mail = new \App\Mail\WeeklyPostViewsForNonReg($user, $count, $posts);
+        };
 
         // other emails test here...
 

@@ -1,6 +1,6 @@
-Hello {{$currentU->name}}!
+Hello {{$user->name}}!
 <br><br>
-Your post ' <a href="{{route('posts.show', $post)}}">{{$post->title}}</a>' in automaticaly created <a href="{{url('')}}">rigmanagers.com</a> account<br>
+Your post '<a href="{{route('posts.show', $post)}}">{{$post->title}}</a>' in automaticaly created <a href="{{url('')}}">rigmanagers.com</a> account<br>
 recieved price request from <a href="{{route('users.show', $user)}}">{{$user->name}}</a> ({{$user->getEmails(0)}}). Here is the message:
 <br><br>
 ------

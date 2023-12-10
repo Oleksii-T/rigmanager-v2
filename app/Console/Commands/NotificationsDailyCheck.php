@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Models\Notification;
 use Illuminate\Console\Command;
 use App\Enums\NotificationGroup;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Activitylog\Models\Activity;
 
 class NotificationsDailyCheck extends Command
@@ -35,6 +36,8 @@ class NotificationsDailyCheck extends Command
     public function handle()
     {
         try {
+            $sendToNonReg = Setting::get('non_reg_send_notif_analytics_to_email');
+
             //posts views
             $min = Setting::get('notif_daily_posts_views_min');
             $postsByUser = Post::query()
@@ -46,10 +49,17 @@ class NotificationsDailyCheck extends Command
                 ->groupBy('user_id');
 
             foreach ($postsByUser as $uId => $items) {
+                $user = User::fing($uId);
                 $count = $items->pluck('views_count')->sum();
+
                 if (!$count || $count < $min) {
                     continue;
                 }
+
+                if (!$user->info->is_registered && $sendToNonReg) {
+                    Mail::to($user->getEmails(0))->send(new \App\Mail\DailyPostViewsForNonReg($user, $count, $items));
+                }
+
                 Notification::make($uId, NotificationGroup::DAILY_POSTS_VIEWS, [
                     'vars' => [
                         'count' => $count
@@ -66,10 +76,15 @@ class NotificationsDailyCheck extends Command
                 ->get()
                 ->groupBy('subject_id');
             foreach ($postsByUser as $uId => $items) {
+                $user = User::fing($uId);
                 $count = $items->count();
 
                 if (!$count || $count < $min) {
                     continue;
+                }
+
+                if (!$user->info->is_registered && $sendToNonReg) {
+                    Mail::to($user->getEmails(0))->send(new \App\Mail\DailyContactViewsForNonReg($user, $count));
                 }
 
                 Notification::make($uId, NotificationGroup::DAILY_CONTACS_VIEWS, [
@@ -86,10 +101,15 @@ class NotificationsDailyCheck extends Command
                 ->get()
                 ->groupBy('subject_id');
             foreach ($viewsByUser as $uId => $items) {
+                $user = User::fing($uId);
                 $count = $items->count();
 
                 if (!$count || $count < $min) {
                     continue;
+                }
+
+                if (!$user->info->is_registered && $sendToNonReg) {
+                    Mail::to($user->getEmails(0))->send(new \App\Mail\DailyProfileViewsForNonReg($user, $count));
                 }
 
                 Notification::make($uId, NotificationGroup::DAILY_PROFILE_VIEWS, [

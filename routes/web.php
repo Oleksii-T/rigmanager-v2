@@ -134,7 +134,6 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::get('favorites/{slug1?}/{slug2?}/{slug3?}', [ProfileController::class, 'favorites'])->name('favorites');
                 Route::get('subscription', [ProfileController::class, 'subscription'])->name('subscription');
                 Route::get('chat', [ProfileController::class, 'chat'])->name('chat');
-                Route::post('chat/{user}', [ProfileController::class, 'message'])->name('chat.store');
                 Route::post('posts/action', [ProfileController::class, 'action']);
                 Route::put('/', [ProfileController::class, 'update'])->name('update');
                 Route::put('password', [ProfileController::class, 'password'])->name('password');
@@ -148,6 +147,8 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
             });
 
             Route::middleware('sub')->group(function () {
+
+                Route::post('profile/chat/{user}', [ProfileController::class, 'message'])->name('profile.chat.store');
 
                 Route::prefix('users')->name('users.')->group(function () {
                     Route::get('{user}/contacts', [UserController::class, 'contacts'])->name('contacts');

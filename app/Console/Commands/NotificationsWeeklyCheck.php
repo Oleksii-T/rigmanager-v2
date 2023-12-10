@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Models\Notification;
 use Illuminate\Console\Command;
 use App\Enums\NotificationGroup;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Activitylog\Models\Activity;
 
 class NotificationsWeeklyCheck extends Command
@@ -35,6 +36,7 @@ class NotificationsWeeklyCheck extends Command
     public function handle()
     {
         try {
+            $sendToNonReg = Setting::get('non_reg_send_notif_analytics_to_email');
 
             //posts views
             $min = Setting::get('notif_weekly_posts_views_min');
@@ -47,10 +49,17 @@ class NotificationsWeeklyCheck extends Command
                 ->groupBy('user_id');
 
             foreach ($postsByUser as $uId => $items) {
+                $user = User::fing($uId);
                 $count = $items->pluck('views_count')->sum();
+
                 if (!$count || $count < $min) {
                     continue;
                 }
+
+                if (!$user->info->is_registered && $sendToNonReg) {
+                    Mail::to($user->getEmails(0))->send(new \App\Mail\WeeklyPostViewsForNonReg($user, $count, $items));
+                }
+
                 Notification::make($uId, NotificationGroup::WEEKLY_POSTS_VIEWS, [
                     'vars' => [
                         'count' => $count
@@ -67,10 +76,15 @@ class NotificationsWeeklyCheck extends Command
                 ->get()
                 ->groupBy('subject_id');
             foreach ($postsByUser as $uId => $items) {
+                $user = User::fing($uId);
                 $count = $items->count();
 
                 if (!$count || $count < $min) {
                     continue;
+                }
+
+                if (!$user->info->is_registered && $sendToNonReg) {
+                    Mail::to($user->getEmails(0))->send(new \App\Mail\WeeklyContactViewsForNonReg($user, $count));
                 }
 
                 Notification::make($uId, NotificationGroup::WEEKLY_CONTACS_VIEWS, [
@@ -80,17 +94,22 @@ class NotificationsWeeklyCheck extends Command
                 ]);
             }
 
-            // user page views
+            // user profile views
             $min = Setting::get('notif_weekly_profile_views_min');
             $viewsByUser = User::getAllViews(true)
                 ->where('created_at', '>=', now()->subWeek())
                 ->get()
                 ->groupBy('subject_id');
             foreach ($viewsByUser as $uId => $items) {
+                $user = User::fing($uId);
                 $count = $items->count();
 
                 if (!$count || $count < $min) {
                     continue;
+                }
+
+                if (!$user->info->is_registered && $sendToNonReg) {
+                    Mail::to($user->getEmails(0))->send(new \App\Mail\WeeklyProfileViewsForNonReg($user, $count));
                 }
 
                 Notification::make($uId, NotificationGroup::WEEKLY_PROFILE_VIEWS, [
