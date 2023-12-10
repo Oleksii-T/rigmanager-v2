@@ -278,6 +278,15 @@
     color: transparent;
     text-shadow: 0 0 7px #ff8d11;
 }
+.blurred.white {
+    text-shadow: 0 0 7px #fff;
+}
+.blurred.b-13 {
+    text-shadow: 0 0 13px #ff8d11;
+}
+.blurred.b-13.white {
+    text-shadow: 0 0 13px #fff;
+}
 
 /* help icon */
 .help-tooltip-icon {

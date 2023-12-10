@@ -2,11 +2,13 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Traits\JsonResponsable;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
+    use JsonResponsable;
     /**
      * A list of exception types with their corresponding custom log levels.
      *
@@ -56,8 +58,10 @@ class Handler extends ExceptionHandler
             ->log('');
 
         if ($request->expectsJson() || $request->ajax()) {
-            return response()->json(['message' => trans('messages.401')], 401);
+            return $this->jsonError(trans('messages.401'), 401);
         }
+
+        flash('Please login to see the page.', false);
 
         return redirect()->route('login');
     }

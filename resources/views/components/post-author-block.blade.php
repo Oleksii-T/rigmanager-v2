@@ -1,14 +1,43 @@
 
 <div class="prod-author">
     <div class="prod-author-info">
-        <img class="prod-author-ava" src="{{userAvatar($post->user)}}" alt="{{$post->user->avatar->alt??''}}">
+            <img
+                class="prod-author-ava"
+                @isSub
+                    src="{{userAvatar($post->user)}}"
+                @else
+                    style="background-color: #282828"
+                    src="{{asset('icons/unknown-user.svg')}}"
+                @endisSub
+                alt="{{$post->user->avatar->alt??''}}"
+            >
         <div class="prod-author-about">
             <div class="prod-author-name">
-                <a href="{{route('users.show', $post->user)}}" class="orange">
-                    {{$post->user->name}}
-                </a>
+                @isSub
+                    <a href="{{route('users.show', $post->user)}}" class="orange">
+                        {{$post->user->name}}
+                    </a>
+                @else
+                    <a
+                        class="prod-info-text blurred c-pointer"
+                        data-subject="{{$post->user->id}}"
+                        @auth
+                            data-modal="sub-required"
+                            data-type="post-author-show-by-unsub"
+                            data-message="A paid Subscription required to see post authors."
+                        @else
+                            data-modal="auth-required"
+                            data-type="post-author-show-by-guest"
+                            data-message="Please login to see post authors."
+                        @endauth
+                    >
+                        Author Name
+                    </a>
+                @endisSub
             </div>
-            <a href="{{route('search', ['author'=>$post->user->slug])}}" class="prod-author-link">{{__('ui.allAuthorPosts')}}</a>
+            <a href="{{route('search', ['author'=>$post->user->slug])}}" class="prod-author-link">
+                {{__('ui.allAuthorPosts')}}
+            </a>
             @auth
                 <br>
                 @if ($post->user_id != $currentUser->id)
@@ -25,7 +54,9 @@
             @endauth
         </div>
     </div>
-    <a href="#" data-url="{{route('users.contacts', $post->user)}}" class="button button-light show-contacts">{{__('ui.showContacts')}}</a>
+    <a href="#" data-url="{{route('users.contacts', $post->user)}}" class="button button-light show-contacts">
+        {{__('ui.showContacts')}}
+    </a>
     <br>
     @if ($currentUser?->id == $post->user_id)
         <button class="button button-light send-message-to-self">{{__('ui.sendMessage')}}</button>

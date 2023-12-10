@@ -182,10 +182,20 @@
                                 <li>
                                     <em>unauthenticated</em>:
                                     unauthenticated error occured.
+                                    <small>
+                                        Logs created due to backend-middleware will not contain any explicit cause of error,
+                                        instead, see properties->general_info->url.
+                                        Logs caused by JS check - will contain type of check in description field.
+                                    </small>
                                 </li>
                                 <li>
                                     <em>not-subscribed</em>:
                                     failed subscription check.
+                                    <small>
+                                        Logs created due to backend-middleware will not contain any explicit cause of error,
+                                        instead, see properties->general_info->url.
+                                        Logs caused by JS check - will contain type of check in description field.
+                                    </small>
                                 </li>
                                 <li>
                                     <em>fail-login</em>:

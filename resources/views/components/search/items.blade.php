@@ -31,7 +31,25 @@
                 <!--under description line. Lables: cost, urgent, import-->
                 <div class="catalog-line-bottom">
                     <!--price-->
-                    <div class="catalog-price">{{$post->cost_readable}}</div>
+                    @isSub
+                        <div class="catalog-price">{{$post->cost_readable}}</div>
+                    @else
+                        <div
+                            class="catalog-price blurred white c-pointer"
+                            data-subject="{{$post->id}}"
+                            @auth
+                                data-modal="sub-required"
+                                data-type="post-price-show-by-unsub"
+                                data-message="A paid Subscription required to see post prices."
+                            @else
+                                data-modal="auth-required"
+                                data-type="post-price-show-by-guest"
+                                data-message="Please login to see post prices."
+                            @endauth
+                        >
+                            $00.000,00
+                        </div>
+                    @endisSub
                     <!--urgent+import-->
                     <div>
                         <!--urgent-->

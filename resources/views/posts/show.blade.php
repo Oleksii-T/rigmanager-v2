@@ -59,6 +59,7 @@
                 </div>
             @endif
             <div class="prod-about">
+                {{--
                 @if ($post->failed_translation)
                     <div class="warning">
                         {{__('ui.posts.autoTranslationNotAvailable')}}
@@ -75,6 +76,7 @@
                     <h1 class="hidden">{{$post->translated('title', $post->origin_lang)}}</h1>
                     <p class="hidden">{{$post->translated('description', $post->origin_lang)}}</p>
                 @endif
+                --}}
                 <h1>{{$post->title}}</h1>
                 <p>{{$post->description}}</p>
             </div>
@@ -153,11 +155,25 @@
                 @if ($post->cost_readable)
                     <div class="prod-info-item">
                         <div class="prod-info-name">{{__('ui.cost')}}</div>
-                        @if ($currentUser && $currentUser->isSub())
+                        @isSub
                             <div class="prod-info-text">{{$post->cost_readable}}</div>
                         @else
-                            <div class="prod-info-text blurred sub-required-modal">00.000,00</div>
-                        @endif
+                            <div
+                                class="prod-info-text blurred c-pointer"
+                                data-subject="{{$post->id}}"
+                                @auth
+                                    data-modal="sub-required"
+                                    data-type="post-price-show-by-unsub"
+                                    data-message="A paid Subscription required to see post prices."
+                                @else
+                                    data-modal="auth-required"
+                                    data-type="post-price-show-by-guest"
+                                    data-message="Please login to see post prices."
+                                @endauth
+                            >
+                                $00.000,00
+                            </div>
+                        @endisSub
                     </div>
                 @endif
                 <div class="prod-info-item">

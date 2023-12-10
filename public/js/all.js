@@ -592,10 +592,24 @@ $(document).ready(function () {
         });
     })
 
-    // show subscription required modal
-    $('.sub-required-modal').click(function(e) {
+    // show auth required modal
+    $(document).on('click', '[data-modal="auth-required"]', function (e) {
         e.preventDefault();
-        showSubRequiredModal();
+        sendActivityLog({
+            type: $(this).data('type'),
+            subject: $(this).data('subject'),
+        });
+        showAuthRequiredModal($(this).data('message'));
+    })
+
+    // show subscription required modal
+    $(document).on('click', '[data-modal="sub-required"]', function (e) {
+        e.preventDefault();
+        sendActivityLog({
+            type: $(this).data('type'),
+            subject: $(this).data('subject'),
+        });
+        showSubRequiredModal($(this).data('message'));
     })
 
     // close page assist
@@ -743,11 +757,27 @@ function showServerError(response) {
     showPopUp(null, msg ? msg : null, false);
 }
 
-// subscription required modal
-function showSubRequiredModal(msg='A subscriptoion required for this action.') {
+// auth required modal
+function showAuthRequiredModal(msg=null) {
+    let html = `<h2 class="swal2-title" style="padding: 0 0 24px 0">Authorization required</h2><p>`;
+    if (msg) html += msg + '<br>';
+    html += `Go to <a href="/login" >Login</a> page.</p>`;
+
     swal.fire({
-        html: `<h2 class="swal2-title" style="padding: 0 0 24px 0">${msg}</h2>
-            <p>Learn more at <a href="/plans" >Paid plans</a> page.</p>`,
+        html,
+        showConfirmButton: false,
+        showCancelButton: true,
+    });
+}
+
+// subscription required modal
+function showSubRequiredModal(msg=null) {
+    let html = `<h2 class="swal2-title" style="padding: 0 0 24px 0">Subscriptoion required</h2><p>`;
+    if (msg) html += msg + '<br>';
+    html += `Learn more at <a href="/plans" >Paid plans</a> page.</p>`;
+
+    swal.fire({
+        html,
         showConfirmButton: false,
         showCancelButton: true,
     });
@@ -876,4 +906,16 @@ function haveBeenCalled(input, remember=false) {
     }
 
     return false;
+}
+
+function sendActivityLog(data)
+{
+    $.ajax({
+        url: '/activity-log',
+        type: 'post',
+        data,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 }

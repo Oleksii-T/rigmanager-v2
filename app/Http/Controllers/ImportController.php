@@ -180,9 +180,13 @@ class ImportController extends Controller
     {
         abort_if(auth()->id() != $import->user_id, 403);
 
-        Post::whereIn('id', $import->posts)->update([
-            'is_active' => false
-        ]);
+        $posts = Post::whereIn('id', $import->posts)->get();
+
+        foreach ($posts as $post) {
+            $post->update([
+                'is_active' => false
+            ]);
+        }
 
         return $this->jsonSuccess(trans('messages.import.posts-deactivated'));
     }
@@ -191,9 +195,13 @@ class ImportController extends Controller
     {
         abort_if(auth()->id() != $import->user_id, 403);
 
-        Post::whereIn('id', $import->posts)->update([
-            'is_active' => true
-        ]);
+        $posts = Post::whereIn('id', $import->posts)->get();
+
+        foreach ($posts as $post) {
+            $post->update([
+                'is_active' => true
+            ]);
+        }
 
         return $this->jsonSuccess(trans('messages.import.posts-activated'));
     }

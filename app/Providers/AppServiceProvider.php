@@ -124,6 +124,16 @@ class AppServiceProvider extends ServiceProvider
 
             return $output;
         });
+        \Blade::if('isSub', function($level=null) {
+            $level = $level ?: null;
+            $user = auth()->user();
+
+            if (!$user) {
+                return false;
+            }
+
+            return $user->isSub($level);
+        });
 
         // load config values from db
         config(['services.google.client_id'=> Setting::get('google_client_id')]);
