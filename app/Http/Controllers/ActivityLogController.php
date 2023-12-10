@@ -31,13 +31,13 @@ class ActivityLogController extends Controller
         if ($descripton == 'post-author-show-by-unsub') {
             $logName = 'users';
             $event = 'not-subscribed';
-            $subject = User::find($request->subject);
+            $subject = User::find($request->subject) ?? User::where('slug', $request->subject)->first();
         }
 
         if ($descripton == 'post-author-show-by-guest') {
             $logName = 'users';
             $event = 'unauthenticated';
-            $subject = User::find($request->subject);
+            $subject = User::find($request->subject) ?? User::where('slug', $request->subject)->first();
         }
 
         if (!$logName) {

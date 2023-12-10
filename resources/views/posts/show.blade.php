@@ -155,25 +155,7 @@
                 @if ($post->cost_readable)
                     <div class="prod-info-item">
                         <div class="prod-info-name">{{__('ui.cost')}}</div>
-                        @isSub
-                            <div class="prod-info-text">{{$post->cost_readable}}</div>
-                        @else
-                            <div
-                                class="prod-info-text blurred c-pointer"
-                                data-subject="{{$post->id}}"
-                                @auth
-                                    data-modal="sub-required"
-                                    data-type="post-price-show-by-unsub"
-                                    data-message="A paid Subscription required to see post prices."
-                                @else
-                                    data-modal="auth-required"
-                                    data-type="post-price-show-by-guest"
-                                    data-message="Please login to see post prices."
-                                @endauth
-                            >
-                                $00.000,00
-                            </div>
-                        @endisSub
+                        <x-post-price :post="$post" class="prod-info-text" />
                     </div>
                 @endif
                 <div class="prod-info-item">

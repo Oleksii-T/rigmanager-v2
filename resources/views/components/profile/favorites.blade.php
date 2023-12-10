@@ -33,7 +33,7 @@
                     <!--under description line. Lables: cost, urgent, import-->
                     <div class="catalog-line-bottom">
                         <!--price-->
-                        <div class="catalog-price">{{$post->cost_readable}}</div>
+                        <x-post-price :post="$post" class="catalog-price" />
                         <!--urgent+import-->
                         <div>
                             <!--urgent-->
