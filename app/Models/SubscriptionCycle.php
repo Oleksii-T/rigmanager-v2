@@ -57,6 +57,9 @@ class SubscriptionCycle extends Model
     public static function dataTable($query)
     {
         return DataTables::of($query)
+            ->editColumn('invoice', function($cycle){
+                return json_encode($cycle->invoice);
+            })
             ->editColumn('created_at', function($cycle){
                 return $cycle->created_at->format(env('ADMIN_DATETIME_FORMAT'));
             })
@@ -68,7 +71,14 @@ class SubscriptionCycle extends Model
                     ? '<span class="badge badge-success">Active</span>'
                     : '<span class="badge badge-warning">Inactive</span>';
             })
-            ->rawColumns(['is_active'])
+            ->addColumn('action', function ($model) {
+                return view('components.admin.actions', [
+                    'model' => $model,
+                    'name' => 'subscription-cycles',
+                    'actions' => ['edit']
+                ])->render();
+            })
+            ->rawColumns(['is_active', 'action'])
             ->make();
     }
 }

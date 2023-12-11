@@ -28,9 +28,12 @@ $(document).ready(function () {
         },
         columns: [
             { data: 'id', name: 'id' },
+            { data: 'invoice', name: 'invoice' },
+            { data: 'price', name: 'price' },
             { data: 'created_at', name: 'created_at' },
             { data: 'expire_at', name: 'expire_at' },
             { data: 'is_active', name: 'is_active' },
+            { data: 'action', name: 'action', orderable: false, searchable: false }
         ]
     });
 });

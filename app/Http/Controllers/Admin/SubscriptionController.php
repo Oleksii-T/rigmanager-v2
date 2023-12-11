@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
+use App\Models\Setting;
+use App\Models\Subscription;
+use Illuminate\Http\Request;
+use App\Services\StripeService;
+use App\Models\SubscriptionPlan;
+use Yajra\DataTables\DataTables;
+use App\Models\SubscriptionCycle;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SubscriptionRequest;
-use Illuminate\Http\Request;
-use App\Models\Subscription;
-use App\Models\SubscriptionCycle;
-use App\Models\Setting;
-use Yajra\DataTables\DataTables;
-use App\Services\StripeService;
 
 class SubscriptionController extends Controller
 {
@@ -31,6 +33,45 @@ class SubscriptionController extends Controller
         }
 
         return Subscription::dataTable(Subscription::query());
+    }
+
+    public function create(Request $request)
+    {
+        $plans = SubscriptionPlan::all();
+        $users = User::latest()->get();
+
+        return view('admin.subscriptions.create', compact('plans', 'users'));
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'subscription_plan_id' => ['required', 'exists:subscription_plans,id'],
+            'user_id' => ['required', 'exists:users,id'],
+            'stripe_id' => ['nullable', 'string'],
+            'status' => ['required', 'string'],
+            'is_active' => ['required', 'boolean'],
+            'invoice' => ['nullable', 'json'],
+            'price' => ['nullable', 'json'],
+            'expire_at' => ['required', 'date'],
+        ]);
+
+        $user = User::findOrFail($data['user_id']);
+        $activeSub = $user->activeSubscription();
+
+        if ($activeSub) {
+            return $this->jsonError("User already have active subscription");
+        }
+
+        $data['price'] = $data['price'] ?: 0;
+        $data['invoice'] = $data['invoice'] ? json_decode($data['invoice'], true) : null;
+
+        $subscription = Subscription::create($data);
+        $subscription->cycle()->create($data);
+
+        return $this->jsonSuccess("Subscription successfully created!", [
+            'redirect' => route('admin.subscriptions.index')
+        ]);
     }
 
     public function show(Request $request, Subscription $subscription)

@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\SubscriptionPlanController;
+use App\Http\Controllers\Admin\SubscriptionCycleController;
 
 /*
  *
@@ -44,7 +45,8 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('subscription-plans', SubscriptionPlanController::class)->except('show');
 
-    Route::resource('subscriptions', SubscriptionController::class)->only(['index', 'show', 'destroy']);
+    Route::resource('subscriptions', SubscriptionController::class);
+    Route::resource('subscription-cycles', SubscriptionCycleController::class)->only('edit', 'update');
 
     Route::resource('mailers', MailerController::class)->except('show');
 

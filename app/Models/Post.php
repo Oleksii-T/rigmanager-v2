@@ -82,7 +82,7 @@ class Post extends Model
     {
         parent::boot();
 
-        static::deleting(function ($model) {
+        static::forceDeleting(function ($model) {
             $model->purgeAttachments();
             $model->purgeTranslations();
         });

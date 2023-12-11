@@ -67,9 +67,12 @@
                         <thead>
                             <tr>
                                 <th class="ids-column">ID</th>
-                                <th>Start</th>
-                                <th>End</th>
+                                <th>Invoice</th>
+                                <th>Paid</th>
+                                <th>Created At</th>
+                                <th>Expire At</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>

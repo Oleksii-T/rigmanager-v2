@@ -10,6 +10,9 @@
                     <h1 class="m-0">Subscriptions</h1>
                 </div>
                 <div class="float-left pl-3">
+                    <a href="{{route('admin.subscriptions.create')}}" class="btn btn-primary">
+                        + Add Subscription
+                    </a>
                     <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#subcs-trivia">
                         Trivia
                     </a>
