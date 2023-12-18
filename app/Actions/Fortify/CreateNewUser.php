@@ -35,14 +35,23 @@ class CreateNewUser implements CreatesNewUsers
             'phone' => ['nullable', 'string', 'max:40']
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'country' => strtolower(Location::get()->countryCode),
             'name' => $input['name'],
             'slug' => makeSlug($input['name'], User::pluck('slug')->toArray()),
             'email' => $input['email'],
-            'phone' => $input['phone'],
             'password' => Hash::make($input['password']),
             'last_active_at' => now(),
         ]);
+
+        $info = [];
+
+        if ($input['phone']) {
+            $info['phnes'] = $input['phone'];
+        }
+
+        $user->info()->create($info);
+
+        return $user;
     }
 }

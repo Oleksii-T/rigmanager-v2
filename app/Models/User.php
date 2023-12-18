@@ -55,15 +55,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_active_at' => 'datetime',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($model) {
-            $model->info()->create([]);
-        });
-    }
-
     // Get the route key for the model.
     public function getRouteKeyName()
     {
@@ -260,7 +251,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 return $model->name;
             })
             ->editColumn('last_active_at', function ($model) {
-                return $model->last_active_at->diffForHumans();
+                return $model->last_active_at?->diffForHumans() ?? '-';
             })
             ->editColumn('created_at', function ($model) {
                 return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));

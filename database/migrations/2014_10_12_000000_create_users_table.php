@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('country', 5);
             $table->string('password')->nullable();
             $table->rememberToken();
-            $table->datetime('last_active_at');
+            $table->datetime('last_active_at')->nullable();
             $table->timestamps();
         });
     }

@@ -251,6 +251,15 @@
                                 </li>
                             </ul>
                         </li>
+                        <li>
+                            <b>feedback-bans</b>
+                            <ul>
+                                <li>
+                                    <em>catch</em>:
+                                    feedback from banned user been catched.
+                                </li>
+                            </ul>
+                        </li>
                     </ol>
                     Causer: entity which caused the log. generally - logged in user.
                     <br>

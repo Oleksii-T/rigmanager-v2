@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\FeedbackBanController;
 use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\SubscriptionController;
@@ -41,6 +42,8 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('categories', CategoryController::class);
 
+    Route::post('posts/{post}/add-views', [PostController::class, 'addViews'])->name('posts.add-views');
+    Route::post('posts/approve-all', [PostController::class, 'approveAll'])->name('posts.approve-all');
     Route::resource('posts', PostController::class);
 
     Route::resource('subscription-plans', SubscriptionPlanController::class)->except('show');
@@ -57,6 +60,9 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('users', UserController::class);
 
     Route::resource('faqs', FaqController::class)->except('show');
+
+    Route::post('feedback-bans/{feedback-ban}/toggle', [FeedbackBanController::class, 'toggle'])->name('feedback-bans.toggle');
+    Route::resource('feedback-bans', FeedbackBanController::class)->only('index', 'store', 'update', 'destroy');
 
     Route::resource('feedbacks', FeedbackController::class)->only('show', 'index', 'destroy', 'update');
 

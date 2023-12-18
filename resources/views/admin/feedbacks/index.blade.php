@@ -5,6 +5,7 @@
 @section('content_header')
     <x-admin.title
         text="Feedbacks"
+        :button="['Bans', route('admin.feedback-bans.index')]"
     />
 @stop
 

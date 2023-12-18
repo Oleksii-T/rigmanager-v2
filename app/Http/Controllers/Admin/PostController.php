@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Enums\NotificationGroup;
-use App\Models\Notification;
+use Carbon\Carbon;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Setting;
-use App\Http\Requests\Admin\PostRequest;
+use App\Models\Notification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\Enums\NotificationGroup;
 use App\Jobs\MailerProcessNewPost;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\Admin\PostRequest;
 
 class PostController extends Controller
 {
@@ -63,8 +64,7 @@ class PostController extends Controller
     {
         $input = $request->validated();
         $user = User::find($input['user_id']);
-        $input['phone'] ??= $user->phone;
-        $input['email'] ??= $user->email;
+        $input['duration'] = 'unlim';
         $post = Post::create($input);
         $post->saveCosts($input);
         $post->saveTranslations($input);
@@ -111,6 +111,39 @@ class PostController extends Controller
         }
 
         return $this->jsonSuccess('Post updated successfully');
+    }
+
+    public function approveAll()
+    {
+        $posts = Post::where('status', 'pending')->get();
+
+        foreach ($posts as $post) {
+            $post->update(['status' => 'approved']);
+        }
+
+        return $this->jsonSuccess('Post updated successfully', [
+            'reload' => true
+        ]);
+    }
+
+    public function addViews(Request $request, Post $post)
+    {
+        for ($i=0; $i < ($request->amount??1); $i++) {
+            $view = $post->saveView(true);
+
+            $view->causer_type = null;
+            $view->causer_id = null;
+
+            if ($request->date) {
+                $date = Carbon::parse($request->date);
+                $view->created_at = $date;
+                $view->updated_at = $date;
+            }
+
+            $view->save();
+        }
+
+        return $this->jsonSuccess('Post views added successfully');
     }
 
     public function destroy(Post $post)

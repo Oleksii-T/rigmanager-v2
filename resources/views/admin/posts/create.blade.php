@@ -120,17 +120,6 @@
                             <span data-input="origin_lang" class="input-error"></span>
                         </div>
                     </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Duration</label>
-                            <select class="form-control" name="duration">
-                                @foreach (\App\Models\Post::DURATIONS as $item)
-                                    <option value="{{$item}}">{{readable($item)}}</option>
-                                @endforeach
-                            </select>
-                            <span data-input="duration" class="input-error"></span>
-                        </div>
-                    </div>
                     <div class="col-md-2 col-lg-2 col-xl-1">
                         <div class="form-group">
                             <label>Is Active</label>
@@ -156,13 +145,74 @@
         </div>
         <div class="card card-secondary">
             <div class="card-header">
+                <h3 class="card-title">Price</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 col-lg-3 col-xl-2">
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <select class="form-control" name="currency">
+                                @foreach (currencies() as $key => $symbol)
+                                    <option value="{{$key}}">{{strtoupper($key)}}</option>
+                                @endforeach
+                            </select>
+                            <span data-input="currency" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-2">
+                        <div class="form-group">
+                            <label>Cost From</label>
+                            <input type="text" class="form-control" name="cost_from">
+                            <span data-input="cost_from" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-2">
+                        <div class="form-group">
+                            <label>Cost To</label>
+                            <input type="text" class="form-control" name="cost_to">
+                            <span data-input="cost_to" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-2">
+                        <div class="form-group">
+                            <label>Cost Per</label>
+                            <input type="text" class="form-control" name="cost_per">
+                            <span data-input="cost_per" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-lg-2 col-xl-1">
+                        <div class="form-group">
+                            <label>Cost Double Value</label>
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" id="is_double_cost" name="is_double_cost" value="1">
+                                <label for="is_double_cost" class="custom-control-label">Yes</label>
+                            </div>
+                            <span data-input="is_double_cost" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-lg-2 col-xl-1">
+                        <div class="form-group">
+                            <label>Price Requests</label>
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" id="is_tba" name="is_tba" value="1">
+                                <label for="is_tba" class="custom-control-label">Yes</label>
+                            </div>
+                            <span data-input="is_tba" class="input-error"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-secondary">
+            <div class="card-header">
                 <h3 class="card-title">Additional Info</h3>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 col-lg-3 col-xl-2">
                         <div class="form-group">
-                            <label>Amount</label>
+                            <label>Quantity</label>
                             <input type="text" class="form-control" name="amount">
                             <span data-input="amount" class="input-error"></span>
                         </div>
@@ -197,24 +247,6 @@
                             <label>Part Number</label>
                             <input type="text" class="form-control" name="part_number">
                             <span data-input="part_number" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Cost</label>
-                            <input type="text" class="form-control" name="cost">
-                            <span data-input="cost" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Currency</label>
-                            <select class="form-control" name="currency">
-                                @foreach (currencies() as $key => $symbol)
-                                    <option value="{{$key}}">{{strtoupper($key)}}</option>
-                                @endforeach
-                            </select>
-                            <span data-input="currency" class="input-error"></span>
                         </div>
                     </div>
                 </div>

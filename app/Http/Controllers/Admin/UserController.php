@@ -41,11 +41,26 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $input = $request->validated();
-        $input['password'] = Hash::make($input['password']);
-        $user = User::create($input);
-        $user->addAttachment($input['avatar'], 'avatar');
-        $user->addAttachment($input['banner'], 'banner');
-        $user->roles()->attach($input['roles']);
+        $userInput = $input['user'];
+        $infoInput = $input['info'];
+
+        $userInput['password'] = Hash::make($userInput['password']);
+        $user = User::create($userInput);
+        $user->addAttachment($userInput['avatar']??null, 'avatar');
+        $user->addAttachment($userInput['banner']??null, 'banner');
+        $user->roles()->attach($userInput['roles']);
+
+        $infoInput['emails'] = $infoInput['emails'] ? json_decode($infoInput['emails']) : null;
+        $infoInput['phones'] = $infoInput['phones'] ? json_decode($infoInput['phones']) : null;
+        $user->info()->create($infoInput);
+
+        if ($input['verify_email_now']??false) {
+            $user->email_verified_at = now();
+            $user->save();
+            event(new \Illuminate\Auth\Events\Verified($user));
+        } else {
+            event(new \Illuminate\Auth\Events\Registered($user));
+        }
 
         return $this->jsonSuccess('User created successfully', [
             'redirect' => route('admin.users.index')
@@ -54,23 +69,31 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $info = $user->info;
+
+        return view('admin.users.edit', compact('user', 'info'));
     }
 
     public function update(UserRequest $request, User $user)
     {
         $input = $request->validated();
+        $userInput = $input['user'];
+        $infoInput = $input['info'];
 
-        if ($input['password']) {
-            $input['password'] = Hash::make($input['password']);
+        if ($userInput['password']) {
+            $userInput['password'] = Hash::make($userInput['password']);
         } else {
-            unset($input['password']);
+            unset($userInput['password']);
         }
 
-        $user->update($input);
-        $user->addAttachment($input['avatar']??null, 'avatar');
-        $user->addAttachment($input['banner']??null, 'banner');
-        $user->roles()->sync($input['roles']??[]);
+        $user->update($userInput);
+        $user->addAttachment($userInput['avatar']??null, 'avatar');
+        $user->addAttachment($userInput['banner']??null, 'banner');
+        $user->roles()->sync($userInput['roles']??[]);
+
+        $infoInput['emails'] = $infoInput['emails'] ? json_decode($infoInput['emails']) : null;
+        $infoInput['phones'] = $infoInput['phones'] ? json_decode($infoInput['phones']) : null;
+        $user->info->update($infoInput);
 
         return $this->jsonSuccess('User updated successfully');
     }

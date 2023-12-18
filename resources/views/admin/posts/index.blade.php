@@ -87,6 +87,12 @@
                         <div class="col-lg-2">
                             <a href="{{request()->url()}}" class="btn btn-warning">Clear Filters</a>
                         </div>
+                        @if (\App\Models\Post::status('pending')->exists())
+                            <form action="{{route('admin.posts.approve-all')}}" method="post" class="col-lg-2 general-ajax-submit">
+                                @csrf
+                                <button class="btn btn-warning">Mark All as Approved</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">

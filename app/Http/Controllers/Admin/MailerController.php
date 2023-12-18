@@ -48,7 +48,7 @@ class MailerController extends Controller
             return view('admin.mailers.edit', compact('mailer'));
         }
 
-        $posts = Post::whereIn('id', $mailer->to_mail);
+        $posts = Post::whereIn('id', $mailer->to_mail??[]);
 
         return Post::dataTable($posts);
     }

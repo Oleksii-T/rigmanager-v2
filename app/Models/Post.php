@@ -296,6 +296,12 @@ class Post extends Model
                 'to' => $input['cost_to']??null,
             ];
         } else {
+            if (($input['cost_to']??false) && !($input['cost_from']??false)) {
+                $input['cost'] = $input['cost_to'];
+            }
+            if (!($input['cost_to']??false) && ($input['cost_from']??false)) {
+                $input['cost'] = $input['cost_from'];
+            }
             $costs = [
                 'eq' => $input['cost']??null,
                 'from' => null,

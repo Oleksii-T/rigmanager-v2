@@ -11,7 +11,7 @@ enum FeedbackStatus:int
     case PENDING = 0;
     case CLIENT = 1;
     case ADV = 2;
-    case TRASH = 3;
+    case SPAM = 3;
     case OFFER = 4;
 
     public static function getReadable($val)
@@ -19,7 +19,7 @@ enum FeedbackStatus:int
         return match ($val) {
             self::PENDING => 'Pending',
             self::CLIENT => 'Client',
-            self::TRASH => 'Trash',
+            self::SPAM => 'Spam',
             self::ADV => 'Ad',
             self::OFFER => 'Offer',
         };

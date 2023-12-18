@@ -11,13 +11,13 @@ trait Viewable
         return $this->morphMany(Activity::class, 'subject')->where('log_name', 'models')->where('event', 'view');
     }
 
-    public function saveView()
+    public function saveView($isFake=false)
     {
-        activity('models')
+        return activity('models')
             ->on($this)
             ->event('view')
             ->withProperties(infoForActivityLog() + [
-                'is_fake' => false
+                'is_fake' => $isFake
             ])
             ->log('');
     }

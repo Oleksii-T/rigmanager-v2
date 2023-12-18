@@ -160,7 +160,6 @@
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-success min-w-100">Save</button>
-                <a href="{{route('admin.mailer-logs.index', ['mailer'=>$mailer->id])}}" class="btn btn-primary min-w-100">Logs</a>
                 <a href="{{ route('admin.mailers.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
             </div>
         </div>

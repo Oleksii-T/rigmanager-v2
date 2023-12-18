@@ -1559,7 +1559,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         {{-- Users per country chart --}}
         <div class="col-3">
@@ -1649,7 +1649,7 @@
                                         {{"<$user->email>"}}
                                     </th>
                                     <th>{{$user->posts_count}}</th>
-                                    <th>{{$user->last_active_at->diffForHumans()}}</th>
+                                    <th>{{$user->last_active_at?->diffForHumans() ?? '-'}}</th>
                                     <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
                                 </tr>
                             @endforeach
@@ -1684,7 +1684,7 @@
                                         {{"<$user->email>"}}
                                     </th>
                                     <th>{{$user->mailers_count}}</th>
-                                    <th>{{$user->last_active_at->diffForHumans()}}</th>
+                                    <th>{{$user->last_active_at?->diffForHumans() ?? '-'}}</th>
                                     <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
                                 </tr>
                             @endforeach
@@ -1721,7 +1721,7 @@
                                         {{"<$user->email>"}}
                                     </th>
                                     <th>{{$user->imports_count}}</th>
-                                    <th>{{$user->last_active_at->diffForHumans()}}</th>
+                                    <th>{{$user->last_active_at?->diffForHumans() ?? '-'}}</th>
                                     <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
                                 </tr>
                             @endforeach
@@ -1756,7 +1756,7 @@
                                         {{"<$user->email>"}}
                                     </th>
                                     <th>{{$user->total_views}}</th>
-                                    <th>{{\Carbon\Carbon::parse($user->last_active_at)->diffForHumans()}}</th>
+                                    <th>{{$user->last_active_at ? \Carbon\Carbon::parse($user->last_active_at)->diffForHumans() : '-'}}</th>
                                     <th>{{\Carbon\Carbon::parse($user->created_at)->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
                                 </tr>
                             @endforeach
@@ -1793,7 +1793,7 @@
                                         {{"<$user->email>"}}
                                     </th>
                                     <th>{{$user->views_count}}</th>
-                                    <th>{{$user->last_active_at->diffForHumans()}}</th>
+                                    <th>{{$user->last_active_at?->diffForHumans() ?? '-'}}</th>
                                     <th>{{$user->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}</th>
                                 </tr>
                             @endforeach

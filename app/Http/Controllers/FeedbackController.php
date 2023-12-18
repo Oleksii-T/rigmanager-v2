@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FeedbackStatus;
+use App\Models\Feedback;
+use App\Models\FeedbackBan;
 use Illuminate\Http\Request;
 use App\Http\Requests\FeedbackRequest;
-use App\Models\Feedback;
 
 class FeedbackController extends Controller
 {
@@ -15,14 +17,6 @@ class FeedbackController extends Controller
 
     public function store(Request $request, $type=null)
     {
-        $spammers = [
-            '185.234.216.114',
-            '176.111.174.153',
-            '62.122.184.194',
-            'Robertsmoth'
-        ];
-        abort_if(in_array($request->ip(), $spammers) || in_array($request->name, $spammers), 429);
-
         if ($type == 'report-category-fields') {
             $input = [
                 'subject' => 'Post Category Suggestion Report',
@@ -39,7 +33,27 @@ class FeedbackController extends Controller
             ]);
         }
 
-        $input['user_id'] = auth()->id();
+        $user = auth()->user();
+        $ban = $user ? FeedbackBan::where('type', 'user')->where('value', $user->id)->first() : null;
+        $ban ??= FeedbackBan::where('type', 'ip')->where('value', $request->ip())->first();
+        $ban ??= FeedbackBan::where('type', 'name')->where('value', $input['name'])->first();
+        $ban ??= FeedbackBan::where('type', 'email')->where('value', $input['email'])->first();
+
+        if ($ban && $ban->is_active) {
+            activity('feedback-bans')
+                ->event('catch')
+                ->withProperties(infoForActivityLog())
+                ->on($ban)
+                ->log('');
+
+            if ($ban->action == 'abort') {
+                abort(429);
+            } else if ($ban->action == 'spam') {
+                $input['status'] = FeedbackStatus::SPAM;
+            }
+        }
+
+        $input['user_id'] = $user->id??null;
 
         Feedback::create($input);
 

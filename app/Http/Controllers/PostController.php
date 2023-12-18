@@ -73,12 +73,6 @@ class PostController extends Controller
 
         $input = $request->validated();
         $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
-        if (($input['cost_to']??false) && !($input['cost_from']??false)) {
-            $input['cost'] = $input['cost_to'];
-        }
-        if (!($input['cost_to']??false) && ($input['cost_from']??false)) {
-            $input['cost'] = $input['cost_from'];
-        }
         $input['duration'] = 'unlim';
         $input['origin_lang'] = $textLocale;
         $input['status'] = 'pending';

@@ -33,7 +33,7 @@ $(document).ready(function () {
     });
 
     // general logic of ajax form submit (supports files)
-    $('form.general-ajax-submit').submit(function(e){
+    $(document).on('submit', 'form.general-ajax-submit', function (e) {
         e.preventDefault();
         loading();
         let form = $(this);
@@ -196,15 +196,9 @@ function deleteResource(dataTable, url) {
 function showServerError(response) {
     if (response.status == 422) {
         for ([field, value] of Object.entries(response.responseJSON.errors)) {
-            let dotI = field.indexOf('.');
-            if (dotI != -1) {
-                field = field.slice(0, dotI);
-            }
+            let errorElement = findErrorElementForField(field);
             let errorText = '';
-            let errorElement = $(`.input-error[data-input=${field}]`);
-            errorElement = errorElement.length ? errorElement : $(`.input-error[data-input="${field}[]"]`);
-            errorElement = errorElement.length ? errorElement : $(`[name=${field}]`).closest('.form-group').find('.input-error');
-            errorElement = errorElement.length ? errorElement : $(`[name="${field}[]"]`).closest('.form-group').find('.input-error');
+
             if (typeof value === 'string' || value instanceof String) {
                 errorText = value;
             } else {
@@ -212,11 +206,38 @@ function showServerError(response) {
                     errorText = errorText ? errorText+'<br>'+error : error;
                 }
             }
+
             errorElement.html(errorText);
         }
     } else {
         swal.fire('Error!', response.responseJSON.message, 'error');
     }
+}
+
+// find element for 422 error visualization
+function findErrorElementForField(field) {
+    let findElHelper = function(field) {
+        let errorElement = $(`.input-error[data-input=${field}]`);
+        errorElement = errorElement.length ? errorElement : $(`.input-error[data-input="${field}[]"]`);
+        errorElement = errorElement.length ? errorElement : $(`[name=${field}]`).closest('.form-group').find('.input-error');
+        errorElement = errorElement.length ? errorElement : $(`[name="${field}[]"]`).closest('.form-group').find('.input-error');
+        return errorElement;
+    }
+
+    let dotI = field.indexOf('.');
+
+    if (dotI == -1) {
+        return findElHelper(field);
+    }
+
+    fieldEscaped = field.replace('.', '\\.');
+    let errorElement = findElHelper(fieldEscaped);
+
+    if (errorElement.length) {
+        return errorElement;
+    }
+
+    return findElHelper(field.slice(0, dotI));
 }
 
 // general success logic, after ajax form submit been processed
