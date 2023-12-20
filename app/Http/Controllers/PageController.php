@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Category;
-use App\Models\Partner;
-use App\Models\Post;
 use App\Models\Faq;
+use App\Models\Post;
+use App\Models\Partner;
+use App\Models\Category;
+use App\Enums\UserStatus;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PageController extends Controller
 {
@@ -78,5 +79,16 @@ class PageController extends Controller
             ->event($request->type)
             ->withProperties(infoForActivityLog())
             ->log('');
+    }
+
+    public function banned()
+    {
+        $user = auth()->user();
+
+        if ($user->status != UserStatus::BANNED) {
+            return redirect()->route('index');
+        }
+
+        return view('banned');
     }
 }

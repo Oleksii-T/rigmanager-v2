@@ -41,6 +41,7 @@ class UserRequest extends FormRequest
             'user.password' => [$model ? 'nullable' : 'required', 'string', new Password],
             'user.roles' => ['nullable', 'array'],
             'user.roles.*' => ['nullable', 'exists:roles,id'],
+            'user.status' => ['nullable', 'string'],
 
             'info.website' => ['nullable', 'string'],
             'info.facebook' => ['nullable', 'string'],

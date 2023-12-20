@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Viewable;
+use App\Enums\UserStatus;
 use App\Mail\PasswordReset;
 use App\Traits\HasAttachments;
 use Yajra\DataTables\DataTables;
@@ -33,6 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'country',
         'last_active_at',
+        'status'
     ];
 
     /**
@@ -51,6 +53,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
+        'status' => UserStatus::class,
         'email_verified_at' => 'datetime',
         'last_active_at' => 'datetime',
     ];

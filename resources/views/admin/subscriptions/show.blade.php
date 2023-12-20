@@ -16,7 +16,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>User</label>
-                        <a class="form-control" href="{{route('admin.users.edit', $subscription->user_id)}}">
+                        <a class="form-control" href="{{route('admin.users.edit', $subscription->user)}}">
                             {{$subscription->user->name}}
                         </a>
                     </div>

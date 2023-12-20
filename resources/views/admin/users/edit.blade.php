@@ -4,7 +4,7 @@
 
 @section('content_header')
     <x-admin.title
-        text="Edit User"
+        text="Edit User #{{$user->id}}"
     />
 @stop
 
@@ -81,6 +81,18 @@
                                 @endforeach
                             </select>
                             <span data-input="user.country" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Status <small>(Banned - prevents log in. Limited - prevents posts creating)</small></label>
+                            <select class="form-control" name="user[status]">
+                                <option value="">No status</option>
+                                @foreach (\App\Enums\UserStatus::all() as $key => $name)
+                                    <option value="{{$key}}" @selected($user->status?->value == $key)>{{$name}}</option>
+                                @endforeach
+                            </select>
+                            <span data-input="user.status" class="input-error"></span>
                         </div>
                     </div>
                 </div>

@@ -64,6 +64,8 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('categories', [PageController::class, 'categories'])->name('categories');
     Route::get('catalog/{slug1?}/{slug2?}/{slug3?}', [SearchController::class, 'index'])->name('search');
     Route::get('search-autocomplete/{type}', [SearchController::class, 'autocomplete']);
+    Route::get('banned', [PageController::class, 'banned'])->middleware('auth')->name('banned');
+    Route::get('limited', [PageController::class, 'limited'])->middleware('auth')->name('limited');
 
     Route::get('blog', [BlogController::class, 'index'])->name('blog.index');
     Route::get('blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
@@ -78,7 +80,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::put('posts/{post}/view', [PostController::class, 'view'])->name('posts.view');
     Route::put('users/{user}/view', [UserController::class, 'view'])->name('users.view');
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'not-banned'])->group(function () {
 
         Route::middleware('verified')->group(function () {
 
@@ -156,12 +158,15 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 });
 
                 Route::prefix('posts')->name('posts.')->group(function () {
-                    Route::post('', [PostController::class, 'store'])->name('store');
+                    Route::middleware('non-limited')->group(function () {
+                        Route::post('', [PostController::class, 'store'])->name('store');
+                        Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle');
+                        Route::put('{post}/translations', [PostController::class, 'translationsUpdate'])->name('translations.update');
+                        Route::put('{post}', [PostController::class, 'update'])->name('update');
+                        Route::put('{post}/recover', [PostController::class, 'recover'])->name('recover');
+                    });
+
                     Route::post('{post}/price-request', [PostController::class, 'priceRequest'])->name('price-request');
-                    Route::put('{post}/toggle-active', [PostController::class, 'toggle'])->name('toggle');
-                    Route::put('{post}/translations', [PostController::class, 'translationsUpdate'])->name('translations.update');
-                    Route::put('{post}', [PostController::class, 'update'])->name('update');
-                    Route::put('{post}/recover', [PostController::class, 'recover'])->name('recover');
                 });
 
                 Route::prefix('mailers')->name('mailers.')->group(function () {
@@ -173,7 +178,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
                 Route::post('imports/{import}/posts/activate', [ImportController::class, 'postsActivate'])->name('imports.posts.activate');
             });
 
-            Route::middleware('sub:2')->group(function () {
+            Route::middleware(['sub:2', 'non-limited'])->group(function () {
 
                 Route::prefix('imports')->name('imports.')->group(function () {
                     Route::post('prep', [ImportController::class, 'prepareStore'])->name('prep-store');
