@@ -32,7 +32,7 @@ class FeedbackBan extends Model
                 return $model->activities()->where('event', 'catch')->count();
             })
             ->editColumn('created_at', function ($model) {
-                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->created_at->adminFormat();
             })
             ->editColumn('is_active', function ($model) {
                 return $model->is_active ? 'Active' : 'Inactive';

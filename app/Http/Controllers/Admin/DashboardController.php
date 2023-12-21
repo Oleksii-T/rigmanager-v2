@@ -51,6 +51,11 @@ class DashboardController extends Controller
         return view('admin.index', $data);
     }
 
+    public function icons()
+    {
+        return view('admin.icons');
+    }
+
     public function getChart(Request $request, $type, AnalyticsService $service)
     {
         $result = $service->getChart($type);

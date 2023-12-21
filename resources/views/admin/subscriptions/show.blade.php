@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <label>Created at</label>
                         <p class="form-control">
-                            {{$subscription->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}
+                            {{$subscription->created_at->adminFormat()}}
                         </p>
                     </div>
                 </div>

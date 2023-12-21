@@ -46,7 +46,7 @@ class ExchangeRate extends Model
     {
         return DataTables::of($query)
             ->editColumn('created_at', function ($model) {
-                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->created_at->adminFormat();
             })
             ->editColumn('auto_update', function ($model) {
                 return $model->auto_update
@@ -54,7 +54,7 @@ class ExchangeRate extends Model
                     : '<span class="badge badge-warning">no</span>';
             })
             ->editColumn('updated_at', function ($model) {
-                return $model->updated_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->updated_at->adminFormat();
             })
             ->addColumn('action', function ($model) {
                 return view('components.admin.actions', [

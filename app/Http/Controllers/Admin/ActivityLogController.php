@@ -81,7 +81,7 @@ class ActivityLogController extends Controller
                 ]);
             })
             ->editColumn('created_at', function ($model) {
-                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->created_at->adminFormat();
             })
             ->rawColumns(['description', 'properties'])
             ->make(true);

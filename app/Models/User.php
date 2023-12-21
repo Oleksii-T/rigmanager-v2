@@ -153,6 +153,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(PaymentMethod::class);
     }
 
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
     public function hasChatWith($uid)
     {
         $messages = $this->messages()
@@ -257,7 +262,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 return $model->last_active_at?->diffForHumans() ?? '-';
             })
             ->editColumn('created_at', function ($model) {
-                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->created_at->adminFormat();
             })
             ->addColumn('action', function ($model) {
                 return view('components.admin.actions', [

@@ -76,10 +76,10 @@ class Mailer extends Model
                 return count($model->posts??[]);
             })
             ->editColumn('last_at', function ($model) {
-                return $model->last_at?->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->last_at?->adminFormat();
             })
             ->editColumn('created_at', function ($model) {
-                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->created_at->adminFormat();
             })
             ->addColumn('action', function ($model) {
                 return view('components.admin.actions', [

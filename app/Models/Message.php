@@ -57,7 +57,7 @@ class Message extends Model
                     : '<span class="badge badge-warning">unread</span>';
             })
             ->editColumn('created_at', function ($model) {
-                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->created_at->adminFormat();
             })
             ->addColumn('action', function ($model) {
                 return view('admin.messages.actions', compact('model'))->render();

@@ -61,10 +61,10 @@ class SubscriptionCycle extends Model
                 return json_encode($cycle->invoice);
             })
             ->editColumn('created_at', function($cycle){
-                return $cycle->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $cycle->created_at->adminFormat();
             })
             ->editColumn('expire_at', function($cycle){
-                return $cycle->expire_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $cycle->expire_at->adminFormat();
             })
             ->editColumn('is_active', function($cycle){
                 return $cycle->is_active

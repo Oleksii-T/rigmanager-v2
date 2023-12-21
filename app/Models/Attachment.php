@@ -124,7 +124,7 @@ class Attachment extends Model
                 return $model->attachmentable_type . ': ' . $model->attachmentable_id;
             })
             ->editColumn('created_at', function ($model) {
-                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->created_at->adminFormat();
             })
             ->editColumn('size', function ($model) {
                 return $model->getSize();

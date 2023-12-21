@@ -125,7 +125,7 @@ class Blog extends Model
                 };
             })
             ->editColumn('posted_at', function ($model) {
-                return $model->posted_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->posted_at->adminFormat();
             })
             ->addColumn('action', function ($model) {
                 return view('admin.blogs.actions', compact('model'))->render();

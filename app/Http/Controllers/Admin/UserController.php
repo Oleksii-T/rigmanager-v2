@@ -30,7 +30,17 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        return view('admin.users.show', compact('user'));
+        $posts = $user->posts()->latest()->get();
+        $info = $user->info;
+
+        return view('admin.users.show', compact('user', 'posts', 'info'));
+    }
+
+    public function login(User $user)
+    {
+        auth()->login($user);
+
+        return redirect()->route('profile.index');
     }
 
     public function create()

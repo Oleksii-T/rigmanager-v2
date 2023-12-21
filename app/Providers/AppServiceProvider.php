@@ -2,15 +2,16 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use App\Models\Setting;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Pagination\Paginator;
+use Carbon\Carbon;
 use App\Models\Post;
+use App\Models\Setting;
 use App\Models\Feedback;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -174,6 +175,15 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton('dumper', function ($app) {
             return new \App\Services\DumperService();
+        });
+
+        Carbon::mixin(new class {
+            public function adminFormat()
+            {
+                return function () {
+                    return $this->format('d/m/Y H:i');
+                };
+            }
         });
     }
 }

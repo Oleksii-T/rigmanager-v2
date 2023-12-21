@@ -80,7 +80,7 @@ class Import extends Model
                 return 'undef';
             })
             ->editColumn('created_at', function ($model) {
-                return $model->created_at->format(env('ADMIN_DATETIME_FORMAT'));
+                return $model->created_at->adminFormat();
             })
             ->addColumn('action', function ($model) {
                 return view('components.admin.actions', [

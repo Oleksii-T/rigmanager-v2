@@ -55,7 +55,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Created At</label>
-                        <input type="text" class="form-control" value="{{$feedback->created_at->format(env('ADMIN_DATETIME_FORMAT'))}}" disabled>
+                        <input type="text" class="form-control" value="{{$feedback->created_at->adminFormat()}}" disabled>
                     </div>
                 </div>
                 <div class="col-md-4">

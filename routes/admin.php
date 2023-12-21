@@ -35,6 +35,7 @@ Route::middleware('is-admin')->group(function () {
     });
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('index');
+    Route::get('icons', [DashboardController::class, 'icons']);
     Route::get('chart/{type}', [DashboardController::class, 'getChart'])->name('get-chart');
 
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
@@ -57,6 +58,7 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('imports', ImportController::class)->only('index', 'show');
 
+    Route::get('users/{user}/login', [UserController::class, 'login'])->name('users.login');
     Route::resource('users', UserController::class);
 
     Route::resource('faqs', FaqController::class)->except('show');
