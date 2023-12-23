@@ -22,7 +22,7 @@ class AnalyticsService
 {
     public function __construct()
     {
-        
+
     }
 
     public function getWidget($class)
@@ -92,7 +92,7 @@ class AnalyticsService
         return $data;
     }
 
-    public function getChart($chartType)
+    public function getChart($chartType, $data=null)
     {
         if ($chartType == 'models-created') {
             $result = [
@@ -182,6 +182,47 @@ class AnalyticsService
                 ->where('log_name', 'mailers')
                 ->where('event', 'email-send');
             $result = $this->constructChartData($query);
+        } elseif ($chartType == 'user-activity') {
+            $logNames = ['models', 'emails', 'import', 'users', 'posts', 'mailers', 'page-assists', 'feedback-bans'];
+            $result = [];
+            foreach ($logNames as $logName) {
+                $query = $data->activitiesBy()->where('log_name', $logName);
+                $period = explode(' - ', request()->period);
+                $from = $period[0];
+                $to = $period[1];
+                $result2 = [];
+                $models = $query
+                    ->whereDate('created_at', '>=', $from)
+                    ->whereDate('created_at', '<=', $to)
+                    ->get();
+
+                // fill the dates
+                $from = Carbon::parse($from);
+                $to = Carbon::parse($to);
+                $diff = $from->diffInDays($to);
+
+                for ($i=0; $i < $diff+1; $i++) {
+                    $date = (clone $from)->addDays($i)->timestamp * 1000;
+                    $result2[$date] = [
+                        'x' => $date,
+                        'y' => 0,
+                        'log_name' => $logName
+                    ];
+                }
+
+                foreach ($models as $model) {
+                    $date = $model->created_at->startOfDay()->timestamp * 1000;
+                    $result2[$date]['y']++;
+                }
+
+                usort($result2, fn ($a, $b) => $a['x'] <=> $b['x']);
+
+                $result[] = [
+                    'label' => readable($logName),
+                    // 'data' => $this->constructChartData($data->activitiesBy()->where('log_name', $logName))
+                    'data' => $result2
+                ];
+            }
         } else {
             dd('Chart type undefield', $chartType);
         }
@@ -325,7 +366,44 @@ class AnalyticsService
         return $result;
     }
 
-    private function constructChartData($query)
+    private function constructChartData($query, $moreDataForLogs=false)
+    {
+        $period = explode(' - ', request()->period);
+        $from = $period[0];
+        $to = $period[1];
+        $result = [];
+        $models = $query
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->whereDate('created_at', '>=', $from)
+            ->whereDate('created_at', '<=', $to)
+            ->groupBy('date')
+            ->get();
+
+        // fill the dates
+        $from = Carbon::parse($from);
+        $to = Carbon::parse($to);
+        $diff = $from->diffInDays($to);
+
+        for ($i=0; $i < $diff+1; $i++) {
+            $date = (clone $from)->addDays($i)->timestamp * 1000;
+            $result[$date] = [
+                'x' => $date,
+                'y' => 0
+            ];
+        }
+
+        // fill actual data
+        foreach ($models as $model) {
+            $date = Carbon::parse($model->date)->timestamp * 1000;
+            $result[$date]['y'] = $model->count;
+        }
+
+        usort($result, fn ($a, $b) => $a['x'] <=> $b['x']);
+
+        return $result;
+    }
+
+    private function constructChartDataForLogs($query)
     {
         $period = explode(' - ', request()->period);
         $from = $period[0];

@@ -6,10 +6,16 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Contracts\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Spatie\Activitylog\ActivitylogServiceProvider;
 
 trait LogsActivityBasic
 {
     use LogsActivity;
+
+    public function activitiesBy()
+    {
+        return $this->morphMany(ActivitylogServiceProvider::determineActivityModel(), 'causer');
+    }
 
     public function createdIp(): Attribute
     {

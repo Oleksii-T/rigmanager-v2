@@ -58,6 +58,7 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('imports', ImportController::class)->only('index', 'show');
 
+    Route::get('users/{user}/get-chart/{type}', [UserController::class, 'getChart'])->name('users.get-chart');
     Route::get('users/{user}/login', [UserController::class, 'login'])->name('users.login');
     Route::resource('users', UserController::class);
 

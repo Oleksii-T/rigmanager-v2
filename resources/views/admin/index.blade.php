@@ -406,6 +406,9 @@
                     <h3 class="card-title">Models Created</h3>
                     <div class="card-tools" style="width: 185px">
                         <div class="input-group">
+                            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#alog-trivia">
+                                Trivia
+                            </a>
                             <input type="text" name="period" class="form-control daterangepicker-mult">
                         </div>
                     </div>
@@ -1099,6 +1102,8 @@
             </div>
         </div>
     </div>
+
+    <x-admin.activity-logs-triavia />
 @endsection
 
 @push('scripts')

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Http\Requests\Admin\UserRequest;
 use Illuminate\Http\Request;
+use App\Services\AnalyticsService;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\Admin\UserRequest;
 
 class UserController extends Controller
 {
@@ -34,6 +35,13 @@ class UserController extends Controller
         $info = $user->info;
 
         return view('admin.users.show', compact('user', 'posts', 'info'));
+    }
+
+    public function getChart(User $user, $type, AnalyticsService $service)
+    {
+        $result = $service->getChart($type, $user);
+
+        return $this->jsonSuccess('', $result);
     }
 
     public function login(User $user)

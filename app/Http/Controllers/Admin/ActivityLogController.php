@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Attachment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 use Spatie\Activitylog\Models\Activity;
@@ -21,6 +22,8 @@ class ActivityLogController extends Controller
             return view('admin.activity-logs.index', compact('names', 'causers', 'subjects'));
         }
 
+        $tsDate = $request->ts_date ? Carbon::createFromTimestampMs($request->ts_date) : null;
+
         $activity = Activity::query()
             ->when($request->period, function ($q) {
                 $period = explode(' - ', request()->period);
@@ -29,21 +32,24 @@ class ActivityLogController extends Controller
             ->when($request->log_name, function ($q) {
                 $q->where('log_name', request()->log_name);
             })
-            ->when($request->log_name && $request->event[$request->log_name], function ($q) {
-                $q->where('event', request()->event[request()->log_name]);
-            })
-            ->when($request->subject_type, function ($q) {
-                $q->where('subject_type', request()->subject_type == '-' ? null : request()->subject_type);
-            })
-            ->when($request->subject_type && ($request->subject_id[$request->subject_type]??false), function ($q) {
-                $q->where('subject_id', request()->subject_id[request()->subject_type]);
-            })
-            ->when($request->causer_type, function ($q) {
-                $q->where('causer_type', request()->causer_type == '-' ? null : request()->causer_type);
-            })
-            ->when($request->causer_type && $request->causer_id[$request->causer_type]??false, function ($q) {
-                $q->where('causer_id', request()->causer_id[request()->causer_type]);
-            });
+            ->when($request->log_name && $request->event && $request->event[$request->log_name], fn ($q) =>
+                $q->where('event', $request->event[$request->log_name])
+            )
+            ->when($request->subject_type, fn ($q) =>
+                $q->where('subject_type', $request->subject_type == '-' ? null : $request->subject_type)
+            )
+            ->when($request->subject_type && ($request->subject_id[$request->subject_type]??false), fn ($q) =>
+                $q->where('subject_id', $request->subject_id[$request->subject_type])
+            )
+            ->when($request->causer_type, fn ($q) =>
+                $q->where('causer_type', $request->causer_type == '-' ? null : $request->causer_type)
+            )
+            ->when($request->causer_type && $request->causer_id && $request->causer_id[$request->causer_type]??false, fn ($q) =>
+                $q->where('causer_id', $request->causer_id[$request->causer_type])
+            )
+            ->when($tsDate, fn($q) =>
+                $q->whereDate('created_at', $tsDate)
+            );
 
         return $this->dataTable($activity);
     }
