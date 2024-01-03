@@ -39,6 +39,48 @@ class Message extends Model
             ->whereIn('reciever_id', $ids);
     }
 
+    public static function getChats($userId)
+    {
+        $chats = [];
+        $chatCodes = [];
+
+        if ($userId)  {
+            $chatCodesRaw = Message::query()
+                ->where('user_id', $userId)
+                ->orWhere('reciever_id', $userId)
+                ->select('user_id', 'reciever_id')
+                ->get();
+        } else {
+            $chatCodesRaw = Message::query()
+                ->distinct()
+                ->select('user_id', 'reciever_id')
+                ->get();
+        }
+
+        foreach ($chatCodesRaw as $chatRaw) {
+            $ids = [$chatRaw->user_id, $chatRaw->reciever_id];
+            $code = implode('-', $ids);
+            $code2 = implode('-', array_reverse($ids));
+
+            if (in_array($code, $chatCodes) || in_array($code2, $chatCodes)) {
+                continue;
+            }
+
+            $chatCodes[] = $code;
+            $chatMessages = Message::getChatMessages($ids)->get();
+            $chats[] = [
+                'uids' => $ids,
+                'users' => User::whereIn('id', $ids)->get(),
+                'count' => $chatMessages->count(),
+                'unread' => $chatMessages->where('is_read', false)->count(),
+                'last_message' => $chatMessages->first()->message,
+                'last_at' => $chatMessages->first()->created_at,
+            ];
+        }
+
+        return $chats;
+    }
+
     public static function dataTable($query)
     {
         return DataTables::of($query)

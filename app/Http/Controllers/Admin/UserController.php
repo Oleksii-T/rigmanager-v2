@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\AnalyticsService;
@@ -29,10 +30,34 @@ class UserController extends Controller
         return User::dataTable($users);
     }
 
-    public function show(User $user)
+    public function show(Request $request, User $user, AnalyticsService $service)
     {
         $posts = $user->posts()->latest()->get();
         $info = $user->info;
+
+        if ($request->table == 'analytics') {
+            if ($request->date) {
+                $period = explode(' - ', $request->date);
+                $from = Carbon::parse($period[0]);
+                $to = Carbon::parse($period[1]);
+            } else {
+                $period = [now()->subMonth(), now()];
+            }
+
+            $engagementInfo = $service->engagement($user, $period);
+            $info = "$engagementInfo->engagement_points points - {$engagementInfo->engagement_place}st place ($engagementInfo->engagement_percent%)";
+
+            return $this->jsonSuccess('', [
+                'info' => $info
+            ]);
+        } else if ($request->table == 'posts') {
+            return \App\Models\Post::dataTable($user->posts());
+        } else if ($request->table == 'messages') {
+            $chats = \App\Models\Message::getChats($user->id);
+            return $this->jsonSuccess('', [
+                'html' =>  view('admin.messages.table', compact('chats'))->render()
+            ]);
+        }
 
         return view('admin.users.show', compact('user', 'posts', 'info'));
     }

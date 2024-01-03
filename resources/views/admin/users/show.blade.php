@@ -75,7 +75,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#activity" data-toggle="tab">
-                                Activity <strong>{{$user->activities()->count()}}</strong>
+                                Activity <strong>{{$user->activitiesBy()->count()}}</strong>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -124,6 +124,29 @@
                     <div class="tab-content">
                         <div class="active tab-pane" id="analytics">
                             <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label title="Engagement is calculated based on activity logs amount caused by user.">
+                                            Engagement
+                                            <span class="help-tooltip-icon" data-toggle="modal" data-target="#engagement-trivia">
+                                                @svg('icons/info.svg')
+                                            </span>
+                                        </label>
+                                        <span class="form-control eng-info-wrpr">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Date Filter</label>
+                                        <input type="text" name="eng-period" class="form-control daterangepicker-mult">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="activity">
+                            <div class="row">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
@@ -148,16 +171,15 @@
                             <button class="d-none" data-toggle="modal" data-target="#alog-details-modal"></button>
                         </div>
 
-                        <div class="tab-pane" id="activity">
-                            todo: activity
-                        </div>
-
                         <div class="tab-pane" id="posts">
-                            todo: posts
+                            <table id="posts-table" data-url="?table=posts" class="table table-bordered table-striped">
+                                <x-admin.posts-table />
+                            </table>
                         </div>
 
-                        <div class="tab-pane" id="messages">
-                            todo: messages
+                        <div class="tab-pane messages-content" id="messages">
+                            <table id="messages-table" data-url="?table=messages" class="table table-bordered table-striped messages-content">
+                            </table>
                         </div>
 
                         <div class="tab-pane" id="mailers">
@@ -190,7 +212,7 @@
         </div>
     </div>
 
-    <x-admin.activity-logs-triavia />
+    <x-admin.triavias />
 
     <div class="modal fade" id="alog-details-modal" style="display: none;">
         <div class="modal-dialog" style="width:90%;max-width:none;">
@@ -226,6 +248,8 @@
 @endsection
 
 @push('scripts')
+    <script src="{{asset('/js/admin/messages.js')}}"></script>
+    <script src="{{asset('/js/admin/posts.js')}}"></script>
     <script>
         var userId = '{{$user->id}}';
         var colors = [
@@ -365,7 +389,28 @@
                 })
             }
 
+            initFirstTab();
+
+            $(document).on('change', '[name="eng-period"]', function (e) {
+                initFirstTab();
+            })
         });
+
+        function initFirstTab(){
+            let el = $('#analytics');
+            $.ajax({
+                data: {
+                    table: 'analytics',
+                    date: $('[name="eng-period"]').val()
+                },
+                success: (response)=>{
+                    $('.eng-info-wrpr').html(response.data.info);
+                },
+                error: function(response) {
+                    console.log(response);
+                }
+            });
+        }
 
         function drawChart(chartItem) {
             let period = chartItem.elem.closest('.card').find('input[name=period]').val();

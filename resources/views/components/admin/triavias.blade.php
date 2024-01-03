@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="alog-trivia" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -212,6 +211,26 @@
                     <li>Subscription notification send tracking</li>
                     <li>Analitics</li>
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="engagement-trivia" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Engagement trivia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <b>Engagement</b> - a measure of how much a user interacts with the site.
+                It is calculated using activity logs caused by user.
+                <br><br>
+                <b>Engagement Percent</b> - a ration between the number of users with same/more engagement points and the number of all users.
             </div>
         </div>
     </div>

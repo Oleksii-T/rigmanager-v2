@@ -5,21 +5,7 @@ $(document).ready(function () {
         tags: true
     });
 
-    $('.daterangepicker-mult').daterangepicker({
-        startDate: moment().subtract(29, 'days'),
-        endDate: moment(),
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        locale: {
-            format: 'YYYY-MM-DD'
-        }
-    });
+    initDatePicker($('.daterangepicker-mult'));
     $('.daterangepicker-single').daterangepicker({
         singleDatePicker: true,
         timePicker: true,
@@ -142,6 +128,28 @@ $(document).ready(function () {
 
     })
 });
+
+function initDatePicker(el) {
+    el.daterangepicker({
+        startDate: moment().subtract(29, 'days'),
+        endDate: moment(),
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment()],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Past Month': [moment().subtract(1, 'month'), moment()],
+            'This Year': [moment().startOf('year'), moment()],
+            'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+            'Past Years': [moment().subtract(1, 'year'), moment()],
+        },
+        locale: {
+            format: 'YYYY-MM-DD'
+        }
+    });
+}
 
 // flash notification
 const Toast = Swal.mixin({

@@ -100,7 +100,7 @@
         </div>
     </div>
 
-    <x-admin.activity-logs-triavia />
+    <x-admin.triavias />
 @endsection
 
 @push('scripts')

@@ -12,6 +12,16 @@ use Illuminate\Support\Facades\Mail;
 use App\Enums\NotificationGroup as NG;
 use App\Facades\DumperServiceFacade as Dumper;
 
+/**
+ * Subscriptions explanaiton:
+ * - designed for Stripe.
+ * - each sub have cycles.
+ * - sub considered active if it have active (payed) cycle.
+ * - sub are extended automaticaly via schedule command with Stripe checks.
+ * - some time of payment pending is allowed. It's called 'incomplete' status.
+ * - webhook is used to handle Stripe events for late invoice payments.
+ *
+ */
 class SubscriptionService
 {
     public static function create($planId)

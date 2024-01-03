@@ -37,6 +37,7 @@ class DashboardController extends Controller
             'usersByPostViewsCount' => $service->getTable('users-by-post-views-count'),
             'usersByViewsCount' => $service->getTable('users-by-views-count'),
             'usersByContactViewsCount' => $service->getTable('users-by-contact-views-count'),
+            'usersByEngagement' => $service->getTable('users-by-engagement'),
             'postsByViewsCount' => $service->getTable('posts-by-views-count'),
             'postsByPriceRequestsCount' => $service->getTable('posts-by-price-requests-count'),
             'postsByOldestView' => $service->getTable('posts-by-oldest-view'),

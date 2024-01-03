@@ -19,6 +19,21 @@
     max-width: 80px;
     max-height: 80px;
 }
+.help-tooltip-icon {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+}
+.help-tooltip-icon svg{
+    vertical-align:text-bottom;
+}
+.help-tooltip-icon svg path {
+    transition: all .3s linear;
+}
+.help-tooltip-icon:hover svg path{
+    fill: #fff;
+}
 
 /* select2 fix */
 .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--multiple {

@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\StripeService;
-use App\Enums\NotificationGroup;
 use Yajra\DataTables\DataTables;
 use App\Traits\LogsActivityBasic;
 use Illuminate\Database\Eloquent\Model;

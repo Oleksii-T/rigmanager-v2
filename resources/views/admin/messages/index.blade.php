@@ -19,7 +19,26 @@
 
 @section('content')
     <div class="row">
-        <div class="col-sm-12 index-content"></div>
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <select class="table-filter form-control select2" name="user_id">
+                                <option value="">Select user</option>
+                                @foreach ($users as $user)
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table id="messages-table" class="table table-bordered table-striped messages-content">
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="modal fade" id="modal-default" style="display: none;">
         <div class="modal-dialog">

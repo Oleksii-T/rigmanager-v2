@@ -230,6 +230,46 @@ class AnalyticsService
         return $result;
     }
 
+    // Calculate engagement values (place, points, percent) using activity-logs created by user.
+    public function engagement($user=null, array|null $between=null)
+    {
+        $biggest = 0;
+        $users = User::query()
+            ->with(['activitiesBy' => function ($q) use($between) {
+                $q->when($between, fn($q2) => $q2->whereBetween('created_at', $between));
+            }])
+            ->get();
+        $usersCount = $users->count();
+
+        // calculate engagement points of each user
+        foreach ($users as &$u) {
+            // assume total logs count as engagement points.
+            //? document points calculation logic in engagement trivia modal for admin.
+            //todo: determine points based on user activity type. E.G.: 5 points for post create, 4 point for post update, 1 points for post view, etc..
+            $points = $u->activitiesBy->count();
+            $biggest = $biggest < $points ? $points : $biggest;
+            $u->engagement_points = $points;
+        }
+
+        // sort by points
+        $users = $users->sortByDesc('engagement_points')->values();
+
+        // calculate percent of users with same or more engagement points.
+        foreach ($users as $i => &$u) {
+            $points = $u->engagement_points;
+            $usersWithMorePoints = $users->where('engagement_points', '>=', $points)->count();
+            $percent = ($usersWithMorePoints * 100) / $usersCount;
+            $u->engagement_place = $i+1;
+            $u->engagement_percent = round($percent, 1);
+        }
+
+        if ($user) {
+            return $users->where('id', $user->id)->first();
+        }
+
+        return $users;
+    }
+
     public function getTable($type)
     {
         if ($type == 'users-by-posts-count') {
@@ -271,6 +311,8 @@ class AnalyticsService
                 ->orderBy('total_views', 'desc')
                 ->limit(5)
                 ->get();
+        } elseif ($type == 'users-by-engagement') {
+            $result = $this->engagement()->take(10);
         } elseif ($type == 'posts-by-views-count') {
             $result = Post::query()
                 ->withCount('views')

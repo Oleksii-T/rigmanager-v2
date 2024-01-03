@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        \Debugbar::disable();
 
         // set global blade variables
         \View::composer('*', function($view) {

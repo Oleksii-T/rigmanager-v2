@@ -1,7 +1,7 @@
 let filters = {};
 
 $(document).ready(function () {
-    if ($('.index-content').length) {
+    if ($('.messages-content').length) {
         getContent();
     }
 
@@ -13,11 +13,13 @@ $(document).ready(function () {
         getContent();
 	});
 
-    let table = $('#messages-table').DataTable({
+    let selector = '#messages-table';
+
+    let table = $(selector).DataTable({
         order: [[ 0, "desc" ]],
         serverSide: true,
         ajax: {
-			url: window.location.href,
+			url: $(selector).data('url') ? $(selector).data('url') : window.location.href,
 			data: function (filter) {
                 addTableFilters(filter);
 			}
@@ -32,7 +34,7 @@ $(document).ready(function () {
         ]
     });
 
-    $(document).on('click', '#messages-table .delete-resource', function (e) {
+    $(document).on('click', selector+' .delete-resource', function (e) {
         e.preventDefault();
         deleteResource(table, $(this).data('link'));
     });
@@ -53,7 +55,7 @@ function getContent() {
                 return;
             }
 
-            $('.index-content').html(response.data.html);
+            $('.messages-content').html(response.data.html);
         },
         error: function(response) {
             swal.close();

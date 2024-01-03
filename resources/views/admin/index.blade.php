@@ -698,6 +698,53 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Top engagement users
+                        <small>(all time)</small>
+                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#engagement-trivia">
+                            Trivia
+                        </a>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <table id="users-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Place</th>
+                                <th>Points</th>
+                                <th>Percent</th>
+                                <th>Last active at</th>
+                                <th>Created at</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($usersByEngagement as $user)
+                                <tr>
+                                    <th>
+                                        {{$user->id}}:
+                                        <a href="{{route("admin.users.show", $user->id)}}">
+                                            {{$user->name}}
+                                        </a>
+                                        {{"<$user->email>"}}
+                                    </th>
+                                    <th>{{$user->engagement_place}}</th>
+                                    <th>{{$user->engagement_points}}</th>
+                                    <th>{{$user->engagement_percent}}</th>
+                                    <th>{{$user->last_active_at?->diffForHumans() ?? '-'}}</th>
+                                    <th>{{$user->created_at->adminFormat()}}</th>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-sm-12">
@@ -1103,7 +1150,7 @@
         </div>
     </div>
 
-    <x-admin.activity-logs-triavia />
+    <x-admin.triavias />
 @endsection
 
 @push('scripts')
