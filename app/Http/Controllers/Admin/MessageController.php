@@ -56,6 +56,27 @@ class MessageController extends Controller
         ]);
     }
 
+    public function read(Request $request)
+    {
+        $data = $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
+            'reciever_id' => ['required', 'exists:users,id'],
+        ]);
+
+        $messages = Message::query()
+            ->where('user_id', $data['user_id'])
+            ->where('reciever_id', $data['reciever_id'])
+            ->get();
+
+        foreach ($messages as $message) {
+            $message->update(['is_read' => true]);
+        }
+
+        return $this->jsonSuccess('Message Read successfully', [
+            'reload' => true
+        ]);
+    }
+
     public function destroy(Request $request, Message $message)
     {
         $message->delete();

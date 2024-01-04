@@ -46,7 +46,9 @@ $(document).ready(function () {
 
 function getContent() {
     loading();
+    let el = $('.messages-content');
     $.ajax({
+        url: el.data('url'),
         data: filters,
         success: (response)=>{
             swal.close();
@@ -55,7 +57,7 @@ function getContent() {
                 return;
             }
 
-            $('.messages-content').html(response.data.html);
+            el.html(response.data.html);
         },
         error: function(response) {
             swal.close();

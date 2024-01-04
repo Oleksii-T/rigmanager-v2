@@ -133,14 +133,24 @@ class Post extends Model
         return $query->where('is_active', $is);
     }
 
-    public function scopeVisible($query)
+    public function scopeVisible($query, $is=true)
     {
-        $hidePending = Setting::get('hide_pending_posts', true, true);
-        $query->where('is_active', true);
-        $query->where('is_trashed', false);
+        if ($is) {
+            $hidePending = Setting::get('hide_pending_posts', true, true);
+            $query->where('is_active', true);
+            $query->where('is_trashed', false);
 
-        if ($hidePending) {
-            return $query->where('status', 'approved');
+            if ($hidePending) {
+                return $query->where('status', 'approved');
+            }
+        } else {
+            $hidePending = Setting::get('hide_pending_posts', true, true);
+            $query->where('is_active', false);
+            $query->where('is_trashed', true);
+
+            if ($hidePending) {
+                return $query->where('status', 'pending');
+            }
         }
 
         return $query;

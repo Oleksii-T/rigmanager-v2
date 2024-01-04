@@ -255,6 +255,9 @@ function showServerSuccess(response) {
             if (response.data?.redirect) {
                 window.location.href = response.data.redirect;
             }
+            if (response.data?.reaload) {
+                window.location.reload();
+            }
         });
     } else {
         swal.fire("Error!", response.message, 'error');

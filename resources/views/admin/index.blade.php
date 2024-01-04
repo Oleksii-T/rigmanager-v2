@@ -1150,7 +1150,7 @@
         </div>
     </div>
 
-    <x-admin.triavias />
+    <x-admin.trivias />
 @endsection
 
 @push('scripts')

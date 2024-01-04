@@ -1,9 +1,10 @@
 $(document).ready(function () {
-    let table = $('#feedbacks-table').DataTable({
+    let selector = '#feedbacks-table';
+    let table = $(selector).DataTable({
         order: [[ 0, "desc" ]],
         serverSide: true,
         ajax: {
-			url: window.location.href,
+			url: $(selector).data('url') ? $(selector).data('url') : window.location.href,
 			data: function (filter) {
                 addTableFilters(filter);
 			}
@@ -18,12 +19,12 @@ $(document).ready(function () {
         ]
     });
 
-    $(document).on('click', '#feedbacks-table .delete-resource', function (e) {
+    $(document).on('click', selector+' .delete-resource', function (e) {
         e.preventDefault();
         deleteResource(table, $(this).data('link'));
     });
 
-    $(document).on('click', '#feedbacks-table .update-resource', function (e) {
+    $(document).on('click', selector+' .update-resource', function (e) {
         e.preventDefault();
         let url = $(this).data('url');
         let key = $(this).data('key');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Services\AnalyticsService;
 use App\Http\Controllers\Controller;
@@ -32,7 +33,6 @@ class UserController extends Controller
 
     public function show(Request $request, User $user, AnalyticsService $service)
     {
-        $posts = $user->posts()->latest()->get();
         $info = $user->info;
 
         if ($request->table == 'analytics') {
@@ -52,14 +52,32 @@ class UserController extends Controller
             ]);
         } else if ($request->table == 'posts') {
             return \App\Models\Post::dataTable($user->posts());
+        } else if ($request->table == 'mailers') {
+            return \App\Models\Mailer::dataTable($user->mailers());
+        } else if ($request->table == 'subscriptions') {
+            return \App\Models\Subscription::dataTable($user->subscriptions());
+        } else if ($request->table == 'feedbacks') {
+            return \App\Models\Feedback::dataTable($user->feedbacks());
+        } else if ($request->table == 'notifications') {
+            return \App\Models\Notification::dataTable($user->notifications());
+        } else if ($request->table == 'imports') {
+            return \App\Models\Import::dataTable($user->imports());
         } else if ($request->table == 'messages') {
-            $chats = \App\Models\Message::getChats($user->id);
+            $chats = Message::getChats($user->id);
             return $this->jsonSuccess('', [
                 'html' =>  view('admin.messages.table', compact('chats'))->render()
             ]);
         }
 
-        return view('admin.users.show', compact('user', 'posts', 'info'));
+        $users = [$user->id, auth()->id()];
+        $chat = Message::query()
+            ->whereIn('user_id', $users)
+            ->whereIn('reciever_id', $users)
+            ->oldest()
+            ->get();
+        $unreadInChat = $chat->where('reciever_id', auth()->id())->where('is_read', false)->count();
+
+        return view('admin.users.show', compact('user', 'chat', 'info', 'unreadInChat'));
     }
 
     public function getChart(User $user, $type, AnalyticsService $service)

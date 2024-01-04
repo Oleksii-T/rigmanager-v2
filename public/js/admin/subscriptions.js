@@ -1,9 +1,10 @@
 $(document).ready(function () {
-    let table = $('#subscriptions-table').DataTable({
+    let selector = '#subscriptions-table';
+    let table = $(selector).DataTable({
         order: [[ 0, "desc" ]],
         serverSide: true,
         ajax: {
-			url: window.location.href
+			url: $(selector).data('url') ? $(selector).data('url') : window.location.href,
 		},
         columns: [
             { data: 'id', name: 'id' },
@@ -15,7 +16,7 @@ $(document).ready(function () {
         ]
     });
 
-    $(document).on('click', '#subscriptions-table .delete-resource', function (e) {
+    $(document).on('click', selector+' .delete-resource', function (e) {
         e.preventDefault();
         deleteResource(table, $(this).data('link'));
     });

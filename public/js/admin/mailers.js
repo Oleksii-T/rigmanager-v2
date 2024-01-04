@@ -5,7 +5,7 @@ $(document).ready(function () {
         order: [[ 0, "desc" ]],
         serverSide: true,
         ajax: {
-			url: window.location.href,
+			url: $(selector).data('url') ? $(selector).data('url') : window.location.href,
 			data: function (filter) {
                 addTableFilters(filter);
 			}

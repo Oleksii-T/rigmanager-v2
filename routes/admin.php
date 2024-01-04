@@ -75,8 +75,9 @@ Route::middleware('is-admin')->group(function () {
 
     Route::resource('activity-logs', ActivityLogController::class)->only(['index']);
 
-    Route::resource('messages', MessageController::class)->only('index', 'store', 'destroy');
     Route::get('messages/{u1}/{u2}', [MessageController::class, 'show'])->name('messages.show');
+    Route::put('messages/read', [MessageController::class, 'read'])->name('messages.read');
+    Route::resource('messages', MessageController::class)->only('index', 'store', 'destroy');
 
     Route::post('exchange-rates/sync-currencies', [ExchangeRateController::class, 'syncCurrencies'])->name('exchange-rates.sync-currencies');
     Route::post('exchange-rates/sync-rates', [ExchangeRateController::class, 'syncRates'])->name('exchange-rates.sync-rates');

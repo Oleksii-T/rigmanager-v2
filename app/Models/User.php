@@ -252,6 +252,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
+    public function getChats()
+    {
+        return Message::getChats($this->id);
+    }
+
     public static function dataTable($query)
     {
         return DataTables::of($query)

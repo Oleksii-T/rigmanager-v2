@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="messages-table" class="table table-bordered table-striped messages-content">
+                    <table class="table table-bordered table-striped messages-content">
                     </table>
                 </div>
             </div>

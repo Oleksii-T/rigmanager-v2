@@ -1,9 +1,10 @@
 $(document).ready(function () {
-    $('#imports-table').DataTable({
+    let selector = '#imports-table';
+    $(selector).DataTable({
         order: [[ 0, "desc" ]],
         serverSide: true,
         ajax: {
-			url: window.location.href
+			url: $(selector).data('url') ? $(selector).data('url') : window.location.href,
 		},
         columns: [
             { data: 'id', name: 'id', searchable: false },

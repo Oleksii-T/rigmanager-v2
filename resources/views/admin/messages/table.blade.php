@@ -13,8 +13,7 @@
         <tr>
             <td>
                 @foreach ($chat['users'] as $user)
-                    <a href="{{route('admin.users.show', $user)}}">{{$user->name}}</a>
-                    <br>
+                    <a href="{{route('admin.users.show', $user)}}">{{$user->name}}</a>{{$loop->last ? '' : ','}}
                 @endforeach
             </td>
             <td>{{$chat['count']}}</td>
