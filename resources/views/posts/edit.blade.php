@@ -59,7 +59,8 @@
                     @csrf
                     @method('PUT')
                     <fieldset>
-                        <div class="form-section"> <!--title+category+cost+type+desc-->
+                        <!--title+category+cost+type+desc-->
+                        <div class="form-section">
                             <label class="label" style="display: flex;justify-content:space-between">
                                 <span>
                                     @lang('ui.title')
@@ -118,7 +119,7 @@
                             <div data-input="category_id" class="form-error"></div>
                             <div class="form-note">@lang('ui.tagHelp')</div>
 
-                            <!--type+role+condition+optionals-->
+                            <!--cost+type-->
                             <div class="row">
                                 <div class="col-6 rci">
                                     <label class="label rci-label">
@@ -148,7 +149,7 @@
                                         <div class="rci-input {{$post->is_double_cost ? 'd-none' : ''}}" data-singlecost>
                                             <input class="input format-cost" name="cost" type="text" value="{{$post->cost}}" />
                                         </div>
-                                        <div class="rci-input" data-doublcost>
+                                        <div class="rci-input {{$post->is_double_cost ? '' : 'd-none'}}" data-doublcost>
                                             <input class="input format-cost" name="cost_from" type="text" placeholder="From" value="{{$post->cost_from}}" />
                                         </div>
                                         <span class="rci-separator {{$post->is_double_cost ? '' : 'd-none'}}" data-doublcost>-</span>

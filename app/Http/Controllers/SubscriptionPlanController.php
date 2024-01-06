@@ -13,12 +13,12 @@ class SubscriptionPlanController extends Controller
         $plans = SubscriptionPlan::all();
         $plans = [
             1 => [
-                'month' => $plans->where('level', 1)->where('interval', 'month')->first(),
-                'year' => $plans->where('level', 1)->where('interval', 'year')->first(),
+                'month' => $plans->where('level', 1)->where('interval', 'day')->first(),
+                'year' => $plans->where('level', 1)->where('interval', 'twoday')->first(),
             ],
             2 => [
-                'month' => $plans->where('level', 2)->where('interval', 'month')->first(),
-                'year' => $plans->where('level', 2)->where('interval', 'year')->first(),
+                'month' => $plans->where('level', 2)->where('interval', 'day')->first(),
+                'year' => $plans->where('level', 2)->where('interval', 'twoday')->first(),
             ]
         ];
 

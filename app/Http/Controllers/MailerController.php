@@ -32,7 +32,7 @@ class MailerController extends Controller
         } else if ($category)  {
             $input['title'] = Category::find($category)->name;
         } else {
-            $input['title'] = trans('messages.mailers.default-title') . $user->mailers()->count() + 1;
+            $input['title'] = trans('messages.mailers.title.default') . $user->mailers()->count() + 1;
         }
 
         $input['slug'] = makeSlug($input['title'], Mailer::pluck('slug')->toArray());
@@ -78,7 +78,7 @@ class MailerController extends Controller
     public function toggle(Mailer $mailer)
     {
         $user = auth()->user();
-        $m = $mailer->is_active 
+        $m = $mailer->is_active
             ? 'messages.mailers.deactivated'
             : 'messages.mailers.activated';
 

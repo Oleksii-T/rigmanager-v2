@@ -139,7 +139,7 @@ return [
         'created' => 'Mailer created successfully!',
         'title' => [
             'from-author' => 'Posts from ',
-            'default-title' => 'Mailer',
+            'default' => 'Mailer ',
         ],
     ],
     'posts' => [

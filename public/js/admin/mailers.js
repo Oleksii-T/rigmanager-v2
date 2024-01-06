@@ -4,6 +4,8 @@ $(document).ready(function () {
     let table = $(selector).DataTable({
         order: [[ 0, "desc" ]],
         serverSide: true,
+        autoWidth: false,
+        responsive: true,
         ajax: {
 			url: $(selector).data('url') ? $(selector).data('url') : window.location.href,
 			data: function (filter) {

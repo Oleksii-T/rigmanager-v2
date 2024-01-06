@@ -457,6 +457,7 @@ class Post extends Model
 
     public static function applyFilters($posts, array $filters)
     {
+        dlog("Post@applyFilters"); //! LOG
         $conditions = $filters['conditions']??[];
         $types = $filters['types']??[];
         $urgent = count($filters['is_urgent']??[]) > 1 ? null : $filters['is_urgent'][0]??null;
