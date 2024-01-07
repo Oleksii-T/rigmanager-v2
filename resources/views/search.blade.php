@@ -6,7 +6,7 @@
 
 @section('bc')
     @if (isset($category))
-        <x-bci :text="trans('ui.catalog')" :href="route('search')" i="2" />
+        <x-bci :text="trans('ui.eqCatalog')" :href="route('search')" i="2" />
         @if (isset($filters['search']))
             <x-bci text="'{{$filters['search']}}'" :href="route('search', ['search'=>$filters['search']])" i="3" />
         @endif
@@ -31,7 +31,7 @@
             />
         @endforeach
     @else
-        <x-bci :text="trans('ui.catalog')" :href="route('search')" i="2" :islast="!isset($filters['author']) && !isset($filters['search'])" />
+        <x-bci :text="trans('ui.eqCatalog')" :href="route('search')" i="2" :islast="!isset($filters['author']) && !isset($filters['search'])" />
         @if (isset($filters['author']))
             @isSub
                 <x-bci :text="$filters['author_name']" :href="$filters['author']" i="3" islast="1" />
@@ -167,7 +167,7 @@
                 @elseif (isset($category))
                     {{$category->name}}
                 @else
-                    @lang('ui.catalog')
+                    @lang('ui.eqCatalog')
                 @endif
                 (<span class="orange searched-amount">_</span>)
             </h1>

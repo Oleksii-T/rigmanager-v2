@@ -43,7 +43,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('activitylog:clean')->daily();
 
         // check subscriptions
-        $schedule->command('subscriptions:extend')->twiceDaily(1, 13);
+        $schedule->command('subscriptions:extend')->hourly(); //twiceDaily(1, 13)
         $schedule->command('subscriptions:deactivate-canceled')->hourly();
         $schedule->command('subscriptions:deactivate-incomplete')->hourly();
         $schedule->command('subscriptions:preliminary-notifs')->daily();

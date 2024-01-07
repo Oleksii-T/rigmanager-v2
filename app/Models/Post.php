@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PostGroups;
 use App\Traits\Viewable;
 use App\Traits\HasAttachments;
 use App\Traits\HasTranslations;
@@ -20,6 +21,7 @@ class Post extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'group',
         'origin_lang',
         'status',
         'type',
@@ -42,6 +44,10 @@ class Post extends Model
 
     protected $appends = self::TRANSLATABLES + [
 
+    ];
+
+    protected $casts = [
+        // 'group' => PostType::class
     ];
 
     const STATUSES = [
@@ -457,7 +463,7 @@ class Post extends Model
 
     public static function applyFilters($posts, array $filters)
     {
-        dlog("Post@applyFilters"); //! LOG
+        // dlog("Post@applyFilters"); //! LOG
         $conditions = $filters['conditions']??[];
         $types = $filters['types']??[];
         $urgent = count($filters['is_urgent']??[]) > 1 ? null : $filters['is_urgent'][0]??null;

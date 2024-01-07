@@ -5179,4 +5179,232 @@ class CategorySeeder extends Seeder
             ],
         ];
     }
+
+    private function getServicesSchema()
+    {
+        return [
+            [
+                'name' => [
+                    'en' => 'Emergency Service',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Drillin Contractor',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Air Emissions',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Geological Well Survey',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Selection Core',
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Logging',
+                        ]
+                    ],
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Flaw Detection and Certification',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Bit Service',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Downhole Motor Service',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Groundings',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Directional Drilling',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Casing Equipment',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Security',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Blow owt prevenstion',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Personnel selection / HR',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Pipe supply',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Gas station / supply',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Heavy machinery supply / rental',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Building / Construction',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'On-site Logging station',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Transportation / Logistics',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Waste Disposal',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ],
+                'childs' => [
+                    [
+                        'name' => [
+                            'en' => 'Drilling',
+                        ]
+                    ],
+                    [
+                        'name' => [
+                            'en' => 'Domestic',
+                        ]
+                    ],
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Chemical Laboratory Control',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+            [
+                'name' => [
+                    'en' => 'Cementing',
+                ],
+                'image' => [
+                    'name' => 'rigs.png',
+                    'size' => '48000'
+                ]
+            ],
+        ];
+    }
 }

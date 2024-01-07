@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Post;
+use App\Enums\PostGroup;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -30,6 +31,7 @@ class PostRequest extends FormRequest
         $rules = [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:9000'],
+            'group' => ['required', Rule::in(PostGroup::values())],
             'category_id' => ['required', 'exists:categories,id'],
             'type' => ['required', 'string', Rule::in(Post::TYPES)],
             'condition' => ['nullable', 'string', Rule::in(Post::CONDITIONS)],

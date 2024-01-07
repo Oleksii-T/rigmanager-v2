@@ -693,10 +693,12 @@ textarea.form-error {
 	font-weight: 500;
 	line-height: 24px;
 	text-decoration: none;
-	background: #ff8d12;
+	background: #ff8d12 !important;
 	border-radius: 8px;
 }
-.header-button:hover {background: #ff7800;}
+.header-button:hover {
+    background: #ff7800 !important;
+}
 .header-user {
 	position: relative;
 	margin: 0 16px 0 0;

@@ -55,12 +55,13 @@ class PostController extends Controller
         return view('posts.show', $data);
     }
 
-    public function create()
+    public function create(Request $request, $type=null)
     {
         $categories = Category::all();
         list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels();
+        $view = $type == 'service' ? 'posts.create-service' : 'posts.create';
 
-        return view('posts.create', compact('categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'categories'));
+        return view($view, compact('categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'categories'));
     }
 
     public function store(PostRequest $request, TranslationService $translator)

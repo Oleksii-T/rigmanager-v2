@@ -1,13 +1,13 @@
 @extends('layouts.page')
 
 @section('meta')
-	<title>@lang('meta.title.post.create.eq')</title>
-	<meta name="description" content="@lang('meta.description.post.create.eq')">
+	<title>@lang('meta.title.post.create.se')</title>
+	<meta name="description" content="@lang('meta.description.post.create.se')">
     <meta name="robots" content="noindex, nofollow">
 @endsection
 
 @section('bc')
-    <x-bci :text="trans('ui.addEqPost')" i="2" islast="1" />
+    <x-bci :text="trans('ui.addSePost')" i="2" islast="1" />
 @endsection
 
 @section('style')
@@ -59,11 +59,11 @@
 @section('content')
     <div class="main-block">
         <div class="content">
-            <h1>@lang('ui.addEqPost')</h1>
+            <h1>@lang('ui.addSePost')</h1>
             <div class="form-block">
                 <form id="form-post" method="POST" action="{{route('posts.store')}}">
                     @csrf
-                    <input type="hidden" name="group" value="{{\App\Enums\PostGroup::EQUIPMENT}}">
+                    <input type="hidden" name="group" value="{{\App\Enums\PostGroup::SERVICE}}">
                     <fieldset>
                         <div class="form-section"> <!--title+category+cost+type+desc-->
                             <label class="label" style="display: flex;justify-content:space-between">
@@ -71,13 +71,6 @@
                                     @lang('ui.title')
                                     <span class="orange">*</span>
                                 </span>
-
-                                <div class="check-block">
-                                    <div class="check-item">
-                                        <input type="checkbox" name="is_urgent" class="check-input" id="ch22" value="1">
-                                        <label for="ch22" class="check-label" style="color: #ffc990">@lang('ui.makePostUrgent')</label>
-                                    </div>
-                                </div>
                             </label>
                             <div class="tt-input-field-wrapper">
                                 <input class="input input-long typeahead-input" data-ttt="title" name="title" type="text"/>
@@ -125,68 +118,6 @@
                             </div>
                             <div data-input="category_id" class="categories-form-error form-error"></div>
                             <div class="form-note">@lang('ui.tagHelp')</div>
-
-                            <div class="row">
-                                <div class="col-6 rci">
-                                    <label class="label rci-label">
-                                        @lang('ui.cost')
-                                        <div class="check-block">
-                                            <div class="check-item">
-                                                <input type="checkbox" name="is_tba" class="check-input" id="is_tba" value="1" checked>
-                                                <label for="is_tba" class="check-label">@lang('ui.TBA')</label>
-                                            </div>
-                                        </div>
-                                        <div class="check-block">
-                                            <div class="check-item">
-                                                <input type="checkbox" name="is_double_cost" class="check-input" id="is_double_cost" value="1">
-                                                <label for="is_double_cost" class="check-label">@lang('ui.double')</label>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <div class="rci-content">
-                                        <div class="rci-input">
-                                            <select class="styled" name="currency">
-                                                @foreach (currencies() as $key => $symbol)
-                                                    <option value="{{$key}}" @selected($currentUser->lastCurrency() == $key)>{{strtoupper($key)}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <span class="rci-separator"></span>
-                                        <div class="rci-input" data-singlecost>
-                                            <input class="input format-cost" name="cost" type="text"/>
-                                        </div>
-                                        <div class="rci-input d-none" data-doublcost>
-                                            <input class="input format-cost" name="cost_from" type="text" placeholder="From"/>
-                                        </div>
-                                        <span class="rci-separator d-none" data-doublcost>-</span>
-                                        <div class="rci-input d-none" data-doublcost>
-                                            <input class="input format-cost" name="cost_to" type="text" placeholder="To"/>
-                                        </div>
-                                        <span class="rci-separator">per</span>
-                                        <div class="rci-input">
-                                            <input type="text" name="cost_per" class="input" placeholder="pc.">
-                                        </div>
-                                    </div>
-                                    <div data-input="cost" class="form-error"></div>
-                                    <div data-input="cost_from" class="form-error"></div>
-                                    <div data-input="cost_to" class="form-error"></div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="add-radio">
-                                        <div class="add-radio-col" style="width: 100%">
-                                            <label class="label" style="margin-bottom:15px">@lang('ui.choosePostType')<span class="orange">*</span>:</label>
-                                            <div class="radio-block">
-                                                @foreach (\App\Models\Post::TYPES as $item)
-                                                    <div class="radio-item d-inline-block">
-                                                        <input type="radio" name="type" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($loop->first)>
-                                                        <label for="{{$item}}" class="radio-label">{{\App\Models\Post::typeReadable($item)}}</label>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <!--description-->
                             <label class="label">@lang('ui.description') <span class="orange">*</span></label>
@@ -282,8 +213,8 @@
                                 <div class="form-note doc-note">@lang('ui.postDocHelp')</div>
                             </div>
                         </div>
+                        {{--
                         <div class="form-section"> <!--lifetime+special-->
-                            {{--
                             <label class="label">@lang('ui.chooseActiveTo') <span class="orange">*</span></label>
                             <div class="select-block">
                                 <select class="styled" name="duration">
@@ -293,74 +224,8 @@
                                 </select>
                             </div>
                             <div data-input="duration" class="form-error"></div>
-                            --}}
-
-                            <div class="faq-item optionals" style="margin-bottom: 14px">
-                                <a href="" class="faq-top">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 255.99 511.99">
-                                        <path d="M253,248.62,18.37,3.29A10.67,10.67,0,1,0,3,18L230.56,256,3,494A10.67,10.67,0,0,0,18.37,508.7L253,263.37A10.7,10.7,0,0,0,253,248.62Z"/>
-                                    </svg>
-                                    <span class="text-show">@lang('ui.showOptionals')</span>
-                                </a>
-                                <div class="faq-hidden ">
-                                    <p>@lang('ui.optionalsHelp')</p>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label class="label">@lang('ui.chooseManufacturer')</label>
-                                            <div class="tt-input-field-wrapper">
-                                                <input class="input typeahead-input" data-ttt="manufacturer" name="manufacturer" type="text"/>
-                                            </div>
-                                            <div data-input="manufacturer" class="form-error"></div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="label">@lang('ui.chooseManufacturedDate')</label>
-                                            <input class="input" name="manufacture_date" type="text"/>
-                                            <div data-input="manufacture_date" class="form-error"></div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="label">@lang('ui.chooseAmount')</label>
-                                            <input class="input" name="amount" type="text"/>
-                                            <div data-input="amount" class="form-error"></div>
-                                            <div class="form-note">@lang('ui.amountHelp')</div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="label">@lang('ui.locationRegion')</label>
-                                            <div class="select-block">
-                                                <select class="select2" name="country" style="width: 100%">
-                                                    @foreach (countries() as $key => $name)
-                                                        <option value="{{$key}}" @selected($currentUser->country == $key)>{{$name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="label">@lang('ui.choosePartNum')</label>
-                                            <input class="input" name="part_number" type="text"/>
-                                            <div data-input="part_number" class="form-error"></div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <label class="label">@lang('ui.chooseCondition')</label>
-                                            <div class="select-block">
-                                                <div class="radio-block">
-                                                    @foreach (\App\Models\Post::CONDITIONS as $item)
-                                                        <div class="radio-item">
-                                                            <input type="radio" name="condition" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($item == 'new')>
-                                                            <label for="{{$item}}" class="radio-label">{{\App\Models\Post::conditionReadable($item)}}</label>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+                        --}}
                         <div class="form-button-block">
                             <button type="submit" class="button">@lang('ui.publish')</button>
                         </div>

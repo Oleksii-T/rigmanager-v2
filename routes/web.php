@@ -111,7 +111,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
             });
 
             Route::prefix('posts')->name('posts.')->group(function () {
-                Route::get('create', [PostController::class, 'create'])->name('create');
+                Route::get('create/{type?}', [PostController::class, 'create'])->name('create');
                 Route::get('{post}/edit', [PostController::class, 'edit'])->name('edit');
                 Route::get('{post}/views', [PostController::class, 'views'])->name('views');
                 Route::get('{post}/translations', [PostController::class, 'translationsEdit'])->name('translations.edit');

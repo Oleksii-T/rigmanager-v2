@@ -5,18 +5,50 @@
             <div class="header-logo">
                 <a href="{{route('index')}}"><img src="{{asset('icons/logo-big.svg')}}" alt=""></a>
             </div>
-            <a href="{{route('search')}}" class="header-catalog">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <path fill-rule="evenodd"  fill="rgb(255, 255, 255)" d="M0.000,11.000 L0.000,10.000 L11.000,10.000 L11.000,11.000 L0.000,11.000 ZM0.000,5.000 L11.000,5.000 L11.000,6.000 L0.000,6.000 L0.000,5.000 ZM0.000,0.000 L11.000,0.000 L11.000,1.000 L0.000,1.000 L0.000,0.000 Z"/>
-                </svg>
-                @lang('ui.catalog')
-            </a>
-            <a href="{{route('categories')}}" class="header-catalog">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <path fill-rule="evenodd"  fill="rgb(255, 255, 255)" d="M0.000,11.000 L0.000,10.000 L11.000,10.000 L11.000,11.000 L0.000,11.000 ZM0.000,5.000 L11.000,5.000 L11.000,6.000 L0.000,6.000 L0.000,5.000 ZM0.000,0.000 L11.000,0.000 L11.000,1.000 L0.000,1.000 L0.000,0.000 Z"/>
-                </svg>
-                @lang('ui.categories')
-            </a>
+            <div class="header-cabinet">
+                <a href="{{route('search')}}" class="header-catalog">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <path fill-rule="evenodd"  fill="rgb(255, 255, 255)" d="M0.000,11.000 L0.000,10.000 L11.000,10.000 L11.000,11.000 L0.000,11.000 ZM0.000,5.000 L11.000,5.000 L11.000,6.000 L0.000,6.000 L0.000,5.000 ZM0.000,0.000 L11.000,0.000 L11.000,1.000 L0.000,1.000 L0.000,0.000 Z"/>
+                    </svg>
+                    @lang('ui.catalog')
+                </a>
+                <ul>
+                    <li>
+                        <a href="{{route('search')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M0,30v452h512V30H0z M482,452H30V120h452V452z M482,90H30V60h452V90z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M271,160v252h181V160H271z M422,382H301V190h121V382z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="160" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="220" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="300" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="360" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g></g></svg>
+                            @lang('ui.eqCatalog')
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M0,30v452h512V30H0z M482,452H30V120h452V452z M482,90H30V60h452V90z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M271,160v252h181V160H271z M422,382H301V190h121V382z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="160" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="220" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="300" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="360" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g></g></svg>
+                            @lang('ui.seCatalog')
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="header-cabinet">
+                <a href="{{route('categories')}}" class="header-catalog">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <path fill-rule="evenodd"  fill="rgb(255, 255, 255)" d="M0.000,11.000 L0.000,10.000 L11.000,10.000 L11.000,11.000 L0.000,11.000 ZM0.000,5.000 L11.000,5.000 L11.000,6.000 L0.000,6.000 L0.000,5.000 ZM0.000,0.000 L11.000,0.000 L11.000,1.000 L0.000,1.000 L0.000,0.000 Z"/>
+                    </svg>
+                    @lang('ui.categories')
+                </a>
+                <ul>
+                    <li>
+                        <a href="{{route('categories')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M0,30v452h512V30H0z M482,452H30V120h452V452z M482,90H30V60h452V90z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M271,160v252h181V160H271z M422,382H301V190h121V382z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="160" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="220" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="300" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="360" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g></g></svg>
+                            @lang('ui.eqCategories')
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M0,30v452h512V30H0z M482,452H30V120h452V452z M482,90H30V60h452V90z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M271,160v252h181V160H271z M422,382H301V190h121V382z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="160" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="220" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="300" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="360" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g></g></svg>
+                            @lang('ui.seCategories')
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <div class="header-search">
                 <a href="" class="header-search-link"></a>
                 <div class="header-search-form">
@@ -73,7 +105,25 @@
                         <a href="{{route('login')}}">@lang('ui.signIn')</a>
                     @endauth
                 </div>
-                <a href="{{route('posts.create')}}" class="header-button">@lang('ui.addPost')</a>
+                <div class="header-cabinet">
+                    <a href="{{route('posts.create')}}" class="header-button">
+                        @lang('ui.addPost')
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{route('posts.create')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M0,30v452h512V30H0z M482,452H30V120h452V452z M482,90H30V60h452V90z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M271,160v252h181V160H271z M422,382H301V190h121V382z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="160" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="220" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="300" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="360" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g></g></svg>
+                                @lang('ui.addEqPost')
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('posts.create', 'service')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M0,30v452h512V30H0z M482,452H30V120h452V452z M482,90H30V60h452V90z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<path d="M271,160v252h181V160H271z M422,382H301V190h121V382z" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="160" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="220" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="300" width="181" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg">	<g>		<rect x="60" y="360" width="121" height="30" fill="#ffffff" data-original="#000000" style="" class=""/>	</g></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g><g xmlns="http://www.w3.org/2000/svg"></g></g></svg>
+                                @lang('ui.addSePost')
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="mob-nav">
                 <div class="holder">
