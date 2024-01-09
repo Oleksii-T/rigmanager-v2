@@ -84,7 +84,7 @@
                                         <div class="mailing-info-name">@lang('ui.type'):</div>
                                         <div class="mailing-info-text">
                                             @foreach ($m->getFilter('types') as $t)
-                                                {{\App\Models\Post::typeReadable($t) . ($loop->last ? '' : ',')}}
+                                                {{\App\Enums\PostType::readable($t) . ($loop->last ? '' : ',')}}
                                             @endforeach
                                         </div>
                                     </div>

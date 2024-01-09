@@ -6,6 +6,8 @@ return [
         'buy' => 'Buy',
         'rent' => 'Rent',
         'lease' => 'Lease',
+        'provide' => 'Provide',
+        'request' => 'Request',
     ],
     'conditions' => [
         'none' => 'None',

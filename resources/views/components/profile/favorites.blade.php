@@ -14,7 +14,7 @@
                     <!--under title line. Lables: type, view, region, date-->
                     <div class="catalog-line">
                         <!--type-->
-                        <a href="{{route('posts.show', $post)}}" class="catalog-tag">{{\App\Models\Post::typeReadable($post->type)}}</a>
+                        <a href="{{route('posts.show', $post)}}" class="catalog-tag">{{$post->type->readable()}}</a>
                         <!--add to fav-->
                         <a href="{{route('posts.add-to-fav', $post)}}" class="catalog-fav add-to-fav {{$currentUser->favorites->contains($post) ? 'active' : ''}}">
                             <svg viewBox="0 0 464 424" xmlns="http://www.w3.org/2000/svg" class="">

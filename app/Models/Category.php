@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CategoryType;
 use App\Traits\HasAttachments;
 use App\Traits\HasTranslations;
 use Yajra\DataTables\DataTables;
@@ -14,8 +15,13 @@ class Category extends Model
     use HasTranslations, HasAttachments, LogsActivityBasic;
 
     protected $fillable = [
+        'type',
         'category_id',
         'is_active'
+    ];
+
+    protected $casts = [
+        'type' => CategoryType::class
     ];
 
     protected $appends = self::TRANSLATABLES + [
@@ -62,6 +68,16 @@ class Category extends Model
     public function childs()
     {
         return $this->hasMany(Category::class, 'category_id');
+    }
+
+    public function scopeEquipment($query)
+    {
+        return $query->where('type', CategoryType::EQUIPMENT);
+    }
+
+    public function scopeService($query)
+    {
+        return $query->where('type', CategoryType::SERVICE);
     }
 
     public function slug(): Attribute
@@ -211,9 +227,11 @@ class Category extends Model
         return self::find(1);
     }
 
-    public static function getLevels()
+    public static function getLevels($equipment=true)
     {
-        $categs = self::active()->whereNull('category_id')->with('childs.childs')->get();
+        $categs = self::active()->whereNull('category_id')->with('childs.childs');
+        $categs = $equipment ? $categs->equipment() : $categs->service();
+        $categs = $categs->get();
 
         $first = [];
         $second = [];

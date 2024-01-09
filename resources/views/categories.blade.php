@@ -30,11 +30,13 @@
                 @foreach ($categories as $category)
                     <div class="category-col">
                         <div class="category-item">
-                            <div class="category-img">
-                                <a href="{{$category->getUrl()}}">
-                                    <img src="{{$category->image->url}}" alt="{{$category->image->alt}}">
-                                </a>
-                            </div>
+                            @if ($category->image)
+                                <div class="category-img">
+                                    <a href="{{$category->getUrl()}}">
+                                        <img src="{{$category->image->url}}" alt="{{$category->image->alt}}">
+                                    </a>
+                                </div>
+                            @endif
                             <div class="category-name" {{request()->show_codes ? "title=$category->slug" : ''}}>
                                 <a href="{{$category->getUrl()}}">
                                     {{$category->name}}

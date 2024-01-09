@@ -397,6 +397,7 @@ If you have significant amount of posts, consider using <a href="/imports" targe
     'costHelp' => 'If it is not obvious what the price is for, you can specify this information in the description.
         Enter cost in format: 0000.00.
         Maximum 20 digits.',
+    'serviceCountry' => 'Country of origin',
     'locationRegion' => 'Location of product (region)',
     'locationTown' => 'Specify location',
     'locationOfProduct' => 'Location of product',

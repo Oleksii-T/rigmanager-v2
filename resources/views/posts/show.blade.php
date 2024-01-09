@@ -108,7 +108,7 @@
                 @endif
                 <div class="prod-info-item">
                     <div class="prod-info-name">{{__('ui.postType')}}</div>
-                    <div class="prod-info-text">{{\App\Models\Post::typeReadable($post->type)}}</div>
+                    <div class="prod-info-text">{{$post->type->readable()}}</div>
                 </div>
                 @if ($post->amount)
                     <div class="prod-info-item">

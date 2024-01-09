@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Setting;
+use App\Enums\PostGroup;
 use App\Models\Category;
 use App\Models\Feedback;
 use App\Jobs\PostTranslate;
@@ -57,11 +58,10 @@ class PostController extends Controller
 
     public function create(Request $request, $type=null)
     {
-        $categories = Category::all();
-        list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels();
+        list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels($type != 'service');
         $view = $type == 'service' ? 'posts.create-service' : 'posts.create';
 
-        return view($view, compact('categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'categories'));
+        return view($view, compact('categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel'));
     }
 
     public function store(PostRequest $request, TranslationService $translator)
@@ -89,7 +89,11 @@ class PostController extends Controller
             $textLocale => $input['description']
         ];
         $post = $user->posts()->create($input);
-        $post->saveCosts($input);
+
+        if ($post->group == PostGroup::EQUIPMENT) {
+            $post->saveCosts($input);
+        }
+
         $post->saveTranslations($input);
         $images = $post->addAttachment(array_reverse($input['images']??[]), 'images', true);
         $post->addAttachment($input['documents']??[], 'documents');
@@ -177,10 +181,11 @@ class PostController extends Controller
 
     public function edit(Request $request, Post $post)
     {
-        list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels();
+        list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels($post->group == PostGroup::EQUIPMENT);
         $activeLevels = array_column($post->category->parents(true), 'id');
+        $view = $post->group == PostGroup::SERVICE ? 'posts.edit-service' : 'posts.edit';
 
-        return view('posts.edit', compact('post', 'categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'activeLevels'));
+        return view($view, compact('post', 'categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'activeLevels'));
     }
 
     public function update(PostRequest $request, Post $post, TranslationService $translator)

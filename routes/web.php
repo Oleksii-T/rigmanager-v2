@@ -61,7 +61,7 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
     Route::get('privacy', [PageController::class, 'privacy'])->name('privacy');
     Route::get('terms', [PageController::class, 'terms'])->name('terms');
     Route::get('site-map', [PageController::class, 'siteMap'])->name('site-map');
-    Route::get('categories', [PageController::class, 'categories'])->name('categories');
+    Route::get('categories/{type?}', [PageController::class, 'categories'])->name('categories');
     Route::get('catalog/{slug1?}/{slug2?}/{slug3?}', [SearchController::class, 'index'])->name('search');
     Route::get('search-autocomplete/{type}', [SearchController::class, 'autocomplete']);
     Route::get('banned', [PageController::class, 'banned'])->middleware('auth')->name('banned');

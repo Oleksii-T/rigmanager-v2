@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Enums\PostGroups;
+use App\Enums\PostType;
+use App\Enums\PostGroup;
 use App\Traits\Viewable;
 use App\Traits\HasAttachments;
 use App\Traits\HasTranslations;
@@ -47,7 +48,8 @@ class Post extends Model
     ];
 
     protected $casts = [
-        // 'group' => PostType::class
+        'group' => PostGroup::class,
+        'type' => PostType::class
     ];
 
     const STATUSES = [
@@ -61,13 +63,6 @@ class Post extends Model
         '1m',
         '2m',
         'unlim'
-    ];
-
-    const TYPES = [
-        'sell',
-        'buy',
-        'rent',
-        'lease'
     ];
 
     const CONDITIONS = [
@@ -132,6 +127,16 @@ class Post extends Model
     public function documents()
     {
         return $this->morphMany(Attachment::class, 'attachmentable')->where('group', __FUNCTION__);
+    }
+
+    public function scopeEquipment($query)
+    {
+        return $query->where('group', PostGroup::EQUIPMENT);
+    }
+
+    public function scopeService($query)
+    {
+        return $query->where('group', PostGroup::SERVICE);
     }
 
     public function scopeActive($query, bool $is=true)
@@ -400,20 +405,6 @@ class Post extends Model
         ];
     }
 
-    public static function typeReadable($type)
-    {
-        switch ($type) {
-            case 'sell':
-                return trans('posts.types.sell');
-            case 'buy':
-                return trans('posts.types.buy');
-            case 'rent':
-                return trans('posts.types.rent');
-            case 'lease':
-                return trans('posts.types.lease');
-        }
-    }
-
     public static function conditionReadable($condition)
     {
         switch ($condition) {
@@ -597,7 +588,7 @@ class Post extends Model
             $posts->whereIn('condition', $conditions);
         }
 
-        if ($types && count($types) < count(Post::TYPES)) {
+        if ($types && count($types) < count(PostType::values())) {
             $posts->whereIn('type', $types);
         }
 

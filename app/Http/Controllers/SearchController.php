@@ -31,6 +31,7 @@ class SearchController extends Controller
         }
 
         $posts = Post::query()
+            ->equipment()
             ->visible()
             ->withCount('views')
             ->filter($filters)

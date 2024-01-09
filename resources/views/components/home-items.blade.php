@@ -13,7 +13,7 @@
             </div>
             <div class="ad-line">
                 <div class="ad-date">{{$post->created_at->diffForHumans()}}</div>
-                <a href="{{route('search', ['type'=>$post->type])}}" class="ad-tag">{{\App\Models\Post::typeReadable($post->type)}}</a>
+                <a href="{{route('search', ['type'=>$post->type])}}" class="ad-tag">{{$post->type->readable()}}</a>
             </div>
             <div class="ad-title"><a href="{{route('posts.show', $post)}}">{{$post->title}}</a></div>
             @if ($post->region)

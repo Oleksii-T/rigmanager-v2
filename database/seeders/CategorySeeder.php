@@ -4,10 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Attachment;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Schema;
+use App\Enums\CategoryType;
 use Illuminate\Support\Str;
+use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
 {
@@ -18,17 +17,38 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
+        // $this->seedEquipment();
+        $this->seedService();
+    }
+
+    private function seedService()
+    {
+        $shemas =$this->getServicesSchema();
+
+        foreach ($shemas as $shema) {
+            $model = Category::create([
+                'category_id' => null,
+                'type' => CategoryType::SERVICE,
+                'is_active' => true
+            ]);
+            $model->saveTranslations([
+                'name' => ['en'=>$shema['name']['en']],
+                'slug' => ['en'=>Str::slug($shema['name']['en'])]
+            ]);
+            $this->saveChildCat($model, $shema['childs']??[]);
+        }
+    }
+
+    private function seedEquipment()
+    {
         $shemas =$this->getSchema();
 
         foreach ($shemas as $shema) {
             $model = Category::create([
                 'category_id' => null,
+                'type' => CategoryType::EQUIPMENT,
                 'is_active' => true
             ]);
-            // $model->saveTranslations([
-            //     'name' => $shema['name'],
-            //     'slug' => $this->makeSlugs($shema['name'])
-            // ]);
             $model->saveTranslations([
                 'name' => ['en'=>$shema['name']['en']],
                 'slug' => ['en'=>Str::slug($shema['name']['en'])]
@@ -52,6 +72,7 @@ class CategorySeeder extends Seeder
         foreach ($childs as $child) {
             $model = Category::create([
                 'category_id' => $parent->id,
+                'type' => $parent->type, // 'Equipment' or 'Service
                 'is_active' => true
             ]);
             // $model->saveTranslations([
@@ -5186,37 +5207,21 @@ class CategorySeeder extends Seeder
             [
                 'name' => [
                     'en' => 'Emergency Service',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Drillin Contractor',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Air Emissions',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Geological Well Survey',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ],
                 'childs' => [
                     [
@@ -5234,145 +5239,81 @@ class CategorySeeder extends Seeder
             [
                 'name' => [
                     'en' => 'Flaw Detection and Certification',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Bit Service',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Downhole Motor Service',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Groundings',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Directional Drilling',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Casing Equipment',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Security',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Blow owt prevenstion',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Personnel selection / HR',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Pipe supply',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Gas station / supply',
                 ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
-                ]
             ],
             [
                 'name' => [
                     'en' => 'Heavy machinery supply / rental',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Building / Construction',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'On-site Logging station',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Transportation / Logistics',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Waste Disposal',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ],
                 'childs' => [
                     [
@@ -5390,19 +5331,11 @@ class CategorySeeder extends Seeder
             [
                 'name' => [
                     'en' => 'Chemical Laboratory Control',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
             [
                 'name' => [
                     'en' => 'Cementing',
-                ],
-                'image' => [
-                    'name' => 'rigs.png',
-                    'size' => '48000'
                 ]
             ],
         ];

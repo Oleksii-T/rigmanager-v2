@@ -76,7 +76,7 @@
                             </label>
                             <input class="input input-long" name="title" type="text" value="{{$post->original('title')}}" />
                             <div data-input="title" class="form-error"></div>
-                            <div class="form-note lifetime-note-pre">@lang('ui.titleSeHelp')</div>
+                            <div class="form-note lifetime-note-pre">@lang('ui.titleEqHelp')</div>
 
                             <label class="label">@lang('ui.chooseTag') <span class="orange">*</span></label>
                             <div class="categories-level-selects">
@@ -170,10 +170,10 @@
                                         <div class="add-radio-col" style="width: 100%">
                                             <label class="label" style="margin-bottom:15px">@lang('ui.choosePostType')<span class="orange">*</span>:</label>
                                             <div class="radio-block">
-                                                @foreach (\App\Models\Post::TYPES as $item)
+                                                @foreach (\App\Enums\PostType::forEquipment() as $key => $name)
                                                     <div class="radio-item d-inline-block">
-                                                        <input type="radio" name="type" class="radio-input" id="{{$item}}" value="{{$item}}" @checked($post->type == $item)>
-                                                        <label for="{{$item}}" class="radio-label">{{\App\Models\Post::typeReadable($item)}}</label>
+                                                        <input type="radio" name="type" class="radio-input" id="{{$key}}" value="{{$key}}" @checked($post->type->value == $key)>
+                                                        <label for="{{$key}}" class="radio-label">{{$name}}</label>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -185,7 +185,7 @@
                             <label class="label">@lang('ui.description') <span class="orange">*</span></label>
                             <textarea cols="30" rows="10" maxlength="9000" class="textarea" name="description" form="form-post">{{$post->original('description')}}</textarea>
                             <div data-input="description" class="form-error"></div>
-                            <div class="form-note lifetime-note-pre">@lang('ui.descriptionSeHelp')</div>
+                            <div class="form-note lifetime-note-pre">@lang('ui.descriptionEqHelp')</div>
                         </div>
                         <div class="form-section row"> <!--images+doc-->
                             <div class="col-6">

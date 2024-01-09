@@ -86,10 +86,10 @@
                                 <div class="add-radio-col">
                                     <label class="label">@lang('ui.types')</label>
                                     <div class="check-block">
-                                        @foreach (\App\Models\Post::TYPES as $item)
+                                        @foreach (\App\Enums\PostType::forEquipment() as $key => $name)
                                             <div class="check-item">
-                                                <input type="checkbox" class="check-input" name="filters[types][]" id="{{$item}}" value="{{$item}}" @checked(in_array($item, $mailer->getFilter('types')??[]))>
-                                                <label for="{{$item}}" class="check-label">{{\App\Models\Post::typeReadable($item)}}</label>
+                                                <input type="checkbox" class="check-input" name="filters[types][]" id="{{$key}}" value="{{$key}}" @checked(in_array($key, $mailer->getFilter('types')??[]))>
+                                                <label for="{{$key}}" class="check-label">{{$name}}</label>
                                             </div>
                                         @endforeach
                                     </div>

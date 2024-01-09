@@ -64,10 +64,10 @@
 <div class="col-4">
     <label class="label">@lang('ui.postType')</label>
     <div id="type" class="check-block">
-        @foreach (\App\Models\Post::TYPES as $item)
+        @foreach (\App\Enums\PostType::forEquipment() as $key => $name)
             <div class="check-item">
-                <input type="checkbox" class="check-input" name="types" id="{{$item}}" value="{{$item}}" @checked(in_array($item, request()->types??[]))>
-                <label for="{{$item}}" class="check-label">{{\App\Models\Post::typeReadable($item)}}</label>
+                <input type="checkbox" class="check-input" name="types" id="{{$key}}" value="{{$key}}" @checked(in_array($key, request()->types??[]))>
+                <label for="{{$key}}" class="check-label">{{$name}}</label>
             </div>
         @endforeach
     </div>

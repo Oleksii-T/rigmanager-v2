@@ -119,6 +119,34 @@
                             <div data-input="category_id" class="categories-form-error form-error"></div>
                             <div class="form-note">@lang('ui.tagHelp')</div>
 
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="label">@lang('ui.serviceCountry')</label>
+                                    <div class="select-block">
+                                        <select class="select2" name="country" style="width: 100%">
+                                            @foreach (countries() as $key => $name)
+                                                <option value="{{$key}}" @selected($currentUser->country == $key)>{{$name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="add-radio">
+                                        <div class="add-radio-col" style="width: 100%">
+                                            <label class="label" style="margin-bottom:15px">@lang('ui.choosePostType')<span class="orange">*</span>:</label>
+                                            <div class="radio-block">
+                                                @foreach (\App\Enums\PostType::forService() as $key => $name)
+                                                    <div class="radio-item d-inline-block">
+                                                        <input type="radio" name="type" class="radio-input" id="type-{{$key}}" value="{{$key}}" @checked($loop->first)>
+                                                        <label for="type-{{$key}}" class="radio-label">{{$name}}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!--description-->
                             <label class="label">@lang('ui.description') <span class="orange">*</span></label>
                             <textarea cols="30" rows="10" maxlength="9000" class="textarea" name="description" form="form-post"></textarea>
