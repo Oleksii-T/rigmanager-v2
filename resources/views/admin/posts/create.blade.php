@@ -54,6 +54,17 @@
                     </div>
                     <div class="col-md-4 col-lg-3 col-xl-2">
                         <div class="form-group">
+                            <label>Group</label>
+                            <select class="form-control select2" name="category_id">
+                                @foreach (\App\Enums\PostGroup::all() as $key => $name)
+                                    <option value="{{$key}}">{{$name}}</option>
+                                @endforeach
+                            </select>
+                            <span data-input="category_id" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-2">
+                        <div class="form-group">
                             <label>User</label>
                             <select class="form-control select2" name="user_id">
                                 <option value="">Select User</option>
@@ -91,8 +102,8 @@
                         <div class="form-group">
                             <label>Type</label>
                             <select class="form-control" name="type">
-                                @foreach (\App\Models\Post::TYPES as $item)
-                                    <option value="{{$item}}">{{readable($item)}}</option>
+                                @foreach (\App\Enums\PostType::all() as $key => $name)
+                                    <option value="{{$key}}">{{$name}}</option>
                                 @endforeach
                             </select>
                             <span data-input="type" class="input-error"></span>

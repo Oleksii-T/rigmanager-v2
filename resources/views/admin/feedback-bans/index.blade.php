@@ -90,7 +90,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Action</label>
+                                <label>
+                                    Action
+                                    <span class="help-tooltip-icon" data-toggle="modal" title="abort - throw 429 error when user tries to submit feedback. spam - allow submit feedback, but mark feedback as spam">
+                                        @svg('icons/info.svg')
+                                    </span>
+                                </label>
                                 <select class="table-filter form-control" name="action">
                                     <option value="">Select action</option>
                                     @foreach (\App\Models\FeedbackBan::ACTIONS as $action)

@@ -17,6 +17,7 @@ $(document).ready(function () {
             { data: 'subject', name: 'subject'},
             { data: 'text', name: 'text'},
             { data: 'ip', name: 'ip'},
+            { data: 'created_at', name: 'created_at'},
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ]
     });

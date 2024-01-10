@@ -32,7 +32,6 @@ class PostRequest extends FormRequest
         $rules = [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:9000'],
-            'group' => ['required', Rule::in(PostGroup::values())],
             'category_id' => ['required', 'exists:categories,id'],
             'type' => ['required', 'string', Rule::in(PostType::values())],
             'condition' => ['nullable', 'string', Rule::in(Post::CONDITIONS)],
@@ -59,6 +58,10 @@ class PostRequest extends FormRequest
                 'max:8000'
             ] // .pdf, .xls, .xlsx, .xml, .doc, .docx
         ];
+
+        if (!$model) {
+            $rules['group'] = ['required', Rule::in(PostGroup::values())];
+        }
 
         if ($this->is_double_cost) {
             $rules['cost_from'] = ['nullable', 'required_with:cost_to', 'numeric', 'min:1', 'max:9999999', 'lt:cost_to'];

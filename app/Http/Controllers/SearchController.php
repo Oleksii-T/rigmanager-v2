@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Enums\PostGroup;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,6 +16,7 @@ class SearchController extends Controller
     {
         $category = $slug3 ?? $slug2 ?? $slug1;
         $filters = $request->all();
+        $filters['group'] = PostGroup::EQUIPMENT;
 
         if ($category) {
             $category = Category::getBySlug($category);
@@ -39,7 +41,49 @@ class SearchController extends Controller
 
         $categories = $category
             ? $category->childs()->active()->get()
-            : Category::active()->whereNull('category_id')->get();
+            : Category::equipment()->active()->whereNull('category_id')->get();
+
+        $postView = $posts->count()
+            ? view('components.search.items', ['posts' => $posts])->render()
+            : view('components.search.empty-result')->render();
+
+        return $this->jsonSuccess('', [
+            'posts' => $postView,
+            'categories' => view('components.search.categories', compact('categories', 'filters'))->render(),
+            'total' => $posts->total()
+        ]);
+    }
+
+    public function services(Request $request, $slug1=null, $slug2=null)
+    {
+        $category = $slug2 ?? $slug1;
+        $filters = $request->all();
+        $filters['group'] = PostGroup::SERVICE;
+
+        if ($category) {
+            $category = Category::getBySlug($category);
+            abort_if(!$category, 404);
+            $filters['category'] = $category;
+        }
+
+        if ($filters['author']??null) {
+            $filters['author_name'] = User::where('slug', $filters['author'])->value('name');
+        }
+
+        if (!$request->ajax()) {
+            return view('services', compact('category', 'filters'));
+        }
+
+        $posts = Post::query()
+            ->service()
+            ->visible()
+            ->withCount('views')
+            ->filter($filters)
+            ->paginate(Post::PER_PAGE);
+
+        $categories = $category
+            ? $category->childs()->active()->get()
+            : Category::service()->active()->whereNull('category_id')->get();
 
         $postView = $posts->count()
             ? view('components.search.items', ['posts' => $posts])->render()
@@ -79,6 +123,7 @@ class SearchController extends Controller
 
         // get post titles where search string found
         $posts = Post::query()
+            ->equipment()
             ->visible()
             ->when($type == 'my-posts', fn ($q) => $q->where('user_id', auth()->id()))
             ->when($type == 'favorites', fn ($q) => $q->whereRelation('favoriteBy', 'user_id', auth()->id()))

@@ -5,47 +5,7 @@
 @endsection
 
 @section('bc')
-    @if (isset($category))
-        <x-bci :text="trans('ui.eqCatalog')" :href="route('search')" i="2" />
-        @if (isset($filters['search']))
-            <x-bci text="'{{$filters['search']}}'" :href="route('search', ['search'=>$filters['search']])" i="3" />
-        @endif
-        @if (isset($filters['author']))
-            @isSub
-                <x-bci :text="$filters['author_name']" :href="route('search', ['author'=>$filters['author']])" i="3" />
-            @else
-                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                    <a itemprop="item" href="{{route('search', ['author'=>$filters['author']])}}">
-                        <span itemprop="name" class="blurred white">Author Name</span>
-                    </a>
-                    <meta itemprop="position" content="3" />
-                </li>
-            @endisSub
-        @endif
-        @foreach ($category->parents(true) as $category)
-            <x-bci
-                :text="$category->name"
-                :href="$category->getUrl()"
-                :i="$loop->index + (isset($filters['author']) || isset($filters['search']) ? 4 : 3)"
-                :islast="$loop->last"
-            />
-        @endforeach
-    @else
-        <x-bci :text="trans('ui.eqCatalog')" :href="route('search')" i="2" :islast="!isset($filters['author']) && !isset($filters['search'])" />
-        @if (isset($filters['author']))
-            @isSub
-                <x-bci :text="$filters['author_name']" :href="$filters['author']" i="3" islast="1" />
-            @else
-                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                    <span itemprop="name" class="blurred white">Author Name</span>
-                    <meta itemprop="position" content="3" />
-                </li>
-            @endisSub
-        @endif
-        @if (isset($filters['search']))
-            <x-bci text="'{{$filters['search']}}'" :href="$filters['search']" i="3" islast="1" />
-        @endif
-    @endif
+    @include('components.search-bci')
 @endsection
 
 @section('content')
@@ -141,36 +101,7 @@
             </div>
         </aside>
         <div class="content">
-            <h1>
-                @if (isset($filters['author']))
-                    @isSub
-                        {{$filters['author_name']}}
-                    @else
-                        <span
-                            class="blurred c-pointer white b-13"
-                            data-subject="{{$filters['author']}}"
-                            @auth
-                                data-modal="sub-required"
-                                data-type="post-author-show-by-unsub"
-                                data-message="A paid Subscription required to see post authors."
-                            @else
-                                data-modal="auth-required"
-                                data-type="post-author-show-by-guest"
-                                data-message="Please login to see post authors."
-                            @endauth
-                        >
-                            Author Name
-                        </span>
-                    @endisSub
-                @elseif (isset($filters['search']))
-                    "{{$filters['search']}}"
-                @elseif (isset($category))
-                    {{$category->name}}
-                @else
-                    @lang('ui.eqCatalog')
-                @endif
-                (<span class="orange searched-amount">_</span>)
-            </h1>
+            @include('components.search-header')
             <div class="searched-categories-content"></div>
             <div class="searched-content"></div>
             <div class="searched-loading hidden">

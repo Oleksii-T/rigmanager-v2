@@ -42,8 +42,8 @@
                         <div class="col-lg-2">
                             <select class="table-filter form-control" name="type">
                                 <option value="">Type Filter</option>
-                                @foreach (\App\Models\Post::TYPES as $filter)
-                                    <option value="{{$filter}}">{{readable($filter)}}</option>
+                                @foreach (\App\Enums\PostType::all() as $key => $name)
+                                    <option value="{{$key}}">{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>

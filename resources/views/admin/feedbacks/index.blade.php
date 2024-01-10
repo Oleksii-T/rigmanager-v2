@@ -34,6 +34,7 @@
                                 <th>Subject</th>
                                 <th>Text</th>
                                 <th>IP</th>
+                                <th>Created At</th>
                                 <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>

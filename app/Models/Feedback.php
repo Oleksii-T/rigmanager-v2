@@ -74,6 +74,9 @@ class Feedback extends Model
 
                 return "$ip ($count)";
             })
+            ->editColumn('created_at', function ($model) {
+                return $model->created_at->adminFormat();
+            })
             ->addColumn('action', function ($model) {
                 return view('admin.feedbacks.actions', compact('model'))->render();
             })
