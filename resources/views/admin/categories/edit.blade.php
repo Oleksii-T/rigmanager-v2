@@ -61,6 +61,17 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Type</label>
+                            <select class="form-control select2" name="type">
+                                @foreach (\App\Enums\CategoryType::all() as $key => $name)
+                                    <option value="{{$key}}" @selected($category->type->value == $key)>{{$name}}</option>
+                                @endforeach
+                            </select>
+                            <span data-input="type" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Is Active</label>
                             <div class="custom-control custom-checkbox">
                                 <input class="custom-control-input" type="checkbox" id="is_active" name="is_active" value="1" @checked($category->is_active)>

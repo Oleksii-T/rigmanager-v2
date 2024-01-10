@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Admin;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\ValidSlug;
 use App\Models\Category;
+use App\Rules\ValidSlug;
+use App\Enums\CategoryType;
+use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryRequest extends FormRequest
 {
@@ -26,7 +28,9 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         $model = $this->route('category');
+
         $rules = [
+            'type' => ['required', Rule::in(CategoryType::values())],
             'name' => ['required', 'array'],
             'name.en' => ['required', 'string', 'max:255'],
             'fields' => ['nullable', 'array'],

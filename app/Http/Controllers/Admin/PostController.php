@@ -33,6 +33,9 @@ class PostController extends Controller
         if ($request->status) {
             $posts->where('status', $request->status);
         }
+        if ($request->group) {
+            $posts->where('group', $request->group);
+        }
         if ($request->type) {
             $posts->where('type', $request->type);
         }

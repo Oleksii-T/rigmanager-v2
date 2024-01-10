@@ -4,7 +4,7 @@
 
 @section('content_header')
     <x-admin.title
-        text="Categorys"
+        text="Categories"
         :button="['+ Add Category', route('admin.categories.create')]"
     />
 @stop
@@ -15,6 +15,14 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
+                        <div class="col-lg-2">
+                            <select class="table-filter form-control select2" name="type">
+                                <option value="">Type Filter</option>
+                                @foreach (\App\Enums\CategoryType::all() as $key => $name)
+                                    <option value="{{$key}}">{{$name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-lg-2">
                             <select class="table-filter form-control select2" name="parent">
                                 <option value="">Parent Filter</option>

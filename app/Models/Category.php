@@ -161,6 +161,9 @@ class Category extends Model
         if ($request->parent) {
             $query->where('category_id', $request->parent);
         }
+        if ($request->type) {
+            $query->where('type', $request->type);
+        }
         if ($request->status !== null) {
             $query->where('is_active', (bool)$request->status);
         }

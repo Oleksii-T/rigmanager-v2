@@ -4,7 +4,7 @@
 
 @section('content_header')
     <x-admin.title
-        text="Users"
+        text="Posts"
         :button="['+ Add Post', route('admin.posts.create')]"
     />
 @stop
@@ -28,6 +28,14 @@
                                 <option value="">Category Filter</option>
                                 @foreach (\App\Models\Category::all() as $filter)
                                     <option value="{{$filter->id}}">{{$filter->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="table-filter form-control select2" name="group">
+                                <option value="">Group Filter</option>
+                                @foreach (\App\Enums\PostGroup::all() as $key=> $name)
+                                    <option value="{{$key}}">{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>

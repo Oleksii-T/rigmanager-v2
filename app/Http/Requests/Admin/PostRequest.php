@@ -2,10 +2,11 @@
 
 namespace App\Http\Requests\Admin;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\ValidSlug;
 use App\Models\Post;
+use App\Enums\PostType;
+use App\Rules\ValidSlug;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class PostRequest extends FormRequest
 {
@@ -42,7 +43,7 @@ class PostRequest extends FormRequest
             'category_id' => ['required', 'exists:categories,id'],
             'origin_lang' => ['required', 'string'],
             'status' => ['required', 'string', Rule::in(Post::STATUSES)],
-            'type' => ['required', 'string', Rule::in(Post::TYPES)],
+            'type' => ['required', 'string', Rule::in(PostType::values())],
             'condition' => ['nullable', 'string', Rule::in(Post::CONDITIONS)],
             'is_active' => ['nullable', 'boolean'],
             'is_urgent' => ['nullable', 'boolean'],
