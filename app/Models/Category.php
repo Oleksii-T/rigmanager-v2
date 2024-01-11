@@ -110,9 +110,9 @@ class Category extends Model
         return $get ? $res->get() : $res;
     }
 
-    public function getUrl($keepParams=false)
+    public function getUrl($keepParams=false, $forServoce=false)
     {
-        $r = 'search';
+        $r = $forServoce ? 'search-services' : 'search';
         $d = $this->parents(true);
         return $keepParams ? qroute($r, $d) : route($r, $d);
     }

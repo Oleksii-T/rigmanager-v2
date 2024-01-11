@@ -4,6 +4,8 @@ namespace App\Traits;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Enums\PostType;
+use App\Enums\PostGroup;
 use App\Models\Attachment;
 use App\Jobs\PostTranslate;
 use App\Models\Translation;
@@ -151,12 +153,13 @@ trait ScrapePosts
 
         $post = [
             'user_id' => $this->user->id,
+            'group' => PostGroup::EQUIPMENT,
             'status' => 'pending',
             'duration' => 'unlim',
             'is_active' => true,
             'origin_lang' => 'en',
             'category_id' => $category->id,
-            'type' => 'sell',
+            'type' => PostType::SELL,
             'condition' => 'new',
             'country' => 'cn',
             'is_tba' => true,

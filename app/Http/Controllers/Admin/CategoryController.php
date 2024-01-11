@@ -54,7 +54,7 @@ class CategoryController extends Controller
 
         $posts = $category->postsAll();
 
-        return Post::dataTable($posts, $request);
+        return Post::dataTable($posts);
     }
 
     public function update(CategoryRequest $request, Category $category)

@@ -52,9 +52,19 @@
             <div class="header-search">
                 <a href="" class="header-search-link"></a>
                 <div class="header-search-form">
-                    <form action="{{route('search')}}">
+                    @php
+                        $isService = Route::currentRouteName() == 'search-services';
+                    @endphp
+                    <form action="{{route($isService ? 'search-services' : 'search')}}">
                         <fieldset>
-                            <input type="text" name="search" class="header-search-input typeahead-input" data-ttt="title" placeholder="@lang('ui.search')" required>
+                            <input
+                                type="text"
+                                name="search"
+                                class="header-search-input typeahead-input"
+                                data-ttt="{{$isService  ? 'se-title' : 'title'}}"
+                                placeholder="@lang($isService ? 'ui.searchService' : 'ui.searchEquipment')"
+                                required
+                            >
                             <button class="header-search-button"></button>
                         </fieldset>
                     </form>

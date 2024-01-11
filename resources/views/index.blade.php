@@ -17,6 +17,9 @@
                         <a href="{{route('search', ['types'=>['sell', 'lease']])}}">@lang('ui.introSellEq')</a>
                     </div>
                     <div class="top-links-item">
+                        <a href="{{route('search-services')}}">@lang('ui.introSe')</a>
+                    </div>
+                    <div class="top-links-item">
                         <a href="{{route('search', ['types'=>['buy', 'rent']])}}">@lang('ui.introBuyEq')</a>
                     </div>
                 </div>
@@ -24,7 +27,7 @@
                     <form action="{{route('search')}}">
                         <fieldset>
                             <div class="top-form-line">
-                                <input type="text" class="input typeahead-input" data-ttt="title" name="search" placeholder="@lang('ui.search')" required>
+                                <input type="text" class="input typeahead-input" data-ttt="title" name="search" placeholder="@lang('ui.searchEquipment')" required>
                                 <button class="button">@lang('ui.search')</button>
                             </div>
                         </fieldset>
@@ -36,9 +39,24 @@
     <section class="main-section">
         <div class="holder">
             <div class="main-category">
+                <ul class="tabs">
+                    <li><a href="#tab1">{{__('ui.equipment')}}</a></li>
+                    <li><a href="#tab2">{{__('ui.service')}}</a></li>
+                </ul>
                 <div id="tab1" class="tab-content">
                     <div class="main-category-block">
-                        @foreach ($categoriesColumns as $column)
+                        @foreach ($categoriesEquipmentColumns as $column)
+                            <ul class="main-category-col">
+                                @foreach ($column as $c)
+                                    <li><a href="{{$c->getUrl()}}">{{$c->name}}</a></li>
+                                @endforeach
+                            </ul>
+                        @endforeach
+                    </div>
+                </div>
+                <div id="tab2" class="tab-content">
+                    <div class="main-category-block">
+                        @foreach ($categoriesServiceColumns as $column)
                             <ul class="main-category-col">
                                 @foreach ($column as $c)
                                     <li><a href="{{$c->getUrl()}}">{{$c->name}}</a></li>

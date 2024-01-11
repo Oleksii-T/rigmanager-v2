@@ -17,6 +17,7 @@ class SearchController extends Controller
         $category = $slug3 ?? $slug2 ?? $slug1;
         $filters = $request->all();
         $filters['group'] = PostGroup::EQUIPMENT;
+        $isService = false;
 
         if ($category) {
             $category = Category::getBySlug($category);
@@ -49,7 +50,7 @@ class SearchController extends Controller
 
         return $this->jsonSuccess('', [
             'posts' => $postView,
-            'categories' => view('components.search.categories', compact('categories', 'filters'))->render(),
+            'categories' => view('components.search.categories', compact('categories', 'filters', 'isService'))->render(),
             'total' => $posts->total()
         ]);
     }
@@ -59,6 +60,7 @@ class SearchController extends Controller
         $category = $slug2 ?? $slug1;
         $filters = $request->all();
         $filters['group'] = PostGroup::SERVICE;
+        $isService = true;
 
         if ($category) {
             $category = Category::getBySlug($category);
@@ -91,7 +93,7 @@ class SearchController extends Controller
 
         return $this->jsonSuccess('', [
             'posts' => $postView,
-            'categories' => view('components.search.categories', compact('categories', 'filters'))->render(),
+            'categories' => view('components.search.categories', compact('categories', 'filters', 'isService'))->render(),
             'total' => $posts->total()
         ]);
     }
@@ -105,7 +107,9 @@ class SearchController extends Controller
             return []; // do not suggest for long search strings
         }
 
-        if ($type == 'my-posts') {
+        if ($type == 'se-title') {
+            $column = 'title';
+        } else if ($type == 'my-posts') {
             $column = 'title';
         } else if ($type == 'favorites') {
             $column = 'title';
@@ -123,8 +127,9 @@ class SearchController extends Controller
 
         // get post titles where search string found
         $posts = Post::query()
-            ->equipment()
             ->visible()
+            ->when($type == 'se-title', fn ($q) => $q->service())
+            ->when($type != 'se-title', fn ($q) => $q->equipment())
             ->when($type == 'my-posts', fn ($q) => $q->where('user_id', auth()->id()))
             ->when($type == 'favorites', fn ($q) => $q->whereRelation('favoriteBy', 'user_id', auth()->id()))
             ->when($column=='title', fn ($q) => $q->whereHas('translations', function ($q1) use ($search) {

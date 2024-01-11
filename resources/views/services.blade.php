@@ -34,7 +34,7 @@
                     @foreach (\App\Enums\PostType::forService() as $key => $name)
                         <div class="check-item">
                             <input type="checkbox" class="check-input" name="types" id="type-{{$key}}" value="{{$key}}" @checked(in_array($key, request()->types??[]))>
-                            <label for="type{{$key}}" class="check-label">{{$name}}</label>
+                            <label for="type-{{$key}}" class="check-label">{{$name}}</label>
                         </div>
                     @endforeach
                 </div>

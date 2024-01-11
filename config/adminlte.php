@@ -269,7 +269,7 @@ return [
         [
             'text' => 'Dashboard',
             'route'  => 'admin.index',
-            'icon' => 'fa fa-fw fa-tachometer',
+            'icon' => 'fa fa-fw fa-anchor',
         ],
         'MAIN SECTIONS',
         [

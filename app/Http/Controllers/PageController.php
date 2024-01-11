@@ -15,22 +15,15 @@ class PageController extends Controller
 {
     public function index(Request $request)
     {
-        $columns = 3;
-        $skip = 0;
-        $categoriesAll = Category::equipment()->whereNull('category_id')->get();
-        $perColumn = $categoriesAll->count() / $columns;
-        for ($i=1, $skip=0; $i<=$columns; $i++) {
-            $take = $i==$columns ? ceil($perColumn) : floor($perColumn);
-            $categoriesColumns[] = $categoriesAll->skip($skip)->take($take);
-            $skip += $take;
-        }
+        $categoriesEquipmentColumns = $this->splitToThreeColumns(Category::equipment()->whereNull('category_id')->get());
+        $categoriesServiceColumns = $this->splitToThreeColumns(Category::service()->whereNull('category_id')->get());
         $newPosts = Post::equipment()->visible()->latest()->limit(7)->get();
         $urgentPosts = Post::equipment()->visible()->latest()->where('is_urgent', true)->limit(3)->get();
         $partners = cache()->remember('partners', 60*10, function () {
             return Partner::orderBy('order')->get();
         });
 
-        return view('index', compact('categoriesColumns', 'newPosts', 'urgentPosts', 'partners'));
+        return view('index', compact('categoriesEquipmentColumns', 'categoriesServiceColumns', 'newPosts', 'urgentPosts', 'partners'));
     }
 
     public function categories($type=null)
@@ -92,5 +85,15 @@ class PageController extends Controller
         }
 
         return view('banned');
+    }
+
+    private function splitToThreeColumns($collection)
+    {
+        $size = ceil($collection->count() / 3);
+        $firstCollection = $collection->splice(0, $size);
+        $secondCollection = $collection->splice(0, $size);
+        $thirdCollection = $collection;
+
+        return [$firstCollection, $secondCollection, $thirdCollection];
     }
 }
