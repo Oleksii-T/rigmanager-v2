@@ -95,9 +95,6 @@ class ScrapePostsRsdst extends Command
         }
         $desc = implode("\r\n", $descriptions);
         $desc = str_replace('Technical parameters', '', $desc);
-        $desc = str_replace('&atilde;', ', ', $desc);
-        $desc = str_replace('&#128;', '', $desc);
-        $desc = str_replace('&#129;', '', $desc);
         $desc = $this->descriptionEscape($desc);
 
         return $desc;

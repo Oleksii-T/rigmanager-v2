@@ -32,12 +32,12 @@ use App\Services\Css2XPathService;
  *
  * There is other helper method to tweak the behavior:
  * - abortOnPageError() - Enable\disable exception when page can not be downloaded;
+ * - nullableValues() - Markes all values as nullable;
  * - debug() - Enable\disable scrapping logging;
  * - logUsing() - Define who logging logic;
  * - limit() - Set the limit;
  * - sleep() - Defile wait seconds before page will be downloaded;
  * - count() - Count pages instead on scrapping. Use instead of scrape();
- * - staticValue() - Manualy insert provided value in result array.
  *
  * See detailed usage, parameters and return values in method comments.
  *
@@ -53,11 +53,14 @@ class PostScraperService
     private string $postLinkAttribute;
     private string $currentUrl = '';
     private bool $abortOnPageError = true;
+    private bool $nullableValues = false;
     private bool $onlyCount = false;
     private bool $debug = false;
     private int $limitResult = 0;
     private int $sleep = 0;
+    private string $shotDir = storage_path('browsershot');
     private array $values = [];
+    private array $shots = [];
     private array $result = [];
     private array $ignoreUrls = [];
     private \Closure $logUsingClosure;
@@ -88,6 +91,17 @@ class PostScraperService
     public function abortOnPageError(bool $abort)
     {
         $this->abortOnPageError = $abort;
+
+        return $this;
+    }
+
+    public function nullableValues()
+    {
+        $this->nullableValues = true;
+
+        foreach ($this->values as $name => &$data) {
+            $data['required'] = false;
+        }
 
         return $this;
     }
@@ -196,24 +210,6 @@ class PostScraperService
     }
 
     /**
-     * Ads static value which will be added to all scraped posts.
-     *
-     * @param string $name Name of value
-     * @param string $value The value
-     *
-     * @return self
-     */
-    public function staticValue(string $name, string $value)
-    {
-        $this->values[$name] = [
-            'static' => true,
-            'value' => $value
-        ];
-
-        return $this;
-    }
-
-    /**
      * Sets the selector for post field. Eg for title or description.
      *
      * @param string $name Name of field
@@ -228,8 +224,7 @@ class PostScraperService
     public function value(string $name, string $selector, string $attribute=null, bool $isMultiple=false, bool $getFromPostsPage=false, bool $required=true)
     {
         $this->values[$name] = [
-            'static' => false,
-            'required' => $required,
+            'required' => $this->nullableValues ? false : $required,
             'selector' => $selector,
             'is_multiple' => $isMultiple,
             'attribute' => $attribute,
@@ -237,6 +232,15 @@ class PostScraperService
         ];
 
         return $this;
+    }
+
+    public function shot(string $name, string $selector, bool $isMultiple=false, bool $required=true)
+    {
+        $this->shots[$name] = [
+            'required' => $required,
+            'selector' => $selector,
+            'is_multiple' => $isMultiple
+        ];
     }
 
     /**
@@ -354,9 +358,7 @@ class PostScraperService
                     continue;
                 }
 
-                $this->result[$postUrl][$key] = $data['static']
-                    ?  $data['value']
-                    : $this->scrapeValue($postNode, $key, $data);
+                $this->result[$postUrl][$key] = $this->scrapeValue($postNode, $key, $data);
             }
 
             $this->meta['parsed_posts'][$postUrl]['end'] = microtime(true);
@@ -426,7 +428,37 @@ class PostScraperService
             $values[$key] = $this->scrapeValue($html, $key, $valueData);
         }
 
+        foreach ($this->shots as $key => $shotData) {
+            $values[$key] = $this->shotHelper($url, $key, $shotData);
+        }
+
         return $values;
+    }
+
+    private function shotHelper($url, $key, $shotData)
+    {
+        $name = $key . '-' . time() . '.jpeg';
+        $path = $this->shotDir . '/' . $name;
+        $selector = $shotData['selector'];
+        $shots = $shotData['is_multiple'] ? 1 : 5; // max 5 images
+        $result = [];
+
+        for ($i=1; $i <= $shots; $i++) {
+            try {
+                \Spatie\Browsershot\Browsershot::url($url)
+                    ->select($selector, $i)
+                    ->setScreenshotType('jpeg', 100)
+                    ->newHeadless()
+                    ->save($path);
+                $result[] = $path;
+            } catch (\Spatie\Browsershot\Exceptions\ElementNotFound $th) {
+                if ($shotData['required'] && $i==1) {
+                    throw new \Exception("Can not make a required shot for '$key' ($selector) at $url", 1);
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**

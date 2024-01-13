@@ -11,6 +11,7 @@ use App\Jobs\PostTranslate;
 use App\Models\Translation;
 use Illuminate\Support\Str;
 use App\Jobs\ProcessPostImages;
+use Illuminate\Support\Facades\DB;
 use App\Services\TranslationService;
 use App\Services\ProcessImageService;
 use Illuminate\Support\Facades\Storage;
@@ -117,7 +118,7 @@ trait ScrapePosts
         $importedCount = 0;
 
         foreach ($scrapedData as $url => $scrapedPost) {
-            $isImported = $this->importScrapedPost($url, $scrapedPost);
+            $isImported = DB::transaction(fn () => $this->importScrapedPost($url, $scrapedPost));
 
             $bar->advance();
 
@@ -306,18 +307,25 @@ trait ScrapePosts
     private function descriptionEscape($desc, $removeTable=true)
     {
         if ($removeTable) {
+            //todo: remove all tables
             $startTable = strpos($desc, '<table');
             $endTable = strpos($desc, '</table>');
             if ($startTable !== false && $endTable !== false) {
                 $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
             }
         }
+
         $desc = strip_tags($desc);
+        $desc = str_replace("\r\n", "\n", $desc); // ensure there all the same new lines symbol
+        $desc = str_replace("\t", ' ', $desc); // change tabs to space
         $desc = str_replace('&Acirc;', '', $desc);
-        $desc = str_replace('&nbsp;', '', $desc);
+        $desc = str_replace('&nbsp;', ' ', $desc);
+        $desc = str_replace("\u{A0}", ' ', $desc); // same as &nbsp;
+        $desc = str_replace('&acirc;&#128;&sup3;', '" ', $desc); // inches
         $desc = preg_replace('/^[ \n]*/', "", $desc); // remove leading newlines and spaces
-        $desc = preg_replace('/(\r\n){3,}/', "\r\n\r\n", $desc); // remove dublicated new lines
-        $desc = preg_replace('/(\n){3,}/', "\n", $desc); // remove dublicated new lines
+        $desc = preg_replace('/ +\n/', "\n", $desc); // remove spaces before new lines
+        $desc = preg_replace('/(\n){3,}/', "\n\n", $desc); // remove dublicated new lines
+        $desc = str_replace("\n", "\r\n", $desc); // make Windows friendly new lines
 
         return $desc;
     }

@@ -78,6 +78,7 @@
                 @endif
                 --}}
                 <h1>{{$post->title}}</h1>
+                <a href="{{$post->scraped_url}}">{{$post->scraped_url}}</a>
                 <p>{{$post->description}}</p>
             </div>
         </div>

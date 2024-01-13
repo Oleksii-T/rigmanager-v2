@@ -70,13 +70,17 @@ class ScrapePostsLakePetro extends Command
                 ->value('tab-2-images', '.tabsWrapper #tab-2 img',   'src', true) // tab 2 main contain "Description" or "Drowings"
                 ->value('tab-3-html',   '.tabsWrapper #tab-3',       'html'     ) // tab 3 main contain "Drowings" or "Contact Us"
                 ->value('tab-3-images', '.tabsWrapper #tab-3 img',   'src', true) // tab 3 main contain "Drowings" or "Contact Us"
-                ->staticValue('category', $categSlug)
+                ->shot('tab-3-table-img', '.tabsWrapper #tab-3 table', false)
                 ->abortOnPageError(false) // some lakepost posts has empty href
-                ->abortOnEmptyValue(false) // some lakepost posts returns 404 page or doesnt have description
+                ->nullableValues() // some lakepost posts returns 404 page so mark all value as nullable
                 ->limit($this->scrapeLimit)
                 ->sleep($this->sleep)
                 ->debug($this->scraperDebug)
                 ->scrape();
+
+            foreach ($tmp as &$p) {
+                $p['category'] = $categSlug;
+            }
             $result = array_merge($result, $tmp);
         }
 

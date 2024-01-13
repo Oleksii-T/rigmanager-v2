@@ -71,6 +71,11 @@ class ScrapePostsGoldenMan extends Command
     {
         $desc = $scrapedPost['description-short'] . "\r\n" . $scrapedPost['description'];
         $desc = $this->descriptionEscape($desc);
+        $desc = str_replace('&acirc;&#128;&#153;', "'", $desc);
+        $desc = str_replace('&acirc;&#128;&#156;', '"', $desc);
+        $desc = str_replace('&acirc;&#128;&#157;', '"', $desc);
+        $desc = str_replace('&deg;', "°", $desc);
+        $desc = str_replace('&amp;', "&", $desc);
 
         return $desc;
     }

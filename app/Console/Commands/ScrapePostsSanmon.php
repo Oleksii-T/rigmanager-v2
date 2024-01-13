@@ -15,7 +15,7 @@ class ScrapePostsSanmon extends Command
      *
      * @var string
      */
-    protected $signature = 'posts:scrape-lakepetro
+    protected $signature = 'posts:scrape-sanmon
                             {--ignore-cache : Ignore cached scraped data. }
                             {--scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/sanmon.json : Path to cache file. }

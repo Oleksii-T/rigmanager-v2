@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Facades\DumperServiceFacade as Dumper;
 
@@ -66,8 +67,6 @@ class DevController extends Controller
     private function test()
     {
         $d = [];
-
-        $d = round(17.29, 1);
 
         dd($d);
     }

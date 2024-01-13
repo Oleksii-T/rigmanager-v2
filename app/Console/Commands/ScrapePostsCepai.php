@@ -15,10 +15,10 @@ class ScrapePostsCepai extends Command
      *
      * @var string
      */
-    protected $signature = 'posts:scrape-lakepetro
+    protected $signature = 'posts:scrape-cepai
                             {--ignore-cache : Ignore cached scraped data. }
                             {--scraper-debug : Enable scraper logs}
-                            {--C|cache-file=storage/scraper_jsons/cepai2.json : Path to cache file. }
+                            {--C|cache-file=storage/scraper_jsons/cepai.json : Path to cache file. }
                             {--U|user=aires@cepai.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
                             {--L|import-limit=0 : Limit the amount of successfully imported posts. }
@@ -79,8 +79,23 @@ class ScrapePostsCepai extends Command
 
     private function parseDescription($scrapedPost)
     {
-        $description = $scrapedPost['description'];
+        $description = $scrapedPost['description'] . "\r\n\r\n" . $scrapedPost['body'];
+        $description = str_replace('</p>', "\r\n</p>", $description);
         $description = $this->descriptionEscape($description);
+        $description = str_replace('&atilde;&#128;&#129;', ', ', $description);
+        $description = str_replace('&iuml;&frac14;&#140;', ', ', $description);
+        $description = str_replace('&iuml;&frac14;&#136;', ' (', $description);
+        $description = str_replace('&iuml;&frac14;&#137;', ') ', $description);
+        $description = str_replace('&acirc;&#128;&#157;', '" ', $description);
+        $description = str_replace('&iuml;&frac14;&#155;', '; ', $description);
+        $description = str_replace('&iuml;&frac14;&#141;', '-', $description);
+        $description = str_replace('&iuml;&frac14;&#139;', '+', $description);
+        $description = str_replace('&atilde;&#128;&#130;', '. ', $description);
+        $description = str_replace('&iuml;&frac14;&#154;', ': ', $description);
+        $description = str_replace('&iuml;&frac12;&#158;', '~', $description);
+        $description = str_replace('&acirc;&#132;&#131;', 'C', $description);
+        $description = str_replace('&iuml;&frac14;&#156;', '<', $description);
+        $description = str_replace('&iuml;&#129;&not;', '', $description);
 
         return $description;
     }
