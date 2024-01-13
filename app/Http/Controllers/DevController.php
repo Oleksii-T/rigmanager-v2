@@ -68,6 +68,14 @@ class DevController extends Controller
     {
         $d = [];
 
+        $url = 'https://www.lakepetro.com/Kelly%20Valve';
+        $path = storage_path('browsershot/web-image.png');
+
+        $d = \Spatie\Browsershot\Browsershot::url($url)
+            ->select('#tab-1 table')
+            ->newHeadless()
+            ->save($path);
+
         dd($d);
     }
 

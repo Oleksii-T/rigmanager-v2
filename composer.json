@@ -25,6 +25,7 @@
         "opcodesio/log-viewer": "^3.0",
         "psr/simple-cache": "^2.0",
         "pusher/pusher-php-server": "^7.2",
+        "spatie/browsershot": "^3.61",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-sitemap": "^6.3",
         "staudenmeir/belongs-to-through": "^2.5",

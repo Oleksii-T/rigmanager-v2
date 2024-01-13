@@ -328,7 +328,7 @@ class SubscriptionService
 
     private static function extendHelper($subscription, $validStatuses)
     {
-        // dlog("SubscriptionService@extendHelper"); //! LOG
+        dlog("SubscriptionService@extendHelper"); //! LOG
 
         $stripeService = new StripeService();
 
@@ -343,12 +343,12 @@ class SubscriptionService
         $activeCycle = $subscription->cycle;
         $invoice = $stripeSub['latest_invoice']??[];
 
-        // dlog(" got sub: " . json_encode($stripeSub)); //! LOG
+        dlog(" got sub: " . json_encode($stripeSub)); //! LOG
 
         if ($activeCycle->expire_at == $stripeExpDate) {
             // we are within paid subscription period
 
-            dlog(" within payed period"); //! LOG
+            // dlog(" within payed period"); //! LOG
 
             if (!in_array($stripeSubStatus, $validStatuses)) {
                 // Subscription was canceled in stripe within a active cycle.
@@ -362,7 +362,7 @@ class SubscriptionService
             return;
         }
 
-        // dlog(" need to renew"); //! LOG
+        dlog(" need to renew"); //! LOG
 
         // current cycle should be renewed
 
@@ -384,7 +384,7 @@ class SubscriptionService
             return;
         }
 
-        // dlog(" renew"); //! LOG
+        dlog(" renew. invoice: ", $invoice); //! LOG
 
         // update status. For example: trialing->active or active->incomplete
         $subscription->update([
