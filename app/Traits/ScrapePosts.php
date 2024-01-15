@@ -174,6 +174,7 @@ trait ScrapePosts
         $post = Post::create($post);
 
         $this->addImages($post, $this->parseImages($scrapedPost));
+        $this->addSavedImages($post, $this->parseSavedImages($scrapedPost));
         $this->addCosts($post, $scrapedPost);
         $this->addTranslations($post, $title, $description);
 
@@ -211,6 +212,9 @@ trait ScrapePosts
 
         foreach ($exists as $e) {
             $post = $e->translatable;
+            if (!$post) {
+                continue;
+            }
             $this->log(" found '$title' in $e->id");
             if ($post->user_id == $this->user->id) {
                 $this->alreadyExisted[$url] = $scrapedPost;
@@ -274,6 +278,37 @@ trait ScrapePosts
         ProcessPostImages::dispatch($attachments);
     }
 
+    private function parseSavedImages($scrapedPost)
+    {
+        return [];
+    }
+
+    private function addSavedImages($post, $paths)
+    {
+        if (!$paths) {
+            return;
+        }
+
+        foreach ($paths as $path) {
+            $disk = Storage::disk('aimages');
+
+            $fileName = basename($path);
+            copy($path, $disk->path($fileName));
+            $size = $disk->size($fileName);
+
+            $attachments[] = Attachment::create([
+                'attachmentable_id' => $post->id,
+                'attachmentable_type' => Post::class,
+                'name' => $fileName,
+                'original_name' => $fileName,
+                'group' => 'images',
+                'type' => 'image',
+                'size' => $size
+            ]);
+        }
+
+    }
+
     private function addTranslations($post, $title, $description)
     {
         $textLocale = (new TranslationService())->detectLanguage("$title. $description");
@@ -307,11 +342,13 @@ trait ScrapePosts
     private function descriptionEscape($desc, $removeTable=true)
     {
         if ($removeTable) {
-            //todo: remove all tables
             $startTable = strpos($desc, '<table');
-            $endTable = strpos($desc, '</table>');
-            if ($startTable !== false && $endTable !== false) {
-                $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
+            while ($startTable !== false) {
+                $endTable = strpos($desc, '</table>');
+                if ($startTable !== false && $endTable !== false) {
+                    $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
+                }
+                $startTable = strpos($desc, '<table');
             }
         }
 

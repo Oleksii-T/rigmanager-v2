@@ -16,8 +16,8 @@ class ScrapePostsLakePetro extends Command
      * @var string
      */
     protected $signature = 'posts:scrape-lakepetro
-                            {--ignore-cache : Ignore cached scraped data. }
-                            {--scraper-debug : Enable scraper logs}
+                            {--I|ignore-cache : Ignore cached scraped data. }
+                            {--D|scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/lakepetro.json : Path to cache file. }
                             {--U|user=sales@lakepetro.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
@@ -70,7 +70,7 @@ class ScrapePostsLakePetro extends Command
                 ->value('tab-2-images', '.tabsWrapper #tab-2 img',   'src', true) // tab 2 main contain "Description" or "Drowings"
                 ->value('tab-3-html',   '.tabsWrapper #tab-3',       'html'     ) // tab 3 main contain "Drowings" or "Contact Us"
                 ->value('tab-3-images', '.tabsWrapper #tab-3 img',   'src', true) // tab 3 main contain "Drowings" or "Contact Us"
-                ->shot('tab-3-table-img', '.tabsWrapper #tab-3 table', false)
+                ->shot('tab-1-table-img', '.tabsWrapper #tab-1 table')
                 ->abortOnPageError(false) // some lakepost posts has empty href
                 ->nullableValues() // some lakepost posts returns 404 page so mark all value as nullable
                 ->limit($this->scrapeLimit)
@@ -156,6 +156,11 @@ class ScrapePostsLakePetro extends Command
         $images = array_merge($images, $scrapedPost['tab-3-images']??[]);
 
         return $images;
+    }
+
+    private function parseSavedImages($scrapedPost)
+    {
+        return $scrapedPost['tab-1-table-img'];
     }
 
     private function parseCategory($scrapedPost)

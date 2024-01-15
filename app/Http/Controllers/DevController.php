@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Facades\DumperServiceFacade as Dumper;
 
 /**
@@ -68,11 +69,15 @@ class DevController extends Controller
     {
         $d = [];
 
-        $url = 'https://www.lakepetro.com/Kelly%20Valve';
-        $path = storage_path('browsershot/web-image.png');
-
-        $d = \Spatie\Browsershot\Browsershot::url($url)
-            ->select('#tab-1 table')
+        $url = 'http://en.cepai.com.cn/product/instrument/mperatu/emperatur/807.html';
+        $path = public_path('test1.jpeg');
+        
+        \Spatie\Browsershot\Browsershot::url($url)
+            ->select('#main_product #main2_lrxq #main2_box4 table', 1)
+            // ->fullPage()
+            // ->windowSize(1300, 3000)
+            ->setOption('addStyleTag', json_encode(['content' => '#main2_box4{height:3000px;} #footer{display:none}']))
+            ->setScreenshotType('jpeg', 100)
             ->newHeadless()
             ->save($path);
 

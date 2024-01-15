@@ -16,8 +16,8 @@ class ScrapePostsCepai extends Command
      * @var string
      */
     protected $signature = 'posts:scrape-cepai
-                            {--ignore-cache : Ignore cached scraped data. }
-                            {--scraper-debug : Enable scraper logs}
+                            {--I|ignore-cache : Ignore cached scraped data. }
+                            {--D|scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/cepai.json : Path to cache file. }
                             {--U|user=aires@cepai.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
@@ -59,6 +59,12 @@ class ScrapePostsCepai extends Command
                 ->value('image', '#main_product #main2_cpxqbj img', 'src')
                 ->value('body', '#main_product #main2_lrxq #main2_box4', 'html')
                 ->value('breadcrumbs', '#main_product #main1_wei a', null, true)
+                ->shot(
+                    'tables-img', 
+                    '#main_product #main2_lrxq #main2_box4 table',
+                    false, 
+                    '#main2_box4{height:3000px;} #footer{display:none}'
+                )
                 ->limit($this->scrapeLimit)
                 ->sleep($this->sleep)
                 ->debug($this->scraperDebug)
@@ -103,6 +109,11 @@ class ScrapePostsCepai extends Command
     private function parseImages($scrapedPost)
     {
         return [$scrapedPost['image']??false];
+    }
+
+    private function parseSavedImages($scrapedPost)
+    {
+        return $scrapedPost['tables-img'];
     }
 
     private function parseCategory($scrapedPost)

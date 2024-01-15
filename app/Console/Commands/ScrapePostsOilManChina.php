@@ -16,8 +16,8 @@ class ScrapePostsOilManChina extends Command
      * @var string
      */
     protected $signature = 'posts:scrape-oilmanchina
-                            {--ignore-cache : Ignore cached scraped data. }
-                            {--scraper-debug : Enable scraper logs}
+                            {--I|ignore-cache : Ignore cached scraped data. }
+                            {--D|scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/oilmanchina.json : Path to cache file. }
                             {--U|user=christal@oilmancn.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
@@ -55,6 +55,7 @@ class ScrapePostsOilManChina extends Command
             ->value('details1-values', '.cont_r .p_attribute', null, true)
             ->value('details2-keys', '#detail_infomation th', null, true)
             ->value('details2-values', '#detail_infomation td', null, true)
+            ->shot('tables-img', '#product_description table')
             ->limit($this->scrapeLimit)
             ->sleep($this->sleep)
             ->debug($this->scraperDebug)
@@ -93,6 +94,7 @@ class ScrapePostsOilManChina extends Command
         $desc = str_replace('Product Description', '', $desc);
         $desc = str_replace('SPECIFICATION AND TECHNICAL DATA:', '', $desc);
         $desc = str_replace('Technical Specifications', '', $desc);
+        $desc = str_replace('&acirc;&#128;&cent;', '- ', $desc);
         $desc = $this->descriptionEscape($desc);
 
         $cutFooters = [
@@ -141,6 +143,11 @@ class ScrapePostsOilManChina extends Command
         $images = array_merge($images, $scrapedPost['description-images']??[]);
 
         return $images;
+    }
+
+    private function parseSavedImages($scrapedPost)
+    {
+        return $scrapedPost['tables-img'];
     }
 
     private function addCosts($post, $scrapedPost)

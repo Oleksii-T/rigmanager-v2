@@ -16,8 +16,8 @@ class ScrapePostsGoldenMan extends Command
      * @var string
      */
     protected $signature = 'posts:scrape-goldenman
-                            {--ignore-cache : Ignore cached scraped data. }
-                            {--scraper-debug : Enable scraper logs}
+                            {--I|ignore-cache : Ignore cached scraped data. }
+                            {--D|scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/goldenman.json : Path to cache file. }
                             {--U|user=info@goldenman.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
@@ -51,6 +51,7 @@ class ScrapePostsGoldenMan extends Command
             ->value('images', '.woocommerce-product-gallery__wrapper a img', 'src', true)
             ->value('description-short', '.woocommerce-product-details__short-description', null, false, false, false)
             ->value('description', '.woocommerce-Tabs-panel--description', 'html')
+            ->shot('tables-img', '.woocommerce-Tabs-panel--description table')
             ->limit($this->scrapeLimit)
             ->sleep($this->sleep)
             ->debug($this->scraperDebug)
@@ -85,6 +86,11 @@ class ScrapePostsGoldenMan extends Command
         $images = $scrapedPost['images'];
 
         return $images;
+    }
+
+    private function parseSavedImages($scrapedPost)
+    {
+        return $scrapedPost['tables-img'];
     }
 
     private function parseCategory($scrapedPost)

@@ -18,6 +18,7 @@ use App\Services\Css2XPathService;
  * - postLink() - set the selector for link which must lead to post page;
  * - pagination() - set the seelctor for pagination links;
  * - value() - set the selector for target value to be scraped;
+ * - shot() - set the selector for screenshot;
  * - scrape() - start the scrapping.
  *
  * Algorithm breakdown:
@@ -58,7 +59,7 @@ class PostScraperService
     private bool $debug = false;
     private int $limitResult = 0;
     private int $sleep = 0;
-    private string $shotDir = storage_path('browsershot');
+    private string $shotDir = '';
     private array $values = [];
     private array $shots = [];
     private array $result = [];
@@ -74,6 +75,7 @@ class PostScraperService
     public function __construct(string $url)
     {
         $this->url = $url;
+        $this->shotDir = storage_path('browsershot');
     }
 
     public static function make(string $url)
@@ -234,13 +236,15 @@ class PostScraperService
         return $this;
     }
 
-    public function shot(string $name, string $selector, bool $isMultiple=false, bool $required=true)
+    public function shot(string $name, string $selector, bool $required=false, string $css='')
     {
         $this->shots[$name] = [
             'required' => $required,
             'selector' => $selector,
-            'is_multiple' => $isMultiple
+            'css' => $css
         ];
+
+        return $this;
     }
 
     /**
@@ -437,26 +441,39 @@ class PostScraperService
 
     private function shotHelper($url, $key, $shotData)
     {
-        $name = $key . '-' . time() . '.jpeg';
-        $path = $this->shotDir . '/' . $name;
+        $this->log("      shot for '$key'", $shotData);
+
         $selector = $shotData['selector'];
-        $shots = $shotData['is_multiple'] ? 1 : 5; // max 5 images
         $result = [];
 
-        for ($i=1; $i <= $shots; $i++) {
+        for ($i=0; $i < 5; $i++) {
             try {
-                \Spatie\Browsershot\Browsershot::url($url)
+                $name = $key . '-' . time() . '.jpeg';
+                $path = $this->shotDir . '/' . $name;
+
+                $browserhot = \Spatie\Browsershot\Browsershot::url($url)
                     ->select($selector, $i)
                     ->setScreenshotType('jpeg', 100)
-                    ->newHeadless()
-                    ->save($path);
+                    ->newHeadless();
+                
+                if ($shotData['css']) {
+                    $browserhot->setOption('addStyleTag', json_encode(['content' => $shotData['css']]));
+                }
+
+                $browserhot->save($path);
+                    
                 $result[] = $path;
+                $this->log("        done #$i");
             } catch (\Spatie\Browsershot\Exceptions\ElementNotFound $th) {
                 if ($shotData['required'] && $i==1) {
                     throw new \Exception("Can not make a required shot for '$key' ($selector) at $url", 1);
                 }
+                $this->log("        error #$i (ElementNotFound): " . $th->getMessage());
+                break;
             }
         }
+
+        $this->log("        result", $result);
 
         return $result;
     }

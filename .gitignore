@@ -6,6 +6,7 @@
 /public/icons/watermarks/watermark-*.png
 /storage/*.key
 /storage/scraper_jsons
+/storage/browsershot
 /vendor
 .env
 .env.backup
