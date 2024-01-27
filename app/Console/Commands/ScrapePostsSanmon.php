@@ -16,8 +16,8 @@ class ScrapePostsSanmon extends Command
      * @var string
      */
     protected $signature = 'posts:scrape-sanmon
-                            {--ignore-cache : Ignore cached scraped data. }
-                            {--scraper-debug : Enable scraper logs}
+                            {--I|ignore-cache : Ignore cached scraped data. }
+                            {--D|scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/sanmon.json : Path to cache file. }
                             {--U|user=sales@cnsanmon.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
@@ -74,6 +74,9 @@ class ScrapePostsSanmon extends Command
     {
         $description = $scrapedPost['description'];
         $description = $this->descriptionEscape($description);
+        $description = str_replace('&acirc;&#129;&#132;', '/', $description);
+        $description = str_replace('&middot;', '- ', $description);
+        $description = str_replace('&acirc;&#128;&#148;', '-', $description);
 
         return $description;
     }
@@ -101,10 +104,10 @@ class ScrapePostsSanmon extends Command
             'BOP' => 'well-control-equipment',
             'Wireline Slickline' => 'fishing-tools',
             'Solids Control Equipment' => 'solid-control-equipment',
-            'MWD and LWD' => '',
-            'ESP / ESPCP' => '',
-            'Coiled Tubing Tools' => '',
-            'Artificial Lifting' => '',
+            'MWD and LWD' => 'downhole-tools',
+            'ESP / ESPCP' => 'mud-pump-spare-parts',
+            'Coiled Tubing Tools' => 'downhole-tools',
+            'Artificial Lifting' => 'solid-control-equipment',
         ];
 
         $mySlug = $map[$scrapedPost['category']] ?? 'other-measurement-equipment';

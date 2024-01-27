@@ -358,7 +358,11 @@ trait ScrapePosts
         $desc = str_replace('&Acirc;', '', $desc);
         $desc = str_replace('&nbsp;', ' ', $desc);
         $desc = str_replace("\u{A0}", ' ', $desc); // same as &nbsp;
+        $desc = str_replace('&acirc;&#128;&cent;', '- ', $desc);
+        $desc = str_replace('&acirc;&#128;&#157;', '"', $desc);
         $desc = str_replace('&acirc;&#128;&sup3;', '" ', $desc); // inches
+        $desc = str_replace('&acirc;&#128;&#156;', '"', $desc);
+        $desc = str_replace('&acirc;&#128;&#153;', "'", $desc); // apostrophy
         $desc = preg_replace('/^[ \n]*/', "", $desc); // remove leading newlines and spaces
         $desc = preg_replace('/ +\n/', "\n", $desc); // remove spaces before new lines
         $desc = preg_replace('/(\n){3,}/', "\n\n", $desc); // remove dublicated new lines

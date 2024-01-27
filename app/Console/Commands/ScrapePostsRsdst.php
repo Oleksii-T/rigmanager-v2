@@ -16,8 +16,8 @@ class ScrapePostsRsdst extends Command
      * @var string
      */
     protected $signature = 'posts:scrape-rsdst
-                            {--ignore-cache : Ignore cached scraped data. }
-                            {--scraper-debug : Enable scraper logs}
+                            {--I|ignore-cache : Ignore cached scraped data. }
+                            {--D|scraper-debug : Enable scraper logs}
                             {--C|cache-file=storage/scraper_jsons/rsdst.json : Path to cache file. }
                             {--U|user=rsdxs@pyzyrsd.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }

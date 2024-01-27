@@ -92,7 +92,6 @@ class ScrapePostsCepai extends Command
         $description = str_replace('&iuml;&frac14;&#140;', ', ', $description);
         $description = str_replace('&iuml;&frac14;&#136;', ' (', $description);
         $description = str_replace('&iuml;&frac14;&#137;', ') ', $description);
-        $description = str_replace('&acirc;&#128;&#157;', '" ', $description);
         $description = str_replace('&iuml;&frac14;&#155;', '; ', $description);
         $description = str_replace('&iuml;&frac14;&#141;', '-', $description);
         $description = str_replace('&iuml;&frac14;&#139;', '+', $description);

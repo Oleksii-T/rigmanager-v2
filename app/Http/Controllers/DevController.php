@@ -69,18 +69,6 @@ class DevController extends Controller
     {
         $d = [];
 
-        $url = 'http://en.cepai.com.cn/product/instrument/mperatu/emperatur/807.html';
-        $path = public_path('test1.jpeg');
-        
-        \Spatie\Browsershot\Browsershot::url($url)
-            ->select('#main_product #main2_lrxq #main2_box4 table', 1)
-            // ->fullPage()
-            // ->windowSize(1300, 3000)
-            ->setOption('addStyleTag', json_encode(['content' => '#main2_box4{height:3000px;} #footer{display:none}']))
-            ->setScreenshotType('jpeg', 100)
-            ->newHeadless()
-            ->save($path);
-
         dd($d);
     }
 

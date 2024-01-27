@@ -94,7 +94,6 @@ class ScrapePostsOilManChina extends Command
         $desc = str_replace('Product Description', '', $desc);
         $desc = str_replace('SPECIFICATION AND TECHNICAL DATA:', '', $desc);
         $desc = str_replace('Technical Specifications', '', $desc);
-        $desc = str_replace('&acirc;&#128;&cent;', '- ', $desc);
         $desc = $this->descriptionEscape($desc);
 
         $cutFooters = [

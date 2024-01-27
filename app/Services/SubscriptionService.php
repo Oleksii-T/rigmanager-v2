@@ -384,7 +384,7 @@ class SubscriptionService
             return;
         }
 
-        dlog(" renew. invoice: ", $invoice); //! LOG
+        dlog(" renew. invoice: ", [$invoice]); //! LOG
 
         // update status. For example: trialing->active or active->incomplete
         $subscription->update([
