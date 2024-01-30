@@ -330,6 +330,47 @@
     flex: 0 0 100%;
     max-width: 100%;
 }
+
+.profile-post-trashed {
+    position: relative;
+    opacity: 0.5;
+}
+.profile-post-trashed:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: red;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.profile-post-pending {
+    position: relative;
+}
+.profile-post-pending:after {
+    content: "PENDING APPROVAL";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #ffff003d;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 3em;
+    font-weight: 600;
+}
+
+.profile-post-hidden {
+    opacity: 0.5;
+}
+
 @media screen and (max-width: 767px) {
     .col-6 {
         flex: 0 0 100%;

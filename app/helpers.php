@@ -225,6 +225,20 @@ if (!function_exists('array_iunique')) {
     }
 }
 
+// get string from exeption
+if (!function_exists('exceptionAsString')) {
+    function exceptionAsString($th) {
+        return $th->getMessage() . '. Trace: ' . $th->getTraceAsString();
+    }
+}
+
+// case insensitive array_unique
+if (!function_exists('postsMustBeApproved')) {
+    function postsMustBeApproved() {
+        return \App\Models\Setting::get('hide_pending_posts', true, true);
+    }
+}
+
 // get readable last json error
 if (!function_exists('_json_last_error')) {
     function _json_last_error()

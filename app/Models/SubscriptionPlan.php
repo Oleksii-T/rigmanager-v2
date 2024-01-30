@@ -69,6 +69,16 @@ class SubscriptionPlan extends Model
         return $this->getTranslatedAttr(__FUNCTION__);
     }
 
+    public function getNextExpireAt()
+    {
+        return match ($this->interval) {
+            'day' => now()->addDay(),
+            'twoday' => now()->addDays(2),
+            'month' => now()->addMonth(),
+            'year' => now()->addYear(),
+        };
+    }
+
     public static function dataTable($query)
     {
         return DataTables::of($query)

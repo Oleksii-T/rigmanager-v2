@@ -51,46 +51,26 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Stripe Id</label>
-                            <input name="stripe_id" type="text" class="form-control">
-                            <span data-input="stripe_id" class="input-error"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">First Cycle</h3>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Invoice <small>(json)</small></label>
-                            <input name="invoice" type="text" class="form-control">
-                            <span data-input="invoice" class="input-error"></span>
+                            <label>Provider</label>
+                            <select name="provider" class="form-control">
+                                <option value="stripe">Stripe</option>
+                                <option value="manual">Manual</option>
+                            </select>
+                            <span data-input="provider" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Price</label>
-                            <input name="price" type="text" class="form-control">
-                            <span data-input="price" class="input-error"></span>
+                            <label>External Id</label>
+                            <input name="external_id" type="text" class="form-control">
+                            <span data-input="external_id" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Expire At <small>subs without stripe will not auto-extend</small></label>
-                            <input name="expire_at" type="text" class="form-control daterangepicker-single">
-                            <span data-input="expire_at" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Is active</label>
-                            <input name="is_active" type="checkbox" class="form-control" value="1" checked>
-                            <span data-input="is_active" class="input-error"></span>
+                            <label>Maximum cycles <small>(for 'manual' sub only)</small></label>
+                            <input name="max_cycles" type="number" class="form-control">
+                            <span data-input="max_cycles" class="input-error"></span>
                         </div>
                     </div>
                 </div>
@@ -99,4 +79,6 @@
         <button type="submit" class="btn btn-success min-w-100">Save</button>
         <a href="{{ route('admin.subscriptions.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
     </form>
+
+    <x-admin.trivias />
 @endsection

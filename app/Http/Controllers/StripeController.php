@@ -22,13 +22,19 @@ class StripeController extends Controller
 
     public function webhook(Request $request)
     {
-        $stripeService = new StripeService();
-        $event = $stripeService->getEvent($request->id);
-        $type = $event['type'];
-        $object = $event['data']['object'];
+        dlog("StripeController@webhook", $request->all()); //! LOG
+        try {
+            $stripeService = new StripeService();
+            $event = $stripeService->getEvent($request->id);
+            $type = $event['type'];
+            $object = $event['data']['object'];
 
-        if ($type == 'customer.subscription.updated') {
-            SubscriptionService::activateIncomplete($object);
+            if ($type == 'customer.subscription.updated') {
+                SubscriptionService::subscriptionUpdatedHook($object);
+            }
+        } catch (\Throwable $th) {
+            // prevent stripe reactions for failed webhooks
+            \Log::error('ERROR in Stripe webhook: ' . exceptionAsString($th), $request->all());
         }
     }
 }

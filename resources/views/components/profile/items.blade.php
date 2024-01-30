@@ -2,7 +2,7 @@
 @if ($posts->isNotEmpty())
     <div class="catalog catalog-my">
         @foreach ($posts as $post)
-            <div class="catalog-item" data-id="{{$post->id}}">
+            <div class="catalog-item {{$post->getClassForProfile()}}" data-id="{{$post->id}}">
                 <!--post-image-->
                 <a href="{{route('posts.show', $post)}}" class="catalog-img">
                     <img src="{{$post->thumbnail()?->compressed(300) ?? asset('icons/no-image.svg')}}" alt="{{$post->title}}" title="{{$post->title}}">

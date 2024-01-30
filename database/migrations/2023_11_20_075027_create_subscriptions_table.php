@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('subscription_plan_id')->constrained('subscription_plans')->cascadeOnDelete();
-            $table->string('stripe_id')->nullable();
+            $table->string('external_id')->nullable();
+            $table->string('provider');
+            $table->smallInteger('max_cycles')->nullable();
             $table->string('status');
             $table->timestamps();
         });

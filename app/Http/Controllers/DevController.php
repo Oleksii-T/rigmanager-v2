@@ -69,6 +69,11 @@ class DevController extends Controller
     {
         $d = [];
 
+        $stripeService = new \App\Services\StripeService();
+        $stripeSub = $stripeService->getSubscription('sub_1OVaBDDqMxQknFXPJRApd20T');
+        $invoice = $stripeSub['latest_invoice']??[];
+        $d = $invoice->toArray();
+
         dd($d);
     }
 

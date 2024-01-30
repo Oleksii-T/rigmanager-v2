@@ -353,6 +353,21 @@ class Post extends Model
         }
     }
 
+    public function getClassForProfile()
+    {
+        if ($this->is_trashed) {
+            return 'profile-post-trashed';
+        }
+
+        if ($this->status == 'pending' && postsMustBeApproved()) {
+            return 'profile-post-pending';
+        }
+
+        if (!$this->is_active) {
+            return 'profile-post-hidden';
+        }
+    }
+
     public static function dataTable($query)
     {
         return DataTables::of($query)
@@ -467,7 +482,7 @@ class Post extends Model
         $author = $filters['author']??null;
         $category = $filters['category']??null;
         $status = $filters['status']??null;
-        $hidePending = Setting::get('hide_pending_posts', true, true);
+        $hidePending = postsMustBeApproved();
 
         if ($status && request()->route()->getName() != 'profile.posts') {
             // status filter allowed only for personal posts

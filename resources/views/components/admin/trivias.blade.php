@@ -267,3 +267,30 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="sub-create-trivia" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Manual Subscription creation trivia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You can create subscription for Stripe manually - 'External Id' and 'First Cycle Invoice' must be filled.<br>
+                Example for 'First Cycle Invoice':<br>
+                {"id": "in_***", "number": "00000000-0000", "payment_intent_id": "pi_***"}<br>
+                where:<br>
+                "id" is Stripe Invoice ID,<br>
+                "number" is Stripe Invoice Number,<br>
+                "payment_intent_id" is Stripe Payment Intent ID.<br>
+                All this information can be found in the Stripe dashboard.<br>
+                This used to display actual information and Stripe invoice for user.<br>
+                <br>
+                A 'manual' subscription can be created as well. Such subscription will be extended for free without any additional checks.
+            </div>
+        </div>
+    </div>
+</div>

@@ -43,17 +43,15 @@ class SubscriptionController extends Controller
         return view('admin.subscriptions.create', compact('plans', 'users'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, StripeService $stripeService)
     {
         $data = $request->validate([
             'subscription_plan_id' => ['required', 'exists:subscription_plans,id'],
             'user_id' => ['required', 'exists:users,id'],
-            'stripe_id' => ['nullable', 'string'],
             'status' => ['required', 'string'],
-            'is_active' => ['required', 'boolean'],
-            'invoice' => ['nullable', 'json'],
-            'price' => ['nullable', 'json'],
-            'expire_at' => ['required', 'date'],
+            'provider' => ['required', 'in:stripe,manual'],
+            'external_id' => ['nullable', 'required_if:provider,stripe', 'string', ], //'unique:subscriptions'
+            'max_cycles' => ['nullable', 'numeric'],
         ]);
 
         $user = User::findOrFail($data['user_id']);
@@ -63,10 +61,32 @@ class SubscriptionController extends Controller
             return $this->jsonError("User already have active subscription");
         }
 
-        $data['price'] = $data['price'] ?: 0;
-        $data['invoice'] = $data['invoice'] ? json_decode($data['invoice'], true) : null;
-
-        $subscription = Subscription::create($data);
+        // create subscription
+        $subscription = $user->subscriptions()->create($data);
+        
+        // create cycle
+        $plan = $subscription->plan;
+        if ($data['provider'] == 'stripe') {
+            try {
+                $stripeSub = $stripeService->getSubscription($data['external_id']);
+            } catch (\Throwable $th) {
+                return $this->jsonError('Stripe Subscription "' . $data['external_id'] . '" not found');
+            }
+            if ($stripeSub->status != 'active') {
+                return $this->jsonError('Stripe Subscription should be active');
+            }
+            $invoice = $stripeSub['latest_invoice'];
+            $data['active'] = true;
+            $data['invoice'] = [
+                'id' => $invoice['id'],
+                'number' => $invoice['number'],
+                'payment_intent_id' => $invoice['payment_intent']['id']
+            ];
+            $data['price'] = $plan->price;
+        } else {
+            $data['price'] = 0;
+        }
+        $data['expire_at'] = $plan->getNextExpireAt();
         $subscription->cycle()->create($data);
 
         return $this->jsonSuccess("Subscription successfully created!", [
@@ -85,8 +105,8 @@ class SubscriptionController extends Controller
 
     public function destroy(Subscription $subscription)
     {
-        if ($subscription->stripe_id && $subscription->status == 'active') {
-            $this->stripeService->cancelSubscription($subscription->stripe_id);
+        if ($subscription->external_id && $subscription->status == 'active') {
+            $this->stripeService->cancelSubscription($subscription->external_id);
         }
 
         $subscription->delete();

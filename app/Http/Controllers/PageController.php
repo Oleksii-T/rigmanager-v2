@@ -28,15 +28,18 @@ class PageController extends Controller
 
     public function categories($type=null)
     {
-        $categories = Category::query()
-            ->active()
-            ->where('type', $type == 'service' ? CategoryType::SERVICE : CategoryType::EQUIPMENT)
-            ->whereNull('category_id')
-            ->with('childs')
-            ->get()
-            ->sortBy('name');
+        $categories = cache()->remember("categoryes-$type", 60*5, function () use ($type) { 
+            return Category::query()
+                ->active()
+                ->where('type', $type == 'service' ? CategoryType::SERVICE : CategoryType::EQUIPMENT)
+                ->whereNull('category_id')
+                ->with('childs', 'image')
+                ->get()
+                ->sortBy('name');
+        });
+        $view = $type == 'service' ? 'categories-services' : 'categories';
 
-        return view('categories', compact('categories'));
+        return view($view, compact('categories'));
     }
 
     public function about()

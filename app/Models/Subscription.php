@@ -13,7 +13,9 @@ class Subscription extends Model
     protected $fillable = [
         'user_id',
         'subscription_plan_id',
-        'stripe_id',
+        'external_id',
+        'provider',
+        'max_cycles',
         'status'
     ];
 

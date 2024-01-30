@@ -49,7 +49,7 @@
                     <div class="form-group">
                         <label>Stripe Id</label>
                         <p class="form-control">
-                            {{$subscription->stripe_id}}
+                            {{$subscription->external_id}}
                         </p>
                     </div>
                 </div>
