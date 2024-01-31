@@ -28,9 +28,12 @@ class StripeController extends Controller
             $event = $stripeService->getEvent($request->id);
             $type = $event['type'];
             $object = $event['data']['object'];
+            $prevAttrs = $event['data']['previous_attributes']??[];
 
             if ($type == 'customer.subscription.updated') {
-                SubscriptionService::subscriptionUpdatedHook($object);
+                SubscriptionService::subscriptionUpdatedHook($object, $prevAttrs);
+            } else if ($type == 'invoice.updated') {
+                SubscriptionService::invoiceUpdatedHook($object);
             }
         } catch (\Throwable $th) {
             // prevent stripe reactions for failed webhooks

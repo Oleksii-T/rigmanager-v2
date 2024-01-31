@@ -1,14 +1,17 @@
 @component('mail::message')
 # Hello!
 
-{{$plan}} Subscription was successfully started!
+Payment for your {{$plan}} Subscription can not be automatically collected!<br>
+It can occur if your payment method is protected by additional security checks.<br>
+<br>
+Please view Subscriptions page for more details.
 
 @component('mail::button', ['url' => $url])
 View Subscription
 @endcomponent
 
 Thanks for choosing us.<br>
-Do not hesitate to  <a href="{{route('feedbacks.create')}}">contact us</a> if you have any questions.
+If there is any uncertainties with the payment, be sure to <a href="{{route('feedbacks.create')}}">contact us</a>.
 
 Regards,<br>
 {{config('app.name')}}

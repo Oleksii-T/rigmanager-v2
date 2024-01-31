@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\Subscription;
 use App\Services\StripeService;
 use App\Models\SubscriptionPlan;
+use App\Models\SubscriptionCycle;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Enums\NotificationGroup as NG;
@@ -14,12 +15,14 @@ use App\Facades\DumperServiceFacade as Dumper;
 
 /**
  * Subscriptions explanaiton:
- * - designed for Stripe.
- * - each sub have cycles.
- * - sub considered active if it have active (payed) cycle.
- * - sub are extended automaticaly via schedule command with Stripe checks.
- * - some time of payment pending is allowed. It's called 'incomplete' status.
- * - webhook is used to handle Stripe events for late invoice payments.
+ * - Designed mainly for Stripe.
+ * - Each sub have cycles.
+ * - Sub considered active if it have active (payed) cycle.
+ * - Some time of payment pending is allowed. It's called 'incomplete' status.
+ * - Webhooks "customer.subscription.updated" and "invoice.created" are used to
+ *   handle Stripe events such as sub extention and different payment errors.
+ * - If webhooks fails there is fallback scheduled check.
+ * - More detailed comments can be found inside the methods.
  *
  */
 class SubscriptionService
@@ -68,31 +71,83 @@ class SubscriptionService
             'expire_at' => Carbon::createFromTimestamp($subscription['current_period_end'])
         ]);
 
-        self::makeNotif(
-            $user,
-            $subscription->status == 'active' ? NG::SUB_CREATED : NG::SUB_CREATED_INCOMPLETE,
-            $subscriptionPlan,
-            $cycle
-        );
+        self::makeNotif($user, NG::SUB_CREATED, $subscriptionPlan, $cycle);
+
+        if ($subscription->status != 'active') {
+            self::makeNotif($user, NG::SUB_CAN_NOT_AUTO_COLLECT, $subscriptionPlan, $sub);
+        }
 
         return null;
     }
 
-    public static function extend()
+    public static function extendManual()
+    {
+        $subs = Subscription::query()
+            ->where('provider', 'manual')
+            ->whereIn('status', 'active')
+            ->get();
+
+        foreach ($subs as $subscription) {
+            DB::beginTransaction();
+
+            try {
+                dlog("SubscriptionService@extendManual. $subscription->id"); //! LOG
+
+                $activeCycle = $subscription->cycle;
+
+                if ($activeCycle->expire_at > now()) {
+                    continue;
+                }
+
+                $cycles = $subscription->cycles;
+                $plan = $subscription->plan;
+                $user = $subscription->user;
+
+                if ($subscription->max_cycles && $cycles->count() >= $subscription->max_cycles) {
+                    $subscription->cancel();
+                    $activeCycle->deactivate();
+                    self::makeNotif($user, NG::SUB_EXTENTION_FAILED, $plan, $subscription);
+                    continue;
+                }
+
+                $activeCycle->deactivate(false, false);
+                $cycle = $subscription->cycles()->create([
+                    'is_active' => true,
+                    'invoice' => null,
+                    'price' => 0,
+                    'expire_at' => $plan->getNextExpireAt()
+                ]);
+
+                self::makeNotif($user, NG::SUB_EXTENDED, $plan, $cycle);
+            } catch (\Throwable $th) {
+                dlog("ERROR"); //! LOG
+                \Log::error("Error when extending #$subscription->id manual subscription: " . exceptionAsString($th));
+                DB::rollBack();
+                continue;
+            }
+
+            DB::commit();
+        }
+    }
+
+    // Daily sync with stripe.
+    // All checks done in this method are covered by webhooks.
+    // This is a fallback logic in case webhooks will fail.
+    public static function extendStripe()
     {
         $validStatuses = ['trialing', 'active'];
+        $subs = Subscription::query()
+            ->where('provider', 'stripe')
+            ->whereIn('status', $validStatuses)
+            ->get();
 
-        foreach (Subscription::whereIn('status', $validStatuses)->get() as $subscription) {
+        foreach ($subs as $subscription) {
             DB::beginTransaction();
 
             // dlog("start tranlsaction for #$subscription->id"); //! LOG
 
             try {
-                if ($subscription->provider == 'stripe') {
-                    self::extendHelperForStripe($subscription, $validStatuses);
-                } else if ($subscription->provider == 'manual')  {
-                    self::extendHelperForManual($subscription);
-                }
+                self::extendHelperForStripe($subscription, $validStatuses);
             } catch (\Throwable $th) {
                 dlog("ERROR"); //! LOG
                 \Log::error("Error when extending #$subscription->id subscription: " . exceptionAsString($th));
@@ -137,11 +192,15 @@ class SubscriptionService
         }
     }
 
-    public static function subscriptionUpdatedHook($object)
+    // Webhook.
+    // Sync the Stripe subscriptions with app db.
+    // See detailed comments for each case inside.
+    public static function subscriptionUpdatedHook($object, $prevAttrs)
     {
+        dlog("SubscriptionService@subscriptionUpdatedHook"); //! LOG
+
         $stripeService = new StripeService();
         $sId = $object['id'];
-        $plan = $subscription->plan;
         $subscription = Subscription::query()
             ->where('external_id', $sId)
             ->whereHas('cycle')
@@ -152,8 +211,14 @@ class SubscriptionService
             return;
         }
 
+        $plan = $subscription->plan;
+        $cycle = $subscription->cycle;
+        $user = $subscription->user;
+
         if ($subscription->status == 'incomplete' && $object['status'] == 'active') {
             // mark subscription as active after been incomplete - user made a payment
+
+            dlog(" make sub active - user make a payment"); //! LOG
 
             $user = $subscription->user;
             $cycle = $subscription->cycle;
@@ -173,29 +238,118 @@ class SubscriptionService
             ]);
 
             self::makeNotif($user, NG::SUB_INCOMPLETED_PAID, $plan, $cycle);
-        } else if ($subscription->status == 'incomplete' && $object['status'] == 'incomplete_expired') {
-            // Canceling the subscription which was not paid manually and was just created.
+
+            return;
+        }
+        
+        if ($subscription->status == 'incomplete' && $object['status'] == 'incomplete_expired') {
+            // Canceling just created subscription which was not paid manually.
             // Manual payment is required when automatic collection can not be executed.
             // It can occure if customer`s payment method have security checks enabled (3DS).
             // Stripe will send a webhook when payment window runs out.
             // This payment window is static and equals to 23 hours (due to JAN 2024).
 
-            $subscription->cancel();
-            $cycle->deactivate(true);
-            self::makeNotif($user, NG::SUB_CANCELED, $plan, $subscription);
-        } else if ($subscription->status == 'active' && $object['status'] == 'past_due') {
-            // Canceling the subscription which was not paid manually.
-            // Manual payment is required when automatic collection can not be executed.
-            // It can occure if customer`s payment method have security checks enabled (3DS).
-            // Stripe will send a webhook when payment window runs out.
-            // This payment window should be set in 
-            // Stripe > Settings > Subscriptions and emails > Manage payments that require confirmation.
+            dlog(" cancel sub - user fail to make first payment"); //! LOG
 
             $subscription->cancel();
             $cycle->deactivate(true);
-            $stripeService->cancelSubscription($sId); // cancel sub in stripe as well
-            self::makeNotif($user, NG::SUB_CANCELED, $plan, $subscription);
+            self::makeNotif($user, NG::SUB_INCOMPLETED_EXPIRED, $plan, $subscription);
+
+            return;
         }
+        
+        if ($subscription->status == 'active' && $object['status'] == 'past_due') {
+            // Mark the subscription which can not be paid automaticaly as 'incomplete'.
+
+            dlog(" sub is past_due"); //! LOG
+
+            $subscription->update([
+                'status' => 'incomplete'
+            ]);
+
+            self::makeNotif($user, NG::SUB_CAN_NOT_AUTO_COLLECT, $plan, $subscription);
+
+            return;
+        }
+        
+        if (in_array($subscription->status, ['active', 'incomplete']) && $object['status'] == 'canceled') {
+            // Cancel the subscription which was not paid manually.
+            // Manual payment is required when automatic collection can not be executed.
+            // It can occure if customer`s payment method have security checks enabled (3DS).
+            // Stripe will send a webhook when payment window runs out.
+            // The payment window and new status should be set in 
+            // Stripe > Settings > Subscriptions and emails > Manage payments that require confirmation.
+            // OR it is just manual sub cancelation via Stripe UI.
+
+            dlog(" cancel sub - payment not done (or manual cancelation via stripe)"); //! LOG
+
+            $subscription->cancel();
+            $cycle->deactivate(true);
+            self::makeNotif($user, NG::SUB_CANCELED, $plan, $subscription);
+
+            return;
+        }
+        
+        if (isset($prevAttrs['latest_invoice']) && $prevAttrs['latest_invoice'] != $cycle->invoice['id']) {
+            // Subscription got new latest_invoice it means, it been extended.
+            // At this moment, invoice is in 'draft' phase - no payment done yet.
+            // Due to Stripe rules, the actual payment will be attempted in 1 hour.
+            // If payment OK, no logic will be triggered.
+            // If payment fails, the webhook with sub status 'past_due' will be received.
+
+            dlog(" sub extended!"); //! LOG
+
+            $stripeExpDate = Carbon::createFromTimestamp($object['current_period_end']);
+
+            $active->deactivate(false, false);
+            $newCycle = $subscription->cycles()->create([
+                'is_active' => true,
+                'invoice' => [
+                    'id' => $object['latest_invoice'],
+                    'number' => null,
+                    'payment_intent_id' => null
+                ],
+                'price' => 0,
+                'expire_at' => $stripeExpDate
+            ]);
+
+            self::makeNotif($user, NG::SUB_EXTENDED, $plan, $newCycle);
+
+            return;
+        }
+    }
+
+    // Webhook.
+    public static function invoiceUpdatedHook($object)
+    {
+        // update info about subscription cycle invoice.
+        // this info can be empty when new cycle created, 
+        // because Stripe has 1hr gap between sub extend and invoice creation.
+
+        // dlog("SubscriptionService@invoiceUpdatedHook"); //! LOG
+
+        if ($object['status'] != 'paid') {
+            return;
+        }
+
+        $cycle = SubscriptionCycle::query()
+            ->where('invoice->id', $object['id'])
+            ->where('price', 0)
+            ->first();
+
+        if (!$cycle) {
+            return;
+        }
+
+        // dlog(" update cycle #$cycle->id"); //! LOG
+
+        $invoice = $cycle->invoice;
+        $invoice['number'] = $object['number'];
+        $invoice['payment_intent_id'] = $object['payment_intent'];
+        $cycle->update([
+            'invoice' => $invoice,
+            'price' => $object['amount_paid']/100
+        ]);
     }
 
     public static function cancel()
@@ -280,8 +434,12 @@ class SubscriptionService
             ]
         ], $resource);
 
-        if ($group == NG::SUB_CREATED_INCOMPLETE || $group == NG::SUB_CREATED) {
-            Mail::to($user)->send(new \App\Mail\Subscriptions\Created($resource, $group));
+        if ($group == NG::SUB_CREATED) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\Created($resource));
+        }
+
+        if ($group == NG::SUB_CAN_NOT_AUTO_COLLECT) {
+            Mail::to($user)->send(new \App\Mail\Subscriptions\CantAutoCollect($resource));
         }
 
         if ($group == NG::SUB_CANCELED_TERMINATED_CAUSE_NEW || $group == NG::SUB_TERMINATED_CAUSE_NEW) {
@@ -321,29 +479,6 @@ class SubscriptionService
         }
     }
 
-    /*
-
-        before 2024-01-26 16:00:07 i had a cycle 
-            expire_at: 2024-02-26 15:25:42
-            created_at: 2024-01-26 16:00:03
-            {
-                "id": "in_1OcrIvDqMxQknFXPomaz9ZDE", 
-                "number": null,
-                "payment_intent_id": null
-            }
-        at 2024-01-26 16:00:07 i got sub:
-            {
-                "id":"sub_1OGkXeDqMxQknFXPSdG5LfR5",
-                "billing_cycle_anchor":1701013602,
-                "created":1701013602,
-                "current_period_end":1708962402,  (26-02-2024 15:46:42)
-                "current_period_start":1706284002, (26 January 2024 15:46:42)
-                "customer":"cus_P4uMHmL5rViT6F"
-            }
-        compare 
-            cycle expire at -        2024-02-26 15:25:42 VS 
-            sub current_period_end - 2024-02-26 15:46:42
-    */
     private static function extendHelperForStripe($subscription, $validStatuses)
     {
         dlog("SubscriptionService@extendHelperForStripe"); //! LOG
@@ -369,14 +504,12 @@ class SubscriptionService
                 // Keep the cycle active - it will deactivate when time comes automaticaly
 
                 $subscription->cancel();
-
-                //TODO: notification
             }
 
-            dlog(' the $activeCycle->expire_at is equal to $stripeSub->current_period_end', [
-                'active_cycle_expire_at' => $activeCycle->expire_at, 
-                'stripe_sub_current_period_end' => $stripeExpDate
-            ]); //! LOG
+            // dlog(' the $activeCycle->expire_at is equal to $stripeSub->current_period_end', [
+            //     'active_cycle_expire_at' => $activeCycle->expire_at, 
+            //     'stripe_sub_current_period_end' => $stripeExpDate
+            // ]); //! LOG
 
             return;
         }
@@ -387,7 +520,7 @@ class SubscriptionService
 
         // stripe possible statuses: incomplete, incomplete_expired, trialing, active, past_due, canceled, unpaid
         // only 'active' and 'incomplete' are treated as success.
-        //? trialing and incomplete can not occure here.
+        // trialing and incomplete can not occure here.
         if ($stripeSubStatus != 'active' && $stripeSubStatus != 'past_due') {
             // stripe can not renew subscription automaticaly
 
@@ -434,36 +567,5 @@ class SubscriptionService
         );
 
         // dlog(" renew done"); //! LOG
-    }
-
-    private static function extendHelperForManual($subscription)
-    {
-        dlog("SubscriptionService@extendHelperForManual"); //! LOG
-        $activeCycle = $subscription->cycle;
-
-        if ($activeCycle->expire_at > now()) {
-            return;
-        }
-
-        $cycles = $subscription->cycles;
-        $plan = $subscription->plan;
-        $user = $subscription->user;
-
-        if ($subscription->max_cycles && $cycles->count() >= $subscription->max_cycles) {
-            $subscription->cancel();
-            $activeCycle->deactivate();
-            self::makeNotif($user, NG::SUB_EXTENTION_FAILED, $plan, $subscription);
-            return;
-        }
-
-        $activeCycle->deactivate(false, false);
-        $cycle = $subscription->cycles()->create([
-            'is_active' => true,
-            'invoice' => null,
-            'price' => 0,
-            'expire_at' => $plan->getNextExpireAt()
-        ]);
-
-        self::makeNotif($user, NG::SUB_EXTENDED, $plan, $cycle);
     }
 }

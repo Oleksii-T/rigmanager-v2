@@ -24,7 +24,7 @@ return [
         'SUB_CANCELED_EXPIRED' => 'Canceled Subscription \':title\' expired',
         'SUB_TERMINATED_CAUSE_NEW' => 'Subscription \':title\' terminated due to new subscription',
         'SUB_INCOMPLETED_EXPIRED' => 'Subscription \':title\' terminated due to payment error',
-        'SUB_CREATED_INCOMPLETE' => 'Subscription \':title\' created with out payment',
+        'SUB_CAN_NOT_AUTO_COLLECT' => 'We can not automatically process a payment for your Subscription \':title\'',
         'SUB_EXTENDED_INCOMPLETE' => 'Subscription \':title\' extended without payment',
         'SUB_INCOMPLETED_PAID' => 'Subscription \':title\' been paid',
         'SUB_RENEW_NEXT_WEEK' => 'Subscription \':title\' will be renewed in 7 days',

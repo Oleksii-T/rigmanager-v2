@@ -161,9 +161,7 @@ class DevController extends Controller
         };
         if ($t == 'sub-created') {
             $cycle = \App\Models\SubscriptionCycle::find(12);
-            $group = \App\Enums\NotificationGroup::SUB_CREATED;
-            $group = \App\Enums\NotificationGroup::SUB_CREATED_INCOMPLETE;
-            $mail = new \App\Mail\Subscriptions\Created($cycle, $group);
+            $mail = new \App\Mail\Subscriptions\Created($cycle);
         };
         if ($t == 'sub-canceled-cause-new') {
             $sub = \App\Models\Subscription::find(13);

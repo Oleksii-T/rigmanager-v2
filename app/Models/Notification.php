@@ -75,10 +75,10 @@ class Notification extends Model
             NotificationGroup::SUB_CANCELED_EXPIRED->value => NotificationType::WARNING,
             NotificationGroup::SUB_TERMINATED_CAUSE_NEW->value => NotificationType::DANGER,
             NotificationGroup::SUB_INCOMPLETED_EXPIRED->value => NotificationType::DANGER,
-            NotificationGroup::SUB_CREATED_INCOMPLETE->value => NotificationType::WARNING,
             NotificationGroup::SUB_EXTENDED_INCOMPLETE->value => NotificationType::WARNING,
             NotificationGroup::SUB_INCOMPLETED_PAID->value => NotificationType::SUCCESS,
             NotificationGroup::SUB_END_NEXT_WEEK->value => NotificationType::WARNING,
+            NotificationGroup::SUB_CAN_NOT_AUTO_COLLECT->value => NotificationType::WARNING,
             default => NotificationType::INFO
         };
 

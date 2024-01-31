@@ -11,19 +11,19 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\SubscriptionCycle;
 use App\Enums\NotificationGroup;
 
-class Created extends Mailable
+class CantAutoCollect extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $plan;
-    public $url;
+    public $sub;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(SubscriptionCycle $cycle)
+    public function __construct(Subscription $sub)
     {
-        $this->plan = $cycle->plan->title;
+        $this->plan = $sub->plan->title;
         $this->url = route('profile.subscription');
     }
 
@@ -33,7 +33,7 @@ class Created extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Subscription been created! | rigmangers.com',
+            subject: 'Subscription payment can not be automatically collected | rigmangers.com',
         );
     }
 
@@ -43,7 +43,7 @@ class Created extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.subscriptions.created',
+            markdown: 'emails.subscriptions.cant-auto-collect',
         );
     }
 

@@ -6,21 +6,21 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use App\Services\SubscriptionService;
 
-class SubscriptionsExtend extends Command
+class SubscriptionsExtendManual extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'subscriptions:extend';
+    protected $signature = 'subscriptions:extend-manual';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Checking activity subscriptions';
+    protected $description = 'Extend manual subscriptions';
 
     /**
      * Create a new command instance.
@@ -38,7 +38,7 @@ class SubscriptionsExtend extends Command
     public function handle()
     {
         try {
-            SubscriptionService::extend();
+            SubscriptionService::extendManual();
         } catch (\Throwable $th) {
             Log::channel('commands')->error('[' . $this->signature . '] ' . $this->description . ' FAILS. ' . $th->getMessage());
         }
