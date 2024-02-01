@@ -25,7 +25,11 @@ class StripePayment {
         var elements = this.stripe.elements();
         let styleObj = {
             style: {
-                base: {lineHeight: '30px'}
+                base: {
+                    lineHeight: '44px',
+                    fontSize: '16px',
+                    color: '#999999'
+                }
             }
         };
 

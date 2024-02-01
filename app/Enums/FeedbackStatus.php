@@ -13,6 +13,7 @@ enum FeedbackStatus:int
     case ADV = 2;
     case SPAM = 3;
     case OFFER = 4;
+    case SYSTEM = 5;
 
     public static function getReadable($val)
     {
@@ -22,6 +23,7 @@ enum FeedbackStatus:int
             self::SPAM => 'Spam',
             self::ADV => 'Ad',
             self::OFFER => 'Offer',
+            self::SYSTEM => 'System',
         };
     }
 

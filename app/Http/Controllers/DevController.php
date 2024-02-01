@@ -69,10 +69,10 @@ class DevController extends Controller
     {
         $d = [];
 
-        $stripeService = new \App\Services\StripeService();
-        $stripeSub = $stripeService->getSubscription('sub_1OVaBDDqMxQknFXPJRApd20T');
-        $invoice = $stripeSub['latest_invoice']??[];
-        $d = $invoice->toArray();
+        $ip = '10.179.80.83';
+        // $d = \Stevebauman\Location\Facades\Location::get($ip)->countryCode;
+        $d = \Stevebauman\Location\Facades\Location::get($ip);
+        
 
         dd($d);
     }

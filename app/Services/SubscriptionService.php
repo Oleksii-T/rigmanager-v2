@@ -27,13 +27,21 @@ use App\Facades\DumperServiceFacade as Dumper;
  */
 class SubscriptionService
 {
-    public static function create($planId)
+    public static function create($planId, $paymentMethodId=null)
     {
         $stripeService = new StripeService();
         $user = auth()->user();
         $activeSub = $user->activeSubscription();
         $subscriptionPlan = SubscriptionPlan::find($planId);
-        $subscription = $stripeService->createSubscription($user->stripe_id, $subscriptionPlan->stripe_id);
+
+        if ($paymentMethodId) {
+            $paymentMethodId = $user->paymentMethods()->where('id', $paymentMethodId)->value('token');
+            if (!$paymentMethodId) {
+                return 'Payment method not found';
+            }
+        }
+
+        $subscription = $stripeService->createSubscription($user->stripe_id, $subscriptionPlan->stripe_id, $paymentMethodId);
         $invoice = $subscription['latest_invoice'];
 
         $sub = $user->subscriptions()->create([
@@ -62,11 +70,7 @@ class SubscriptionService
 
         $cycle = $sub->cycles()->create([
             'is_active' => true,
-            'invoice' => [
-                'id' => $invoice['id'],
-                'number' => $invoice['number'],
-                'payment_intent_id' => $invoice['payment_intent']['id']
-            ],
+            'invoice' => SubscriptionCycle::extractInvoiceData($invoice),
             'price' => $invoice['amount_paid']/100,
             'expire_at' => Carbon::createFromTimestamp($subscription['current_period_end'])
         ]);
@@ -197,10 +201,12 @@ class SubscriptionService
     // See detailed comments for each case inside.
     public static function subscriptionUpdatedHook($object, $prevAttrs)
     {
-        dlog("SubscriptionService@subscriptionUpdatedHook"); //! LOG
+        dlog(" SubscriptionService@subscriptionUpdatedHook"); //! LOG
 
         $stripeService = new StripeService();
         $sId = $object['id'];
+        $object = $stripeService->getSubscription($sId)->toArray();
+        $invoice = $object['latest_invoice'];
         $subscription = Subscription::query()
             ->where('external_id', $sId)
             ->whereHas('cycle')
@@ -218,22 +224,17 @@ class SubscriptionService
         if ($subscription->status == 'incomplete' && $object['status'] == 'active') {
             // mark subscription as active after been incomplete - user made a payment
 
-            dlog(" make sub active - user make a payment"); //! LOG
+            dlog("  make sub active - user make a payment"); //! LOG
 
             $user = $subscription->user;
             $cycle = $subscription->cycle;
-            $invoice = $stripeService->getInvoice($object['latest_invoice']);
 
             $subscription->update([
                 'status' => 'active'
             ]);
 
             $cycle->update([
-                'invoice' => [
-                    'id' => $invoice['id'],
-                    'number' => $invoice['number'],
-                    'payment_intent_id' => $invoice['payment_intent']['id']??null
-                ],
+                'invoice' => SubscriptionCycle::extractInvoiceData($invoice),
                 'price' => $invoice['amount_paid']/100,
             ]);
 
@@ -249,7 +250,7 @@ class SubscriptionService
             // Stripe will send a webhook when payment window runs out.
             // This payment window is static and equals to 23 hours (due to JAN 2024).
 
-            dlog(" cancel sub - user fail to make first payment"); //! LOG
+            dlog("  cancel sub - user fail to make first payment"); //! LOG
 
             $subscription->cancel();
             $cycle->deactivate(true);
@@ -261,7 +262,7 @@ class SubscriptionService
         if ($subscription->status == 'active' && $object['status'] == 'past_due') {
             // Mark the subscription which can not be paid automaticaly as 'incomplete'.
 
-            dlog(" sub is past_due"); //! LOG
+            dlog("  sub is past_due"); //! LOG
 
             $subscription->update([
                 'status' => 'incomplete'
@@ -281,7 +282,7 @@ class SubscriptionService
             // Stripe > Settings > Subscriptions and emails > Manage payments that require confirmation.
             // OR it is just manual sub cancelation via Stripe UI.
 
-            dlog(" cancel sub - payment not done (or manual cancelation via stripe)"); //! LOG
+            dlog("  cancel sub - payment not done (or manual cancelation via stripe)"); //! LOG
 
             $subscription->cancel();
             $cycle->deactivate(true);
@@ -290,25 +291,21 @@ class SubscriptionService
             return;
         }
         
-        if (isset($prevAttrs['latest_invoice']) && $prevAttrs['latest_invoice'] != $cycle->invoice['id']) {
+        if (isset($prevAttrs['latest_invoice']) && $invoice['id'] != $cycle->invoice['id']) {
             // Subscription got new latest_invoice it means, it been extended.
             // At this moment, invoice is in 'draft' phase - no payment done yet.
             // Due to Stripe rules, the actual payment will be attempted in 1 hour.
             // If payment OK, no logic will be triggered.
             // If payment fails, the webhook with sub status 'past_due' will be received.
 
-            dlog(" sub extended!"); //! LOG
+            dlog("  sub extended!"); //! LOG
 
             $stripeExpDate = Carbon::createFromTimestamp($object['current_period_end']);
 
-            $active->deactivate(false, false);
+            $cycle->deactivate(false, false);
             $newCycle = $subscription->cycles()->create([
                 'is_active' => true,
-                'invoice' => [
-                    'id' => $object['latest_invoice'],
-                    'number' => null,
-                    'payment_intent_id' => null
-                ],
+                'invoice' => SubscriptionCycle::extractInvoiceData($invoice),
                 'price' => 0,
                 'expire_at' => $stripeExpDate
             ]);
@@ -317,6 +314,8 @@ class SubscriptionService
 
             return;
         }
+
+        dlog("  no logic found", $invoice); //! LOG
     }
 
     // Webhook.
@@ -326,11 +325,9 @@ class SubscriptionService
         // this info can be empty when new cycle created, 
         // because Stripe has 1hr gap between sub extend and invoice creation.
 
-        // dlog("SubscriptionService@invoiceUpdatedHook"); //! LOG
+        dlog(" SubscriptionService@invoiceUpdatedHook"); //! LOG
 
-        if ($object['status'] != 'paid') {
-            return;
-        }
+        $stripeService = new StripeService();
 
         $cycle = SubscriptionCycle::query()
             ->where('invoice->id', $object['id'])
@@ -341,13 +338,12 @@ class SubscriptionService
             return;
         }
 
-        // dlog(" update cycle #$cycle->id"); //! LOG
+        $object = $stripeService->getInvoice($object['id'])->toArray();
 
-        $invoice = $cycle->invoice;
-        $invoice['number'] = $object['number'];
-        $invoice['payment_intent_id'] = $object['payment_intent'];
+        dlog("  update cycle #$cycle->id"); //! LOG
+
         $cycle->update([
-            'invoice' => $invoice,
+            'invoice' => SubscriptionCycle::extractInvoiceData($object),
             'price' => $object['amount_paid']/100
         ]);
     }
@@ -383,7 +379,7 @@ class SubscriptionService
         $invoice = $stripeService->getInvoice($invoice['id']);
 
         if ($invoice->paid) {
-            $paymentIntent = $stripeService->paymentIntent($invoice['payment_intent_id']);
+            $paymentIntent = $stripeService->paymentIntent($invoice['payment_intent']);
             $charge = $stripeService->charge($paymentIntent->latest_charge);
             $url = $charge->receipt_url;
         } else {
@@ -433,6 +429,10 @@ class SubscriptionService
                 'title' => $plan->title
             ]
         ], $resource);
+
+        if (!$user->info->is_registered) {
+            return;
+        }
 
         if ($group == NG::SUB_CREATED) {
             Mail::to($user)->send(new \App\Mail\Subscriptions\Created($resource));
@@ -550,11 +550,7 @@ class SubscriptionService
         $activeCycle->deactivate(false, false);
         $cycle = $subscription->cycles()->create([
             'is_active' => true,
-            'invoice' => [
-                'id' => $invoice['id'],
-                'number' => $invoice['number'],
-                'payment_intent_id' => $invoice['payment_intent']['id'] ?? ''
-            ],
+            'invoice' => SubscriptionCycle::extractInvoiceData($invoice),
             'price' => $invoice['amount_paid']/100,
             'expire_at' => $stripeExpDate
         ]);

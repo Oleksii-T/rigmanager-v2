@@ -15,9 +15,8 @@
     <style>
         .payment-field {
             display: block;
-            /* width: 100%; */
             height: 44px;
-            padding: 0 15px;
+            padding: 0 15px 0 15px;
             margin: 0 0 27px;
             font-size: 16px;
             color: #999999;
@@ -40,12 +39,17 @@
 		<x-informations-nav active='plans'/>
 
 		<div class="content">
-			<h1>
-                Subscription to
-                <span class="orange">{{$subscriptionPlan->title}}</span>
-                plan
-                <small style="color: #999999">${{$subscriptionPlan->price}}/{{$subscriptionPlan->interval}}</small>
-            </h1>
+            <div style="display:flex;justify-content:space-between">
+                <h1>
+                    Subscription to
+                    <span class="orange">{{$subscriptionPlan->title}}</span>
+                    plan<br>
+                    <small style="color: #999999">${{$subscriptionPlan->price}}/{{$subscriptionPlan->interval}}</small>
+                </h1>
+                <a target="_blank" href="https://stripe.com/" style="width:150px;padding-top:4px">
+                    @svg('icons/powered_by_stripe_blurplee.svg')
+                </a>
+            </div>
             <div>
                 <form class="subscribe-form">
                     @csrf

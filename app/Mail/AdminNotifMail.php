@@ -1,31 +1,24 @@
 <?php
 
-namespace App\Mail\Subscriptions;
+namespace App\Mail;
 
-use App\Models\Subscription;
 use Illuminate\Bus\Queueable;
-use Illuminate\Mail\Mailable;
-use App\Enums\NotificationGroup;
-use App\Models\SubscriptionCycle;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
 
-class CantAutoCollect extends Mailable
+class AdminNotifMail extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $plan;
-    public $sub;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Subscription $sub)
+    public function __construct(public $text, public $data)
     {
-        $this->plan = $sub->plan->title;
-        $this->url = route('profile.subscription');
+        //
     }
 
     /**
@@ -34,7 +27,7 @@ class CantAutoCollect extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Subscription payment can not be automatically collected | rigmangers.com',
+            subject: 'System Notification | ' . config('app.name'),
         );
     }
 
@@ -44,7 +37,7 @@ class CantAutoCollect extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.subscriptions.cant-auto-collect',
+            text: 'emails.admin-notif',
         );
     }
 

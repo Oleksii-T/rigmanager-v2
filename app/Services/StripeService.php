@@ -160,18 +160,22 @@ class StripeService
      * @return \Stripe\Subscription
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public function createSubscription($customerId, $subscriptionId)
+    public function createSubscription($customerId, $subscriptionId, $paymentMethod=null)
     {
         $subscription = [
             'customer' => $customerId,
             'items' => [
                 ['price' => $subscriptionId],
             ],
-            'expand' => ['latest_invoice.payment_intent'],
+            'expand' => ['latest_invoice.payment_intent.payment_method'],
             // 'payment_behavior' => 'allow_incomplete', // default for stripe
             // 'collection_method' => 'charge_automatically', // default for stripe
             'trial_from_plan' => true
         ];
+
+        if ($paymentMethod) {
+            $subscription['default_payment_method'] = $paymentMethod;
+        }
 
         return $this->stripe->subscriptions->create($subscription);
     }
@@ -186,7 +190,7 @@ class StripeService
         return $this->stripe->subscriptions->retrieve(
             $subscriptionId,
             [
-                'expand' => ['latest_invoice.payment_intent'],
+                'expand' => ['latest_invoice.payment_intent.payment_method'],
             ]
         );
     }
@@ -248,7 +252,9 @@ class StripeService
             return [];
         }
 
-        return $this->stripe->invoices->retrieve($invoiceId, []);
+        return $this->stripe->invoices->retrieve($invoiceId, [
+            'expand' => ['payment_intent.payment_method'],
+        ]);
     }
 
     public function setupIntent($customerId)

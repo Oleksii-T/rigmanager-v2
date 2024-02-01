@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Arr;
 use Yajra\DataTables\DataTables;
 use App\Traits\LogsActivityBasic;
 use App\Services\SubscriptionService;
@@ -52,6 +53,18 @@ class SubscriptionCycle extends Model
         if ($disablePaidFuntionalities) {
             SubscriptionService::disablePaidFuntionalities($this->user);
         }
+    }
+
+    public static function extractInvoiceData($invoice)
+    {
+        return [
+            'id' => Arr::get($invoice, 'id'),
+            'number' => Arr::get($invoice, 'number'),
+            'payment_intent_id' => Arr::get($invoice, 'payment_intent.id'),
+            'pm_id' => Arr::get($invoice, 'payment_intent.payment_method.id'),
+            'brand' => Arr::get($invoice, 'payment_intent.payment_method.card.brand'),
+            'last4' => Arr::get($invoice, 'payment_intent.payment_method.card.last4')
+        ];
     }
 
     public static function dataTable($query)

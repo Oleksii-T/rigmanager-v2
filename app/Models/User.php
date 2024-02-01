@@ -279,4 +279,23 @@ class User extends Authenticatable implements MustVerifyEmail
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    public static function informAdmins(string $text, array $data=[])
+    {
+        $adminEmails = User::query()
+            ->whereRelation('roles', 'name', 'admin')
+            ->pluck('email')
+            ->toArray();
+
+        Feedback::create([
+            'email' => env('MAIL_FROM_ADDRESS'),
+            'name' => 'system',
+            'subject' => 'System Notification',
+            'text' => $text . ' | Data: ' . json_encode($data),
+            'status' => \App\Enums\FeedbackStatus::PENDING
+        ]);
+
+        \Illuminate\Support\Facades\Mail::to('alex.media.t@gmail.com')->send(new \App\Mail\AdminNotifMail($text, $data));
+        
+    }
 }

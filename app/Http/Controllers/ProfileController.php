@@ -152,6 +152,8 @@ class ProfileController extends Controller
 
         auth()->login($user);
 
+        User::informAdmins("A known user finished the registeration! User: $user->name <$user->email>");
+
         return $this->jsonSuccess(trans('messages.registerSuccess'), [
             'redirect' => route('index')
         ]);
