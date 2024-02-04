@@ -257,6 +257,11 @@ class StripeService
         ]);
     }
 
+    public function voidInvoice($invoiceId)
+    {
+        return $this->stripe->invoices->voidInvoice($invoiceId, []);
+    }
+
     public function setupIntent($customerId)
     {
         return $this->stripe->setupIntents->create([

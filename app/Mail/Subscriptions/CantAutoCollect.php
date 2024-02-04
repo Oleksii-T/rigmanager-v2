@@ -17,7 +17,7 @@ class CantAutoCollect extends Mailable
     use Queueable, SerializesModels;
 
     public $plan;
-    public $sub;
+    public $url;
 
     /**
      * Create a new message instance.

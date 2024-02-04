@@ -273,16 +273,10 @@ class SubscriptionService
             return;
         }
         
-        if (in_array($subscription->status, ['active', 'incomplete']) && $object['status'] == 'canceled') {
-            // Cancel the subscription which was not paid manually.
-            // Manual payment is required when automatic collection can not be executed.
-            // It can occure if customer`s payment method have security checks enabled (3DS).
-            // Stripe will send a webhook when payment window runs out.
-            // The payment window and new status should be set in 
-            // Stripe > Settings > Subscriptions and emails > Manage payments that require confirmation.
-            // OR it is just manual sub cancelation via Stripe UI.
+        if ($subscription->status != 'canceled' && $object['status'] == 'canceled') {
+            // Cancel the subscription which was manualy cancelated via Stripe UI.
 
-            dlog("  cancel sub - payment not done (or manual cancelation via stripe)"); //! LOG
+            dlog("  cancel sub - manual cancelation via stripe"); //! LOG
 
             $subscription->cancel();
             $cycle->deactivate(true);
@@ -319,33 +313,78 @@ class SubscriptionService
     }
 
     // Webhook.
-    public static function invoiceUpdatedHook($object)
+    public static function subscriptionDeletedHook($object, $prevAttrs)
+    {
+        // Cancel the subscription which was not paid manually.
+        // Manual payment is required when automatic collection can not be executed.
+        // It can occure if customer`s payment method have security checks enabled (3DS).
+        // Stripe will send a webhook when payment window runs out.
+        // The payment window and new status should be set in 
+        // Stripe > Settings > Subscriptions and emails > Manage payments that require confirmation.
+
+        dlog("  cancel sub - payment not done"); //! LOG
+
+        $subscription = Subscription::query()
+            ->where('external_id', $object['id'])
+            ->whereHas('cycle')
+            ->with(['cycle', 'plan', 'user'])
+            ->first();
+
+        if (!$subscription) {
+            return;
+        }
+
+        $plan = $subscription->plan;
+        $cycle = $subscription->cycle;
+        $user = $subscription->user;
+
+        $subscription->cancel();
+        $cycle->deactivate(true);
+        self::makeNotif($user, NG::SUB_CANCELED, $plan, $subscription);
+    }
+
+    // Webhook.
+    public static function invoiceUpdatedHook($object, $prevAttrs)
     {
         // update info about subscription cycle invoice.
         // this info can be empty when new cycle created, 
         // because Stripe has 1hr gap between sub extend and invoice creation.
 
         dlog(" SubscriptionService@invoiceUpdatedHook"); //! LOG
-
+        
         $stripeService = new StripeService();
+
+        if ($object['status'] == 'uncollectible' && $prevAttrs['status'] == 'open') {
+            // User did not payed invoice. To preven out of logic late payments - 'void' the invoice.
+            // Must be set in Stripe > Settings > Subscriptions and emails > Manage payments that require confirmation.
+            // Do not update the subscription because there is separate webhook to handle attached sub
+
+            dlog("  void invoice"); //! LOG
+
+            $stripeService->voidInvoice($object['id']);
+
+            return;
+        }
 
         $cycle = SubscriptionCycle::query()
             ->where('invoice->id', $object['id'])
             ->where('price', 0)
             ->first();
 
-        if (!$cycle) {
+        if ($cycle) {
+            // sync stripe invoice data
+
+            dlog("  update cycle #$cycle->id"); //! LOG
+
+            $object = $stripeService->getInvoice($object['id'])->toArray();
+
+            $cycle->update([
+                'invoice' => SubscriptionCycle::extractInvoiceData($object),
+                'price' => $object['amount_paid']/100
+            ]);
+
             return;
         }
-
-        $object = $stripeService->getInvoice($object['id'])->toArray();
-
-        dlog("  update cycle #$cycle->id"); //! LOG
-
-        $cycle->update([
-            'invoice' => SubscriptionCycle::extractInvoiceData($object),
-            'price' => $object['amount_paid']/100
-        ]);
     }
 
     public static function cancel()
@@ -481,7 +520,7 @@ class SubscriptionService
 
     private static function extendHelperForStripe($subscription, $validStatuses)
     {
-        dlog("SubscriptionService@extendHelperForStripe"); //! LOG
+        // dlog("SubscriptionService@extendHelperForStripe"); //! LOG
 
         $stripeService = new StripeService();
         $user = $subscription->user;
@@ -491,7 +530,7 @@ class SubscriptionService
         $activeCycle = $subscription->cycle;
         $invoice = $stripeSub['latest_invoice']??[];
 
-        dlog(" got sub: ", $stripeSub->toArray()); //! LOG
+        // dlog(" got sub: ", $stripeSub->toArray()); //! LOG
 
         if ($activeCycle->expire_at == $stripeExpDate) {
             // we are within paid subscription period
@@ -514,7 +553,7 @@ class SubscriptionService
             return;
         }
 
-        dlog(" need to renew"); //! LOG
+        dlog(" SubscriptionService@extendHelperForStripe need to renew"); //! LOG
 
         // current cycle should be renewed
 

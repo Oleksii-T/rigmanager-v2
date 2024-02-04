@@ -32,11 +32,13 @@ class StripeController extends Controller
 
             if ($type == 'customer.subscription.updated') {
                 SubscriptionService::subscriptionUpdatedHook($object, $prevAttrs);
+            } else if ($type == 'customer.subscription.deleted') {
+                SubscriptionService::subscriptionDeletedHook($object, $prevAttrs);
             } else if ($type == 'invoice.updated') {
-                SubscriptionService::invoiceUpdatedHook($object);
+                SubscriptionService::invoiceUpdatedHook($object, $prevAttrs);
             }
         } catch (\Throwable $th) {
-            // prevent stripe reactions for failed webhooks
+            // catch the error to prevent stripe reactions for failed webhooks
             \Log::error('ERROR in Stripe webhook: ' . exceptionAsString($th), $request->all());
         }
     }
