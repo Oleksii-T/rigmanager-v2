@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use App\Services\Css2XPathService;
 
@@ -59,6 +60,7 @@ class PostScraperService
     private bool $debug = false;
     private int $limitResult = 0;
     private int $sleep = 0;
+    private int $cacheTime = 60*60*24*7;
     private string $shotDir = '';
     private array $values = [];
     private array $shots = [];
@@ -444,7 +446,13 @@ class PostScraperService
         $this->log("      shot for '$key'", $shotData);
 
         $selector = $shotData['selector'];
-        $result = [];
+        $cKey = Str::slug("cached-shot-$url-$selector");
+        $result = cache()->get($cKey, []);
+
+        if ($result) {
+            $this->log("       cached result", $result);
+            return $result;
+        }
 
         for ($i=0; $i < 5; $i++) {
             try {
@@ -465,12 +473,26 @@ class PostScraperService
                 $result[] = $path;
                 $this->log("        done #$i");
             } catch (\Spatie\Browsershot\Exceptions\ElementNotFound $th) {
+                report($th);
+                if ($shotData['required'] && $i==1) {
+                    throw new \Exception("Can not make a required shot for '$key' ($selector) at $url", 1);
+                }
+                $this->log("        error #$i (ElementNotFound): " . $th->getMessage());
+                break;
+            } catch (\Symfony\Component\Process\Exception\ProcessFailedException $th) {
+                report($th);
                 if ($shotData['required'] && $i==1) {
                     throw new \Exception("Can not make a required shot for '$key' ($selector) at $url", 1);
                 }
                 $this->log("        error #$i (ElementNotFound): " . $th->getMessage());
                 break;
             }
+        }
+
+        try {
+            cache()->put($cKey, $result, $this->cacheTime);
+        } catch (\Throwable $th) {
+            $this->log("       CAN NOT CACHE SHOT RESULT");
         }
 
         $this->log("        result", $result);
@@ -591,13 +613,26 @@ class PostScraperService
 
     private function getHTML($url)
     {
-        return cache()->remember("post-scraper-html-$url", 60*60, function() use ($url) {
-            if ($this->sleep) {
-                sleep($this->sleep);
-            }
+        $cKey = Str::slug("post-scraper-html-$url");
+        $html = cache()->get($cKey);
 
-            return Http::get($url)->body();
-        });
+        if ($html) {
+            return $html;
+        }
+
+        if ($this->sleep) {
+            sleep($this->sleep);
+        }
+
+        $html = Http::get($url)->body();
+
+        try {
+            cache()->put($cKey, $html, $this->cacheTime);
+        } catch (\Throwable $th) {
+            $this->log("       CAN NOT CACHE PAGE HTML");
+        }
+
+        return $html;
     }
 
     private function querySelector($html, $selector, $context=null)

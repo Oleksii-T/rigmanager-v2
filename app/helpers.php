@@ -225,6 +225,13 @@ if (!function_exists('array_iunique')) {
     }
 }
 
+// string of author name to display for guests and unsubs
+if (!function_exists('maskedUserName')) {
+    function maskedUserName() {
+        return '____';
+    }
+}
+
 // get string from exeption
 if (!function_exists('exceptionAsString')) {
     function exceptionAsString($th) {

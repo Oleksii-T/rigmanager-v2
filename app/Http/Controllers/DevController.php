@@ -69,9 +69,30 @@ class DevController extends Controller
     {
         $d = [];
 
-        $ip = '10.179.80.83';
-        // $d = \Stevebauman\Location\Facades\Location::get($ip)->countryCode;
-        $d = \Stevebauman\Location\Facades\Location::get($ip);
+        // $json = file_get_contents(base_path('storage/scraper_jsons/cepai.json'));
+
+        // $scrapedPosts = json_decode($json, true);
+
+        // foreach ($scrapedPosts as $url => $p) {
+        //     $p['url'] = $url;
+
+        //     if ($p['title'] == 'Temperature transmitter with thermocouple') {
+        //         dump($p);
+        //     }
+        // }
+
+        // dd($scrapedPosts);
+
+
+        // 9 - cepai
+        // 12 - goldeman
+        // 15 - lakepetro
+
+        $user = User::find(12);
+
+        foreach ($user->posts as $p) {
+            $p->delete();
+        }
         
 
         dd($d);

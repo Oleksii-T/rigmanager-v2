@@ -64,7 +64,14 @@
         @if ($hasChat)
             <a href="{{route('profile.chat')}}?chat_with={{$post->user_id}}" class="button button-light">{{__('ui.openChat')}}</a>
         @else
-            <a href="#" data-url="{{route('profile.chat.store', $post->user->slug)}}" data-user="{{$post->user->name}}" class="button button-light send-message">{{__('ui.sendMessage')}}</a>
+            <a 
+                href="#" 
+                data-url="{{route('profile.chat.store', $post->user->slug)}}" 
+                data-user="{{$currentUser?->isSub() ? $post->user->name : maskedUserName()}}" 
+                class="button button-light send-message"
+            >
+                {{__('ui.sendMessage')}}
+            </a>
         @endif
     @endif
     @if ($post->is_tba)
@@ -72,7 +79,7 @@
         <button
             class="button execute-tba button-light"
             data-url="{{route('posts.price-request', $post)}}"
-            data-uname="{{$post->user->name}}"
+            data-uname="{{$currentUser?->isSub() ? $post->user->name : maskedUserName()}}"
             data-ptitle="{{$post->title}}"
         >
             @lang('ui.askForCost')
