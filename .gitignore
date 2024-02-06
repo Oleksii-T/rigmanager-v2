@@ -7,6 +7,7 @@
 /storage/*.key
 /storage/scraper_jsons
 /storage/browsershot
+/storage/logs-06-02-2024.tar
 /vendor
 .env
 .env.backup

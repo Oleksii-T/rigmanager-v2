@@ -40,7 +40,7 @@ class SubscriptionsDeactivateCanceled extends Command
         try {
             SubscriptionService::deactivateCanceled();
         } catch (\Throwable $th) {
-            Log::channel('commands')->error('[' . $this->signature . '] ' . $this->description . ' FAILS. ' . $th->getMessage());
+            Log::channel('commands')->error('[' . $this->signature . '] ' . $this->description . ' FAILS. ' . exceptionAsString($th));
         }
 
         return Command::SUCCESS;

@@ -40,7 +40,7 @@ class SubscriptionsExtendStripe extends Command
         try {
             SubscriptionService::extendStripe();
         } catch (\Throwable $th) {
-            Log::channel('commands')->error('[' . $this->signature . '] ' . $this->description . ' FAILS. ' . $th->getMessage());
+            Log::channel('commands')->error('[' . $this->signature . '] ' . $this->description . ' FAILS. ' . exceptionAsString($th));
         }
 
         return Command::SUCCESS;

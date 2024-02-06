@@ -60,9 +60,9 @@ class ScrapePostsCepai extends Command
                 ->value('body', '#main_product #main2_lrxq #main2_box4', 'html')
                 ->value('breadcrumbs', '#main_product #main1_wei a', null, true)
                 ->shot(
-                    'tables-img', 
+                    'tables-img',
                     '#main_product #main2_lrxq #main2_box4 table',
-                    false, 
+                    false,
                     '#main2_box4{height:3000px;} #footer{display:none}'
                 )
                 ->limit($this->scrapeLimit)

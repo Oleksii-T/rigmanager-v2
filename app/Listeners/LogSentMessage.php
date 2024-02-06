@@ -37,7 +37,7 @@ class LogSentMessage
         try {
             $this->doLog($message);
         } catch (\Throwable $th) {
-            \Log::error('Error when logging email send: ' . $th->getMessage());
+            \Log::error('Error when logging email send: ' . exceptionAsString($th));
         }
     }
 

@@ -152,9 +152,7 @@ class SitemapGenerate extends Command
             $sm->writeToFile(public_path('sitemap-users.xml'));
 
         } catch (\Throwable $th) {
-            Log::channel('commands')->error("[$this->signature] " . $th->getMessage(), [
-                'trace' => substr($th->getTraceAsString(), 0, 600)
-            ]);
+            Log::channel('commands')->error("[$this->signature] " . exceptionAsString($th));
         }
 
         return 0;

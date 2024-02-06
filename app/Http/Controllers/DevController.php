@@ -87,11 +87,19 @@ class DevController extends Controller
         // 9 - cepai
         // 12 - goldeman
         // 15 - lakepetro
+        // 14 - oilmanchina
+        // 7 - rsd
+        // 16 - cnsanmon
 
-        $user = User::find(12);
+        $posts = Post::query()
+            ->withTrashed()
+            ->where('user_id',16)
+            ->get();
 
-        foreach ($user->posts as $p) {
-            $p->delete();
+        dump("Posts: " . $posts->count());
+
+        foreach ($posts as $p) {
+            $p->forceDelete();
         }
         
 

@@ -32,7 +32,7 @@ class InitialImportFileValidation implements ValidationRule
                 $fail("File must have at least $colunmsLeast columns");
             }
         } catch (\Throwable $th) {
-            \Log::error('ERROR on initial import file validation: ' . $th->getMessage());
+            \Log::error('ERROR on initial import file validation: ' . exceptionAsString($th));
             $fail("Can not read file");
         }
     }
