@@ -183,7 +183,6 @@ if (!function_exists('infoForActivityLog')) {
             \Log::error('Can not detect location for activity log: ' . $th->getMessage());
         }
 
-
         try {
             $agent = new \Jenssegers\Agent\Agent();
             $agent->setUserAgent($agentString);

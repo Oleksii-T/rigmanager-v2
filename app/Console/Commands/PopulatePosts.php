@@ -13,11 +13,12 @@ class PopulatePosts extends Command implements PromptsForMissingInput
 {
     private $userId = false;
     private $skipWithViews = false;
-    private $minViews = false;
-    private $maxViews = false;
-    private $minDaysPastNow = false;
-    private $maxDaysPastNow = false;
-    private $withoutDate = false;
+    private $minViews = 0;
+    private $maxViews = 0;
+    private $periodDays = 0;
+    private $periodPastDays = 0;
+
+    // php artisan posts:populate -S50 -M30 -W50 -P7 -D30 -Uaires@cepai.com
 
     /**
      * The name and signature of the console command.
@@ -25,12 +26,11 @@ class PopulatePosts extends Command implements PromptsForMissingInput
      * @var string
      */
     protected $signature = 'posts:populate
-                            {--skip-with-views=1 : Posts with this amount of views will be skipped }
-                            {--min-views=15 : Minimum fake views to be created }
-                            {--max-views=30 : Maximum fake views to be created }
-                            {--min-days-from-now=0 : Minimum days past now for post date }
-                            {--max-days-from-now=30 : Maximum days past now for post date }
-                            {--without-days : Whether post dates should be randomized }
+                            {--S|skip-with-views=1 : Posts with this amount of views will be skipped }
+                            {--M|min-views=15 : Minimum fake views to be created }
+                            {--W|max-views=30 : Maximum fake views to be created }
+                            {--P|period-past-days=0 : Minimum days past now for post date }
+                            {--D|period-days=30 : Maximum days past now for post date }
                             {--U|user= : User id or email whose posts to process }';
 
     /**
@@ -54,8 +54,8 @@ class PopulatePosts extends Command implements PromptsForMissingInput
         $this->warn("Amount of posts to be processed: " . $posts->count());
         $this->warn("Skip with Views: $this->skipWithViews");
         $this->warn("Amount of views to be faked: $this->minViews - $this->maxViews");
-        $dText = now()->subDays($this->maxDaysPastNow)->format('d/m/Y') . ' - ' . now()->subDays($this->minDaysPastNow)->format('d/m/Y');
-        $this->warn("Date to be randomized: " . ($this->withoutDate ? '-' : $dText));
+        $dText = now()->subDays($this->periodPastDays + $this->periodDays)->format('d/m/Y') . ' - ' . now()->subDays($this->periodPastDays)->format('d/m/Y');
+        $this->warn("Date to be randomized: $dText");
 
         if ($posts->isEmpty()) {
             $this->error("No posts found");
@@ -69,10 +69,34 @@ class PopulatePosts extends Command implements PromptsForMissingInput
         $bar = $this->output->createProgressBar($posts->count());
         $bar->start();
 
-        foreach ($posts as $post) {
-            $this->randomizeViews($post);
+        $randDates = $this->randomizedDates(
+            $posts->count(), 
+            now()->subDays($this->periodPastDays + $this->periodDays), 
+            now()->subDays($this->periodPastDays)
+        );
 
-            $this->randomizeDate($post);
+        foreach ($posts as $i => $post) {
+            $date = $randDates[$i];
+
+            // randomize date
+            $post->created_at = $date;
+            $post->updated_at = $date;
+            $post->save();
+
+            // randomize views
+            $viewsCount = rand($this->minViews, $this->maxViews);
+            $randDatesForViews = $this->randomizedDates(
+                $viewsCount, 
+                $post->created_at,
+                now()->subDays($this->periodPastDays), 
+            );
+            for ($i=0; $i < $viewsCount; $i++) {
+                $date = $randDatesForViews[$i];
+                $view = $post->saveView(true);
+                $view->created_at = $date;
+                $view->updated_at = $date;
+                $view->save();
+            }
 
             $bar->advance();
         }
@@ -82,41 +106,19 @@ class PopulatePosts extends Command implements PromptsForMissingInput
         $this->info('Process finished');
     }
 
-    private function randomizeViews($post)
+    private function randomizedDates($count, $from, $to)
     {
-        $views = rand($this->minViews, $this->maxViews);
-        for ($i=0; $i < $views; $i++) {
-            $view = $post->views()->create([
-                'user_id' => null,
-                'ip' => fake()->ipv4(),
-                'is_fake' => true,
-            ]);
+        $randDates = [];
+        $diffInDays = $from->diffInDays($to);
+        $diffInMinutes = $diffInDays * 1440;
 
-            if ($this->withoutDate) {
-                continue;
-            }
-
-            $date = $this->randDate();
-            $view->created_at = $date;
-            $view->updated_at = $date;
-            $view->save();
+        for ($i=0; $i < $count; $i++) { 
+            $randDates[] = (clone $to)->subMinutes(rand(0, $diffInMinutes));
         }
-    }
 
-    private function randomizeDate($post)
-    {
-        if ($this->withoutDate) {
-            return;
-        }
-        $date = $this->randDate();
-        $post->created_at = $date;
-        $post->updated_at = $date;
-        $post->save();
-    }
+        sort($randDates);
 
-    private function randDate()
-    {
-        return now()->subDays(rand($this->minDaysPastNow, $this->maxDaysPastNow));
+        return $randDates;
     }
 
     private function getUser($userId)
@@ -136,9 +138,10 @@ class PopulatePosts extends Command implements PromptsForMissingInput
     private function getPosts($user, $skipWithViews)
     {
         $posts = Post::query()
-            ->where('user_id', 9)
-            ->withCount('views')
-            ->having('views_count', '<', $skipWithViews)
+            ->withCount([
+                'activities' => fn ($q) => $q->where('event', 'view') 
+            ])
+            ->having('activities_count', '<', $skipWithViews)
             ->where('user_id', $user->id)
             ->get();
 
@@ -151,9 +154,8 @@ class PopulatePosts extends Command implements PromptsForMissingInput
         $this->skipWithViews = $this->option('skip-with-views');
         $this->minViews = $this->option('min-views');
         $this->maxViews = $this->option('max-views');
-        $this->minDaysPastNow = $this->option('min-days-from-now');
-        $this->maxDaysPastNow = $this->option('max-days-from-now');
-        $this->withoutDate = $this->option('without-days');
+        $this->periodPastDays = $this->option('period-past-days');
+        $this->periodDays = $this->option('period-days');
 
         if (!$this->userId) {
             $this->userId = $this->ask('Please specify user id or email');
