@@ -163,6 +163,11 @@ class ScrapePostsLakePetro extends Command
         return $scrapedPost['tab-1-table-img'];
     }
 
+    private function parseCountry($scrapedPost)
+    {
+        return 'cn';
+    }
+
     private function parseCategory($scrapedPost)
     {
         return Category::getBySlug($scrapedPost['category']);

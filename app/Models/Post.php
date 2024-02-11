@@ -67,6 +67,7 @@ class Post extends Model
 
     const CONDITIONS = [
         'new',
+        'refurbished',
         'used',
         'for-parts'
     ];
@@ -74,6 +75,8 @@ class Post extends Model
     const TRANSLATABLES = [
         'title',
         'description',
+        'meta_title',
+        'meta_description',
         'slug'
     ];
 
@@ -368,6 +371,34 @@ class Post extends Model
         }
     }
 
+    public function generateMetaTitle()
+    {
+        return $this->generateMetaTitleHelper($this->title, $this->category->name);
+    }
+
+    public static function generateMetaTitleHelper(string $title, string $category)
+    {
+        return $title . ' - ' . $category . ' on rigmanagers.com';
+    }
+
+    public function generateMetaDescription()
+    {
+        $d = $this->description;
+
+        if (!$d) {
+            return $this->generateMetaTitle();
+        }
+
+        return $this->generateMetaDescriptionHelper($d);
+    }
+
+    public static function generateMetaDescriptionHelper(string $description)
+    {
+        return strlen($description) > 70 
+            ? (substr($description, 0, 70) . '... - rigmanagers.com')
+            : $description . ' - rigmanagers.com';
+    }
+
     public static function dataTable($query)
     {
         return DataTables::of($query)
@@ -425,6 +456,8 @@ class Post extends Model
         switch ($condition) {
             case 'new':
                 return trans('posts.conditions.new');
+            case 'refurbished':
+                return trans('posts.conditions.refurbished');
             case 'used':
                 return trans('posts.conditions.used');
             case 'for-parts':

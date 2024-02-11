@@ -196,6 +196,11 @@ class ScrapePostsOilManChina extends Command
         }
     }
 
+    private function parseCountry($scrapedPost)
+    {
+        return 'cn';
+    }
+
     private function parseCategory($scrapedPost)
     {
         $map = [

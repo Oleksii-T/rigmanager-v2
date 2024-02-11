@@ -150,7 +150,7 @@
                 @if ($post->country)
                     <div class="prod-info-item">
                         <div class="prod-info-name">{{__('ui.location')}}</div>
-                        <div class="prod-info-text">{{$post->country}}</div>
+                        <div class="prod-info-text">{{countries()[$post->country]}}</div>
                     </div>
                 @endif
                 @if ($post->cost_readable)

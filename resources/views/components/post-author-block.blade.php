@@ -59,7 +59,7 @@
     </a>
     <br>
     @if ($currentUser?->id == $post->user_id)
-        <button class="button button-light send-message-to-self">{{__('ui.sendMessage')}}</button>
+        <button class="button button-light send-message-to-self">{{__('ui.startChat')}}</button>
     @else
         @if ($hasChat)
             <a href="{{route('profile.chat')}}?chat_with={{$post->user_id}}" class="button button-light">{{__('ui.openChat')}}</a>

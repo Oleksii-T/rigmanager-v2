@@ -55,7 +55,7 @@ if (!function_exists('isdev')) {
         }
 
         $ips = [
-            '213.174.29.7',
+            '213.174.29.197',
             '127.0.0.1',
         ];
 
@@ -64,6 +64,27 @@ if (!function_exists('isdev')) {
         } catch (\Throwable $th) {
             return false;
         }
+    }
+}
+
+
+if (!function_exists('devdd')) {
+    function devdd($text, $array=[]) {
+        if (!isdev()) {
+            return;
+        }
+
+        dd($text, $array);
+    }
+}
+
+if (!function_exists('devdump')) {
+    function devdump($text, $array=[]) {
+        if (!isdev()) {
+            return;
+        }
+
+        dump($text, $array);
     }
 }
 

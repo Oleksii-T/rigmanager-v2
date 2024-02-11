@@ -6,7 +6,7 @@ use App\Models\Category;
 use App\Traits\ScrapePosts;
 use Illuminate\Console\Command;
 
-class ScrapePostsPeddler extends Command
+class ScrapePostsDtoSupply extends Command
 {
     use ScrapePosts;
 
@@ -15,11 +15,11 @@ class ScrapePostsPeddler extends Command
      *
      * @var string
      */
-    protected $signature = 'posts:scrape-peddler
+    protected $signature = 'posts:scrape-dtosupply
                             {--I|ignore-cache : Ignore cached scraped data. }
                             {--D|scraper-debug : Enable scraper logs}
-                            {--C|cache-file=storage/scraper_jsons/peddler.json : Path to cache file. }
-                            {--U|user=peddlerconsignment@sasktel.net : User id or email to which imported posts will be attached. }
+                            {--C|cache-file=storage/scraper_jsons/dtosupply.json : Path to cache file. }
+                            {--U|user=sales@dtosupply.com : User id or email to which imported posts will be attached. }
                             {--scrape-limit=0 : Limit the amount of scraped posts. Scrapping may generate non valid posts, so limiting scraped posts amount not always the same as limiting imported posts amount. }
                             {--L|import-limit=0 : Limit the amount of successfully imported posts. }
                             {--S|sleep=0 : Wait seconds before scrapping the page. May protect agains 429. }';
@@ -29,7 +29,7 @@ class ScrapePostsPeddler extends Command
      *
      * @var string
      */
-    protected $description = 'Scrape posts from www.heavyoilfieldtrucks.com';
+    protected $description = 'Scrape posts from dtosupply.com';
 
     /**
      * Execute the console command.
@@ -40,25 +40,19 @@ class ScrapePostsPeddler extends Command
         $this->porocess();
     }
 
+    //public function value(string $name, string $selector, string $attribute=null, bool $isMultiple=false, bool $getFromPostsPage=false, bool $required=true)
     private function scrapePosts()
     {
-        $result = \App\Services\PostScraperService::make('https://www.heavyoilfieldtrucks.com/listings/')
-            ->post('.auto-listings-items .auto-listing')
-            ->postLink('.summary .title a')
-            ->value('title', '.listing .title')
-            ->value('images', '#image-gallery img', 'src', true)
-            ->value('price', '.price h4')
-            ->value('condition', '.price .condition')
-            ->value('short_specs', '.at-a-glance li', null, true)
-            ->value('description', '.description', 'html')
-            ->shot('details_tables', '.auto-listings-Tabs-panel--details')
-            ->shot(
-                'specifications_tables', 
-                '.auto-listings-Tabs-panel--specifications',    
-                false,
-                '.auto-listings-Tabs-panel--specifications{display:block !important;}'
-            )
-            ->shot('few_details', '.sidebar .at-a-glance')
+        $result = \App\Services\PostScraperService::make('https://dtosupply.com/shop/')
+            ->post('.products .product')
+            ->postLink('.woocommerce-LoopProduct-link')
+            ->value('title', '.product_title')
+            ->value('price', '.price', null, false, false, false)
+            ->value('details', '.woocommerce-product-details__short-description', null, false, false, false)
+            ->value('posted_in', '.posted_in')
+            ->value('tagged_as', '.tagged_as')
+            ->value('description', '.woocommerce-Tabs-panel--description', 'html')
+            ->value('breadcrumb', '.woocommerce-breadcrumb a', null, true)
             ->limit($this->scrapeLimit)
             ->sleep($this->sleep)
             ->debug($this->scraperDebug)
@@ -113,9 +107,12 @@ class ScrapePostsPeddler extends Command
 
     private function parseCondition($scrapedPost)
     {
+        // refurbished
         $condition = 'new';
+        $title = strtolower($scrapedPost['title']);
+        $details = strtolower($scrapedPost['details']);
 
-        if ($scrapedPost['condition'] == 'Used Vehicle') {
+        if ($scrapedPost['title'] == 'Used Vehicle') {
             $condition = 'used';
         }
 

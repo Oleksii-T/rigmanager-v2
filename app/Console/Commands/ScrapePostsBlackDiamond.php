@@ -42,19 +42,44 @@ class ScrapePostsBlackDiamond extends Command
 
     private function scrapePosts()
     {
-        $result = \App\Services\PostScraperService::make('https://www.heavyoilfieldtrucks.com/listings/')
-            ->post('#phContentBody_resultsSeller_gridAdResults tr')
-            ->postLink('#phContentBody_resultsSeller_gridAdResults_tdTitleCell_0 a')
-            ->value('title', '.equip-lbl-details h1')
-            ->value('images', '#equipmentgallery img', 'src', true)
-            ->value('short_specs', '.equip-lbl-details label', null, true)
-            ->value('description', '.description', 'html')
-            ->shot('details_tables', '.auto-listings-Tabs-panel--details')
-            ->shot('specifications_tables', '.auto-listings-Tabs-panel--specifications')
-            ->limit($this->scrapeLimit)
-            ->sleep($this->sleep)
-            ->debug($this->scraperDebug)
-            ->scrape();
+        $result = [];
+        $baseUrls = [
+            'https://www.blackdiamonddrilling.com/equipment/coil-tubing-equipment' => 'coil-tubing-eq',
+            'https://www.blackdiamonddrilling.com/equipment/cranes' => 'cranes',
+            'https://www.blackdiamonddrilling.com/equipment/drill-bits-for-sale' => 'drill-bit',
+            'https://www.blackdiamonddrilling.com/equipment/drill-collars-for-sale' => 'drill-collar-dc',
+            'https://www.blackdiamonddrilling.com/equipment/drill-pipe-for-sale' => 'drill-pipe-dp',
+            'https://www.blackdiamonddrilling.com/equipment/drilling-rigs-for-sale' => 'rig-accessories',
+            'https://www.blackdiamonddrilling.com/equipment/handling-tools-for-sale' => 'handling-tools',
+            'https://www.blackdiamonddrilling.com/equipment/loaders' => 'vehicles',
+            'https://www.blackdiamonddrilling.com/equipment/miscellaneous' => 'others-spare-parts',
+            'https://www.blackdiamonddrilling.com/equipment/pipe-racks-for-sale' => 'pipe-racks',
+            'https://www.blackdiamonddrilling.com/equipment/pumps-for-sale' => 'mud-pump-spare-parts',
+            'https://www.blackdiamonddrilling.com/equipment/rotary-tools-for-sale' => 'rotary-table',
+            // 'https://www.blackdiamonddrilling.com/equipment/service-equipment-for-sale' => '',
+            'https://www.blackdiamonddrilling.com/equipment/tanks-for-sale' => 'trailers',
+            'https://www.blackdiamonddrilling.com/equipment/trailers-for-sale' => 'trailers',
+            'https://www.blackdiamonddrilling.com/equipment/trucks-for-sale' => 'trucks',
+        ];
+
+        foreach ($baseUrls as $url => $categSlug) {
+            $tmp = \App\Services\PostScraperService::make($url)
+                ->post('.product-box-grid .w-dyn-item')
+                ->postLink('a')
+                ->value('title', '.product-page-title')
+                ->value('images', '.w-slider-mask img', 'src', true, false, false)
+                ->value('specs_keys', '.list-item .product-content-title', null, true, false, false)
+                ->value('specs_values', '.list-item .paragraph', null, true, false, false)
+                ->limit($this->scrapeLimit)
+                ->sleep($this->sleep)
+                ->debug($this->scraperDebug)
+                ->scrape();
+
+            foreach ($tmp as &$p) {
+                $p['category'] = $categSlug;
+            }
+            $result = array_merge($result, $tmp);
+        }
 
         return $result;
     }
@@ -69,7 +94,18 @@ class ScrapePostsBlackDiamond extends Command
 
     private function parseDescription($scrapedPost)
     {
-        $description = $scrapedPost['description'];
+        $description = [];
+
+        foreach ($scrapedPost['specs_keys'] as $i => $name) {
+            $value = $scrapedPost['specs_values'][$i];
+            if (!$value) {
+                continue;
+            }
+
+            $description[] = "$name: $value";
+        }
+
+        $description = implode("\r\n\r\n", $description);
         $description = $this->descriptionEscape($description);
 
         return $description;
@@ -82,18 +118,13 @@ class ScrapePostsBlackDiamond extends Command
         return $images;
     }
 
-    private function parseCategory($scrapedPost)
+    private function parseCountry($scrapedPost)
     {
-        return Category::getBySlug('heavy-machinery-supply-rental');
+        return 'us';
     }
 
-    private function parseSavedImages($scrapedPost)
+    private function parseCategory($scrapedPost)
     {
-        $images = array_merge(
-            $scrapedPost['details_tables'],
-            $scrapedPost['specifications_tables'],
-        );
-
-        return $images;
+        return Category::getBySlug($scrapedPost['category']);
     }
 }

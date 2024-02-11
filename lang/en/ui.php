@@ -208,6 +208,7 @@ If you have significant amount of posts, consider using <a href="/imports" targe
         All your mailers will be deleted.
         You subscription will be canceled.',
     'mailer' => 'Mailer',
+    'startChat' => 'Start Chat',
     'sendMessage' => 'Send Message',
     'sendMessagePopupTitle' => 'Send Message to ',
     'sendMessagePopupSendBtn' => 'Send',

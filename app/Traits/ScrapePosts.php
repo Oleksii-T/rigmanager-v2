@@ -152,6 +152,10 @@ trait ScrapePosts
 
         $category = $this->parseCategory($scrapedPost);
 
+        $condition = $this->parseCondition($scrapedPost);
+
+        $country = $this->parseCountry($scrapedPost);
+
         $post = [
             'user_id' => $this->user->id,
             'group' => PostGroup::EQUIPMENT,
@@ -161,8 +165,8 @@ trait ScrapePosts
             'origin_lang' => 'en',
             'category_id' => $category->id,
             'type' => PostType::SELL,
-            'condition' => 'new',
-            'country' => 'cn',
+            'condition' => $condition,
+            'country' => $country,
             'is_tba' => true,
             'scraped_url' => $url,
             // 'amount' => '',
@@ -283,6 +287,11 @@ trait ScrapePosts
         return [];
     }
 
+    private function parseCondition($scrapedPost)
+    {
+        return 'new';
+    }
+
     private function addSavedImages($post, $paths)
     {
         if (!$paths) {
@@ -312,6 +321,7 @@ trait ScrapePosts
     private function addTranslations($post, $title, $description)
     {
         $textLocale = (new TranslationService())->detectLanguage("$title. $description");
+        $mTitle = Post::generateMetaTitleHelper($title, $post->category->name);
 
         $post->saveTranslations([
             'slug' => [
@@ -322,6 +332,12 @@ trait ScrapePosts
             ],
             'description' => [
                 $textLocale => $description
+            ],
+            'meta_title' => [
+                $textLocale => $mTitle
+            ],
+            'meta_description' => [
+                $textLocale => $description ? Post::generateMetaDescriptionHelper($description) : $mTitle
             ]
         ]);
 

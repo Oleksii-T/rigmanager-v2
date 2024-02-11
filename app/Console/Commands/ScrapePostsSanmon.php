@@ -89,6 +89,11 @@ class ScrapePostsSanmon extends Command
         return $images;
     }
 
+    private function parseCountry($scrapedPost)
+    {
+        return 'cn';
+    }
+
     private function parseCategory($scrapedPost)
     {
         $map = [

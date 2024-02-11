@@ -90,17 +90,76 @@ class DevController extends Controller
         // 14 - oilmanchina
         // 7 - rsd
         // 16 - cnsanmon
+        // 30 - paddler
 
-        $posts = Post::query()
-            ->withTrashed()
-            ->where('user_id',16)
-            ->get();
+        // $posts = Post::query()
+        //     ->withTrashed()
+        //     ->where('user_id',30)
+        //     ->get();
 
-        dump("Posts: " . $posts->count());
+        // dump("Posts: " . $posts->count());
 
-        foreach ($posts as $p) {
-            $p->forceDelete();
+        // foreach ($posts as $p) {
+        //     $p->forceDelete();
+        // }
+
+        $post = Post::find(310);
+        // dd($post->meta_title, $post->toArray());
+
+        $posts = Post::get();
+
+        foreach ($posts as $post) {
+            $m = $post->meta_title;
+
+            if ($m) {
+                continue;
+            }
+
+            try {
+                $t = $post->generateMetaTitle();
+                $d = $post->generateMetaDescription();
+
+                $meta = [
+                    'meta_title' => [
+                        'en' => $t
+                    ],
+                    'meta_description' => [
+                        'en' => $d
+                    ]
+                ];
+
+                $post->saveTranslations($meta);
+            } catch (\Throwable $th) {
+                dd($th->getMessage(), $post->toArray());
+            }
+
+            dump($post->id);
+
         }
+        
+
+        dd($d);
+    }
+
+    private function scrapeTest()
+    {
+        $d = [];
+
+        // $d = \App\Services\PostScraperService::make('https://www.heavyoilfieldtrucks.com/listings/')
+        //     ->post('.auto-listings-items .auto-listing')
+        //     ->postLink('.summary .title a')
+        //     ->value('title', '.listing .title')
+        //     ->value('images', '#image-gallery img', 'src', true)
+        //     ->value('price', '.price h4')
+        //     ->value('condition', '.price .condition')
+        //     ->value('short_specs', '.at-a-glance li', null, true)
+        //     ->value('description', '.description', 'html')
+        //     ->shot('details_tables', '.auto-listings-Tabs-panel--details')
+        //     ->shot('specifications_tables', '.auto-listings-Tabs-panel--specifications')
+        //     ->limit(2)
+        //     ->sleep(0)
+        //     ->debug(true)
+        //     ->scrape();
         
 
         dd($d);
@@ -112,7 +171,10 @@ class DevController extends Controller
             // 'lakepetro' => storage_path('scraper_jsons/lakepetro.json'),
             // 'oilmanchina' => storage_path('scraper_jsons/oilmanchina.json'),
             // 'goldenman' => storage_path('scraper_jsons/goldenman.json'),
-            'rsdst' => storage_path('scraper_jsons/rsdst.json'),
+            // 'rsdst' => storage_path('scraper_jsons/rsdst.json'),
+            // 'peddler' => storage_path('scraper_jsons/peddler.json'),
+            // 'blackdiamond' => storage_path('scraper_jsons/blackdiamond.json'),
+            'dtosupply' => storage_path('scraper_jsons/dtosupply.json'),
         ];
 
         foreach ($files as $author => $file) {
@@ -125,6 +187,27 @@ class DevController extends Controller
 
             $this->d($scrapedPosts);
         }
+    }
+
+    private function testScrapedShotImage()
+    {
+        $name = 'test-shot.jpeg';
+        $path = storage_path('browsershot') . '/' . $name;
+        $path = '/var/www/rigmanager/storage/browsershot/specifications_tables-1707565873.jpeg';
+        $url = 'https://www.heavyoilfieldtrucks.com/listing/2006-sterling-model-lt-8500-picker-truck/';
+
+        $browserhot = \Spatie\Browsershot\Browsershot::url($url)
+            ->select('.auto-listings-Tabs-panel--specifications')
+            ->setScreenshotType('jpeg', 100)
+            ->newHeadless();
+        
+        $browserhot->setOption('addStyleTag', json_encode([
+            'content' => '.specifications_tables{display:block !important;}'
+        ]));
+
+        $browserhot->save($path);
+
+        dd('shot done.', $path);
     }
 
     private function example()

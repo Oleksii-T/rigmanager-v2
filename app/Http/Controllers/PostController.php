@@ -74,6 +74,7 @@ class PostController extends Controller
 
         $input = $request->validated();
         $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
+        $c = Category::find($input['category_id']);
         $input['duration'] = 'unlim';
         $input['origin_lang'] = $textLocale;
         $input['status'] = 'pending';
@@ -87,6 +88,12 @@ class PostController extends Controller
         ];
         $input['description'] = [
             $textLocale => $input['description']
+        ];
+        $input['meta_title'] = [
+            $textLocale => Post::generateMetaTitleHelper($input['title'], $c->name)
+        ];
+        $input['meta_description'] = [
+            $textLocale => Post::generateMetaDescriptionHelper($input['description'])
         ];
         $post = $user->posts()->create($input);
 

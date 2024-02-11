@@ -115,6 +115,11 @@ class ScrapePostsCepai extends Command
         return $scrapedPost['tables-img'];
     }
 
+    private function parseCountry($scrapedPost)
+    {
+        return 'cn';
+    }
+
     private function parseCategory($scrapedPost)
     {
         if (in_array('CEPAI Valves', $scrapedPost['breadcrumbs'])) {

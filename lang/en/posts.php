@@ -12,6 +12,7 @@ return [
     'conditions' => [
         'none' => 'None',
         'new' => 'New',
+        'refurbished' => 'Refurbished',
         'used' => 'Used',
         'for-parts' => 'For parts',
     ],

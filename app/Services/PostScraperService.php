@@ -302,8 +302,12 @@ class PostScraperService
         }
         $this->meta['parsed_posts_count'] = count($this->meta['parsed_posts']);
 
-        $this->meta['avg_time_per_post'] = $this->meta['parsed_posts_time'] / $this->meta['parsed_posts_count'];
-        $this->meta['avg_time_per_page'] = $this->meta['parsed_pages_time'] / $this->meta['parsed_pages_total'];
+        $this->meta['avg_time_per_post'] = $this->meta['parsed_posts_count'] 
+            ? $this->meta['parsed_posts_time'] / $this->meta['parsed_posts_count']
+            : 0;
+        $this->meta['avg_time_per_page'] = $this->meta['parsed_pages_total'] 
+            ? $this->meta['parsed_pages_time'] / $this->meta['parsed_pages_total']
+            : 0;
     }
 
     /**
@@ -519,7 +523,7 @@ class PostScraperService
         if ($valueData['is_multiple']) {
             $this->log("        is multiple");
             $res = [];
-            foreach ($nodeList as $node) {
+            foreach ($nodeList as $i => $node) {
                 $res[] = $this->scrapeValueHelper($node, $key, $valueData);
             }
             $this->log("        result: ", $res);

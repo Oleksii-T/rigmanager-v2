@@ -28,14 +28,32 @@ class PageController extends Controller
 
     public function categories($type=null)
     {
+        // cache()->forget("categoryes-$type");
         $categories = cache()->remember("categoryes-$type", 60*5, function () use ($type) { 
-            return Category::query()
+            $isService = $type == 'service';
+            $categories = Category::query()
                 ->active()
-                ->where('type', $type == 'service' ? CategoryType::SERVICE : CategoryType::EQUIPMENT)
+                ->where('type', $isService ? CategoryType::SERVICE : CategoryType::EQUIPMENT)
                 ->whereNull('category_id')
-                ->with('childs', 'image')
+                ->with('childs.childs', 'image')
                 ->get()
                 ->sortBy('name');
+
+            foreach ($categories as &$category) {
+                $category->posts_count = $category->postsAll()->visible()->count();
+                $category->url = $category->getUrl(false, $isService);
+                $category->name = $category->name;
+                foreach ($category->childs as &$child) {
+                    $child->url = $child->getUrl(false, $isService);
+                    $child->name = $child->name;
+                    foreach ($child->childs as &$child2) {
+                        $child2->url = $child2->getUrl(false, $isService);
+                        $child2->name = $child2->name;
+                    }
+                }
+            }
+
+            return $categories;
         });
         $view = $type == 'service' ? 'categories-services' : 'categories';
 
