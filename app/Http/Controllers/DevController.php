@@ -91,50 +91,17 @@ class DevController extends Controller
         // 7 - rsd
         // 16 - cnsanmon
         // 30 - paddler
+        // 32 - DTOsupply
 
-        // $posts = Post::query()
-        //     ->withTrashed()
-        //     ->where('user_id',30)
-        //     ->get();
+        $posts = Post::query()
+            ->withTrashed()
+            ->where('user_id', 32)
+            ->get();
 
-        // dump("Posts: " . $posts->count());
+        dump("Posts: " . $posts->count());
 
-        // foreach ($posts as $p) {
-        //     $p->forceDelete();
-        // }
-
-        $post = Post::find(310);
-        // dd($post->meta_title, $post->toArray());
-
-        $posts = Post::get();
-
-        foreach ($posts as $post) {
-            $m = $post->meta_title;
-
-            if ($m) {
-                continue;
-            }
-
-            try {
-                $t = $post->generateMetaTitle();
-                $d = $post->generateMetaDescription();
-
-                $meta = [
-                    'meta_title' => [
-                        'en' => $t
-                    ],
-                    'meta_description' => [
-                        'en' => $d
-                    ]
-                ];
-
-                $post->saveTranslations($meta);
-            } catch (\Throwable $th) {
-                dd($th->getMessage(), $post->toArray());
-            }
-
-            dump($post->id);
-
+        foreach ($posts as $p) {
+            $p->forceDelete();
         }
         
 

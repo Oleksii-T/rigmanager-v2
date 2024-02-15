@@ -44,14 +44,16 @@ class ScrapePostsDtoSupply extends Command
     private function scrapePosts()
     {
         $result = \App\Services\PostScraperService::make('https://dtosupply.com/shop/')
+            ->pagination('.page-numbers a')
             ->post('.products .product')
             ->postLink('.woocommerce-LoopProduct-link')
             ->value('title', '.product_title')
+            ->value('images', '.images .wp-post-image', 'src', true, false, false)
             ->value('price', '.price', null, false, false, false)
             ->value('details', '.woocommerce-product-details__short-description', null, false, false, false)
             ->value('posted_in', '.posted_in')
-            ->value('tagged_as', '.tagged_as')
-            ->value('description', '.woocommerce-Tabs-panel--description', 'html')
+            ->value('tagged_as', '.tagged_as', null, false, false, false)
+            ->value('description', '.woocommerce-Tabs-panel--description', 'html', false, false, false)
             ->value('breadcrumb', '.woocommerce-breadcrumb a', null, true)
             ->limit($this->scrapeLimit)
             ->sleep($this->sleep)
@@ -72,6 +74,8 @@ class ScrapePostsDtoSupply extends Command
     private function parseDescription($scrapedPost)
     {
         $description = $scrapedPost['description'];
+        $desc = str_replace('Description', "", $description);
+        $desc = str_replace('sales@dtosupply.com', "", $description);
         $description = $this->descriptionEscape($description);
 
         return $description;
@@ -107,13 +111,13 @@ class ScrapePostsDtoSupply extends Command
 
     private function parseCondition($scrapedPost)
     {
-        // refurbished
         $condition = 'new';
-        $title = strtolower($scrapedPost['title']);
-        $details = strtolower($scrapedPost['details']);
+        $title = strtolower($scrapedPost['title']) . strtolower($scrapedPost['details']);
 
-        if ($scrapedPost['title'] == 'Used Vehicle') {
+        if (str_contains($title, 'used')) {
             $condition = 'used';
+        } else if (str_contains($title, 'recertified') || str_contains($title, 'refurbished')) {
+            $condition = 'refurbished';
         }
 
         return $condition;
@@ -126,17 +130,6 @@ class ScrapePostsDtoSupply extends Command
 
     private function parseCategory($scrapedPost)
     {
-        return Category::getBySlug('heavy-machinery-supply-rental');
-    }
-
-    private function parseSavedImages($scrapedPost)
-    {
-        $images = array_merge(
-            $scrapedPost['details_tables'],
-            $scrapedPost['specifications_tables'],
-            $scrapedPost['few_details']
-        );
-
-        return $images;
+        return Category::getBySlug('top-drive-drilling-system');
     }
 }
