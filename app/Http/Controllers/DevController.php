@@ -93,17 +93,16 @@ class DevController extends Controller
         // 30 - paddler
         // 32 - DTOsupply
 
-        $posts = Post::query()
-            ->withTrashed()
-            ->where('user_id', 32)
-            ->get();
+        // $posts = Post::query()
+        //     ->withTrashed()
+        //     ->where('user_id', 32)
+        //     ->get();
 
-        dump("Posts: " . $posts->count());
+        // dump("Posts: " . $posts->count());
 
-        foreach ($posts as $p) {
-            $p->forceDelete();
-        }
-        
+        // foreach ($posts as $p) {
+        //     $p->forceDelete();
+        // }
 
         dd($d);
     }

@@ -4,6 +4,7 @@ namespace App\Rules;
 
 use Closure;
 use App\Models\Post;
+use App\Enums\PostType;
 use App\Models\Category;
 use App\Models\Translation;
 use Illuminate\Contracts\Validation\DataAwareRule;
@@ -194,7 +195,9 @@ class ImportValidation implements DataAwareRule, ValidationRule
             return;
         }
 
-        if (!in_array(strtolower($val), Post::TYPES)) {
+        $int = PostType::getByCode($val);
+
+        if (!$int === null) {
             $this->fail("Type '$val' not recognized - row #$i");
         }
     }

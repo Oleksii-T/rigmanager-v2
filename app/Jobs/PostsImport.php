@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Models\Post;
 use App\Models\Import;
+use App\Enums\PostType;
+use App\Enums\PostGroup;
 use App\Models\Category;
 use App\Models\Attachment;
 use App\Models\Translation;
@@ -46,9 +48,6 @@ class PostsImport implements ShouldQueue
         $this->endRow = $s['end_row'];
         $this->userColumns = $s['columns'];
         $this->user = $import->user;
-
-        LogBatch::startBatch();
-        LogBatch::setBatch("import-id-$import->id");
     }
 
     /**
@@ -59,13 +58,17 @@ class PostsImport implements ShouldQueue
     public function handle()
     {
         try {
-            $this->import->update([
+            $import = $this->import;
+            LogBatch::startBatch();
+            LogBatch::setBatch("import-id-$import->id");
+
+            $import->update([
                 'status' => Import::STATUS_PROCESSING
             ]);
 
             $this->log('Start');
 
-            $pages = \Excel::toArray(new PostsImportExcel, $this->import->file->path);
+            $pages = \Excel::toArray(new PostsImportExcel, $import->file->path);
             $rows = $pages[0]; // get first excel page
             // get only rows specified by user
             $rows = array_slice($rows, $this->startRow-1, $this->endRow-$this->startRow+1);
@@ -86,19 +89,15 @@ class PostsImport implements ShouldQueue
 
             $this->log('ERROR. see main log for more info', ' ');
 
-            \Log::error('PostsImport Job: ERROR', [
-                'import' => $this->import,
-                'error' => $th->getMessage(),
-                'trace' => substr($th->getTraceAsString(), 0, 600)
-            ]);
+            \Log::error("PostsImport Job #$import->id: ERROR: " . exceptionAsString($th));
 
             Notification::make($this->user->id, NotificationGroup::IMPORT_FAIL, [
                 'vars' => [
-                    'id' => $this->import->id
+                    'id' => $import->id
                 ]
-            ], $this->import);
+            ], $import);
 
-            $this->import->update([
+            $import->update([
                 'status' => Import::STATUS_FAILED
             ]);
 
@@ -130,6 +129,7 @@ class PostsImport implements ShouldQueue
             'status' => 'pending',
             'duration' => 'unlim',
             'is_active' => true,
+            'group' => PostGroup::EQUIPMENT,
             'user_id' => $this->user->id,
             'origin_lang' => 'en',
             'category_id' => $this->getCategory($row[$this->userColumns['category']]),
@@ -163,16 +163,13 @@ class PostsImport implements ShouldQueue
     private function getType($row)
     {
         $i = $this->userColumns['type'];
-        $default = 'sell';
+        $default = PostType::SELL;
 
         if (!$i) {
             return $default;
         }
 
-        $val = strtolower($row[$i]);
-        $val = trim($val);
-
-        return $val ? $val : $default;
+        return PostType::getByCode($row[$i]);
     }
 
     private function getCondition($row)
@@ -266,6 +263,7 @@ class PostsImport implements ShouldQueue
         $title = $row[$this->userColumns['title']];
         $description = $row[$this->userColumns['description']];
         $textLocale = (new TranslationService())->detectLanguage("$title. $description");
+        $c = $post->category;
 
         $post->saveTranslations([
             'slug' => [
@@ -276,6 +274,12 @@ class PostsImport implements ShouldQueue
             ],
             'description' => [
                 $textLocale => $description
+            ],
+            'meta_title' => [
+                $textLocale => Post::generateMetaTitleHelper($title, $c->name)
+            ],
+            'meta_description' => [
+                $textLocale => Post::generateMetaDescriptionHelper($description)
             ]
         ]);
 

@@ -663,17 +663,18 @@ const Toast = Swal.mixin({
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
-    didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
+    // didOpen: (toast) => {
+    //     toast.addEventListener('mouseenter', Swal.stopTimer)
+    //     toast.addEventListener('mouseleave', Swal.resumeTimer)
+    // }
 });
 
 // show message depends on role and fade out it after 3 sec
 function showToast(title, icon=true) {
 	Toast.fire({
         icon: icon ? 'success' : 'error',
-        title: title
+        title: title,
+        // toast: false
     });
 }
 

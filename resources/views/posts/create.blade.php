@@ -153,14 +153,14 @@
                                         </div>
                                         <span class="rci-separator"></span>
                                         <div class="rci-input" data-singlecost>
-                                            <input class="input format-cost" name="cost" type="text"/>
+                                            <input class="input format-cost price-chars-allowed" name="cost" type="text"/>
                                         </div>
                                         <div class="rci-input d-none" data-doublcost>
-                                            <input class="input format-cost" name="cost_from" type="text" placeholder="From"/>
+                                            <input class="input format-cost price-chars-allowed" name="cost_from" type="text" placeholder="From"/>
                                         </div>
                                         <span class="rci-separator d-none" data-doublcost>-</span>
                                         <div class="rci-input d-none" data-doublcost>
-                                            <input class="input format-cost" name="cost_to" type="text" placeholder="To"/>
+                                            <input class="input format-cost price-chars-allowed" name="cost_to" type="text" placeholder="To"/>
                                         </div>
                                         <span class="rci-separator">per</span>
                                         <div class="rci-input">

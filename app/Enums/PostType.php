@@ -29,6 +29,20 @@ enum PostType:int
         return array_filter($all, fn ($t) => in_array($t, $types), ARRAY_FILTER_USE_KEY);
     }
 
+
+    public static function getByCode($code)
+    {
+        return match ($code) {
+            'sell' => 0,
+            'buy' => 1,
+            'rent' => 2,
+            'lease' => 3,
+            'provide' => 4,
+            'request' => 5,
+            default => null
+        };
+    }
+
     public static function getReadable($val)
     {
         return match ($val) {

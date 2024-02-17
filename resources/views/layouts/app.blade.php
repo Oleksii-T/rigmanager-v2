@@ -123,7 +123,7 @@
 					</div>
 					<div class="footer-col">
 						<ul class="footer-nav">
-							<li><a href="https://www.linkedin.com/company/rigmanagers-com/about">LinedIn</a></li>
+							<li><a href="https://www.linkedin.com/company/rigmanagers-com/about">LinkedIn</a></li>
 							<li><a href="https://www.facebook.com/rigmanagerscom">Facebook</a></li>
 						</ul>
 					</div>

@@ -196,12 +196,23 @@ if (!function_exists('infoForActivityLog')) {
         $requestParams = request()->all();
         unset($requestParams['_token']);
 
-        try {
-            $location = config('location.testing.enabled')
-                ? null
-                : \Stevebauman\Location\Facades\Location::get($ip)->countryCode;
-        } catch (\Throwable $th) {
-            \Log::error('Can not detect location for activity log: ' . $th->getMessage());
+        if ($ip != '127.0.0.1') {
+            try {
+                // Get the current log level
+                // $originalLogLevel = \Illuminate\Support\Facades\Log::getLogger()->getHandlers()[0]->getLevel();
+        
+                // Set the log level to emergency to suppress all other log levels
+                // \Illuminate\Support\Facades\Log::getLogger()->getHandlers()[0]->setLevel(\Monolog\Logger::EMERGENCY);
+        
+                $location = config('location.testing.enabled')
+                    ? null
+                    : \Stevebauman\Location\Facades\Location::get($ip)->countryCode;
+
+                // Restore the original log level
+                // \Illuminate\Support\Facades\Log::getLogger()->getHandlers()[0]->setLevel($originalLogLevel);
+            } catch (\Throwable $th) {
+                \Log::error("Can not detect location for activity log ($ip): " . $th->getMessage());
+            }
         }
 
         try {

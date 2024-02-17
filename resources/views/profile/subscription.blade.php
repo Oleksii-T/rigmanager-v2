@@ -37,7 +37,11 @@
                         <div class="pack-name">Active subscription «<span class="orange">{{$sub->plan->title}}</span>»</div>
                         <div class="pack-text">
                             @if ($sub->status == 'canceled')
-                                <span>Subscription is canceled. It will not be prolonged.</span>
+                                <span>
+                                    Subscription is canceled. It will not be prolonged.
+                                    <br>
+                                    Paid functionalities are <b>active</b> until paid period end.
+                                </span>
                             @else
                                 <x-sub-cancel-form btnclass="cancel-sub-btn" btntext="Cancel subscription" />
                             @endif

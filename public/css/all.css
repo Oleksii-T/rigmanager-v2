@@ -3593,6 +3593,12 @@ article ul li:before {
 		margin: -67px 0 0;
 		padding: 100px 0 60px;
 	}
+    .header-cabinet {
+        display: none;
+    }
+    .top-form-line .twitter-typeahead {
+        width: 100%;
+    }
 	.top-section h1 {
 		max-width: none;
 		font-size: 22px;

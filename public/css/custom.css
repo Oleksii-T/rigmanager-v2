@@ -228,6 +228,13 @@
     color: white;
     font-size: 80%;
 }
+.swal2-popup.swal2-toast .swal2-title {
+    font-size: 0.8em !important;
+    line-height: 20px;
+}
+.swal2-popup.swal2-toast {
+    padding: 0.5em !important;
+}
 
 
 /* typeahead */
@@ -375,5 +382,12 @@
     .col-6 {
         flex: 0 0 100%;
         max-width: 100%;
+    }
+    .swal2-popup.swal2-toast .swal2-title {
+        font-size: 0.8em !important;
+        line-height: 18px;
+    }
+    .swal2-popup.swal2-toast {
+        padding: 0.4em !important;
     }
 }

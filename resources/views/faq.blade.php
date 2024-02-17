@@ -16,7 +16,7 @@
 
 		<div class="content">
 			<h1>FAQ</h1>
-			<div class="content-top-text">{{__('ui.faq.intro')}} <a href="#">{{__('ui.footerContact')}}</a>.</div>
+			<div class="content-top-text">{{__('ui.faq.intro')}} <a href="{{route('feedbacks.create')}}">{{__('ui.footerContact')}}</a>.</div>
 			<div class="faq">
                 @foreach ($faqs as $faq)
                     <div class="faq-item">

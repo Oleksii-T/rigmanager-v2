@@ -88,16 +88,12 @@ class ScrapePostsCepai extends Command
         $description = $scrapedPost['description'] . "\r\n\r\n" . $scrapedPost['body'];
         $description = str_replace('</p>', "\r\n</p>", $description);
         $description = $this->descriptionEscape($description);
-        $description = str_replace('&atilde;&#128;&#129;', ', ', $description);
+        $description = str_replace('&amp;', '&', $description);
         $description = str_replace('&iuml;&frac14;&#140;', ', ', $description);
         $description = str_replace('&iuml;&frac14;&#136;', ' (', $description);
         $description = str_replace('&iuml;&frac14;&#137;', ') ', $description);
-        $description = str_replace('&iuml;&frac14;&#155;', '; ', $description);
         $description = str_replace('&iuml;&frac14;&#141;', '-', $description);
         $description = str_replace('&iuml;&frac14;&#139;', '+', $description);
-        $description = str_replace('&atilde;&#128;&#130;', '. ', $description);
-        $description = str_replace('&iuml;&frac14;&#154;', ': ', $description);
-        $description = str_replace('&iuml;&frac12;&#158;', '~', $description);
         $description = str_replace('&acirc;&#132;&#131;', 'C', $description);
         $description = str_replace('&iuml;&frac14;&#156;', '<', $description);
         $description = str_replace('&iuml;&#129;&not;', '', $description);

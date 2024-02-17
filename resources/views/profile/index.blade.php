@@ -66,7 +66,7 @@
                     {{-- bio --}}
                     <div class="bio-container">
                         <p class="bio-header">@lang('ui.bio')</p>
-                        <textarea name="info[bio]" class="bio-content" placeholder="@lang('ui.bioPh')">{{$info->bio}}</textarea>
+                        <textarea name="info[bio]" class="bio-content" placeholder="@lang('ui.bioPh')">{{$info?->bio}}</textarea>
                         <div data-input="info.bio" class="form-error"></div>
                     </div>
 
@@ -76,7 +76,7 @@
                             <div class="prod-info-item">
                                 <div class="prod-info-name">@lang('ui.website')</div>
                                 <div class="prod-info-text">
-                                    <input type="text" name="info[website]" class="input" placeholder="@lang('ui.websitePh')" value="{{$info->website}}">
+                                    <input type="text" name="info[website]" class="input" placeholder="@lang('ui.websitePh')" value="{{$info?->website}}">
                                     <div data-input="info.website" class="form-error"></div>
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
                             <div class="prod-info-item">
                                 <div class="prod-info-name">Facebook</div>
                                 <div class="prod-info-text">
-                                    <input type="text" name="info[facebook]" class="input" placeholder="@lang('ui.facebookPh')" value="{{$info->facebook}}">
+                                    <input type="text" name="info[facebook]" class="input" placeholder="@lang('ui.facebookPh')" value="{{$info?->facebook}}">
                                     <div data-input="info.facebook" class="form-error"></div>
                                 </div>
                             </div>
@@ -104,7 +104,7 @@
                             <div class="prod-info-item">
                                 <div class="prod-info-name">LinkedIn</div>
                                 <div class="prod-info-text">
-                                    <input type="text" name="info[linkedin]" class="input" placeholder="@lang('ui.linkedinPh')" value="{{$info->linkedin}}">
+                                    <input type="text" name="info[linkedin]" class="input" placeholder="@lang('ui.linkedinPh')" value="{{$info?->linkedin}}">
                                     <div data-input="info.linkedin" class="form-error"></div>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
                         <button type="button" class="header-button" id="add-cts-email">@lang('ui.add')+</button>
                     </p>
                     <div class="row" id="cts-email-inputs" data-defaultph="{{$currentUser->email}}">
-                        @forelse ($info->emails??[] as $i => $email)
+                        @forelse ($info?->emails??[] as $i => $email)
                             <div class="col-4 cts-el">
                                 <div class="cts-input">
                                     <input type="text" class="input" name="info[emails][]" value="{{$email}}">
@@ -158,7 +158,7 @@
                         <button type="button" class="header-button" id="add-cts-phone">@lang('ui.add')+</button>
                     </p>
                     <div class="row" id="cts-phone-inputs" data-defaultph="+0-000-000-000">
-                        @foreach ($info->phones?:[null] as $i => $phone)
+                        @foreach ($info?->phones?:[null] as $i => $phone)
                             <div class="col-4 cts-el {{$phone ? '' : 'd-none'}}">
                                 <div class="cts-input">
                                     <input type="text" class="input" name="info[phones][]" placeholder="{{$loop->first ? '+0-000-000-000' : ''}}" value="{{$phone}}">

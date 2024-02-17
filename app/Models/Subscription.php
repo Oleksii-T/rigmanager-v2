@@ -62,6 +62,11 @@ class Subscription extends Model
         return (bool)$this->cycle;
     }
 
+    public function isStripe()
+    {
+        return $this->provider == 'stripe';
+    }
+
     public static function dataTable($query)
     {
         return DataTables::of($query)

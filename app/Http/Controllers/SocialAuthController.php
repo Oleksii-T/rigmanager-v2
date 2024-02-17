@@ -29,6 +29,8 @@ class SocialAuthController extends Controller
                 'last_active_at' => now(),
             ]);
 
+            $user->info()->create([]);
+
             event(new \Illuminate\Auth\Events\Verified($user));
         }
 

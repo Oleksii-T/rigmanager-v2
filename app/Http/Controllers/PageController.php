@@ -29,7 +29,7 @@ class PageController extends Controller
     public function categories($type=null)
     {
         // cache()->forget("categoryes-$type");
-        $categories = cache()->remember("categoryes-$type", 60*5, function () use ($type) { 
+        $categories = cache()->remember("categoryes-$type", 60*60*24, function () use ($type) { 
             $isService = $type == 'service';
             $categories = Category::query()
                 ->active()

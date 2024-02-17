@@ -31,7 +31,7 @@ class SubscriptionController extends Controller
     {
         $error = SubscriptionService::cancel();
 
-        if (!$error) {
+        if ($error) {
             return $this->jsonError($error);
         }
 

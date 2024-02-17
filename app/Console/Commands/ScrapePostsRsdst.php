@@ -95,6 +95,9 @@ class ScrapePostsRsdst extends Command
         }
         $desc = implode("\r\n", $descriptions);
         $desc = str_replace('Technical parameters', '', $desc);
+        $desc = str_replace('&acirc;&#133;&cent;', 'Ⅲ', $desc);
+        $desc = str_replace('&iuml;&frac14;&#158;', '>', $desc);
+        $desc = str_replace('&auml;&cedil;&ordm;', '为', $desc);
         $desc = $this->descriptionEscape($desc);
 
         return $desc;

@@ -21,6 +21,11 @@ $(document).ready(function() {
         // Your custom options
     });
 
+    // filter numerics for price input
+    $(".price-chars-allowed").on('input', function(e){
+        $(this).val($(this).val().replace(/[^0-9.]/g, ''));
+    });
+
     //hide/show translated/origin title/description
     $('.post-translated-text-toggle a').click(function(e){
         e.preventDefault();

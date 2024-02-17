@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Notification;
 use App\Models\Subscription;
 use App\Services\StripeService;
@@ -50,22 +51,31 @@ class SubscriptionService
             'provider' => 'stripe',
             'status' => $subscription['status'],
         ]);
+        
+        dlog("SubscriptionService@create"); //! LOG
 
         if ($activeSub) {
             // deactivate previous sub completely
+            dlog(" old sub detected: $activeSub->id"); //! LOG
+            
+            $activeSubCycle = $activeSub->cycle;
+
+            dlog(" prev cycle: $activeSubCycle?->id"); //! LOG
 
             if ($activeSub->status == 'canceled') {
                 // sub already was canceled by user
                 self::makeNotif($user, NG::SUB_CANCELED_TERMINATED_CAUSE_NEW, $activeSub->plan, $activeSub);
             } else {
                 // cancel sub manualy
-                $stripeService->cancelSubscription($activeSub->external_id);
+                if ($activeSub->isStripe()) {
+                    $stripeService->cancelSubscription($activeSub->external_id);
+                }
                 $activeSub->cancel();
 
                 self::makeNotif($user, NG::SUB_TERMINATED_CAUSE_NEW, $activeSub->plan, $activeSub);
             }
 
-            $activeSub->cycle->deactivate(true, false);
+            $activeSubCycle->deactivate(true, false);
         }
 
         $cycle = $sub->cycles()->create([
@@ -80,6 +90,13 @@ class SubscriptionService
         if ($subscription->status != 'active') {
             self::makeNotif($user, NG::SUB_CAN_NOT_AUTO_COLLECT, $subscriptionPlan, $sub);
         }
+
+        User::informAdmins('Subscrption created', [
+            'subscription_id' => $subscription->id,
+            'subscription_plan_title' => $subscriptionPlan->title,
+            'user_id' => $user->id,
+            'user_name' => $user->name
+        ]);
 
         return null;
     }
@@ -244,7 +261,7 @@ class SubscriptionService
         }
         
         if ($subscription->status == 'incomplete' && $object['status'] == 'incomplete_expired') {
-            // Canceling just created subscription which was not paid manually.
+            // Canceling just created subscription which was not paid manually (first sub payment).
             // Manual payment is required when automatic collection can not be executed.
             // It can occure if customer`s payment method have security checks enabled (3DS).
             // Stripe will send a webhook when payment window runs out.
@@ -255,6 +272,13 @@ class SubscriptionService
             $subscription->cancel();
             $cycle->deactivate(true);
             self::makeNotif($user, NG::SUB_INCOMPLETED_EXPIRED, $plan, $subscription);
+
+            User::informAdmins('Subscrption canceled due to "customer.subscription.updated" webhook (first sub payment).', [
+                'subscription_id' => $subscription->id,
+                'subscription_plan_title' => $plan->title,
+                'user_id' => $user->id,
+                'user_name' => $user->name
+            ]);
 
             return;
         }
@@ -321,16 +345,19 @@ class SubscriptionService
         // Stripe will send a webhook when payment window runs out.
         // The payment window and new status should be set in 
         // Stripe > Settings > Subscriptions and emails > Manage payments that require confirmation.
+        // OR: this webhook can be received when user sub canceled (becase of new sub or manual sub cancel).
 
-        dlog("  cancel sub - payment not done"); //! LOG
+        dlog("  cancel sub - payment not done (or sub canceled manualy\programmingly)"); //! LOG
 
         $subscription = Subscription::query()
             ->where('external_id', $object['id'])
             ->whereHas('cycle')
+            ->where('status', 'incomplete') // to cancel only subs which was not paid
             ->with(['cycle', 'plan', 'user'])
             ->first();
 
         if (!$subscription) {
+            dlog("   sub not found"); //! LOG
             return;
         }
 
@@ -341,6 +368,13 @@ class SubscriptionService
         $subscription->cancel();
         $cycle->deactivate(true);
         self::makeNotif($user, NG::SUB_CANCELED, $plan, $subscription);
+
+        User::informAdmins('Subscrption canceled due to "customer.subscription.deleted" webhook', [
+            'subscription_id' => $subscription->id,
+            'subscription_plan_title' => $plan->title,
+            'user_id' => $user->id,
+            'user_name' => $user->name
+        ]);
     }
 
     // Webhook.
@@ -397,10 +431,20 @@ class SubscriptionService
             return 'No active subscrption found';
         }
 
-        $stripeService->cancelSubscription($activeSub->external_id);
+        if ($activeSub->isStripe()) {
+            $stripeService->cancelSubscription($activeSub->external_id);
+        }
+
         $activeSub->cancel();
 
         self::makeNotif($user, NG::SUB_CANCELED, $activeSub->plan, $activeSub);
+
+        User::informAdmins('Subscrption canceled', [
+            'subscription_id' => $activeSub->id,
+            'subscription_plan_title' => $activeSub->plan->title,
+            'user_id' => $user->id,
+            'user_name' => $user->name
+        ]);
 
         return null;
     }

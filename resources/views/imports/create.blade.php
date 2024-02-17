@@ -172,7 +172,7 @@
                 $('#import-file').val('');
             })
 
-            // check required column select and calumn dublicates
+            // check required column select and column dublicates
             $('.import-column-selector').on('selectmenuchange', function() {
                 let map = {};
                 $('.import-column-selector').closest('.select-block').removeClass('has-error');

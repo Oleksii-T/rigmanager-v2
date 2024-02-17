@@ -147,14 +147,14 @@
                                         </div>
                                         <span class="rci-separator"></span>
                                         <div class="rci-input {{$post->is_double_cost ? 'd-none' : ''}}" data-singlecost>
-                                            <input class="input format-cost" name="cost" type="text" value="{{$post->cost}}" />
+                                            <input class="input format-cost price-chars-allowed" name="cost" type="text" value="{{$post->cost}}" />
                                         </div>
                                         <div class="rci-input {{$post->is_double_cost ? '' : 'd-none'}}" data-doublcost>
-                                            <input class="input format-cost" name="cost_from" type="text" placeholder="From" value="{{$post->cost_from}}" />
+                                            <input class="input format-cost price-chars-allowed" name="cost_from" type="text" placeholder="From" value="{{$post->cost_from}}" />
                                         </div>
                                         <span class="rci-separator {{$post->is_double_cost ? '' : 'd-none'}}" data-doublcost>-</span>
                                         <div class="rci-input {{$post->is_double_cost ? '' : 'd-none'}}" data-doublcost>
-                                            <input class="input format-cost" name="cost_to" type="text" placeholder="To" value="{{$post->cost_to}}"/>
+                                            <input class="input format-cost price-chars-allowed" name="cost_to" type="text" placeholder="To" value="{{$post->cost_to}}"/>
                                         </div>
                                         <span class="rci-separator">per</span>
                                         <div class="rci-input">

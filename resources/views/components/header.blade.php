@@ -138,21 +138,31 @@
             <div class="mob-nav">
                 <div class="holder">
                     <ul class="mob-nav-list">
-                        <li><a href="{{route('search')}}">@lang('ui.catalog')</a></li>
+                        <li><a href="{{route('search')}}">@lang('ui.eqCatalog')</a></li>
+                        <li><a href="{{route('search-services')}}">@lang('ui.seCatalog')</a></li>
+                    </ul>
+                    <ul class="mob-nav-list">
+                        <li><a href="{{route('categories')}}">@lang('ui.eqCategories')</a></li>
+                        <li><a href="{{route('categories', 'service')}}">@lang('ui.seCategories')</a></li>
+                    </ul>
+                    <ul class="mob-nav-list">
+                        <li><a href="{{route('search', ['types'=>['sell', 'lease']])}}">@lang('ui.introSellEq')</a></li>
+                        <li><a href="{{route('search', ['types'=>['buy', 'rent']])}}">@lang('ui.introBuyEq')</a></li>
+                        <li><a href="{{route('search-services')}}">@lang('ui.introSe')</a></li>
                     </ul>
                     <ul class="mob-nav-list">
                         @auth
                             <li><a href="{{route('profile.index')}}">@lang('ui.cabinet')</a></li>
                             <li><a href="{{route('profile.posts')}}">@lang('ui.myPosts')</a></li>
                             <li><a href="{{route('profile.favorites')}}">@lang('ui.favourites')</a></li>
+                            <li><a href="{{route('logout')}}">@lang('ui.signOut')</a></li>
                         @else
                             <li><a href="{{route('login')}}">@lang('ui.signIn')</a></li>
                         @endauth
-                        <li><a href="{{route('posts.create')}}">@lang('ui.addPost')</a></li>
                     </ul>
                     <ul class="mob-nav-list">
-                        <li><a href="{{route('search', ['types'=>['sell', 'lease']])}}">@lang('ui.introSellEq')</a></li>
-                        <li><a href="{{route('search', ['types'=>['buy', 'rent']])}}">@lang('ui.introBuyEq')</a></li>
+                        <li><a href="{{route('posts.create')}}" style="color: #ff8d12">@lang('ui.addEqPost')</a></li>
+                        <li><a href="{{route('posts.create', 'service')}}" style="color: #ff8d12">@lang('ui.addSePost')</a></li>
                     </ul>
                     <ul class="mob-nav-list">
                         <li><a href="{{route('about')}}">@lang('ui.footerAbout')</a></li>

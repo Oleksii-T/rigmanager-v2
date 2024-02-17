@@ -375,6 +375,11 @@ trait ScrapePosts
         $desc = str_replace('&nbsp;', ' ', $desc);
         $desc = str_replace("\u{A0}", ' ', $desc); // same as &nbsp;
         $desc = str_replace('&acirc;&#128;&cent;', '- ', $desc);
+        $desc = str_replace('&atilde;&#128;&#129;', ', ', $desc);
+        $desc = str_replace('&iuml;&frac14;&#154;', ': ', $desc);
+        $desc = str_replace('&iuml;&frac12;&#158;', '~', $desc);
+        $desc = str_replace('&iuml;&frac14;&#155;', '; ', $desc);
+        $desc = str_replace('&atilde;&#128;&#130;', '. ', $desc);
         $desc = str_replace('&acirc;&#128;&#157;', '"', $desc);
         $desc = str_replace('&acirc;&#128;&sup3;', '" ', $desc); // inches
         $desc = str_replace('&acirc;&#128;&#156;', '"', $desc);
