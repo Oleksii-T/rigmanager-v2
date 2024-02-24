@@ -637,7 +637,7 @@ class Post extends Model
         }
 
         if ($types && count($types) < count(PostType::values())) {
-            $posts->whereIn('type', $types);
+            $posts->whereIn('posts.type', $types);
         }
 
         if ($urgent !== null) {

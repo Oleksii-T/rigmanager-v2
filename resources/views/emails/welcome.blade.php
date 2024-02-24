@@ -27,9 +27,11 @@ If there is any question\suggestions\complaints, please, <a target="_blank" href
 Regards,<br>
 {{ config('app.name') }}
 
+{{--
 @component('mail::table')
 ||
 |-|
 |Some functionalities described above require a payment to be used - <a target="_blank" href="{{route('plans.index')}}">see subscriptions</a>.|
 @endcomponent
+--}}
 @endcomponent

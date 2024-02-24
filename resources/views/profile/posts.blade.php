@@ -84,8 +84,8 @@
                     <div class="select-block">
                         <select class="styled apply-selected-action">
                             <option value="">Actions</option>
-                            <option value="activete">Activete</option>
-                            <option value="deactivate">Deactivete</option>
+                            <option value="activete">Activate</option>
+                            <option value="deactivate">Deactivate</option>
                             <option value="trash">Trash</option>
                             <option value="recover">Recover</option>
                         </select>

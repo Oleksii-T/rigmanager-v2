@@ -62,7 +62,7 @@
                         <li><a href="{{route('terms')}}">{{__('ui.footerTerms')}}</a></li>
                         <li><a href="{{route('privacy')}}">{{__('ui.footerPrivacy')}}</a></li>
                         <li><a href="{{route('site-map')}}">{{__('ui.footerSiteMap')}}</a></li>
-                        <li><a href="{{route('plans.index')}}">{{__('ui.footerSubscription')}}</a></li>
+                        {{-- <li><a href="{{route('plans.index')}}">{{__('ui.footerSubscription')}}</a></li> --}}
                         <li><a href="{{route('feedbacks.create')}}">{{__('ui.footerContact')}}</a></li>
                         <li><a href="{{route('faq')}}">FAQ</a></li>
 					</ul>
