@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('original_name');
             $table->string('type')->nullable();
+            $table->string('alt')->nullable();
             $table->double('size')->nullable();
             $table->integer('order')->nullable();
             $table->string('group')->nullable();
+            $table->json('optimizations')->nullable();
             $table->timestamps();
         });
     }

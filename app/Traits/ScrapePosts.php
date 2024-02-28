@@ -297,6 +297,8 @@ trait ScrapePosts
         if (!$paths) {
             return;
         }
+        
+        $attachments = [];
 
         foreach ($paths as $path) {
             $disk = Storage::disk('aimages');
@@ -315,7 +317,7 @@ trait ScrapePosts
                 'size' => $size
             ]);
         }
-
+        ProcessPostImages::dispatch($attachments);
     }
 
     private function addTranslations($post, $title, $description)

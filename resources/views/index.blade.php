@@ -101,7 +101,7 @@
         <div class="holder">
             <div class="main-about-block">
                 <div class="main-about-logo">
-                    <img src="{{asset('icons/logo-big.svg')}}" alt="">
+                    <img src="{{asset('icons/logo-big.svg')}}" alt="rigmanagers.com logo">
                 </div>
                 <p>@lang('ui.epilogue1')</p>
                 <p>@lang('ui.epilogue2')</p>

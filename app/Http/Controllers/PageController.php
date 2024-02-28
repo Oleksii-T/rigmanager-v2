@@ -44,9 +44,11 @@ class PageController extends Controller
                 $category->url = $category->getUrl(false, $isService);
                 $category->name = $category->name;
                 foreach ($category->childs as &$child) {
+                    $child->posts_count = $child->postsAll()->visible()->count();
                     $child->url = $child->getUrl(false, $isService);
                     $child->name = $child->name;
                     foreach ($child->childs as &$child2) {
+                        $child2->posts_count = $child2->posts()->visible()->count();
                         $child2->url = $child2->getUrl(false, $isService);
                         $child2->name = $child2->name;
                     }

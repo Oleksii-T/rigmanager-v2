@@ -1,7 +1,7 @@
 @extends('layouts.page')
 
 @section('meta')
-
+    @include('components.search-metas')
 @endsection
 
 @section('bc')
@@ -10,6 +10,15 @@
 
 @section('content')
     <span class="hidden" data-category="{{isset($category) ? $category->id : ''}}" page-data></span>
+
+    @if (isset($category) && $category->add_desc_short && strip_tags($category->add_desc_short))
+        <div class="search-category-short-description">
+            {!!$category->add_desc_short!!}
+            @if ($category->add_desc)
+                <a href="#search-category-description">Read more</a>
+            @endif
+        </div>
+    @endif
 
     <div class="main-block">
         <aside class="side">
@@ -96,7 +105,7 @@
             </div>
             <div class="side-add" id="add-to-mailer-ad">
                 <div class="side-add-text">@lang('ui.mailerSuggestText')</div>
-                <div class="side-add-icon"><img src="{{asset('icons/add-icon.svg')}}" alt=""></div>
+                <div class="side-add-icon"><img src="{{asset('icons/add-icon.svg')}}" alt="add icon"></div>
                 <button data-url="{{route('mailers.store')}}" class="button add-request-to-mailer">@lang('ui.add')</button>
             </div>
         </aside>
@@ -105,13 +114,20 @@
             <div class="searched-categories-content"></div>
             <div class="searched-content"></div>
             <div class="searched-loading hidden">
-                <img src="{{asset('icons/loading.svg')}}" alt="">
+                <img src="{{asset('icons/loading.svg')}}" alt="loading">
             </div>
             <div class="searched-empty hidden">
                 <p>@lang('ui.searchFail'). <a href="{{ url()->previous() }}">@lang('ui.serverErrorGoBack')</a></p>
             </div>
         </div>
     </div>
+
+    @if (isset($category) && $category->add_desc && strip_tags($category->add_desc))
+        <div id="search-category-description">
+            {!!$category->add_desc!!}
+        </div>
+    @endif
+
 @endsection
 
 @section('scripts')

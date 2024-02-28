@@ -68,19 +68,19 @@
             <div class="reg-social-text">@lang('ui.socialSignIn')</div>
             <div class="social-buttons">
                 @if (\App\Models\Setting::get('facebook_auth_enabled'))
-                    <a href="{{route('auth.social', 'facebook')}}" class="social-fb"><img src="{{asset('icons/fb.svg')}}" alt=""></a>
+                    <a href="{{route('auth.social', 'facebook')}}" class="social-fb"><img src="{{asset('icons/fb.svg')}}" alt="facebook logo"></a>
                 @endif
                 @if (\App\Models\Setting::get('google_auth_enabled'))
-                    <a href="{{route('auth.social', 'google')}}" class="social-google"><img src="{{asset('icons/google.svg')}}" alt=""></a>
+                    <a href="{{route('auth.social', 'google')}}" class="social-google"><img src="{{asset('icons/google.svg')}}" alt="google logo"></a>
                 @endif
                 @if (\App\Models\Setting::get('twitter_auth_enabled'))
-                    <a href="{{route('auth.social', 'twitter')}}" class="social-twitter"><img src="{{asset('icons/twitter.svg')}}" alt=""></a>
+                    <a href="{{route('auth.social', 'twitter')}}" class="social-twitter"><img src="{{asset('icons/twitter.svg')}}" alt="twitter logo"></a>
                 @endif
                 @if (\App\Models\Setting::get('linkedin_auth_enabled'))
-                    <a href="{{route('auth.social', 'linkedin')}}" class="social-linkedin"><img src="{{asset('icons/linkedin.svg')}}" alt=""></a>
+                    <a href="{{route('auth.social', 'linkedin')}}" class="social-linkedin"><img src="{{asset('icons/linkedin.svg')}}" alt="linkedin logo"></a>
                 @endif
                 @if (\App\Models\Setting::get('apple_auth_enabled'))
-                    <a href="{{route('auth.social', 'apple')}}" class="social-apple"><img src="{{asset('icons/apple.svg')}}" alt=""></a>
+                    <a href="{{route('auth.social', 'apple')}}" class="social-apple"><img src="{{asset('icons/apple.svg')}}" alt="apple logo"></a>
                 @endif
             </div>
         </div>

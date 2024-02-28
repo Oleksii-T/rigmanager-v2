@@ -69,39 +69,21 @@ class DevController extends Controller
     {
         $d = [];
 
-        // $json = file_get_contents(base_path('storage/scraper_jsons/cepai.json'));
+        $as = \App\Models\Attachment::where('size', '>', 300000)->get();
 
-        // $scrapedPosts = json_decode($json, true);
+        // $intervention = \Image::make($a->path); 
 
-        // foreach ($scrapedPosts as $url => $p) {
-        //     $p['url'] = $url;
+        \App\Jobs\ProcessPostImages::dispatch($as);
 
-        //     if ($p['title'] == 'Temperature transmitter with thermocouple') {
-        //         dump($p);
-        //     }
-        // }
+        // $categories = \App\Models\Category::all();
+        // foreach ($categories as $c) {
+        //     $t = [
+        //         'meta_title' => [
+        //             'en' => $c->name . ' for sale on rigmanagers.com'
+        //         ],
+        //     ];
 
-        // dd($scrapedPosts);
-
-
-        // 9 - cepai
-        // 12 - goldeman
-        // 15 - lakepetro
-        // 14 - oilmanchina
-        // 7 - rsd
-        // 16 - cnsanmon
-        // 30 - paddler
-        // 32 - DTOsupply
-
-        // $posts = Post::query()
-        //     ->withTrashed()
-        //     ->where('user_id', 32)
-        //     ->get();
-
-        // dump("Posts: " . $posts->count());
-
-        // foreach ($posts as $p) {
-        //     $p->forceDelete();
+        //     $c->saveTranslations($t);
         // }
 
         dd($d);

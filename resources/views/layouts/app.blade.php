@@ -12,7 +12,7 @@
 	@yield('meta')
 	<link rel="icon" href="{{asset('icons/favicon.ico')}}">
 	<meta property="og:image" content="{{asset('icons/og-favicon.png')}}" />
-
+    <link rel="canonical" href="https://rigmanagers.com{{request()->getRequestUri()}}" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/all.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}" />

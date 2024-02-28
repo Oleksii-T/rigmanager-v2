@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /login
+Disallow: /register
+Disallow: /profile/*
+Disallow: /contact-us
+Sitemap: https://rigmanagers.com/sitemap.xml

@@ -31,6 +31,10 @@ class Category extends Model
     const TRANSLATABLES = [
         'name',
         'slug',
+        'meta_title',
+        'meta_description',
+        'add_desc_short',
+        'add_desc',
         'suggestions'
     ];
 
@@ -88,6 +92,26 @@ class Category extends Model
     public function name(): Attribute
     {
         return $this->getTranslatedAttr(__FUNCTION__);
+    }
+
+    public function metaTitle(): Attribute
+    {
+        return $this->getTranslatedAttr('meta_title');
+    }
+
+    public function metaDescription(): Attribute
+    {
+        return $this->getTranslatedAttr('meta_description');
+    }
+
+    public function addDescShort(): Attribute
+    {
+        return $this->getTranslatedAttr('add_desc_short');
+    }
+
+    public function addDesc(): Attribute
+    {
+        return $this->getTranslatedAttr('add_desc');
     }
 
     public function suggestions(): Attribute

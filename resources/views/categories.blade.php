@@ -7,7 +7,7 @@
 @endsection
 
 @section('bc')
-    <x-bci :text="trans('ui.categories')" i="2" islast="1" />
+    <x-bci :text="trans('ui.eqCategories')" i="2" islast="1" />
 @endsection
 
 @section('content')
@@ -24,7 +24,7 @@
             </div>
         </aside>
         <div class="content">
-            <h1>@lang('ui.categories')</h1>
+            <h1>@lang('ui.eqCategories')</h1>
             <div class="content-top-text catalog-help">@lang('ui.catalogHelp')</div>
             <div class="category">
                 @foreach ($categories as $category)
@@ -33,7 +33,7 @@
                             @if ($category->image)
                                 <div class="category-img">
                                     <a href="{{$category->url}}">
-                                        <img src="{{$category->image->url}}" alt="{{$category->image->alt}}">
+                                        <img src="{{$category->image->url}}" alt="{{$category->name}}">
                                     </a>
                                 </div>
                             @endif
@@ -46,16 +46,22 @@
                             @if ($category->childs->isNotEmpty())
                                 <ul class="category-list">
                                     @foreach ($category->childs as $childCat)
+                                        @if (!$childCat->posts_count)
+                                            @continue
+                                        @endif
                                         <li>
                                             <a href="{{$childCat->url}}">
                                                 {{$childCat->name}}
                                             </a>
                                             @if ($childCat->childs->isNotEmpty())
                                                 @foreach ($childCat->childs as $childChildCat)
+                                                    @if (!$childChildCat->posts_count)
+                                                        @continue
+                                                    @endif
                                                     <ul class="category-sublist">
                                                         <li>
                                                             <a href="{{$childChildCat->url}}">
-                                                                {{$childChildCat->name}}
+                                                                {{$childChildCat->name}} ({{$childChildCat->posts_count}})
                                                             </a>
                                                         </li>
                                                     </ul>

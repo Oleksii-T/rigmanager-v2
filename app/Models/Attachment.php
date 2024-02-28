@@ -33,11 +33,16 @@ class Attachment extends Model
         'original_name',
         'type',
         'size',
+        'alt',
         'order',
+        'optimizations',
         'attachmentable_id',
         'attachmentable_type'
     ];
 
+    protected $casts = [
+        'optimizations' => 'array'
+    ];
     protected $appends = [
         'url'
     ];

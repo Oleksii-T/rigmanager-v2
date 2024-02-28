@@ -20,7 +20,8 @@ class ProcessPostImages implements ShouldQueue
     protected $images;
     protected $doConvert;
     protected $doWaterMark;
-    protected $doResize;
+    protected $resizeVersions;
+    protected $optimizeSize;
 
     /**
      * Create a new job instance.
@@ -30,7 +31,8 @@ class ProcessPostImages implements ShouldQueue
         $this->images = $images;
         $this->doConvert = Setting::get('convert_uploaded_post_images_to_webp', true, true);
         $this->doWaterMark = Setting::get('add_water_mark_to_uploaded_post_images', true, true);
-        $this->doResize = Setting::get('resize_uploaded_post_images', true, true);
+        $this->resizeVersions = Setting::get('resized_versions_of_uploaded_post_images', true, true);
+        $this->optimizeSize = Setting::get('resized_uploaded_post_images', true, true);
     }
 
     /**
@@ -39,16 +41,56 @@ class ProcessPostImages implements ShouldQueue
     public function handle(): void
     {
         foreach ($this->images as $image) {
+            $update = $image->optimizations ?? [];
+
+            if ($this->optimizeSize) {
+                try {
+                    ProcessImageService::resize(1920, null, $image->path);
+                    $update['resized'] = true;
+                } catch (\Throwable $th) {
+                    report($th);
+                }
+            }
+
             if ($this->doConvert) {
-                $image = $this->convert($image);
+                try {
+                    $image = $this->convert($image);
+                    $update['converted'] = true;
+                } catch (\Throwable $th) {
+                    report($th);
+                }
             }
 
             if ($this->doWaterMark) {
-                ProcessImageService::watermark($image->path);
+                try {
+                    ProcessImageService::watermark($image->path);
+                    $update['water_marked'] = true;
+                } catch (\Throwable $th) {
+                    report($th);
+                }
             }
 
-            if ($this->doResize) {
-                $this->resize($image);
+            if ($this->resizeVersions) {
+                try {
+                    $this->resize($image);
+                    $update['resized_copies'] = true;
+                } catch (\Throwable $th) {
+                    report($th);
+                }
+            }
+
+            $newSize = filesize($image->path);
+
+            if ($newSize != $image->size) {
+                $image->update([
+                    'size' => $newSize
+                ]);
+            }
+
+            if ($update) {
+                $image->update([
+                    'optimizations' => $update
+                ]);
             }
         }
     }

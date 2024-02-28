@@ -3,7 +3,7 @@
         <div class="header-block">
             <a href="" class="mob-nav-icon"><span class="mob-nav-block"></span></a>
             <div class="header-logo">
-                <a href="{{route('index')}}"><img src="{{asset('icons/logo-big.svg')}}" alt=""></a>
+                <a href="{{route('index')}}"><img src="{{asset('icons/logo-big.svg')}}" alt="rigmanagers.com logo"></a>
             </div>
             <div class="header-cabinet">
                 <a href="{{route('search')}}" class="header-catalog">

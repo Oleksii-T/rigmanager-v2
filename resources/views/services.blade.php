@@ -1,7 +1,7 @@
 @extends('layouts.page')
 
 @section('meta')
-
+    @include('components.search-metas')
 @endsection
 
 @section('bc')
@@ -42,7 +42,7 @@
             </div>
             <div class="side-add" id="add-to-mailer-ad">
                 <div class="side-add-text">@lang('ui.mailerSuggestText')</div>
-                <div class="side-add-icon"><img src="{{asset('icons/add-icon.svg')}}" alt=""></div>
+                <div class="side-add-icon"><img src="{{asset('icons/add-icon.svg')}}" alt="add icon"></div>
                 <button data-url="{{route('mailers.store')}}" class="button add-request-to-mailer">@lang('ui.add')</button>
             </div>
         </aside>
@@ -51,7 +51,7 @@
             <div class="searched-categories-content"></div>
             <div class="searched-content"></div>
             <div class="searched-loading hidden">
-                <img src="{{asset('icons/loading.svg')}}" alt="">
+                <img src="{{asset('icons/loading.svg')}}" alt="loading">
             </div>
             <div class="searched-empty hidden">
                 <p>@lang('ui.searchFail'). <a href="{{ url()->previous() }}">@lang('ui.serverErrorGoBack')</a></p>

@@ -7,7 +7,7 @@
 @endsection
 
 @section('bc')
-    <x-bci :text="trans('ui.categories')" i="2" islast="1" />
+    <x-bci :text="trans('ui.seCategories')" i="2" islast="1" />
 @endsection
 
 @section('content')
@@ -24,7 +24,7 @@
             </div>
         </aside>
         <div class="content">
-            <h1>@lang('ui.categories')</h1>
+            <h1>@lang('ui.seCategories')</h1>
             <div class="content-top-text catalog-help">@lang('ui.catalogHelp')</div>
             <div class="category">
                 @foreach ($categories as $category)

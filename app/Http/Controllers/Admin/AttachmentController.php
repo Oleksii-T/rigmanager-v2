@@ -12,16 +12,13 @@ class AttachmentController extends Controller
     public function index(Request $request)
     {
         if (!$request->ajax()) {
-            return view('admin.attachments.index');
+            $resources = Attachment::distinct('attachmentable_type')->pluck('attachmentable_type');
+
+            return view('admin.attachments.index', compact('resources'));
         }
 
-        $attachments = Attachment::query();
-
-        if ($request->role !== null) {
-            $attachments->whereHas('roles', function($q) use ($request){
-                $q->where('roles.id', $request->role);
-            });
-        }
+        $attachments = Attachment::query()
+            ->when($request->attachmentable_type, fn ($q) => $q->where('attachmentable_type', $request->attachmentable_type));
 
         return Attachment::dataTable($attachments);
     }
@@ -44,9 +41,16 @@ class AttachmentController extends Controller
         return view('admin.attachments.edit', compact('attachment', 'resized'));
     }
 
-    public function update(AttachmentRequest $request, Attachment $attachment)
+    public function update(Request $request, Attachment $attachment)
     {
-        //TODO
+        $data = $request->validate([
+            'original_name' => ['required', 'string'],
+            'alt' => ['nullable', 'string']
+        ]);
+
+        $attachment->update($data);
+
+        return $this->jsonSuccess('Attachment updated successfully');
     }
 
     public function destroy(Request $request, Attachment $attachment)

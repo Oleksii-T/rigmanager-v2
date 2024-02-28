@@ -12,6 +12,18 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <select class="table-filter form-control" name="attachmentable_type">
+                                <option value="">Resource</option>
+                                @foreach ($resources as $type)
+                                    <option value="{{$type}}">{{$type}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     <table id="attachments-table" class="table table-bordered table-striped">
                         <thead>

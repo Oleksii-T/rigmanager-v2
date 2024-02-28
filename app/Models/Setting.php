@@ -35,7 +35,8 @@ class Setting extends Model
             'settings' => [
                 'convert_uploaded_post_images_to_webp' => 'Convert uploaded post images to .webp',
                 'add_water_mark_to_uploaded_post_images' => 'Add water mark to uploaded post images',
-                'resize_uploaded_post_images' => 'Generate resized versions of post images',
+                'resized_versions_of_uploaded_post_images' => 'Generate resized versions of post images',
+                'resized_uploaded_post_images' => 'Ensure max width of 1920px for post images',
                 'optimize_user_avatar' => 'Optimize user avatar (.webp + resize)',
                 'optimize_user_banner' => 'Optimize user banner (.webp + resize)',
             ]

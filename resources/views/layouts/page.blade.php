@@ -4,7 +4,7 @@
     <x-header/>
 
     <div class="full-loader d-none">
-        <img src="{{asset('icons/loading.svg')}}" alt="">
+        <img src="{{asset('icons/loading.svg')}}" alt="loading">
     </div>
     <section class="main">
         <div class="holder">

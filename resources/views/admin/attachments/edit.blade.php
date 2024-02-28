@@ -42,6 +42,12 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Alt</label>
+                            <input type="text" name="alt" class="form-control" value="{{$attachment->alt}}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>URL</label>
                             <a href="{{$attachment->url}}" target="_blank" class="form-control">{{$attachment->url}}</a>
                             @if ($attachment->type == 'image')

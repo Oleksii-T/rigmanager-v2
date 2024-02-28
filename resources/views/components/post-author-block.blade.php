@@ -9,7 +9,7 @@
                     style="background-color: #282828"
                     src="{{asset('icons/unknown-user.svg')}}"
                 @endisSub
-                alt="{{$post->user->avatar->alt??''}}"
+                alt="{{($post->user->name??'unknown user') . ' avatar'}}"
             >
         <div class="prod-author-about">
             <div class="prod-author-name">

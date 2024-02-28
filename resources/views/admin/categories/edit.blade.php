@@ -30,6 +30,34 @@
                         </div>
                     </div>
                     <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Meta Title</label>
+                            <x-admin.multi-lang-input name="meta_title" :model="$category" />
+                            <span data-input="meta_title" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Meta Description</label>
+                            <x-admin.multi-lang-input name="meta_description" :model="$category" />
+                            <span data-input="meta_description" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Additional description short</label>
+                            <x-admin.multi-lang-input name="add_desc_short" :model="$category" richtext="1" />
+                            <span data-input="add_desc_short" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Additional description </label>
+                            <x-admin.multi-lang-input name="add_desc" :model="$category" richtext="1"/>
+                            <span data-input="add_desc" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group show-uploaded-file-name show-uploaded-file-preview">
                             <label>Image</label>
                             <div class="custom-file">

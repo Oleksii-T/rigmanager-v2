@@ -1,7 +1,7 @@
 <div class="sub-info-item">
     @if (isset($check))
         @if ($check)
-            <img src="{{asset('icons/sub-check.svg')}}" alt="">
+            <img src="{{asset('icons/sub-check.svg')}}" alt="check icon">
         @else
             <div class="sub-no"></div>
         @endif

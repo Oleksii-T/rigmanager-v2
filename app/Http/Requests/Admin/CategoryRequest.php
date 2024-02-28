@@ -36,6 +36,14 @@ class CategoryRequest extends FormRequest
             'fields' => ['nullable', 'array'],
             'fields.en' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'array', new ValidSlug(Category::class, $model->id??null)],
+            'meta_title' => ['required', 'array'],
+            'meta_title.en' => ['required', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'array'],
+            'meta_description.en' => ['nullable', 'string', 'max:5000'],
+            'add_desc_short' => ['nullable', 'array'],
+            'add_desc_short.en' => ['nullable', 'string', 'max:5000'],
+            'add_desc' => ['nullable', 'array'],
+            'add_desc.en' => ['nullable', 'string', 'max:5000'],
             'category_id' => ['nullable', 'exists:categories,id'],
         ];
 

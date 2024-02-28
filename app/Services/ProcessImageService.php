@@ -4,10 +4,10 @@ namespace App\Services;
 
 class ProcessImageService
 {
-    public static function resize($w, $h, $path)
+    public static function resize($w, $h=null, $path)
     {
         // dlog("ProcessImageService@resize. w $w | h $h | path $path"); //! LOG
-        $out = self::getCompressedName($w, $h, $path);
+        $out = $h ? self::getCompressedName($w, $h, $path) : $path;
         $intervention = \Image::make($path);
 
         if ($intervention->width() <= $w && $intervention->height() <= $h) {
