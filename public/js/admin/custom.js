@@ -251,13 +251,21 @@ function findErrorElementForField(field) {
 // general success logic, after ajax form submit been processed
 function showServerSuccess(response) {
     if (response.success) {
-        swal.fire("Success!", response.message, 'success').then((result) => {
-            if (response.data?.redirect) {
+        if (response.data?.redirect) {
+            swal.fire("Success!", response.message, 'success').then((result) => {
                 window.location.href = response.data.redirect;
-            }
-            if (response.data?.reaload) {
+            });
+            return;
+        }
+        if (response.data?.reaload) {
+            swal.fire("Success!", response.message, 'success').then((result) => {
                 window.location.reload();
-            }
+            });
+            return;
+        }
+        Toast.fire({
+            icon: 'success',
+            title: response.message
         });
     } else {
         swal.fire("Error!", response.message, 'error');

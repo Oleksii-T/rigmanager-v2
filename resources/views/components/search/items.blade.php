@@ -8,7 +8,9 @@
             <!--all post preview but image-->
             <div class="catalog-content">
                 <!--title-->
-                <div class="catalog-name"><a href="{{route('posts.show', $post)}}">{{$post->title}}</a></div>
+                <h3 class="catalog-name">
+                    <a href="{{route('posts.show', $post)}}">{{$post->title}}</a>
+                </h3>
                 <!--under title line. Lables: type, view, region, date-->
                 <div class="catalog-line">
                     <!--type-->

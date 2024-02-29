@@ -2,7 +2,7 @@
     <a href="#side-block" data-fancybox="mobilemenu" class="side-mob">@lang('ui.cabinet')</a>
     <div class="side-block" id="side-block">
         <div class="side-title">@lang('ui.cabinet')</div>
-        <ul class="side-list">
+        <ul class="side-list" data-component="resources/views/components/profile/nav.blade.php">
             <li><a href="{{route('profile.index')}}" class="{{$active=="profile" ? 'active' : ''}}">@lang('ui.profileInfo')</a></li>
             <li><a href="{{route('profile.posts')}}" class="{{$active=="posts" ? 'active' : ''}}">@lang('ui.myPosts')</a></li>
             <li><a href="{{route('profile.favorites')}}" class="{{$active=="fav" ? 'active' : ''}}">@lang('ui.favourites')</a></li>

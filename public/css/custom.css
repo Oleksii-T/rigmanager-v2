@@ -400,14 +400,28 @@
 .search-category-short-description > a {
     color: #999999;
 }
-#search-category-description h3, #search-category-description h4 {
+#search-category-description h2, #search-category-description h3, #search-category-description h4 {
     color: #999999;
 }
+#search-category-description h2 {
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+#search-category-description h3 {
+    padding-top: 8px;
+    margin-bottom: 15px;
+    font-size: 25px;
+}
+#search-category-description h4 {
+    margin-bottom: 7px;
+    font-weight: normal;
+}
 #search-category-description p {
-    margin-bottom: 0px;   
+    margin-bottom: 7px;
 }
 #search-category-description ul {
-    padding-left: 17px;;
+    padding-left: 17px;
+    margin-bottom: 7px;
 }
 #search-category-description li {
     list-style-type: circle;

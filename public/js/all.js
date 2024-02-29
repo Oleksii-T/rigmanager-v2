@@ -91,6 +91,11 @@ $(document).ready(function () {
         mainClass: 'mobile-fancybox-wrapper'
     });
 
+    // init fancybox for posts filters
+    Fancybox.bind("[data-fancybox='posts-filters-mobile']", {
+        mainClass: 'mobile-fancybox-wrapper'
+    });
+
     //block not-ready links
     $('.not-ready').click(function(e){
         e.preventDefault();
