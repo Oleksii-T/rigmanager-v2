@@ -72,4 +72,33 @@ class PostRequest extends FormRequest
 
         return $rules;
     }
+
+    // protected function passedValidation()
+    // {
+    //     $builder = new \HtmlSanitizer\SanitizerBuilder();
+    //     $builder->registerExtension(new \App\Sanitizer\BasicExtension());
+
+    //     $sanitizer = $builder->build([
+    //         'extensions' => ['basic'],
+    //         'tags' => [
+    //             'table' => [
+    //                 'allowed_attributes' => ['class']
+    //             ]
+    //         ]
+    //     ]);
+
+    //     $safeHtml = $sanitizer->sanitize($this->get('description'));
+
+    //     dlog("DESCRIPTION OUTPUT: $safeHtml"); //! LOG
+
+    //     if ($safeHtml != $value) {
+    //         // \App\Models\User::informAdmins('Dangerous HTML detected in post description', [
+    //         //     'description' => $value
+    //         // ]);
+    //     }
+
+    //     $this->replace([
+    //         'description' => $this->sanitize($safeHtml),
+    //     ]);
+    // }
 }

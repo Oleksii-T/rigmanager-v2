@@ -124,6 +124,9 @@ class SitemapGenerate extends Command
             // categories sitemap
             $sm = Sitemap::create();
             foreach (Category::active()->get() as $c) {
+                if (!$c->postsAll()->visible()->count()) {
+                    continue;
+                }
                 $sm->add(Url::create($c->getUrl())
                     ->setLastModificationDate(now())
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)

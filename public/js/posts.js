@@ -13,6 +13,25 @@ $(document).ready(function() {
         description: null
     };
 
+    $('.posts-rich-desc').summernote({
+        minHeight: '140px',
+        toolbar: [
+            ['style', ['style']],
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['para', ['ul', 'ol']],
+            ['table', ['table']],
+            ['misc', ['undo', 'redo']]
+        ],
+        styleTags: ['p', 'h2', 'h3', 'h4'],
+        disableDragAndDrop: true,
+        codeviewIframeFilter: true,
+        callbacks: {
+            onFocus: () => $('.note-editor').addClass('focused'),
+            onBlur: () => $('.note-editor').removeClass('focused')
+        }
+    });
+
     /* show page */
     /*************/
 

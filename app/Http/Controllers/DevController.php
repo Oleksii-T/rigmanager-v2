@@ -69,22 +69,17 @@ class DevController extends Controller
     {
         $d = [];
 
-        $as = \App\Models\Attachment::where('size', '>', 300000)->get();
+        $untrustedHtml = '<h1>This is h1</h1>
+        <p>and this is p</p>';
+        
+        $sanitizer = \HtmlSanitizer\Sanitizer::create(['extensions' => ['basic']]);
+        $d = $sanitizer->sanitize($untrustedHtml);
 
-        // $intervention = \Image::make($a->path); 
-
-        \App\Jobs\ProcessPostImages::dispatch($as);
-
-        // $categories = \App\Models\Category::all();
-        // foreach ($categories as $c) {
-        //     $t = [
-        //         'meta_title' => [
-        //             'en' => $c->name . ' for sale on rigmanagers.com'
-        //         ],
-        //     ];
-
-        //     $c->saveTranslations($t);
-        // }
+        if ($d != $untrustedHtml) {
+            dump('found en error');
+        } else {
+            dump('all good');
+        }
 
         dd($d);
     }

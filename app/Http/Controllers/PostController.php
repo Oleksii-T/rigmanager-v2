@@ -58,8 +58,13 @@ class PostController extends Controller
 
     public function create(Request $request, $type=null)
     {
+        if ($request->dev == 'test') {
+            return view('posts.create-tmp', ['categsFirstLevel' => [], 'categsSecondLevel' => [], 'categsThirdLevel' => []]);
+        }
+
         list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels($type != 'service');
         $view = $type == 'service' ? 'posts.create-service' : 'posts.create';
+
 
         return view($view, compact('categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel'));
     }
