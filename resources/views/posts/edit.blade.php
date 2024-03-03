@@ -183,7 +183,7 @@
                             </div>
 
                             <label class="label">@lang('ui.description') <span class="orange">*</span></label>
-                            <textarea cols="30" rows="10" maxlength="9000" class="textarea" name="description" form="form-post">{{$post->original('description')}}</textarea>
+                            <textarea class="textarea posts-rich-desc" name="description" form="form-post">{{$post->original('description')}}</textarea>
                             <div data-input="description" class="form-error"></div>
                             <div class="form-note lifetime-note-pre">@lang('ui.descriptionEqHelp')</div>
                         </div>

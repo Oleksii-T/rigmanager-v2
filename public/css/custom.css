@@ -427,6 +427,76 @@
     list-style-type: circle;
 }
 
+
+.note-editor.note-frame {
+    border: 1px solid #505050 !important;
+    transition: all 0.3s linear;
+    margin-bottom: 27px;
+}
+.note-editor.note-frame.focused, .note-editor.note-frame:hover {
+    border: 1px solid #ff8d11 !important;
+}
+.note-toolbar {
+    background-color: transparent !important;
+    border-bottom: 1px solid #505050 !important;
+}
+.note-btn {
+    color: #999999 !important;
+    background-color: transparent !important;
+    border: none !important;
+    transition: all 0.3s linear;
+}
+.note-btn:hover {
+    color: #ff8d11 !important;
+}
+.note-dropdown-menu {
+    background-color: #1f1f1f !important;
+    border: 1px solid #505050 !important;
+}
+.note-dropdown-menu a {
+    color: #999999 !important;
+}
+.note-frame, .note-frame h2, .note-frame h3 {
+    color: #999999 !important;
+}
+.note-frame h2 {
+    margin-bottom: 25px;
+}
+.note-frame ul {
+    padding-left: 14px;
+}
+.note-frame ol {
+    padding-left: 15px;
+}
+.note-frame ul li {
+    list-style: circle !important;
+}
+.note-dropdown-menu h2, .note-dropdown-menu h3 {
+    color: #999999 !important;
+}
+.note-dropdown-menu h4 {
+    font-weight: normal !important;
+}
+.note-dropdown-menu h3 {
+    font-size: 18px !important;
+}
+.note-dropdown-menu h2 {
+    font-size: 20px !important;
+}
+.note-dropdown-menu h4 {
+    font-size: 16px !important;
+}
+.note-dropdown-item:hover {
+    background-color: transparent !important;
+}
+.note-dropdown-item p, .note-dropdown-item h2, .note-dropdown-item h3, .note-dropdown-item h4 {
+    transition: all 0.3s linear;
+}
+.note-dropdown-item:hover p, .note-dropdown-item:hover h2, .note-dropdown-item:hover h3, .note-dropdown-item:hover h4 {
+    color: #ff8d11 !important;
+}
+
+
 @media screen and (max-width: 767px) {
     .col-6 {
         flex: 0 0 100%;

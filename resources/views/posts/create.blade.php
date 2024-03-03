@@ -190,7 +190,7 @@
 
                             <!--description-->
                             <label class="label">@lang('ui.description') <span class="orange">*</span></label>
-                            <textarea cols="30" rows="10" maxlength="9000" class="textarea" name="description" form="form-post"></textarea>
+                            <textarea class="textarea posts-rich-desc" name="description" form="form-post"></textarea>
                             <div data-input="description" class="form-error"></div>
                             <div class="form-note lifetime-note-pre">@lang('ui.descriptionEqHelp')</div>
                         </div>
@@ -372,5 +372,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{asset('js/posts.js')}}"></script>
+    <script src="{{asset('js/posts.js')}}?v={{time()}}"></script>
 @endsection

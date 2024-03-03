@@ -359,18 +359,18 @@ trait ScrapePosts
 
     private function descriptionEscape($desc, $removeTable=true)
     {
-        if ($removeTable) {
-            $startTable = strpos($desc, '<table');
-            while ($startTable !== false) {
-                $endTable = strpos($desc, '</table>');
-                if ($startTable !== false && $endTable !== false) {
-                    $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
-                }
-                $startTable = strpos($desc, '<table');
-            }
-        }
+        // if ($removeTable) {
+        //     $startTable = strpos($desc, '<table');
+        //     while ($startTable !== false) {
+        //         $endTable = strpos($desc, '</table>');
+        //         if ($startTable !== false && $endTable !== false) {
+        //             $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
+        //         }
+        //         $startTable = strpos($desc, '<table');
+        //     }
+        // }
 
-        $desc = strip_tags($desc);
+        // $desc = strip_tags($desc);
         $desc = str_replace("\r\n", "\n", $desc); // ensure there all the same new lines symbol
         $desc = str_replace("\t", ' ', $desc); // change tabs to space
         $desc = str_replace('&Acirc;', '', $desc);
@@ -390,6 +390,7 @@ trait ScrapePosts
         $desc = preg_replace('/ +\n/', "\n", $desc); // remove spaces before new lines
         $desc = preg_replace('/(\n){3,}/', "\n\n", $desc); // remove dublicated new lines
         $desc = str_replace("\n", "\r\n", $desc); // make Windows friendly new lines
+        $desc = \App\Sanitizer\Sanitizer::handle($desc, false);
 
         return $desc;
     }

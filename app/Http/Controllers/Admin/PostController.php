@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Setting;
+use Illuminate\Support\Str;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Enums\NotificationGroup;
@@ -22,38 +23,7 @@ class PostController extends Controller
             return view('admin.posts.index');
         }
 
-        $posts = Post::query();
-
-        if ($request->user_id) {
-            $posts->where('user_id', $request->user_id);
-        }
-        if ($request->category_id) {
-            $posts->where('category_id', $request->category_id);
-        }
-        if ($request->status) {
-            $posts->where('status', $request->status);
-        }
-        if ($request->group) {
-            $posts->where('group', $request->group);
-        }
-        if ($request->type) {
-            $posts->where('posts.type', $request->type);
-        }
-        if ($request->condition) {
-            $posts->where('condition', $request->condition);
-        }
-        if ($request->duration) {
-            $posts->where('duration', $request->duration);
-        }
-        if ($request->is_active !== null) {
-            $posts->where('is_active', $request->is_active);
-        }
-        if ($request->is_urgent !== null) {
-            $posts->where('is_urgent', $request->is_urgent);
-        }
-        if ($request->is_import !== null) {
-            $posts->where('is_import', $request->is_import);
-        }
+        $posts = $this->filter($request->all(), Post::query());
 
         return Post::dataTable($posts);
     }
@@ -79,9 +49,17 @@ class PostController extends Controller
         ]);
     }
 
-    public function edit(Post $post)
+    public function edit(Request $request, Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        $approveFilters = $request->approveFilters;
+        $approvingPosts = null;
+
+        if ($approveFilters) {
+            $approveFilters = json_decode($approveFilters, true);
+            $approvingPosts = $this->filter($approveFilters, Post::query())->latest()->get();
+        }
+
+        return view('admin.posts.edit', compact('post', 'approvingPosts'));
     }
 
     public function update(PostRequest $request, Post $post)
@@ -113,6 +91,22 @@ class PostController extends Controller
             ], $post);
         }
 
+        if ($request->approveFilters) {
+            $f = json_decode($request->approveFilters, true);
+            $post = $this->filter($f, Post::query())
+                ->latest()
+                ->where('id', '<', $post->id)
+                ->first();
+
+            if (!$post) {
+                return $this->jsonSuccess('Post updated. Next post to apprive not found');
+            }
+
+            return $this->jsonSuccess('Post updated successfully', [
+                'redirect' => route('admin.posts.edit', $post) . '?approveFilters=' . $request->approveFilters
+            ]);
+        }
+
         return $this->jsonSuccess('Post updated successfully');
     }
 
@@ -126,6 +120,19 @@ class PostController extends Controller
 
         return $this->jsonSuccess('Post updated successfully', [
             'reload' => true
+        ]);
+    }
+
+    public function startApproving(Request $request)
+    {
+        $post = $this->filter($request->filters, Post::query())->latest()->first();
+
+        if (!$post) {
+            return $this->jsonError('No posts to approve found');
+        }
+
+        return $this->jsonSuccess('', [
+            'redirect' => route('admin.posts.edit', $post) . '?approveFilters=' . json_encode($request->filters)
         ]);
     }
 
@@ -154,5 +161,22 @@ class PostController extends Controller
         $post->delete();
 
         return $this->jsonSuccess('Post deleted successfully');
+    }
+
+    private function filter($f, $p)
+    {
+        $p
+            ->when($f['user_id']??false, fn ($q) => $q->where('user_id', $f['user_id']))
+            ->when($f['category_id']??false, fn ($q) => $q->where('category_id', $f['category_id']))
+            ->when($f['status']??false, fn ($q) => $q->where('status', $f['status']))
+            ->when($f['group']??false, fn ($q) => $q->where('group', $f['group']))
+            ->when($f['type']??false, fn ($q) => $q->where('posts.type', $f['type']))
+            ->when($f['condition']??false, fn ($q) => $q->where('condition', $f['condition']))
+            ->when($f['duration']??false, fn ($q) => $q->where('duration', $f['duration']))
+            ->when(($f['is_active']??null) !== null, fn ($q) => $q->where('is_active', $f['is_active']))
+            ->when(($f['is_urgent']??null) !== null, fn ($q) => $q->where('is_urgent', $f['is_urgent']))
+            ->when(($f['is_import']??null) !== null, fn ($q) => $q->where('is_import', $f['is_import']));
+
+        return $p;
     }
 }

@@ -32,4 +32,26 @@ $(document).ready(function () {
 	$('.table-filter').change(function() {
 		table.draw();
 	});
+
+    $('.start-approving').click(function(e) {
+        e.preventDefault();
+
+        let url = $(this).attr('href');
+        let filters = {};
+        addTableFilters(filters, $(selector).closest('.card'));
+        
+        $.ajax({
+            url,
+            type: 'get',
+            data: {
+                filters
+            },
+            success: (response)=>{
+                showServerSuccess(response);
+            },
+            error: function(response) {
+                showServerError(response);
+            }
+        });
+    })
 });

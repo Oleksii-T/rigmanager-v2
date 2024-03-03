@@ -69,16 +69,11 @@ class DevController extends Controller
     {
         $d = [];
 
-        $untrustedHtml = '<h1>This is h1</h1>
-        <p>and this is p</p>';
-        
-        $sanitizer = \HtmlSanitizer\Sanitizer::create(['extensions' => ['basic']]);
-        $d = $sanitizer->sanitize($untrustedHtml);
+        $posts = User::find(1)->posts;
+        $d = $posts->count();
 
-        if ($d != $untrustedHtml) {
-            dump('found en error');
-        } else {
-            dump('all good');
+        foreach ($posts as $post) {
+            $post->forceDelete();
         }
 
         dd($d);

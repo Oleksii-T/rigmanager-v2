@@ -16,6 +16,17 @@
     @endforeach
 @endsection
 
+@section('style')
+    <style>
+        .prod-about table td {
+            border: 1px solid #505050;
+        }
+        .prod-about table td {
+            padding: 0 0 0 5px;
+        }
+    </style>
+@endsection
+
 @section('content')
     <span class="hidden" data-postid="{{$post->id}}" data-viewurl="{{route('posts.view', $post)}}" page-data></span>
 
@@ -79,7 +90,7 @@
                 --}}
                 <h1>{{$post->title}}</h1>
                 {{-- <a href="{{$post->scraped_url}}">{{$post->scraped_url}}</a> --}}
-                <p>{{$post->description}}</p>
+                {!!$post->description!!}
             </div>
         </div>
         <div class="prod-side">

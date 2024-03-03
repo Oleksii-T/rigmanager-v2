@@ -394,9 +394,10 @@ class Post extends Model
 
     public static function generateMetaDescriptionHelper(string $description)
     {
+        $description = strip_tags($description);
         return strlen($description) > 70 
-            ? (substr($description, 0, 70) . '... - rigmanagers.com')
-            : $description . ' - rigmanagers.com';
+            ? (substr($description, 0, 70) . '... | rigmanagers.com')
+            : $description . ' | rigmanagers.com';
     }
 
     public static function dataTable($query)

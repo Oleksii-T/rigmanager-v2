@@ -45,6 +45,7 @@ Route::middleware('is-admin')->group(function () {
 
     Route::post('posts/{post}/add-views', [PostController::class, 'addViews'])->name('posts.add-views');
     Route::post('posts/approve-all', [PostController::class, 'approveAll'])->name('posts.approve-all');
+    Route::get('posts/start-approving', [PostController::class, 'startApproving'])->name('posts.start-approving');
     Route::resource('posts', PostController::class);
 
     Route::resource('subscription-plans', SubscriptionPlanController::class)->except('show');

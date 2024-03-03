@@ -123,16 +123,20 @@ h2 {
 	margin: 0 0 40px;
 	color: #fff;
 	font-weight: 300;
-	font-size: 36px;
+	font-size: 31px;
 	line-height: 43px;
 }
 h3 {
 	display: block;
 	margin: 0 0 19px;
 	color: #fff;
-	font-size: 30px;
+	font-size: 26px;
 	font-weight: 300;
 	line-height: 36px;
+}
+h4 {
+	font-size: 21px;
+	font-weight: normal;
 }
 a {transition: all .3s linear;}
 p {margin: 0 0 24px;}
@@ -2878,6 +2882,19 @@ article ul li:before {
 .prod-about p {
 	line-height: 34px;
 	white-space: pre-line;
+}
+.prod-about h2 {
+    margin-bottom: 25px;
+}
+.prod-about ul, .prod-about ol {
+    padding-left: 17px;
+}
+.prod-about ul li {
+    list-style: circle !important;
+}
+.prod-about table {
+    border-collapse: collapse;
+    width: 100%;
 }
 .prod-arrow {
 	width: 9px;

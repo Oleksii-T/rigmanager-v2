@@ -48,7 +48,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Description</label>
-                            <x-admin.multi-lang-input name="description" textarea="1" />
+                            <x-admin.multi-lang-input name="description" richtext="1" />
                             <span data-input="description" class="input-error"></span>
                         </div>
                     </div>

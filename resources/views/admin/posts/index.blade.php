@@ -92,15 +92,18 @@
                                 <option value="0">No</option>
                             </select>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-4">
                             <a href="{{request()->url()}}" class="btn btn-warning">Clear Filters</a>
+
+                            @if (\App\Models\Post::status('pending')->exists())
+                                <form action="{{route('admin.posts.approve-all')}}" method="post" class="general-ajax-submit" style="display: inline-block">
+                                    @csrf
+                                    <button class="btn btn-warning">Mark All as Approved</button>
+                                </form>
+                            @endif
+
+                            <a href="{{route('admin.posts.start-approving')}}" class="btn btn-warning start-approving">Start Approving</a>
                         </div>
-                        @if (\App\Models\Post::status('pending')->exists())
-                            <form action="{{route('admin.posts.approve-all')}}" method="post" class="col-lg-2 general-ajax-submit">
-                                @csrf
-                                <button class="btn btn-warning">Mark All as Approved</button>
-                            </form>
-                        @endif
                     </div>
                 </div>
                 <div class="card-body">
@@ -114,5 +117,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{asset('/js/admin/posts.js')}}"></script>
+    <script src="{{asset('/js/admin/posts.js')}}?v={{time()}}"></script>
 @endpush

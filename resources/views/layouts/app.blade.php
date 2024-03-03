@@ -21,6 +21,7 @@
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom-swal.css')}}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 	@yield('style')
     <style>
         .page-assist {
@@ -217,6 +218,7 @@
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render={{config('services.recaptcha.public_key')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 	<script src="{{asset('js/slick.min.js')}}"></script>
 	<script src="{{asset('js/jquery-ui-2.min.js')}}"></script>
 	<script src="{{asset('js/typeahead.bundle.js')}}"></script>

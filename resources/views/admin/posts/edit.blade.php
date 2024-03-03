@@ -3,18 +3,35 @@
 @section('title', 'Edit Post')
 
 @section('content_header')
-    <x-admin.title
-        text="Edit Post"
-    />
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <div class="float-left">
+                    <h1 class="m-0">Edit Post #{{$post->id}}</h1>
+                </div>
+                <div class="float-left pl-3">
+                    <a href="{{route('posts.show', $post)}}" class="btn btn-primary" target="_blank">
+                        Preview
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('content')
     <form action="{{route('admin.posts.update', $post)}}" method="POST" class="pb-3 general-ajax-submit">
         @csrf
         @method('PUT')
+        @if ($approvingPosts)
+            <input type="hidden" name="approveFilters" value="{{request()->approveFilters}}">
+        @endif
         <div class="card card-secondary">
             <div class="card-header">
                 <h3 class="card-title">General info</h3>
+                @if ($post->scraped_url)
+                    <a style="padding-left: 10px; color:rgb(211, 211, 211)" href="{{$post->scraped_url}}" target="_blank">{{$post->scraped_url}}</a>
+                @endif
             </div>
             <div class="card-body">
                 <div class="row">
@@ -49,7 +66,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Description</label>
-                            <x-admin.multi-lang-input name="description" :model="$post" textarea="1" />
+                            <x-admin.multi-lang-input name="description" :model="$post" richtext="1" />
                             <span data-input="description" class="input-error"></span>
                         </div>
                     </div>
@@ -356,11 +373,45 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-success">Save</button>
-        <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
-        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-views">
-            Add View(s)
-        </button>
+        @if ($approvingPosts)
+            <div class="card card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="mr-2">Approving Progress</span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach ($approvingPosts as $approvingPost)
+                            @php
+                                if ($post->id == $approvingPost->id) {
+                                    $cl = 'text-secondary';
+                                } else if ($approvingPost->status == 'pending') {
+                                    $cl = 'text-warning';
+                                } else if ($approvingPost->status == 'approved') {
+                                    $cl = 'text-success';
+                                } else {
+                                    $cl = 'text-danger';
+                                }
+                            @endphp
+                            <div class="col-md-4">
+                                <span>{{$approvingPost->id}}</span>.
+                                <a href="{{route('admin.posts.edit', $approvingPost) . '?approveFilters=' . request()->approveFilters}}" class="{{$cl}}">{{$approvingPost->title}}</a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Save and go to next</button>
+            <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
+        @else
+            <button type="submit" class="btn btn-success">Save</button>
+            <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-views">
+                Add View(s)
+            </button>
+        @endif
+        
     </form>
 
     <div class="modal fade" id="add-views">

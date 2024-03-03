@@ -58,13 +58,8 @@ class PostController extends Controller
 
     public function create(Request $request, $type=null)
     {
-        if ($request->dev == 'test') {
-            return view('posts.create-tmp', ['categsFirstLevel' => [], 'categsSecondLevel' => [], 'categsThirdLevel' => []]);
-        }
-
         list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = Category::getLevels($type != 'service');
         $view = $type == 'service' ? 'posts.create-service' : 'posts.create';
-
 
         return view($view, compact('categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel'));
     }
@@ -78,10 +73,10 @@ class PostController extends Controller
         }
 
         $input = $request->validated();
-        $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
+        $ogDesc = \App\Sanitizer\Sanitizer::handle($input['description']);
+        $textLocale = $translator->detectLanguage($input['title'] . '. ' . $ogDesc);
         $c = Category::find($input['category_id']);
         $ogTitle = $input['title'];
-        $ogDesc = $input['description'];
         $input['duration'] = 'unlim';
         $input['origin_lang'] = $textLocale;
         $input['status'] = 'pending';
@@ -94,7 +89,7 @@ class PostController extends Controller
             $textLocale => $input['title']
         ];
         $input['description'] = [
-            $textLocale => $input['description']
+            $textLocale => $ogDesc
         ];
         $input['meta_title'] = [
             $textLocale => Post::generateMetaTitleHelper($ogTitle, $c->name)
@@ -208,7 +203,8 @@ class PostController extends Controller
 
         $user = auth()->user();
         $input = $request->validated();
-        $textLocale = $translator->detectLanguage($input['title'] . '. ' . $input['description']);
+        $ogDesc = \App\Sanitizer\Sanitizer::handle($input['description']);
+        $textLocale = $translator->detectLanguage($input['title'] . '. ' . $ogDesc);
         $oldImages = $input['old_images']??[];
         $images = $input['images']??[];
         $images = $images + $oldImages;
@@ -228,7 +224,7 @@ class PostController extends Controller
             $textLocale => $input['title']
         ];
         $input['description'] = [
-            $textLocale => $input['description']
+            $textLocale => $ogDesc
         ];
 
         // dlog(" PostController@update. input", $input); //! LOG

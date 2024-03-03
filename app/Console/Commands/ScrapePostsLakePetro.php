@@ -70,7 +70,6 @@ class ScrapePostsLakePetro extends Command
                 ->value('tab-2-images', '.tabsWrapper #tab-2 img',   'src', true) // tab 2 main contain "Description" or "Drowings"
                 ->value('tab-3-html',   '.tabsWrapper #tab-3',       'html'     ) // tab 3 main contain "Drowings" or "Contact Us"
                 ->value('tab-3-images', '.tabsWrapper #tab-3 img',   'src', true) // tab 3 main contain "Drowings" or "Contact Us"
-                ->shot('tab-1-table-img', '.tabsWrapper #tab-1 table')
                 ->abortOnPageError(false) // some lakepost posts has empty href
                 ->nullableValues() // some lakepost posts returns 404 page so mark all value as nullable
                 ->limit($this->scrapeLimit)
@@ -128,6 +127,9 @@ class ScrapePostsLakePetro extends Command
                 2 => 'tab-3-html',
             };
             $description = $scrapedPost[$field];
+            if ($field != 'tab-1-html') {
+                $description .= $scrapedPost['tab-1-html']; // add tables from tab-1 to description
+            }
         } else if (in_array('More Details', $tabs)) {
             // we have standart description
             $field = match (array_search('More Details', $tabs)) {
@@ -136,6 +138,9 @@ class ScrapePostsLakePetro extends Command
                 2 => 'tab-3-html',
             };
             $description = $scrapedPost[$field];
+            if ($field != 'tab-1-html') {
+                $description .= $scrapedPost['tab-1-html']; // add tables from tab-1 to description
+            }
         } else {
             // take Tech specs as description.
             // TechSpecs are always in first tab.
@@ -156,11 +161,6 @@ class ScrapePostsLakePetro extends Command
         $images = array_merge($images, $scrapedPost['tab-3-images']??[]);
 
         return $images;
-    }
-
-    private function parseSavedImages($scrapedPost)
-    {
-        return $scrapedPost['tab-1-table-img'];
     }
 
     private function parseCountry($scrapedPost)
