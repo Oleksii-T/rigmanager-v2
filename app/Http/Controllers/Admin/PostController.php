@@ -56,10 +56,15 @@ class PostController extends Controller
 
         if ($approveFilters) {
             $approveFilters = json_decode($approveFilters, true);
-            $approvingPosts = $this->filter($approveFilters, Post::query())->latest()->get();
+            $approvingPosts = $this->filter($approveFilters, Post::query())->latest()->select(['id', 'status'])->with('translations')->get();
         }
 
-        return view('admin.posts.edit', compact('post', 'approvingPosts'));
+        $users = User::all();
+        list($categsFirstLevel, $categsSecondLevel, $categsThirdLevel) = \App\Models\Category::getLevels();
+        $categories = \App\Models\Category::active()->get();
+        $activeLevels = array_column($post->category->parents(true), 'id');
+
+        return view('admin.posts.edit', compact('post', 'approvingPosts', 'users', 'categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'activeLevels'));
     }
 
     public function update(PostRequest $request, Post $post)

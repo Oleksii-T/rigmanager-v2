@@ -66,7 +66,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Description</label>
-                            <x-admin.multi-lang-input name="description" :model="$post" richtext="1" />
+                            <x-admin.multi-lang-input name="description" :model="$post" richtextPostsDesc="1" />
                             <span data-input="description" class="input-error"></span>
                         </div>
                     </div>
@@ -86,23 +86,11 @@
                             <label>User</label>
                             <select class="form-control select2" name="user_id">
                                 <option value="">Select User</option>
-                                @foreach (\App\Models\User::all() as $model)
+                                @foreach ($users as $model)
                                     <option value="{{$model->id}}" @selected($post->user_id == $model->id)>{{$model->name}}</option>
                                 @endforeach
                             </select>
                             <span data-input="user_id" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select class="form-control select2" name="category_id">
-                                <span>Test head line</span>
-                                @foreach (\App\Models\Category::active()->get() as $c)
-                                    <option value="{{$c->id}}" @selected($post->category_id == $c->id)>{{$c->name}}</option>
-                                @endforeach
-                            </select>
-                            <span data-input="category_id" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-3 col-xl-2">
@@ -148,6 +136,43 @@
                             </select>
                             <span data-input="origin_lang" class="input-error"></span>
                         </div>
+                    </div>
+                    <div class="col-12 categories-level-selects row">
+                        <input type="hidden" name="category_id" value="{{$post->category_id}}">
+                        <div class="col-4 cat-lev-x cat-lev-1">
+                            <div class="form-group select-block">
+                                <select class="form-control">
+                                    <option value="">@lang('ui.chooseTag')</option>
+                                    @foreach ($categsFirstLevel as $c)
+                                        <option value="{{$c->id}}" data-suggestions="{{$c->suggestions}}" @selected($activeLevels[0] == $c->id)>{{$c->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4 cat-lev-x cat-lev-2">
+                            @foreach ($categsSecondLevel as $parentId => $secondLevel)
+                                <div class="form-group select-block {{$activeLevels[0] == $parentId ? '' : 'd-none'}}" data-parentcateg="{{$parentId}}">
+                                    <select class="form-control">
+                                        <option value="">@lang('ui.chooseNextTag')</option>
+                                        @foreach ($secondLevel as $c)
+                                            <option value="{{$c->id}}" data-suggestions="{{$c->suggestions}}" @selected(($activeLevels[1]??null) == $c->id)>{{$c->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="col-4 cat-lev-x cat-lev-3">
+                            @foreach ($categsThirdLevel as $parentId => $thirdLevel)
+                                <div class="form-group select-block {{($activeLevels[1]??null) == $parentId ? '' : 'd-none'}}" data-parentcateg="{{$parentId}}">
+                                    <select class="form-control">
+                                        <option value="">@lang('ui.chooseNextTag')</option>
+                                        @foreach ($thirdLevel as $c)
+                                            <option value="{{$c->id}}" data-suggestions="{{$c->suggestions}}" @selected(($activeLevels[2]??null) == $c->id)>{{$c->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endforeach
+                        </div> 
                     </div>
                     <div class="col-md-2 col-lg-2 col-xl-1">
                         <div class="form-group">
@@ -450,3 +475,8 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{asset('/js/admin/posts.js')}}?v={{time()}}"></script>
+@endpush
+

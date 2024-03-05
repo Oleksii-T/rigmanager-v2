@@ -256,7 +256,7 @@ class Category extends Model
 
     public static function getLevels($equipment=true)
     {
-        $categs = self::active()->whereNull('category_id')->with('childs.childs');
+        $categs = self::active()->whereNull('category_id')->with(['childs.translations', 'childs.childs.translations']);
         $categs = $equipment ? $categs->equipment() : $categs->service();
         $categs = $categs->get();
 

@@ -18,11 +18,14 @@
 
 @section('style')
     <style>
+        .prod-about table {
+            margin-bottom: 24px;
+        }
         .prod-about table td {
             border: 1px solid #505050;
         }
         .prod-about table td {
-            padding: 0 0 0 5px;
+            padding: 0 5px 0 5px;
         }
     </style>
 @endsection

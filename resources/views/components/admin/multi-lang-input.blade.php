@@ -19,8 +19,8 @@
                 $name_ = ($prefix??'') . $name . '[' . $localeCode . ']';
                 $value = old($name.'['.$localeCode.']', isset($model) ? $model->translated($name, $localeCode) : '');
             @endphp
-            @if (($textarea??false) || ($richtext??false))
-                <textarea class="form-control {{$richtext??false ? 'summernote' : ''}}" name="{{$name_}}" rows="4">{{$value}}</textarea>
+            @if (($textarea??false) || ($richtext??false) || ($richtextPostsDesc??false))
+                <textarea class="form-control {{$richtext??false ? 'summernote' : ''}} {{$richtextPostsDesc??false ? 'posts-rich-desc' : ''}}" name="{{$name_}}" rows="4">{{$value}}</textarea>
             @else
                 <input class="form-control" name="{{$name_}}" type="text" value="{{$value}}">
             @endif

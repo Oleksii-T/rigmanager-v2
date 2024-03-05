@@ -1,3 +1,25 @@
+var waitClass = 'cursor-wait';
+
+$.fn.lock = function() {
+    this.addClass(waitClass);
+    return this;
+}
+$.fn.isLocked = function() {
+    return this.hasClass(waitClass);
+}
+$.fn.unlock = function() {
+    this.removeClass(waitClass);
+    return this;
+}
+$.fn.toggleClassIf = function(className, condition) {
+    if (condition) {
+        this.addClass(className);
+    } else {
+        this.removeClass(className);
+    }
+    return this;
+}
+
 $(document).ready(function () {
     $('.summernote').summernote();
     $('.select2').select2();
@@ -164,6 +186,14 @@ const Toast = Swal.mixin({
     }
 });
 
+// show message depends on role and fade out it after 3 sec
+function showToast(title, icon=true) {
+	Toast.fire({
+        icon: icon ? 'success' : 'error',
+        title: title
+    });
+}
+
 //delete resource from datatable
 function deleteResource(dataTable, url) {
     swal.fire({
@@ -252,15 +282,15 @@ function findErrorElementForField(field) {
 function showServerSuccess(response) {
     if (response.success) {
         if (response.data?.redirect) {
-            swal.fire("Success!", response.message, 'success').then((result) => {
+            // swal.fire("Success!", response.message, 'success').then((result) => {
                 window.location.href = response.data.redirect;
-            });
+            // });
             return;
         }
         if (response.data?.reaload) {
-            swal.fire("Success!", response.message, 'success').then((result) => {
+            // swal.fire("Success!", response.message, 'success').then((result) => {
                 window.location.reload();
-            });
+            // });
             return;
         }
         Toast.fire({

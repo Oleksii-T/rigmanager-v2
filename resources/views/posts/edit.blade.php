@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="cat-lev-x cat-lev-3">
                                     @foreach ($categsThirdLevel as $parentId => $thirdLevel)
-                                        <div class="select-block  {{($activeLevels[1]??null) == $parentId ? '' : 'd-none'}}" data-parentcateg="{{$parentId}}">
+                                        <div class="select-block {{($activeLevels[1]??null) == $parentId ? '' : 'd-none'}}" data-parentcateg="{{$parentId}}">
                                             <select class="styled">
                                                 <option value="">@lang('ui.chooseNextTag')</option>
                                                 @foreach ($thirdLevel as $c)
