@@ -395,9 +395,14 @@ class Post extends Model
     public static function generateMetaDescriptionHelper(string $description)
     {
         $description = strip_tags($description);
-        return strlen($description) > 70 
-            ? (substr($description, 0, 70) . '... | rigmanagers.com')
-            : $description . ' | rigmanagers.com';
+        $maxSeoDesc = 150;
+        $seoDescSufix = ' | rigmanagers.com';
+        $seoDescSufixLength = strlen($seoDescSufix);
+        $maxSeoDesc -= $seoDescSufixLength;
+
+        return strlen($description) > $maxSeoDesc 
+            ? (substr($description, 0, $maxSeoDesc) . "...$seoDescSufix")
+            : $description . $seoDescSufix;
     }
 
     public static function dataTable($query)

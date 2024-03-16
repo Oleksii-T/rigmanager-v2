@@ -359,38 +359,17 @@ trait ScrapePosts
 
     private function descriptionEscape($desc, $removeTable=true)
     {
-        // if ($removeTable) {
-        //     $startTable = strpos($desc, '<table');
-        //     while ($startTable !== false) {
-        //         $endTable = strpos($desc, '</table>');
-        //         if ($startTable !== false && $endTable !== false) {
-        //             $desc = substr($desc, 0, $startTable) . substr($desc, $endTable+8);
-        //         }
-        //         $startTable = strpos($desc, '<table');
-        //     }
-        // }
+        foreach ($this->getEscapedChars() as $esc) {
+            if ($sc[2]) {
+                $desc = preg_replace($esc[0], $esc[1], $desc);
+            } else {
+                $desc = str_replace($esc[0], $esc[1], $desc);
+            }
+        }
 
-        // $desc = strip_tags($desc);
-        $desc = str_replace("\r\n", "\n", $desc); // ensure there all the same new lines symbol
-        $desc = str_replace("\t", ' ', $desc); // change tabs to space
-        $desc = str_replace('&Acirc;', '', $desc);
-        $desc = str_replace('&nbsp;', ' ', $desc);
-        $desc = str_replace("\u{A0}", ' ', $desc); // same as &nbsp;
-        $desc = str_replace('&acirc;&#128;&cent;', '- ', $desc);
-        $desc = str_replace('&atilde;&#128;&#129;', ', ', $desc);
-        $desc = str_replace('&iuml;&frac14;&#154;', ': ', $desc);
-        $desc = str_replace('&iuml;&frac12;&#158;', '~', $desc);
-        $desc = str_replace('&iuml;&frac14;&#155;', '; ', $desc);
-        $desc = str_replace('&atilde;&#128;&#130;', '. ', $desc);
-        $desc = str_replace('&acirc;&#128;&#157;', '"', $desc);
-        $desc = str_replace('&acirc;&#128;&sup3;', '" ', $desc); // inches
-        $desc = str_replace('&acirc;&#128;&#156;', '"', $desc);
-        $desc = str_replace('&acirc;&#128;&#153;', "'", $desc); // apostrophy
-        $desc = preg_replace('/^[ \n]*/', "", $desc); // remove leading newlines and spaces
-        $desc = preg_replace('/ +\n/', "\n", $desc); // remove spaces before new lines
-        $desc = preg_replace('/(\n){3,}/', "\n\n", $desc); // remove dublicated new lines
-        $desc = str_replace("\n", "\r\n", $desc); // make Windows friendly new lines
         $desc = \App\Sanitizer\Sanitizer::handle($desc, false);
+        $desc = preg_replace('/<p>[ \n]*<\/p>/', '', $desc); // remove empty paragraphs
+        $desc = trim($desc);
 
         return $desc;
     }
@@ -405,5 +384,76 @@ trait ScrapePosts
 
         \Log::channel('scraping')->info($toLog);
 
+    }
+
+    public static function getEscapedChars()
+    {
+        return [
+            ["\r\n", "\n", false], // ensure there all the same new lines symbo
+            ["\t", ' ', false], // change tabs to space
+            ['&Acirc;', '', false], 
+            ['&nbsp;', ' ', false], 
+            ["\u{A0}", ' ', false], // same as &nbsp;
+
+            ['&acirc;&#128;&cent;', '- ', false], 
+            ['&atilde;&#128;&#129;', ', ', false], 
+            ['&iuml;&frac14;&#154;', ': ', false], 
+            ['&iuml;&frac12;&#158;', '~', false], 
+            ['&iuml;&frac14;&#155;', '; ', false], 
+            ['&atilde;&#128;&#130;', '. ', false], 
+            ['&acirc;&#128;&#157;', '"', false], 
+            ['&acirc;&#128;&sup3;', '" ', false], // inches 
+            ['&acirc;&#128;&#156;', '"', false], 
+            ['&acirc;&#128;&#153;', "'", false],  // apostrophy
+            ['&amp;', '&', false],
+            ['&iuml;&frac14;&#140;', ', ', false],
+            ['&iuml;&frac14;&#136;', ' (', false],
+            ['&iuml;&frac14;&#137;', ') ', false],
+            ['&iuml;&frac14;&#141;', '-', false],
+            ['&iuml;&frac14;&#139;', '+', false],
+            ['&acirc;&#132;&#131;', 'C', false],
+            ['&iuml;&frac14;&#156;', '<', false],
+            ['&iuml;&#129;&not;', '', false],
+
+            [chr(195).chr(131).chr(194).chr(151), 'x', false], 
+            [chr(195).chr(142).chr(194).chr(188), 'µ', false], 
+            [chr(195).chr(142).chr(194).chr(169), 'Ω', false], 
+            [chr(195).chr(143).chr(194).chr(134), 'φ', false], 
+            [chr(195).chr(131).chr(194).chr(184), 'ø', false], 
+            [chr(195).chr(142).chr(194).chr(166), 'Φ', false], 
+            [chr(195).chr(131).chr(194).chr(152), 'Ø', false], 
+            [chr(195).chr(142).chr(194).chr(148), 'Δ', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(136), ' (', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(137), ') ', false], 
+            [chr(195).chr(162).chr(194).chr(137).chr(194).chr(164), '≤', false], 
+            [chr(195).chr(162).chr(194).chr(137).chr(194).chr(165), '≥', false], 
+            [chr(195).chr(162).chr(194).chr(128).chr(194).chr(147), '-', false], 
+            [chr(195).chr(162).chr(194).chr(132).chr(194).chr(131), '℃', false], 
+            [chr(195).chr(175).chr(194).chr(129).chr(194).chr(172), '', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(133), '%', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(133), '%', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(156), '<', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(141), '-', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(139), '+', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(140), ', ', false], 
+            [chr(195).chr(165).chr(194).chr(163).chr(194).chr(171), '±', false], 
+            [chr(195).chr(162).chr(194).chr(150).chr(194).chr(179), '△', false], 
+            [chr(195).chr(142).chr(194).chr(148).chr(194).chr(176), 'Δ°', false], 
+            [chr(195).chr(175).chr(194).chr(185).chr(194).chr(163), '﹣', false], 
+            [chr(195).chr(162).chr(194).chr(150).chr(194).chr(161), '', false], 
+            [chr(195).chr(162).chr(194).chr(150).chr(194).chr(161), '', false], 
+            [chr(195).chr(162).chr(194).chr(136).chr(194).chr(163), '|', false], 
+            [chr(195).chr(175).chr(194).chr(185).chr(194).chr(159), '#', false], 
+            [chr(195).chr(163).chr(194).chr(128).chr(194).chr(158), '"', false], 
+            [chr(195).chr(162).chr(194).chr(133).chr(194).chr(161), 'Ⅱ', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(142), '.', false], 
+            // [, false], 
+            
+
+            ['/^[ \n]*/', "", true],  // remove leading newlines and spaces
+            ['/ +\n/', "\n", true], // remove spaces before new lines
+            ['/(\n){3,}/', "\n\n", true], // remove dublicated new lines
+            ["\n", "\r\n", false], // make Windows friendly new lines
+        ];
     }
 }

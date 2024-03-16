@@ -27,6 +27,12 @@
         .prod-about table td {
             padding: 0 5px 0 5px;
         }
+        .prod-about ul {
+            margin-bottom: 24px;
+        }
+        .prod-about {
+            overflow-x: scroll;
+        }
     </style>
 @endsection
 

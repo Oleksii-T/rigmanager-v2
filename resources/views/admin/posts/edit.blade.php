@@ -402,21 +402,22 @@
             <div class="card card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <span class="mr-2">Approving Progress</span>
+                        <span class="mr-2">Approving Progress ({{$approvingPosts->where('status', 'approved')->count()}}/{{$approvingPosts->count()}})</span>
                     </h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         @foreach ($approvingPosts as $approvingPost)
                             @php
-                                if ($post->id == $approvingPost->id) {
-                                    $cl = 'text-secondary';
-                                } else if ($approvingPost->status == 'pending') {
+                                if ($approvingPost->status == 'pending') {
                                     $cl = 'text-warning';
                                 } else if ($approvingPost->status == 'approved') {
                                     $cl = 'text-success';
                                 } else {
                                     $cl = 'text-danger';
+                                }
+                                if ($post->id == $approvingPost->id) {
+                                    $cl .= ' font-weight-bold font-italic';
                                 }
                             @endphp
                             <div class="col-md-4">

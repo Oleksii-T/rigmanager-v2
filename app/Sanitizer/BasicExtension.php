@@ -46,6 +46,7 @@ class BasicExtension implements ExtensionInterface
 
             // custom
             'b' => new \App\Sanitizer\BNodeVisitor($config['tags']['b'] ?? []),
+            'strong' => new \App\Sanitizer\StrongNodeVisitor($config['tags']['strong'] ?? []),
             'strike' => new \App\Sanitizer\StrikeNodeVisitor($config['tags']['strike'] ?? []),
         ];
     }

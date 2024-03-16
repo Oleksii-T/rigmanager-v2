@@ -69,12 +69,88 @@ class DevController extends Controller
     {
         $d = [];
 
-        $posts = User::find(1)->posts;
-        $d = $posts->count();
+        $posts = Post::query()
+            ->where('user_id', 9)
+            ->get();
+        $posts = [];
 
         foreach ($posts as $post) {
-            $post->forceDelete();
+
+            $t = \App\Models\Translation::query()
+                ->where('translatable_type', 'App\Models\Post')
+                ->where('translatable_id', $post->id)
+                ->where('field', 'description')
+                ->where('locale', 'en')
+                ->first();
+
+            $desc = $t->value;
+
+            foreach (\App\Traits\ScrapePosts::getEscapedChars() as $esc) {
+                if ($esc[2]) {
+                    $desc = preg_replace($esc[0], $esc[1], $desc);
+                } else {
+                    $desc = str_replace($esc[0], $esc[1], $desc);
+                }
+            }
+            
+            $t->update([
+                'value' => $desc
+            ]);
+
+            // dump("Updated $t->id");
+
+            continue;
+
+            $t = \App\Models\Translation::query()
+                ->where('translatable_type', 'App\Models\Post')
+                ->where('translatable_id', $post->id)
+                ->where('field', 'description')
+                ->where('locale', 'en')
+                ->first();
+
+            \App\Models\Translation::query()
+                ->where('translatable_type', 'App\Models\Post')
+                ->where('translatable_id', $post->id)
+                ->where('field', 'meta_description')
+                ->where('locale', 'en')
+                ->first()
+                ->update([
+                    'value' => Post::generateMetaDescriptionHelper($t->value)
+                ]);
         }
+
+        $post = Post::find(2004);
+        $desc = $post->description;
+
+        // find closes chart
+        for ($i=0; $i < strlen($desc); $i++) { 
+            $char = $desc[$i];
+            $code = ord($char);
+            if ($code == 195) {
+                // dd("found '192' char at $i");
+            }
+        }
+
+        $from = 775;
+        $length = 10;
+
+        $d[] = substr($desc, $from, $length);
+
+        if ($length < 21) {
+            foreach (range($from,$from+$length) as $i) {
+                $d[$i] = [
+                    $desc[$i]??'',
+                    ord($desc[$i]??'')
+                ];
+            }
+        }
+
+        // $d = ord(195);
+        // $d = substr($d, 843, 10);
+
+        // $d[] = $desc;
+
+
 
         dd($d);
     }
