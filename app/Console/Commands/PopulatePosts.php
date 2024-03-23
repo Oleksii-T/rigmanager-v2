@@ -49,12 +49,13 @@ class PopulatePosts extends Command implements PromptsForMissingInput
 
         $user = $this->getUser($this->userId);
         $posts = $this->getPosts($user, $this->skipWithViews);
+        $f = 'Y-m-d';
 
         $this->warn("User: #$user->id $user->name <$user->email>");
         $this->warn("Amount of posts to be processed: " . $posts->count());
         $this->warn("Skip with Views: $this->skipWithViews");
         $this->warn("Amount of views to be faked: $this->minViews - $this->maxViews");
-        $dText = now()->subDays($this->periodPastDays + $this->periodDays)->format('d/m/Y') . ' - ' . now()->subDays($this->periodPastDays)->format('d/m/Y');
+        $dText = now()->subDays($this->periodPastDays + $this->periodDays)->format($f) . ' - ' . now()->subDays($this->periodPastDays)->format($f);
         $this->warn("Date to be randomized: $dText");
 
         if ($posts->isEmpty()) {

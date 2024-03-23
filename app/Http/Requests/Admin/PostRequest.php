@@ -54,8 +54,10 @@ class PostRequest extends FormRequest
             'part_number' => ['nullable', 'string', 'max:255'],
             'is_tba' => ['nullable', 'boolean'],
             'is_double_cost' => ['nullable', 'boolean'],
-            'cost_from' => ['nullable', 'numeric', 'min:1', 'max:9999999'],
-            'cost_to' => ['nullable', 'numeric', 'min:1', 'max:9999999'],
+            'cost_from' => ['nullable', 'required_if:is_double_cost,1', 'numeric', 'min:1', 'max:9999999'],
+            'cost_to' => ['nullable', 'required_if:is_double_cost,1', 'numeric', 'min:1', 'max:9999999'],
+            'cost_per' => ['nullable', 'string'],
+            'cost' => ['nullable', 'required_if:is_double_cost,0', 'numeric', 'min:1', 'max:9999999'],
             'currency' => ['nullable', 'required_with:cost'],
             'images' => ['nullable', 'array'],
             // .jpg, .jpeg, .png, .bmp, .gif, .svg, .webp

@@ -125,7 +125,23 @@ $(document).ready(function () {
         e.preventDefault();
         let el = $(this).closest('.file-input');
         let url = $(this).data('url');
+        let id = el.data('id');
+        let input = el.data('input');
         console.log(url);
+
+        if (id && input) {
+            input = $(this).closest('form').find(`[name="${input}"]`);
+            let val = input.val();
+            if (val) {
+                val = JSON.parse(val);
+                val.push(id);
+            } else {
+                val = [id];
+            }
+            val = JSON.stringify(val);
+            input.val(val);
+        }
+
         if (!url) {
             el.remove();
             return;
@@ -149,7 +165,42 @@ $(document).ready(function () {
         });
 
     })
+
+    let inputsForCount = $('.count-input-chart');
+    inputsForCount.each(function(index) {
+        countCharsInInput($(this));
+        $(this).on('input', function(e) {
+            countCharsInInput($(this));
+        })
+    });
 });
+
+function countCharsInInput(el) {
+    // get wraper of label and input field
+    let wraper = el.closest('.form-group');
+
+    // get lavel of input
+    let label;
+    if (wraper.find('.nav-tabs')) {
+        let locale = el.data('locale');
+        label = wraper.find(`.nav-tabs [data-locale="${locale}"]`);        
+    } else {
+        label = wraper.find('label');
+    }
+
+    // remove existing counter
+    label.parent().find('.input-counter').remove();
+
+    // get current chars
+    let currentValue = el.val();
+    let charsInCurrentValue = currentValue.length;
+
+    // prepare counter html
+    let counter = `<small class="input-counter" style="padding-left: 5px;">c:${charsInCurrentValue}</small>`;
+
+    // append counter to label
+    label.after(counter);
+}
 
 function initDatePicker(el) {
     el.daterangepicker({

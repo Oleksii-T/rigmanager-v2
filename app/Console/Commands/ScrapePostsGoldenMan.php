@@ -49,9 +49,8 @@ class ScrapePostsGoldenMan extends Command
             ->value('breadcrumbs', '.woocommerce-breadcrumb a', null, true)
             ->value('title', '.product_title')
             ->value('images', '.woocommerce-product-gallery__wrapper a img', 'src', true)
-            ->value('description-short', '.woocommerce-product-details__short-description', null, false, false, false)
+            ->value('description-short', '.woocommerce-product-details__short-description', 'html', false, false, false)
             ->value('description', '.woocommerce-Tabs-panel--description', 'html')
-            ->shot('tables-img', '.woocommerce-Tabs-panel--description table')
             ->limit($this->scrapeLimit)
             ->sleep($this->sleep)
             ->debug($this->scraperDebug)
@@ -72,8 +71,8 @@ class ScrapePostsGoldenMan extends Command
     {
         $desc = $scrapedPost['description-short'] . "\r\n" . $scrapedPost['description'];
         $desc = $this->descriptionEscape($desc);
-        $desc = str_replace('&deg;', "°", $desc);
-        $desc = str_replace('&amp;', "&", $desc);
+        // $desc = str_replace('&deg;', "°", $desc);
+        // $desc = str_replace('&amp;', "&", $desc);
 
         return $desc;
     }
@@ -83,11 +82,6 @@ class ScrapePostsGoldenMan extends Command
         $images = $scrapedPost['images'];
 
         return $images;
-    }
-
-    private function parseSavedImages($scrapedPost)
-    {
-        return $scrapedPost['tables-img'];
     }
 
     private function parseCountry($scrapedPost)

@@ -90,11 +90,6 @@ class ScrapePostsCepai extends Command
         return [$scrapedPost['image']??false];
     }
 
-    // private function parseSavedImages($scrapedPost)
-    // {
-    //     return $scrapedPost['tables-img'];
-    // }
-
     private function parseCountry($scrapedPost)
     {
         return 'cn';

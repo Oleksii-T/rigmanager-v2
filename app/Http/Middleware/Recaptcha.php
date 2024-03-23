@@ -38,15 +38,18 @@ class Recaptcha
 
     private function checkRecaptcha($token)
     {
+        // dlog("Recaptcha@checkRecaptcha"); //! LOG
         $secret = config('services.recaptcha.private_key');
         $threshold = config('services.recaptcha.threshold');
 
         if (!$secret || !$threshold) {
             // if keys are empty, assume that recaptcha is disabled by admin
+            // dlog(" no keys"); //! LOG
             return true;
         }
 
         if (!$token) {
+            // dlog(" not token"); //! LOG
             return false;
         }
 
@@ -58,13 +61,16 @@ class Recaptcha
 
             if (!$response['success'] && in_array('invalid-input-response', $response['error-codes'])) {
                 // user has invalid recatcha token
+                // dlog(" wrong token"); //! LOG
                 return false;
             }
 
             if ($response['score'] < $threshold) {
                 // dlog(" recaptcha score: " . $response['score']); //! LOG
+                // dlog(" bad threshold"); //! LOG
                 return false;
             }
+            // dlog(" ok threshold " . $threshold); //! LOG
         } catch (\Throwable $th) {
             // if recapcha service fails, treat as success
             \Log::error('Repatcha error: ' . $th->getMessage() . '. Response: ' . json_encode($response??''));

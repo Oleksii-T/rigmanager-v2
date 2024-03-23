@@ -70,11 +70,36 @@ class DevController extends Controller
         $d = [];
 
         $posts = Post::query()
-            ->where('user_id', 9)
+            ->where('user_id', 12)
             ->get();
+
         $posts = [];
 
         foreach ($posts as $post) {
+            // $post->forceDelete();
+            // continue;
+
+            // try {
+            //     if (!str_contains($post->description, '<p>')) {
+            //         $post->saveTranslations([
+            //             'description' => [
+            //                 'en' => '<p>' . $post->description . '</p>'
+            //             ]
+            //         ]);
+            //     }
+            // } catch (\Throwable $th) {
+            //     //throw $th;
+            // }
+
+            // $post->saveTranslations([
+            //     'meta_description' => [
+            //         'en' => $post->generateMetaDescription()
+            //     ]
+            // ]);
+
+            // dump('s');
+
+            // continue;
 
             $t = \App\Models\Translation::query()
                 ->where('translatable_type', 'App\Models\Post')
@@ -97,29 +122,12 @@ class DevController extends Controller
                 'value' => $desc
             ]);
 
-            // dump("Updated $t->id");
-
-            continue;
-
-            $t = \App\Models\Translation::query()
-                ->where('translatable_type', 'App\Models\Post')
-                ->where('translatable_id', $post->id)
-                ->where('field', 'description')
-                ->where('locale', 'en')
-                ->first();
-
-            \App\Models\Translation::query()
-                ->where('translatable_type', 'App\Models\Post')
-                ->where('translatable_id', $post->id)
-                ->where('field', 'meta_description')
-                ->where('locale', 'en')
-                ->first()
-                ->update([
-                    'value' => Post::generateMetaDescriptionHelper($t->value)
-                ]);
+            dump("Updated $t->id");
         }
 
-        $post = Post::find(2004);
+        // dd('done');
+
+        $post = Post::find(2157);
         $desc = $post->description;
 
         // find closes chart
@@ -127,12 +135,12 @@ class DevController extends Controller
             $char = $desc[$i];
             $code = ord($char);
             if ($code == 195) {
-                // dd("found '192' char at $i");
+                dump("found '192' char at $i");
             }
         }
 
-        $from = 775;
-        $length = 10;
+        $from = 1;
+        $length = 1000;
 
         $d[] = substr($desc, $from, $length);
 

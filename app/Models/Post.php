@@ -291,7 +291,13 @@ class Post extends Model
 
         $symbol = currencies($currency??$costM->currency);
 
-        return $symbol . number_format($costM->cost, 2);
+        $cost = $symbol . number_format($costM->cost, 2);
+
+        if ($this->cost_per) {
+            $cost .= " per $this->cost_per";
+        }
+
+        return $cost;
     }
 
     public function thumbnail($defaultImg=true)
@@ -313,13 +319,16 @@ class Post extends Model
 
     public function saveCosts($input)
     {
+        // dlog("Post@saveCosts"); //! LOG
         if ($input['is_double_cost']??false) {
+            // dlog(" is double"); //! LOG
             $costs = [
                 'eq' => null,
                 'from' => $input['cost_from']??null,
                 'to' => $input['cost_to']??null,
             ];
         } else {
+            // dlog(" is single :("); //! LOG
             if (($input['cost_to']??false) && !($input['cost_from']??false)) {
                 $input['cost'] = $input['cost_to'];
             }
@@ -333,6 +342,8 @@ class Post extends Model
             ];
         }
         $baseCurrency = $input['currency'];
+
+        // dlog(" res", $costs); //! LOG
 
         foreach ($costs as $type => $cost) {
             if (!$cost) {
@@ -395,7 +406,7 @@ class Post extends Model
     public static function generateMetaDescriptionHelper(string $description)
     {
         $description = strip_tags($description);
-        $maxSeoDesc = 150;
+        $maxSeoDesc = 140;
         $seoDescSufix = ' | rigmanagers.com';
         $seoDescSufixLength = strlen($seoDescSufix);
         $maxSeoDesc -= $seoDescSufixLength;

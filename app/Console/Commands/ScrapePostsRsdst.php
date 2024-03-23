@@ -87,17 +87,15 @@ class ScrapePostsRsdst extends Command
     private function parseDescription($scrapedPost)
     {
         $descriptions = [$scrapedPost['description-short']];
+
         foreach ($scrapedPost['description'] as $d) {
-            if (str_contains($d, 'RSD strength')) {
+            if (str_contains($d, 'RSD strength') || str_contains($d, 'Data download')) {
                 continue;
             }
             $descriptions[] = $d;
         }
+
         $desc = implode("\r\n", $descriptions);
-        $desc = str_replace('Technical parameters', '', $desc);
-        $desc = str_replace('&acirc;&#133;&cent;', 'Ⅲ', $desc);
-        $desc = str_replace('&iuml;&frac14;&#158;', '>', $desc);
-        $desc = str_replace('&auml;&cedil;&ordm;', '为', $desc);
         $desc = $this->descriptionEscape($desc);
 
         return $desc;

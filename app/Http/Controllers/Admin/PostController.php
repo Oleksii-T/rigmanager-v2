@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Setting;
+use App\Models\Attachment;
 use Illuminate\Support\Str;
 use App\Models\Notification;
 use Illuminate\Http\Request;
@@ -73,12 +74,20 @@ class PostController extends Controller
         $input['is_active'] ??= false;
         $input['is_urgent'] ??= false;
         $input['is_import'] ??= false;
+        $input['description'] = str_replace('<p></p>', '', $input['description']);
+        $input['description'] = str_replace('<br></p>', '</p>', $input['description']);
+        $input['description'] = str_replace('<p><strong></strong></p>', '', $input['description']);
         $oldStatus = $post->status;
         $post->update($input);
         $post->saveCosts($input);
         $post->saveTranslations($input);
         $post->addAttachment($input['images']??null, 'images');
         $post->addAttachment($input['documents']??[], 'documents');
+        $toDelImages = $request->deleted_images ? json_decode($request->deleted_images, true) : [];
+
+        foreach ($toDelImages as $imgId) {
+            Attachment::find($imgId)->delete();
+        }
 
         $hidePending = Setting::get('hide_pending_posts', true, true);
         if ($oldStatus == 'pending' && $post->status == 'approved' && $hidePending) {

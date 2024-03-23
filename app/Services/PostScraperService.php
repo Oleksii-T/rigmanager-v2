@@ -225,7 +225,14 @@ class PostScraperService
      *
      * @return self
      */
-    public function value(string $name, string $selector, string $attribute=null, bool $isMultiple=false, bool $getFromPostsPage=false, bool $required=true)
+    public function value(
+        string $name, 
+        string $selector, 
+        string $attribute=null, 
+        bool $isMultiple=false, 
+        bool $getFromPostsPage=false, 
+        bool $required=true
+    )
     {
         $this->values[$name] = [
             'required' => $this->nullableValues ? false : $required,

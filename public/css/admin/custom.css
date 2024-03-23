@@ -57,6 +57,7 @@
     top: 6px;
 }
 
+/* summernote fix */
 .note-frame table td {
     border: 1px solid #505050;
 }

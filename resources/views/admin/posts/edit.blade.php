@@ -26,6 +26,7 @@
         @if ($approvingPosts)
             <input type="hidden" name="approveFilters" value="{{request()->approveFilters}}">
         @endif
+        <input type="hidden" name="deleted_images">
         <div class="card card-secondary">
             <div class="card-header">
                 <h3 class="card-title">General info</h3>
@@ -45,21 +46,21 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Slug</label>
-                            <x-admin.multi-lang-input name="slug" :model="$post" />
+                            <x-admin.multi-lang-input name="slug" :model="$post" count="1"/>
                             <span data-input="slug" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Meta Title</label>
-                            <x-admin.multi-lang-input name="meta_title" :model="$post" />
+                            <x-admin.multi-lang-input name="meta_title" :model="$post" count="1" />
                             <span data-input="meta_title" class="input-error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Meta Description</label>
-                            <x-admin.multi-lang-input name="meta_description" :model="$post" />
+                            <x-admin.multi-lang-input name="meta_description" :model="$post" count="1" />
                             <span data-input="meta_description" class="input-error"></span>
                         </div>
                     </div>
@@ -337,7 +338,7 @@
                         </div>
                     </div>
                     @foreach ($post->images as $image)
-                        <div class="col-md-4 file-input">
+                        <div class="col-md-4 file-input" data-id="{{$image->id}}" data-input="deleted_images">
                             <div class="form-group show-uploaded-file-name show-uploaded-file-preview">
                                 <div class="input-group">
                                     <div class="custom-file">

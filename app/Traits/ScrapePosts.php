@@ -360,7 +360,7 @@ trait ScrapePosts
     private function descriptionEscape($desc, $removeTable=true)
     {
         foreach ($this->getEscapedChars() as $esc) {
-            if ($sc[2]) {
+            if ($esc[2]) {
                 $desc = preg_replace($esc[0], $esc[1], $desc);
             } else {
                 $desc = str_replace($esc[0], $esc[1], $desc);
@@ -414,6 +414,8 @@ trait ScrapePosts
             ['&acirc;&#132;&#131;', 'C', false],
             ['&iuml;&frac14;&#156;', '<', false],
             ['&iuml;&#129;&not;', '', false],
+            ['&atilde;&#128;&#157;', '"', false],
+            ['&atilde;&#128;&#158;', '"', false],
 
             [chr(195).chr(131).chr(194).chr(151), 'x', false], 
             [chr(195).chr(142).chr(194).chr(188), 'µ', false], 
@@ -447,6 +449,8 @@ trait ScrapePosts
             [chr(195).chr(163).chr(194).chr(128).chr(194).chr(158), '"', false], 
             [chr(195).chr(162).chr(194).chr(133).chr(194).chr(161), 'Ⅱ', false], 
             [chr(195).chr(175).chr(194).chr(188).chr(194).chr(142), '.', false], 
+            [chr(195).chr(162).chr(194).chr(133).chr(194).chr(162), 'Ⅲ', false], 
+            [chr(195).chr(175).chr(194).chr(188).chr(194).chr(158), '>', false], 
             // [, false], 
             
 
