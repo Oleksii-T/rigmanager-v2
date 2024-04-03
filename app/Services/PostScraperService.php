@@ -561,7 +561,7 @@ class PostScraperService
 
         if ($attr && $attr == 'html') {
             $res = $node?->ownerDocument->saveHtml($node);
-            $res = $this->crearHtml($res)??null;
+            // $res = $this->crearHtml($res)??null;
         } else if ($attr) {
             $res = $node->getAttribute($attr)??null;
         } else {
@@ -581,6 +581,7 @@ class PostScraperService
 
     /**
      * Remove arbitrary attributes from html
+     * ! breaks multibyte chars
      *
      * @param string $html Input html
      *

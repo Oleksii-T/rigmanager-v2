@@ -357,7 +357,7 @@ trait ScrapePosts
         return;
     }
 
-    private function descriptionEscape($desc, $removeTable=true)
+    public function descriptionEscape($desc)
     {
         foreach ($this->getEscapedChars() as $esc) {
             if ($esc[2]) {

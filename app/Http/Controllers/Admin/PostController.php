@@ -107,17 +107,25 @@ class PostController extends Controller
 
         if ($request->approveFilters) {
             $f = json_decode($request->approveFilters, true);
-            $post = $this->filter($f, Post::query())
-                ->latest()
-                ->where('id', '<', $post->id)
-                ->first();
+            $redirect = route('admin.posts.edit', $post);
 
-            if (!$post) {
-                return $this->jsonSuccess('Post updated. Next post to apprive not found');
+            if ($request->go_to_next) {
+                $post = $this->filter($f, Post::query())
+                    ->latest()
+                    ->where('id', '<', $post->id)
+                    ->first();
+    
+                if (!$post) {
+                    return $this->jsonSuccess('Post updated. Next post to apprive not found');
+                }
+    
+                $redirect = route('admin.posts.edit', $post);
             }
 
+            $redirect .= '?approveFilters=' . $request->approveFilters;
+
             return $this->jsonSuccess('Post updated successfully', [
-                'redirect' => route('admin.posts.edit', $post) . '?approveFilters=' . $request->approveFilters
+                'redirect' => $redirect
             ]);
         }
 

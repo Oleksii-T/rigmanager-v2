@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Facades\DumperServiceFacade as Dumper;
+use App\Services\Css2XPathService;
 
 /**
  * Controller for developers use only
@@ -20,6 +21,8 @@ use App\Facades\DumperServiceFacade as Dumper;
  */
 class DevController extends Controller
 {
+    use \App\Traits\ScrapePosts;
+
     private $d = [];
     private $timings = [];
     private $queryLog = false;
@@ -73,7 +76,7 @@ class DevController extends Controller
             ->where('user_id', 12)
             ->get();
 
-        $posts = [];
+        // $posts = [];
 
         foreach ($posts as $post) {
             // $post->forceDelete();
@@ -117,7 +120,7 @@ class DevController extends Controller
                     $desc = str_replace($esc[0], $esc[1], $desc);
                 }
             }
-            
+
             $t->update([
                 'value' => $desc
             ]);
@@ -131,7 +134,7 @@ class DevController extends Controller
         $desc = $post->description;
 
         // find closes chart
-        for ($i=0; $i < strlen($desc); $i++) { 
+        for ($i=0; $i < strlen($desc); $i++) {
             $char = $desc[$i];
             $code = ord($char);
             if ($code == 195) {
@@ -163,6 +166,36 @@ class DevController extends Controller
         dd($d);
     }
 
+    private function querySelector($html, $selector, $context=null)
+    {
+        if ($html instanceof \DOMElement) {
+            $innerHTML = "";
+
+            foreach ($html->childNodes as $child) {
+                $innerHTML .= $html->ownerDocument->saveHTML($child);
+            }
+
+            $html = $innerHTML;
+        } else {
+            // remove inner html tag to prevent query selectors error
+            if (substr_count($html, '</html>') > 1) {
+                $start = strposX($html, '<html', 2);
+                $end = strpos($html, '</html>') + 7;
+                $html = substr($html, 0, $start) . substr($html, $end);
+            }
+        }
+
+        libxml_use_internal_errors(true);
+        $dom = new \DomDocument;
+        $dom->loadHTML($html);
+        $xpath = new \DOMXPath($dom);
+        $tr = new Css2XPathService($selector);
+        $tr = $tr->asXPath();
+        $nodeList = $xpath->query($tr);
+
+        return $nodeList;
+    }
+
     private function scrapeTest()
     {
         $d = [];
@@ -182,7 +215,7 @@ class DevController extends Controller
         //     ->sleep(0)
         //     ->debug(true)
         //     ->scrape();
-        
+
 
         dd($d);
     }
@@ -222,7 +255,7 @@ class DevController extends Controller
             ->select('.auto-listings-Tabs-panel--specifications')
             ->setScreenshotType('jpeg', 100)
             ->newHeadless();
-        
+
         $browserhot->setOption('addStyleTag', json_encode([
             'content' => '.specifications_tables{display:block !important;}'
         ]));

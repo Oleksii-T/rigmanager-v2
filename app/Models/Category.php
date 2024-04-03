@@ -258,7 +258,7 @@ class Category extends Model
     {
         $categs = self::active()->whereNull('category_id')->with(['childs.translations', 'childs.childs.translations']);
         $categs = $equipment ? $categs->equipment() : $categs->service();
-        $categs = $categs->get();
+        $categs = $categs->get()->sortBy('name');
 
         $first = [];
         $second = [];
@@ -266,13 +266,13 @@ class Category extends Model
 
         foreach ($categs as $firstC) {
             $first[] = $firstC;
-            foreach ($firstC['childs']??[] as $secondC) {
+            foreach ($firstC->childs->sortBy('name') as $secondC) {
                 if (isset($second[$firstC->id])) {
                     $second[$firstC->id][] = $secondC;
                 } else {
                     $second[$firstC->id] = [$secondC];
                 }
-                foreach ($secondC['childs']??[] as $thirdC) {
+                foreach ($secondC->childs->sortBy('name') as $thirdC) {
                     if (isset($third[$secondC->id])) {
                         $third[$secondC->id][] = $thirdC;
                     } else {

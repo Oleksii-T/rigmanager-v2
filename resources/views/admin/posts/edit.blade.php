@@ -20,7 +20,7 @@
 @stop
 
 @section('content')
-    <form action="{{route('admin.posts.update', $post)}}" method="POST" class="pb-3 general-ajax-submit">
+    <form action="{{route('admin.posts.update', $post)}}" method="POST" class="pb-3 approve-form">
         @csrf
         @method('PUT')
         @if ($approvingPosts)
@@ -429,7 +429,8 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-success">Save and go to next</button>
+            <button type="submit" class="btn btn-success">Save</button>
+            <button type="submit" name="go_to_next" value="1" class="btn btn-success">Save and go to next</button>
             <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
         @else
             <button type="submit" class="btn btn-success">Save</button>
@@ -438,7 +439,6 @@
                 Add View(s)
             </button>
         @endif
-        
     </form>
 
     <div class="modal fade" id="add-views">
@@ -480,5 +480,37 @@
 
 @push('scripts')
     <script src="{{asset('/js/admin/posts.js')}}?v={{time()}}"></script>
+    <script>
+        $(document).ready(function () {
+            // general logic of ajax form submit (supports files)
+            $(document).on('click', '.approve-form button[type="submit"]', function (e) {
+                e.preventDefault();
+                loading();
+                $('.input-error').empty();
+                let form = $(this).closest('form');
+                let formData = new FormData(form.get(0));
+
+                if ($(this).attr('name')) {
+                    formData.append($(this).attr('name'), $(this).attr('value'));
+                }
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: (response)=>{
+                        showServerSuccess(response);
+                    },
+                    error: function(response) {
+                        swal.close();
+                        showServerError(response);
+                    }
+                });
+            })
+        });
+    </script>
 @endpush
 
