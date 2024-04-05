@@ -74,9 +74,6 @@ class ScrapePostsSanmon extends Command
     {
         $description = $scrapedPost['description'];
         $description = $this->descriptionEscape($description);
-        $description = str_replace('&acirc;&#129;&#132;', '/', $description);
-        $description = str_replace('&middot;', '- ', $description);
-        $description = str_replace('&acirc;&#128;&#148;', '-', $description);
 
         return $description;
     }

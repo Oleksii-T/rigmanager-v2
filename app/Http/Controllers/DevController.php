@@ -73,14 +73,14 @@ class DevController extends Controller
         $d = [];
 
         $posts = Post::query()
-            ->where('user_id', 12)
+            ->where('user_id', 16)
             ->get();
 
         // $posts = [];
 
         foreach ($posts as $post) {
-            // $post->forceDelete();
-            // continue;
+            $post->forceDelete();
+            continue;
 
             // try {
             //     if (!str_contains($post->description, '<p>')) {

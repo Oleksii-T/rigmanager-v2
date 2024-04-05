@@ -416,6 +416,10 @@ trait ScrapePosts
             ['&iuml;&#129;&not;', '', false],
             ['&atilde;&#128;&#157;', '"', false],
             ['&atilde;&#128;&#158;', '"', false],
+            ['&acirc;&#129;&#132;', '/', false],
+            ['&acirc;&#129;&#132;', '/', false],
+            ['&middot;', '- ', false],
+            ['&acirc;&#128;&#148;', '-', false],
 
             [chr(195).chr(131).chr(194).chr(151), 'x', false], 
             [chr(195).chr(142).chr(194).chr(188), 'µ', false], 

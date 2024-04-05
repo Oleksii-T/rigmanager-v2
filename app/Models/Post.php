@@ -53,6 +53,7 @@ class Post extends Model
     ];
 
     const STATUSES = [
+        'pre-approved',
         'approved',
         'pending',
         'draft',
@@ -149,16 +150,16 @@ class Post extends Model
 
     public function scopeVisible($query, $is=true)
     {
+        $hidePending = Setting::get('hide_pending_posts', true, true);
+
         if ($is) {
-            $hidePending = Setting::get('hide_pending_posts', true, true);
             $query->where('is_active', true);
             $query->where('is_trashed', false);
 
             if ($hidePending) {
-                return $query->where('status', 'approved');
+                return $query->whereIn('status', ['approved', 'pre-approved']);
             }
         } else {
-            $hidePending = Setting::get('hide_pending_posts', true, true);
             $query->where('is_active', false);
             $query->where('is_trashed', true);
 
