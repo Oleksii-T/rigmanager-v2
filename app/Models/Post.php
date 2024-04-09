@@ -388,11 +388,6 @@ class Post extends Model
         return $this->generateMetaTitleHelper($this->title, $this->category->name);
     }
 
-    public static function generateMetaTitleHelper(string $title, string $category)
-    {
-        return $title . ' - ' . $category . ' on rigmanagers.com';
-    }
-
     public function generateMetaDescription()
     {
         $d = $this->description;
@@ -402,6 +397,26 @@ class Post extends Model
         }
 
         return $this->generateMetaDescriptionHelper($d);
+    }
+
+    public function getApprovingClass()
+    {
+        if ($this->status == 'pending') {
+            $cl = 'text-warning';
+        } else if ($this->status == 'approved') {
+            $cl = 'text-success';
+        } else if ($this->status == 'pre-approved') {
+            $cl = 'text-info';
+        } else {
+            $cl = 'text-danger';
+        }
+
+        return $cl;
+    }
+
+    public static function generateMetaTitleHelper(string $title, string $category)
+    {
+        return $title . ' - ' . $category . ' on rigmanagers.com';
     }
 
     public static function generateMetaDescriptionHelper(string $description)

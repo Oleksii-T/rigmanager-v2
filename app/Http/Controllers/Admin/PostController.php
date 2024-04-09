@@ -54,10 +54,15 @@ class PostController extends Controller
     {
         $approveFilters = $request->approveFilters;
         $approvingPosts = null;
+        $prev = null;
+        $next = null;
 
         if ($approveFilters) {
             $approveFilters = json_decode($approveFilters, true);
             $approvingPosts = $this->filter($approveFilters, Post::query())->latest()->select(['id', 'status'])->with('translations')->get();
+            $position = $approvingPosts->search(fn ($item, $key) => $item->id == $post->id);
+            $prev = !$position ? null : $approvingPosts[$position - 1];
+            $next = $position == $approvingPosts->count()-1 ? null : $approvingPosts[$position + 1];
         }
 
         $users = User::all();
@@ -65,7 +70,7 @@ class PostController extends Controller
         $categories = \App\Models\Category::active()->get();
         $activeLevels = array_column($post->category->parents(true), 'id');
 
-        return view('admin.posts.edit', compact('post', 'approvingPosts', 'users', 'categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'activeLevels'));
+        return view('admin.posts.edit', compact('post', 'approvingPosts', 'users', 'categsFirstLevel', 'categsSecondLevel', 'categsThirdLevel', 'activeLevels', 'prev', 'next'));
     }
 
     public function update(PostRequest $request, Post $post)
@@ -74,9 +79,13 @@ class PostController extends Controller
         $input['is_active'] ??= false;
         $input['is_urgent'] ??= false;
         $input['is_import'] ??= false;
+        $input['description'] = str_replace("<p>\r\n</p>", '', $input['description']);
         $input['description'] = str_replace('<p></p>', '', $input['description']);
         $input['description'] = str_replace('<br></p>', '</p>', $input['description']);
         $input['description'] = str_replace('<p><strong></strong></p>', '', $input['description']);
+        // if (!in_array($post->id, [2294])) {
+            $input['description'] = array_map(fn ($d) => \App\Sanitizer\Sanitizer::handle($d, false), $input['description']);
+        // }
         $oldStatus = $post->status;
         $post->update($input);
         $post->saveCosts($input);

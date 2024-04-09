@@ -36,7 +36,7 @@ class PostRequest extends FormRequest
             'meta_title.en' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'array', new ValidSlug(Post::class, $model->id??null)],
             'description' => ['required', 'array'],
-            'description.en' => ['required', 'string', 'max:60000'],
+            'description.en' => ['required', 'string'], //'max:60000'
             'meta_description' => ['required', 'array'],
             'meta_description.en' => ['required', 'string', 'max:500'],
             'user_id' => ['required', 'exists:users,id'],

@@ -31,7 +31,26 @@
             <div class="card-header">
                 <h3 class="card-title">General info</h3>
                 @if ($post->scraped_url)
-                    <a style="padding-left: 10px; color:rgb(211, 211, 211)" href="{{$post->scraped_url}}" target="_blank">{{$post->scraped_url}}</a>
+                    <a style="padding-left: 10px; color:rgb(211, 211, 211)" href="{{$post->scraped_url}}" target="_blank">
+                        {{$post->scraped_url}}
+                    </a>
+                @endif
+                @if ($approvingPosts)
+                    <div style="display:inline-block;float:right">
+                        @if ($prev)
+                            <a href="{{route('admin.posts.edit', $prev) . '?approveFilters=' . request()->approveFilters}}" class="{{$prev->getApprovingClass()}}">{{$prev->id}}</a>
+                        @else
+                            <a href="#">-</a>
+                        @endif
+                        >
+                        {{$post->id}}
+                        >
+                        @if ($next)
+                            <a href="{{route('admin.posts.edit', $next) . '?approveFilters=' . request()->approveFilters}}" class="{{$next->getApprovingClass()}}">{{$next->id}}</a>                        
+                        @else
+                            <a href="#">-</a>
+                        @endif
+                    </div>
                 @endif
             </div>
             <div class="card-body">
@@ -410,20 +429,16 @@
                     <div class="row">
                         @foreach ($approvingPosts as $approvingPost)
                             @php
-                                if ($approvingPost->status == 'pending') {
-                                    $cl = 'text-warning';
-                                } else if ($approvingPost->status == 'approved') {
-                                    $cl = 'text-success';
-                                } else {
-                                    $cl = 'text-danger';
-                                }
+                                $cl = $approvingPost->getApprovingClass();
                                 if ($post->id == $approvingPost->id) {
                                     $cl .= ' font-weight-bold font-italic';
                                 }
                             @endphp
                             <div class="col-md-4">
                                 <span>{{$approvingPost->id}}</span>.
-                                <a href="{{route('admin.posts.edit', $approvingPost) . '?approveFilters=' . request()->approveFilters}}" class="{{$cl}}">{{$approvingPost->title}}</a>
+                                <a href="{{route('admin.posts.edit', $approvingPost) . '?approveFilters=' . request()->approveFilters}}" class="{{$cl}}">
+                                    {{$approvingPost->title}}
+                                </a>
                             </div>
                         @endforeach
                     </div>
