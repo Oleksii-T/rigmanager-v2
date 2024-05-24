@@ -10,9 +10,11 @@ use App\Http\Controllers\Admin\MailerController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ScraperController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ScraperRunController;
 use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\FeedbackBanController;
@@ -69,6 +71,10 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('feedback-bans', FeedbackBanController::class)->only('index', 'store', 'update', 'destroy');
 
     Route::resource('feedbacks', FeedbackController::class)->only('show', 'index', 'destroy', 'update');
+    
+    Route::resource('scrapers', ScraperController::class);
+
+    Route::resource('scraper-runs', ScraperRunController::class);
 
     Route::resource('notifications', NotificationController::class)->except('show');
 

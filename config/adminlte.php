@@ -362,6 +362,11 @@ return [
             'url'  => '/admin/translations',
             'icon' => 'fas fa-fw fa-language',
         ],
+        [
+            'text' => 'Scrapers',
+            'url'  => '/admin/scrapers',
+            'icon' => 'fas fa-fw fa-download',
+        ],
         'LOGS',
         [
             'text' => 'Activity Logs',
