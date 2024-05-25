@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('scraper_runs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scraper_id')->constrained()->onDelete('cascade');
+            $table->smallInteger('status');
+            $table->smallInteger('saved')->nullable();
+            $table->smallInteger('scraped')->nullable();
+            $table->smallInteger('max')->nullable();
             $table->timestamp('end_at')->nullable();
             $table->timestamps();
         });

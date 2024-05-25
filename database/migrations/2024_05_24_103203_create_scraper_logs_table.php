@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('scraper_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('run_id')->constrained('scraper_runs')->onDelete('cascade');
-            $table->foreignId('log_id')->constrained('scraper_logs')->onDelete('cascade');
+            $table->foreignId('log_id')->nullable()->constrained('scraper_logs')->onDelete('cascade');
             $table->text('text');
             $table->json('data')->nullable();
             $table->timestamps();

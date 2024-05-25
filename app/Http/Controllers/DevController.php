@@ -72,6 +72,19 @@ class DevController extends Controller
     {
         $d = [];
 
+        $run = \App\Models\ScraperRun::find(5);
+        $d = collect($run->scraper->selectors);
+        $d = $d->where('name', 'post')->first()['value'];
+        // \App\Jobs\ScraperJob::dispatch($run);
+
+
+        dd($d);
+    }
+
+    private function fixChars()
+    {
+        $d = [];
+
         $table = '<table class="aliDataTable" style="box-sizing: content-box; margin: 0px; padding: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; font-size: 12px; line-height: inherit; font-family: Arial, Helvetica, sans-senif; border-collapse: collapse; width: 426.1pt; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; color: rgb(51, 51, 51);">
         <tbody style="box-sizing: content-box; margin: 0px; padding: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit;">
             <tr align="left" style="box-sizing: content-box; margin: 0px; padding: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; height: 30.2pt;">

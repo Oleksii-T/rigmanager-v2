@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->json('base_urls');
             $table->boolean('is_debug');
-            $table->boolean('with_cache');
             $table->integer('scrape_limit')->unsigned()->nullable();
             $table->smallInteger('sleep')->nullable();
             $table->json('selectors');

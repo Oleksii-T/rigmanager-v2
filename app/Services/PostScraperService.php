@@ -67,6 +67,7 @@ class PostScraperService
     private array $result = [];
     private array $ignoreUrls = [];
     private \Closure $logUsingClosure;
+    private \Closure $afterEachScrapeClosure;
     private array $meta = [
         'parsed_posts' => [],
         'parsed_pages' => [],
@@ -88,6 +89,13 @@ class PostScraperService
     public function logUsing(\Closure $callback)
     {
         $this->logUsingClosure = $callback;
+
+        return $this;
+    }
+
+    public function afterEachScrape(\Closure $callback)
+    {
+        $this->afterEachScrapeClosure = $callback;
 
         return $this;
     }
@@ -338,57 +346,85 @@ class PostScraperService
 
         // scrape posts
         foreach ($postsNodeLists as $i => $postNode) {
-            $postUrl = $this->querySelector($postNode, $this->postLinkSelector)->item(0)->getAttribute($this->postLinkAttribute)??null;
+            $scrapedPostData = $this->scrapePostHelper($postNode, $page, $url, $i);
 
-            $this->log("  Post #$page:" . $i+1 . " process: $postUrl");
-
-            if (!$postUrl) {
-                $this->log("    NOT URL");
-                if ($this->abortOnPageError) {
-                    throw new \Exception("Post #" . $i+1 . " url at '$url' can not be retrived", 1);
-                }
-                continue;
+            if (isset($this->afterEachScrapeClosure)) {
+                $function = $this->afterEachScrapeClosure;
+                $function($scrapedPostData);
             }
-
-            if (in_array($postUrl, $this->ignoreUrls)) {
-                continue;
-            }
-
-            if ($this->onlyCount) {
-                $this->meta['parsed_posts'][] = 1;
-                continue;
-            }
-
-            // ensure that link contains schema and domain
-            $postUrl = $this->ensureSchema($postUrl);
-
-            $this->meta['parsed_posts'][$postUrl] = [
-                'start' => microtime(true)
-            ];
-
-            // scrape values from post page
-            $this->result[$postUrl] = $this->processPost($postUrl);
-
-            // scrape values from post preview block
-            foreach ($this->values as $key => $data) {
-                if (!$data['from_posts_page']) {
-                    continue;
-                }
-
-                $this->result[$postUrl][$key] = $this->scrapeValue($postNode, $key, $data);
-            }
-
-            $this->meta['parsed_posts'][$postUrl]['end'] = microtime(true);
 
             if ($this->enough()) {
                 $this->log("    ENOUGH");
-                break;
+                return;
             }
         }
 
         $this->log("  Posts process done");
 
-        // find next page url
+        $nextPageUrl = $this->getNextPaginationUrl($html);
+
+        $this->meta['parsed_pages'][$url]['end'] = microtime(true);
+
+        // check is next page must be scraped
+        if ($this->enough() || !$nextPageUrl) {
+            $this->log("  ENOUGH or NO PAGE");
+            return;
+        }
+
+        // scrape next page
+        return $this->scrapeHelper($nextPageUrl, $page+1);
+    }
+
+    private function scrapePostHelper($postNode, $page, $url, $i)
+    {
+        $postUrl = $this->querySelector($postNode, $this->postLinkSelector)->item(0)->getAttribute($this->postLinkAttribute)??null;
+
+        $this->log("  Post #$page:" . $i+1 . " process: $postUrl");
+
+        if (!$postUrl) {
+            $this->log("    NOT URL");
+            if ($this->abortOnPageError) {
+                throw new \Exception("Post #" . $i+1 . " url at '$url' can not be retrived", 1);
+            }
+            return;
+        }
+
+        if (in_array($postUrl, $this->ignoreUrls)) {
+            return;
+        }
+
+        if ($this->onlyCount) {
+            $this->meta['parsed_posts'][] = 1;
+            return;
+        }
+
+        // ensure that link contains schema and domain
+        $postUrl = $this->ensureSchema($postUrl);
+
+        $this->meta['parsed_posts'][$postUrl] = [
+            'start' => microtime(true)
+        ];
+
+        // scrape values from post page
+        $this->result[$postUrl] = $this->processPost($postUrl);
+
+        // scrape values from post preview block
+        foreach ($this->values as $key => $data) {
+            if (!$data['from_posts_page']) {
+                return;
+            }
+
+            $this->result[$postUrl][$key] = $this->scrapeValue($postNode, $key, $data);
+        }
+
+        $this->meta['parsed_posts'][$postUrl]['end'] = microtime(true);
+
+        return $this->result[$postUrl];
+    }
+
+    private function getNextPaginationUrl($html)
+    {
+        $nextPageUrl = null;
         $paginationUrls = $this->paginationSelector
             ? $this->getLinksFromUrl($html, $this->paginationSelector)
             : [];
@@ -407,16 +443,7 @@ class PostScraperService
             break;
         }
 
-        $this->meta['parsed_pages'][$url]['end'] = microtime(true);
-
-        // check is next page must be scraped
-        if ($this->enough() || !isset($nextPageUrl)) {
-            $this->log("  ENOUGH or NO PAGE");
-            return;
-        }
-
-        // scrape next page
-        return $this->scrapeHelper($nextPageUrl, $page+1);
+        return $nextPageUrl;
     }
 
     /**

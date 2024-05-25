@@ -4,17 +4,17 @@
 
 @section('content_header')
     <x-admin.title
-        text="Scraper #{{$scraper->id}} {{$scraper->name}}"
+        text="Scraper #{{$scraper->id}} '{{$scraper->name}}'"
     />
 @stop
 
 @section('content')
     <div class="row">
         <div class="col-sm-12">
-            @if ($run)
+            @if ($runInProgress)
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Run {{$run->id}} in progress</h3>
+                        <h3 class="card-title">Run {{$runInProgress->id}} in progress</h3>
                     </div>
                     <div class="card-body">
                         
@@ -51,10 +51,11 @@
                         <thead>
                             <tr>
                                 <th class="ids-column">ID</th>
-                                <th>Scraped Posts</th>
-                                <th>Started_at</th>
-                                <th>Ended_at</th>
-                                <th class="actions-column-2">Actions</th>
+                                {{-- <th>Status</th> --}}
+                                {{-- <th>Scraped/Saved/Max Posts</th> --}}
+                                {{-- <th>Started_at</th> --}}
+                                {{-- <th>Ended_at</th> --}}
+                                {{-- <th class="actions-column-2">Actions</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -64,6 +65,7 @@
             </div>
         </div>
     </div>
+    <a href="{{ route('admin.scrapers.edit', $scraper) }}" class="btn btn-outline-secondary text-dark min-w-100">Edit</a>
     <a href="{{ route('admin.scrapers.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
 @endsection
 

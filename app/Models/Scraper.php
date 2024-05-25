@@ -12,7 +12,6 @@ class Scraper extends Model
         'name',
         'base_urls',
         'is_debug',
-        'with_cache',
         'scrape_limit',
         'sleep',
         'selectors',
@@ -28,11 +27,17 @@ class Scraper extends Model
         return $this->hasMany(ScraperRun::class);
     }
 
-    public static function getDefSelectors() {
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public static function getDefSelectors($scraper=null) {
+
         return [
-            'post' => '',
-            'post_link' => '',
-            'pagination' => '',
+            'post',
+            'post_link',
+            'pagination',
         ];
     }
 
