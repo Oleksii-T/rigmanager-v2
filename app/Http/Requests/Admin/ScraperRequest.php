@@ -29,6 +29,7 @@ class ScraperRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'user_id' => ['nullable', 'exists:users,id'],
             'base_urls' => ['required', 'string'],
+            'exclude_urls' => ['nullable', 'string'],
             'scrape_limit' => ['nullable', 'numeric', 'min:1'],
             'sleep' => ['nullable', 'numeric', 'min:1'],
             'with_cache' => ['required', 'bool'],

@@ -47,6 +47,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Exclude Urls <small>comma separated</small></label>
+                            <input name="exclude_urls" type="text" class="form-control">
+                            <span data-input="exclude_urls" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Scrape limit</label>
                             <input name="scrape_limit" type="number" class="form-control">
                             <span data-input="scrape_limit" class="input-error"></span>
@@ -61,7 +68,6 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>-</label>
                             <div class="form-check">
                                 <input id="is_debug" name="is_debug" class="form-check-input" type="checkbox" value="1">
                                 <label for="is_debug" class="form-check-label">Debug enabled</label>

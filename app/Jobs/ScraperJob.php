@@ -9,6 +9,7 @@ use App\Models\Scraper;
 use App\Enums\PostGroup;
 use App\Models\Attachment;
 use App\Models\ScraperRun;
+use App\Models\ScraperPost;
 use App\Jobs\PostTranslate;
 use App\Models\Translation;
 use Illuminate\Support\Str;
@@ -50,13 +51,16 @@ class ScraperJob implements ShouldQueue
     public function handle()
     {
         try {
-            dlog("ScraperJob@handle"); //! LOG
             $run = $this->runModel;
             $scraperModel = $run->scraper;
             $cache = $run->cache_file;
 
+            $this->log('Start Count...');
+
             // count posts to be scraped
             $postsCount = $this->countPostsToBeScraped();
+            
+            $this->log('Count Result', $postsCount);
 
             // save progress
             $run->update([
@@ -65,23 +69,42 @@ class ScraperJob implements ShouldQueue
                 'status' => ScraperRunStatus::IN_PROGRESS
             ]);
 
+            $this->log('Start Scrapping...');
+
             // scrape posts
             $scrapedPosts = $this->scrapePosts();
 
+            $this->log('Posts Scrapped');
+            $this->log('Start Save to DB...');
+
             // saving to db
             $this->saveScrapedPostsToDb($scrapedPosts);
+
+            $this->log('Scraped Posts Saved to DB');
+
+            $run->update([
+                'status' => ScraperRunStatus::SUCCESS,
+                'end_at' => now()
+            ]);
+
         } catch (\Throwable $th) {
+
             $run->update([
                 'status' => ScraperRunStatus::ERROR,
                 'end_at' => now()
             ]);
+
+            $run->logs()->create([
+                'text' => 'ERROR: ' . $th->getMessage(),
+                'data' => $th->getTraceAsString()
+            ]);
+
             throw $th;
         }
     }
 
     private function countPostsToBeScraped() : int
     {
-        dlog("ScraperJob@countPostsToBeScraped"); //! LOG
         $run = $this->runModel;
         $config = $run->scraper;
         $selectors = collect($config->selectors);
@@ -103,7 +126,6 @@ class ScraperJob implements ShouldQueue
 
     private function scrapePosts() : array
     {
-        dlog("ScraperJob@scrapePosts"); //! LOG
         $run = $this->runModel;
         $config = $run->scraper;
         $result = [];
@@ -157,10 +179,10 @@ class ScraperJob implements ShouldQueue
 
     private function saveScrapedPostsToDb($scrapedData)
     {
-        dlog("ScraperJob@saveScrapedPostsToDb"); //! LOG
-        foreach ($scrapedData as $scrapedPostData) {
-            ScraperPost::create([
-                'data' => $scrapedData
+        foreach ($scrapedData as $url => $scrapedPostData) {
+            $this->runModel->posts()->create([
+                'url' => $url,
+                'data' => $scrapedPostData
             ]);
         }
     }
@@ -405,6 +427,11 @@ class ScraperJob implements ShouldQueue
 
     private function log(string $text, $data=[])
     {
+        return $this->runModel->logs()->create([
+            'text' => $text,
+            'data' => $data ?: null
+        ]);
+
         $toLog = $text;
 
         if ($data) {

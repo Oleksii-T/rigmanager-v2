@@ -72,6 +72,9 @@ class DevController extends Controller
     {
         $d = [];
 
+        $log = \App\Models\ScraperLog::find(204);
+        dd($log->text, strlen($log->text), substr($log->text, 0, 20));
+
         $run = \App\Models\ScraperRun::find(5);
         $d = collect($run->scraper->selectors);
         $d = $d->where('name', 'post')->first()['value'];

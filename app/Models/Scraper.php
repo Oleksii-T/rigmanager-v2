@@ -11,6 +11,7 @@ class Scraper extends Model
         'user_id',
         'name',
         'base_urls',
+        'exclude_urls',
         'is_debug',
         'scrape_limit',
         'sleep',
@@ -20,6 +21,7 @@ class Scraper extends Model
     protected $casts = [
         'base_urls' => 'array',
         'selectors' => 'array',
+        'exclude_urls' => 'array',
     ];
 
     public function runs()

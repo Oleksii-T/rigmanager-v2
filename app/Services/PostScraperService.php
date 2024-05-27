@@ -411,7 +411,7 @@ class PostScraperService
         // scrape values from post preview block
         foreach ($this->values as $key => $data) {
             if (!$data['from_posts_page']) {
-                return;
+                continue;
             }
 
             $this->result[$postUrl][$key] = $this->scrapeValue($postNode, $key, $data);

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('name');
             $table->json('base_urls');
+            $table->json('exclude_urls')->nullable();
             $table->boolean('is_debug');
             $table->integer('scrape_limit')->unsigned()->nullable();
             $table->smallInteger('sleep')->nullable();

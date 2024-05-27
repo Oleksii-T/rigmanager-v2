@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('scraper_posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('run_id')->constrained('scraper_runs')->onDelete('cascade');
+            $table->smallInteger('status');
+            $table->string('url');
             $table->json('data');
             $table->timestamps();
         });

@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ScraperRunController;
 use App\Http\Controllers\Admin\AttachmentController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\ScraperPostController;
 use App\Http\Controllers\Admin\FeedbackBanController;
 use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\NotificationController;
@@ -75,6 +76,9 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('scrapers', ScraperController::class);
 
     Route::resource('scraper-runs', ScraperRunController::class);
+    
+    Route::get('scraper-posts/{scraperPost}', [ScraperPostController::class, 'publishing'])->name('scraper-posts.publishing');
+    Route::post('scraper-posts/{scraperPost}', [ScraperPostController::class, 'publish'])->name('scraper-posts.publish');
 
     Route::resource('notifications', NotificationController::class)->except('show');
 

@@ -16,15 +16,51 @@ $(document).ready(function () {
     });
 
     let scraperRunsTable = $('#scraper-runs-table').DataTable({
-        // order: [[ 0, "desc" ]],
+        order: [[ 0, "desc" ]],
         serverSide: true,
+        ajax: {
+            url: window.location.href
+        },
         columns: [
             { data: 'id', name: 'id' },
-            // { data: 'status', name: 'status'},
-            // { data: 'posts', name: 'posts'},
-            // { data: 'created_at', name: 'created_at'},
-            // { data: 'end_at', name: 'end_at' },
-            // { data: 'action', name: 'action', orderable: false, searchable: false }
+            { data: 'status', name: 'status'},
+            { data: 'posts', name: 'posts'},
+            { data: 'created_at', name: 'created_at'},
+            { data: 'end_at', name: 'end_at' },
+            { data: 'action', name: 'action', orderable: false, searchable: false }
+        ]
+    });
+
+    let scraperRunLogsTable = $('#scraper-run-logs-table').DataTable({
+        order: [[ 0, "desc" ]],
+        serverSide: true,
+        pageLength: 100,
+        ajax: {
+            url: window.location.href
+        },
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'text', name: 'text'},
+            { data: 'data', name: 'data'},
+            { data: 'created_at', name: 'created_at'}
+        ]
+    });
+
+    let scraperRunPostsTable = $('#scraper-run-posts-table').DataTable({
+        order: [[ 0, "desc" ]],
+        serverSide: true,
+        pageLength: 100,
+        ajax: {
+            url: window.location.href,
+			data: function (filter) {
+                filter.table = 'posts';
+			}
+        },
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'url', name: 'url'},
+            { data: 'data', name: 'data'},
+            { data: 'created_at', name: 'created_at'}
         ]
     });
 
@@ -33,10 +69,10 @@ $(document).ready(function () {
         deleteResource(scrapersTable, $(this).data('link'));
     });
 
-    // $(document).on('click', '#scraper-runs-table .delete-resource', function (e) {
-    //     e.preventDefault();
-    //     deleteResource(scraperRunsTable, $(this).data('link'));
-    // });
+    $(document).on('click', '#scraper-runs-table .delete-resource', function (e) {
+        e.preventDefault();
+        deleteResource(scraperRunsTable, $(this).data('link'));
+    });
 
     $('.add-selector').click(function(e) {
         e.preventDefault();
@@ -56,5 +92,13 @@ $(document).ready(function () {
 
     $(document).on('click', '.remove-selector', function (e) {
         $(this).closest('.row').remove();
+    })
+
+    $(document).on('click', '.show-full-cell-content-btn', function (e) {
+        e.preventDefault();
+        let text = $(this).closest('div').find('.full-cell-content').html();
+        let modal = $(this).data('target');
+        modal = $(modal);
+        modal.find('.modal-body').html(text);
     })
 });

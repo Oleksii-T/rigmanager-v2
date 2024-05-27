@@ -157,43 +157,7 @@
                             <span data-input="origin_lang" class="input-error"></span>
                         </div>
                     </div>
-                    <div class="col-12 categories-level-selects row">
-                        <input type="hidden" name="category_id" value="{{$post->category_id}}">
-                        <div class="col-4 cat-lev-x cat-lev-1">
-                            <div class="form-group select-block">
-                                <select class="form-control">
-                                    <option value="">@lang('ui.chooseTag')</option>
-                                    @foreach ($categsFirstLevel as $c)
-                                        <option value="{{$c->id}}" data-suggestions="{{$c->suggestions}}" @selected($activeLevels[0] == $c->id)>{{$c->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-4 cat-lev-x cat-lev-2">
-                            @foreach ($categsSecondLevel as $parentId => $secondLevel)
-                                <div class="form-group select-block {{$activeLevels[0] == $parentId ? '' : 'd-none'}}" data-parentcateg="{{$parentId}}">
-                                    <select class="form-control">
-                                        <option value="">@lang('ui.chooseNextTag')</option>
-                                        @foreach ($secondLevel as $c)
-                                            <option value="{{$c->id}}" data-suggestions="{{$c->suggestions}}" @selected(($activeLevels[1]??null) == $c->id)>{{$c->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endforeach
-                        </div>
-                        <div class="col-4 cat-lev-x cat-lev-3">
-                            @foreach ($categsThirdLevel as $parentId => $thirdLevel)
-                                <div class="form-group select-block {{($activeLevels[1]??null) == $parentId ? '' : 'd-none'}}" data-parentcateg="{{$parentId}}">
-                                    <select class="form-control">
-                                        <option value="">@lang('ui.chooseNextTag')</option>
-                                        @foreach ($thirdLevel as $c)
-                                            <option value="{{$c->id}}" data-suggestions="{{$c->suggestions}}" @selected(($activeLevels[2]??null) == $c->id)>{{$c->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endforeach
-                        </div> 
-                    </div>
+                    @include('admin.posts.category-input')
                     <div class="col-md-2 col-lg-2 col-xl-1">
                         <div class="form-group">
                             <label>Is Active</label>
@@ -222,67 +186,7 @@
                 <h3 class="card-title">Price</h3>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Cost</label>
-                            <input type="text" class="form-control" name="cost" value="{{$post->cost}}">
-                            <span data-input="cost" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Cost From</label>
-                            <input type="text" class="form-control" name="cost_from" value="{{$post->cost_from}}">
-                            <span data-input="cost_from" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Cost To</label>
-                            <input type="text" class="form-control" name="cost_to" value="{{$post->cost_to}}">
-                            <span data-input="cost_to" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Cost Per</label>
-                            <input type="text" class="form-control" name="cost_per" value="{{$post->cost_per}}">
-                            <span data-input="cost_per" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Currency</label>
-                            <select class="form-control" name="currency">
-                                @foreach (currencies() as $key => $symbol)
-                                    <option value="{{$key}}" @selected($post->currency)>{{strtoupper($key)}}</option>
-                                @endforeach
-                            </select>
-                            <span data-input="currency" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-lg-2 col-xl-1">
-                        <div class="form-group">
-                            <label>Cost Double Value</label>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="is_double_cost" name="is_double_cost" value="1" @checked($post->is_double_cost)>
-                                <label for="is_double_cost" class="custom-control-label">Yes</label>
-                            </div>
-                            <span data-input="is_double_cost" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-lg-2 col-xl-1">
-                        <div class="form-group">
-                            <label>Price Requests</label>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="is_tba" name="is_tba" value="1" @checked($post->is_tba)>
-                                <label for="is_tba" class="custom-control-label">Yes</label>
-                            </div>
-                            <span data-input="is_tba" class="input-error"></span>
-                        </div>
-                    </div>
-                </div>
+                @include('admin.posts.cost-input')
             </div>
         </div>
         <div class="card card-secondary">
@@ -291,45 +195,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Quantity</label>
-                            <input type="text" class="form-control" name="amount" value="{{$post->amount}}">
-                            <span data-input="amount" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Country</label>
-                            <select class="form-control" name="country">
-                                @foreach (countries() as $key => $name)
-                                    <option value="{{$key}}" @selected($post->country == $key)>{{$name}}</option>
-                                @endforeach
-                            </select>
-                            <span data-input="country" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Manufacturer</label>
-                            <input type="text" class="form-control" name="manufacturer" value="{{$post->manufacturer}}">
-                            <span data-input="manufacturer" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Manufacture Date</label>
-                            <input type="text" class="form-control" name="manufacture_date" value="{{$post->manufacture_date}}">
-                            <span data-input="manufacture_date" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-2">
-                        <div class="form-group">
-                            <label>Part Number</label>
-                            <input type="text" class="form-control" name="part_number" value="{{$post->part_number}}">
-                            <span data-input="part_number" class="input-error"></span>
-                        </div>
-                    </div>
+                    @include('admin.posts.additional-inputs')
                 </div>
             </div>
         </div>

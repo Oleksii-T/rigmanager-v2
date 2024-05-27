@@ -4,7 +4,7 @@
 
 @section('content_header')
     <x-admin.title
-        text="Edit Scraper {{$scraper->id}}"
+        text="Edit Scraper #{{$scraper->id}}"
     />
 @stop
 
@@ -48,6 +48,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Exclude Urls <small>comma separated</small></label>
+                            <input name="exclude_urls" type="text" class="form-control" value="{{implode(', ', $scraper->exclude_urls??[])}}">
+                            <span data-input="exclude_urls" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Scrape limit</label>
                             <input name="scrape_limit" type="number" class="form-control" value="{{$scraper->scrape_limit}}">
                             <span data-input="scrape_limit" class="input-error"></span>
@@ -62,7 +69,6 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>-</label>
                             <div class="form-check">
                                 <input id="is_debug" name="is_debug" class="form-check-input" type="checkbox" value="1" @checked($scraper->is_debug)>
                                 <label for="is_debug" class="form-check-label">Debug enabled</label>
@@ -170,8 +176,8 @@
             </div>
         </div>
         <button type="submit" class="btn btn-success min-w-100">Save</button>
-        <a href="{{ route('admin.scrapers.show', $scraper) }}" class="btn btn-outline-secondary text-dark min-w-100">View</a>
-        <a href="{{ route('admin.scrapers.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
+        <a href="{{ route('admin.scrapers.show', $scraper) }}" class="btn btn-outline-secondary text-dark min-w-100">Go to View</a>
+        <a href="{{ route('admin.scrapers.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Back to scrapers</a>
     </form>
 @endsection
 

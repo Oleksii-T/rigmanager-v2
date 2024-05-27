@@ -55,60 +55,6 @@ $(document).ready(function () {
         });
     })
 
-    $('.posts-rich-desc').summernote({
-        minHeight: '140px',
-        toolbar: [
-            ['style', ['style']],
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['strikethrough', 'superscript', 'subscript']],
-            ['para', ['ul', 'ol']],
-            ['table', ['table']],
-            ['misc', ['undo', 'redo']],
-            ['admin', ['codeview', 'htmlformat', 'htmlminify']]
-        ],
-        buttons: {
-            htmlformat: function(context) {
-                var ui = $.summernote.ui;
-                var button = ui.button({
-                    contents: '<i class="fa fa-paint-brush"/>',
-                    tooltip: 'Format HTML',
-                    click: function() {
-                        let code = context.code();
-                        const options = { indent_size: 2, space_in_empty_paren: true }
-                        let formatted = html_beautify(code, options);
-                        context.code(formatted);
-                        showToast('Inner HTML formatted!');
-                    }
-                });
-                return button.render();
-            },
-            htmlminify: function(context) {
-                var ui = $.summernote.ui;
-                var button = ui.button({
-                    contents: '<i class="fa fa-eraser"/>',
-                    tooltip: 'Minify HTML',
-                    click: function() {
-                        let code = context.code();
-                        let minified = code.replace(/\t|\s{2,}/g, '');
-                        context.code(minified);
-                        showToast('Inner HTML minified!');
-                    }
-                });
-                return button.render();
-            }
-        },
-        styleTags: ['p', 'h2', 'h3', 'h4'],
-        disableDragAndDrop: true,
-        codeviewIframeFilter: true,
-        callbacks: {
-            onFocus: () => $('.note-editor').addClass('focused'),
-            onBlur: () => $('.note-editor').removeClass('focused')
-        },
-        codemirror: {
-            theme: 'monokai'
-        }
-    });
-
     // categories select
     $(document).on('change', '.categories-level-selects .cat-lev-1 select', function (e) {
         console.log(`new level 1 `); //! LOG

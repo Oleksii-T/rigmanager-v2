@@ -39,7 +39,7 @@
                 </form>
             @endif
         </div>
-    </div>
+    </div> 
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
@@ -51,11 +51,11 @@
                         <thead>
                             <tr>
                                 <th class="ids-column">ID</th>
-                                {{-- <th>Status</th> --}}
-                                {{-- <th>Scraped/Saved/Max Posts</th> --}}
-                                {{-- <th>Started_at</th> --}}
-                                {{-- <th>Ended_at</th> --}}
-                                {{-- <th class="actions-column-2">Actions</th> --}}
+                                <th>Scraping Status</th>
+                                <th>Scraped/Saved/Max Posts</th>
+                                <th>Started_at</th>
+                                <th>Ended_at</th>
+                                <th class="actions-column-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,10 +65,10 @@
             </div>
         </div>
     </div>
-    <a href="{{ route('admin.scrapers.edit', $scraper) }}" class="btn btn-outline-secondary text-dark min-w-100">Edit</a>
-    <a href="{{ route('admin.scrapers.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
+    <a href="{{ route('admin.scrapers.edit', $scraper) }}" class="btn btn-outline-secondary text-dark min-w-100">Go to Edit</a>
+    <a href="{{ route('admin.scrapers.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Back to scrapers</a>
 @endsection
 
 @push('scripts')
-    <script src="{{asset('/js/admin/scrapers.js')}}"></script>
+    <script src="{{asset('/js/admin/scrapers.js')}}?v={{time()}}"></script>
 @endpush
