@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Attachment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
+use App\Actions\MakeActivityLogTable;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Storage;
 
@@ -51,46 +51,7 @@ class ActivityLogController extends Controller
                 $q->whereDate('created_at', $tsDate)
             );
 
-        return $this->dataTable($activity);
-    }
-
-    private function dataTable($query)
-    {
-        return DataTables::of($query)
-            ->addColumn('causer', function ($model) {
-                return $model->causer_type
-                    ? $model->causer_type . ':' . $model->causer_id
-                    : '';
-            })
-            ->addColumn('subject', function ($model) {
-                return $model->subject_type
-                    ? $model->subject_type . ':' . $model->subject_id
-                    : '';
-            })
-            ->editColumn('description', function ($model) {
-                if ($model->description == $model->event) {
-                    return '';
-                }
-                return view('admin.activity-logs.description-cell', [
-                    'id' => $model->id,
-                    'desc' => $model->description
-                ]);
-            })
-            ->editColumn('properties', function ($model) {
-                if ($model->properties->isEmpty()) {
-                    return '';
-                }
-                return view('admin.activity-logs.properties-cell', [
-                    'id' => $model->id,
-                    'props' => $model->properties->toArray(),
-                    'raw' => $model->getAttribute('properties')
-                ]);
-            })
-            ->editColumn('created_at', function ($model) {
-                return $model->created_at->adminFormat();
-            })
-            ->rawColumns(['description', 'properties'])
-            ->make(true);
+        return MakeActivityLogTable::run($activity);
     }
 
     private function getActivityGroups($groupBy, $column)

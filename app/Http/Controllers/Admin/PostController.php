@@ -14,6 +14,7 @@ use App\Enums\NotificationGroup;
 use App\Jobs\MailerProcessNewPost;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Actions\MakeActivityLogTable;
 use App\Http\Requests\Admin\PostRequest;
 
 class PostController extends Controller
@@ -139,6 +140,17 @@ class PostController extends Controller
         }
 
         return $this->jsonSuccess('Post updated successfully');
+    }
+
+    public function views(Request $request, Post $post)
+    {
+        if (!$request->ajax()) {
+            return view('admin.posts.views', compact('post'));
+        }
+
+        $views = $post->views();
+
+        return MakeActivityLogTable::run($views);
     }
 
     public function approveAll()
