@@ -21,10 +21,10 @@
         .prod-about table {
             margin-bottom: 24px;
         }
-        .prod-about table td {
+        .prod-about table td,.prod-about table th {
             border: 1px solid #505050;
         }
-        .prod-about table td {
+        .prod-about table td,.prod-about table th {
             padding: 0 5px 0 5px;
         }
         .prod-about ul {

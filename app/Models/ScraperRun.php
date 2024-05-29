@@ -46,7 +46,7 @@ class ScraperRun extends Model
         if (!$currentPostId) {
             return $posts->first();
         }
-        
+
         $posts = $posts->pluck('id')->toArray();
 
         if (!$posts) {
@@ -70,7 +70,7 @@ class ScraperRun extends Model
                 return $model->status->readable();
             })
             ->addColumn('posts', function ($model) {
-                return $model->scraped . ' / ' . $model->posts()->count() . ' / ' . $model->max;
+                return $model->scraped . ' / ' . $model->posts()->count() . ' / ' . $model->posts()->where('status', ScraperPostStatus::PUBLISHED)->count() . ' / ' . $model->max;
             })
             ->editColumn('end_at', function ($model) {
                 return $model->end_at?->adminFormat();

@@ -41,8 +41,14 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Scraped / Saved / Max posts</label>
-                                <input name="name" type="text" class="form-control" value="{{$scraperRun->scraped}} / {{$scraperRun->posts()->count()}} / {{$scraperRun->max}}" readonly>
+                                <label>Scraped / Saved / Published / Max posts</label>
+                                <input
+                                    name="name"
+                                    type="text"
+                                    class="form-control"
+                                    value="{{$scraperRun->scraped}} / {{$scraperRun->posts()->count()}} / {{$scraperRun->posts()->where('status', \App\Enums\ScraperPostStatus::PUBLISHED)->count()}} / {{$scraperRun->max}}"
+                                    readonly
+                                >
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -117,3 +123,14 @@
 @push('scripts')
     <script src="{{asset('/js/admin/scrapers.js')}}?v={{time()}}"></script>
 @endpush
+
+{{--
+
+https://www.heavyoilfieldtrucks.com/listings/
+
+post        .auto-listings-items .auto-listing
+post_link   .summary .title a
+title       .listing .title
+description .description
+--}}
+

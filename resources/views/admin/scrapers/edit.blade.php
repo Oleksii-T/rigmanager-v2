@@ -146,7 +146,7 @@
                             <div class="form-group">
                                 <div class="form-check">
                                     <input type="hidden" name="selectors[{{$i}}][is_multiple]" value="0">
-                                    <input name="selectors[{{$i}}][is_multiple]" class="form-check-input" type="checkbox" value="1" @checked($selector['is_multiple'])>
+                                    <input name="selectors[{{$i}}][is_multiple]" class="form-check-input" type="checkbox" value="1" @checked($selector['is_multiple']??false)>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                             <div class="form-group">
                                 <div class="form-check">
                                     <input type="hidden" name="selectors[{{$i}}][from_posts_page]" value="0">
-                                    <input name="selectors[{{$i}}][from_posts_page]" class="form-check-input" type="checkbox" value="1" @checked($selector['from_posts_page'])>
+                                    <input name="selectors[{{$i}}][from_posts_page]" class="form-check-input" type="checkbox" value="1" @checked($selector['from_posts_page']??false)>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                             <div class="form-group">
                                 <div class="form-check">
                                     <input type="hidden" name="selectors[{{$i}}][required]" value="0">
-                                    <input name="selectors[{{$i}}][required]" class="form-check-input" type="checkbox" value="1" @checked($selector['required'])>
+                                    <input name="selectors[{{$i}}][required]" class="form-check-input" type="checkbox" value="1" @checked($selector['required']??false)>
                                 </div>
                             </div>
                         </div>

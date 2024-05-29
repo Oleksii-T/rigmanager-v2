@@ -241,6 +241,11 @@ class Post extends Model
         );
     }
 
+    public function currency(): Attribute
+    {
+        return new Attribute(fn () => $this->costs()->where('is_default', true)->value('currency'));
+    }
+
     public function costReadable(): Attribute
     {
         return new Attribute(
@@ -427,7 +432,7 @@ class Post extends Model
         $seoDescSufixLength = strlen($seoDescSufix);
         $maxSeoDesc -= $seoDescSufixLength;
 
-        return strlen($description) > $maxSeoDesc 
+        return strlen($description) > $maxSeoDesc
             ? (substr($description, 0, $maxSeoDesc) . "...$seoDescSufix")
             : $description . $seoDescSufix;
     }

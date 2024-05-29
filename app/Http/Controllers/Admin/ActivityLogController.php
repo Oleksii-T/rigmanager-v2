@@ -22,40 +22,21 @@ class ActivityLogController extends Controller
             return view('admin.activity-logs.index', compact('names', 'causers', 'subjects'));
         }
 
-        $tsDate = $request->ts_date ? Carbon::createFromTimestampMs($request->ts_date) : null;
+        $activity = Activity::query();
 
-        $activity = Activity::query()
-            ->when($request->period, function ($q) {
-                $period = explode(' - ', request()->period);
-                $q->where('created_at', '>=', $period[0] . ' 00:00:00')->where('created_at', '<=', $period[1] . ' 23:59:59');
-            })
-            ->when($request->log_name, function ($q) {
-                $q->where('log_name', request()->log_name);
-            })
-            ->when($request->log_name && $request->event && $request->event[$request->log_name], fn ($q) =>
-                $q->where('event', $request->event[$request->log_name])
-            )
-            ->when($request->subject_type, fn ($q) =>
-                $q->where('subject_type', $request->subject_type == '-' ? null : $request->subject_type)
-            )
-            ->when($request->subject_type && ($request->subject_id[$request->subject_type]??false), fn ($q) =>
-                $q->where('subject_id', $request->subject_id[$request->subject_type])
-            )
-            ->when($request->causer_type, fn ($q) =>
-                $q->where('causer_type', $request->causer_type == '-' ? null : $request->causer_type)
-            )
-            ->when($request->causer_type && $request->causer_id && $request->causer_id[$request->causer_type]??false, fn ($q) =>
-                $q->where('causer_id', $request->causer_id[$request->causer_type])
-            )
-            ->when($tsDate, fn($q) =>
-                $q->whereDate('created_at', $tsDate)
-            );
-
-        return MakeActivityLogTable::run($activity);
+        return MakeActivityLogTable::run($request, $activity);
     }
 
     private function getActivityGroups($groupBy, $column)
     {
+        $groups = Activity::distinct()->pluck('subject_type');
+        $result = [];
+        foreach ($groups as $group) {
+            $result[$group] = Activity::distinct()->where('subject_type', $group)->pluck('subject_id')->toArray();
+        }
+
+        return $result;
+
         $columns = $column . 's';
         $activities = Activity::query()
             ->selectRaw("$groupBy, GROUP_CONCAT(DISTINCT $column) as $columns")

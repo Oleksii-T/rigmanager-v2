@@ -32,7 +32,7 @@
             <label>Currency</label>
             <select class="form-control" name="currency">
                 @foreach (currencies() as $key => $symbol)
-                    <option value="{{$key}}" @selected($post?->currency)>{{strtoupper($key)}}</option>
+                    <option value="{{$key}}" @selected($post?->currency == $key)>{{strtoupper($key)}}</option>
                 @endforeach
             </select>
             <span data-input="currency" class="input-error"></span>

@@ -13,6 +13,12 @@
                     <a href="{{route('posts.show', $post)}}" class="btn btn-primary" target="_blank">
                         Preview
                     </a>
+                    <a href="{{route('admin.activity-logs.index')}}?subject_type=App\Models\Post&subject_id={{$post->id}}" class="btn btn-primary" target="_blank">
+                        Actions
+                    </a>
+                    <a href="{{route('admin.posts.views', $post)}}" class="btn btn-primary">
+                        Views
+                    </a>
                 </div>
             </div>
         </div>
@@ -46,7 +52,7 @@
                         {{$post->id}}
                         >
                         @if ($next)
-                            <a href="{{route('admin.posts.edit', $next) . '?approveFilters=' . request()->approveFilters}}" class="{{$next->getApprovingClass()}}">{{$next->id}}</a>                        
+                            <a href="{{route('admin.posts.edit', $next) . '?approveFilters=' . request()->approveFilters}}" class="{{$next->getApprovingClass()}}">{{$next->id}}</a>
                         @else
                             <a href="#">-</a>
                         @endif
@@ -316,15 +322,13 @@
         @else
             <button type="submit" class="btn btn-success">Save</button>
             <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
-            <a href="{{route('admin.posts.views', $post)}}" class="btn btn-default">
-                Views
-            </a>
         @endif
     </form>
 @endsection
 
 @push('scripts')
     <script src="{{asset('/js/admin/posts.js')}}?v={{time()}}"></script>
+    <script src="{{asset('/js/admin/post-category-selector.js')}}"></script>
     <script>
         $(document).ready(function () {
             // general logic of ajax form submit (supports files)

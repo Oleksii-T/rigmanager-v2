@@ -17,10 +17,10 @@
                         <h3 class="card-title">Run {{$runInProgress->id}} in progress</h3>
                     </div>
                     <div class="card-body">
-                        
+
                     </div>
                     <div class="card-footer">
-                        
+
                     </div>
                 </div>
             @else
@@ -31,7 +31,7 @@
                         <h3 class="card-title">Create Run</h3>
                     </div>
                     <div class="card-body">
-                        
+
                     </div>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-success min-w-100">Run</button>
@@ -39,7 +39,7 @@
                 </form>
             @endif
         </div>
-    </div> 
+    </div>
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
@@ -52,7 +52,7 @@
                             <tr>
                                 <th class="ids-column">ID</th>
                                 <th>Scraping Status</th>
-                                <th>Scraped/Saved/Max Posts</th>
+                                <th>Scraped/Saved/Published/Max Posts</th>
                                 <th>Started_at</th>
                                 <th>Ended_at</th>
                                 <th class="actions-column-2">Actions</th>

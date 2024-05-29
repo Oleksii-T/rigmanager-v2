@@ -61,14 +61,14 @@
                             <select class="table-filter form-control has-sub-select" name="subject_type">
                                 <option value="">Select Subject</option>
                                 @foreach ($subjects as $causer => $ids)
-                                    <option value="{{$causer}}">{{$causer}}</option>
+                                    <option value="{{$causer}}" @selected(request()->subject_type == $causer)>{{$causer}}</option>
                                 @endforeach
                             </select>
                             @foreach ($subjects as $subject => $ids)
-                                <select class="table-filter form-control d-none" data-parentselect="subject_type" data-parentvalue="{{$subject}}" name="subject_id[{{$subject}}]">
+                                <select class="table-filter form-control {{request()->subject_type == $subject ? '' : 'd-none'}}" data-parentselect="subject_type" data-parentvalue="{{$subject}}" name="subject_id[{{$subject}}]">
                                     <option value="">Select {{$subject}} ID</option>
                                     @foreach ($ids as $id)
-                                        <option value="{{$id}}">{{$id}}</option>
+                                        <option value="{{$id}}" @selected(request()->subject_type == $subject && request()->subject_id == $id)>{{$id}}</option>
                                     @endforeach
                                 </select>
                             @endforeach

@@ -3,6 +3,7 @@ $(document).ready(function () {
     let table = $('#activity-logs-table').DataTable({
         order: [[ 0, "desc" ]],
         serverSide: true,
+        pageLength: 100,
         ajax: {
 			url: window.location.href,
 			data: function (filter) {

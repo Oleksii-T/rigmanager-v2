@@ -320,3 +320,8 @@
         <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
     </form>
 @endsection
+
+@push('scripts')
+    <script src="{{asset('/js/admin/posts.js')}}?v={{time()}}"></script>
+    <script src="{{asset('/js/admin/post-category-selector.js')}}"></script>
+@endpush

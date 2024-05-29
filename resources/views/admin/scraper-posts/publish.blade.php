@@ -31,7 +31,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         @if ($alreadyPublishedPost)
-                            Published Post <a href="{{route('admin.posts.edit', $alreadyPublishedPost)}}" target="_blank">#{{$alreadyPublishedPost->id}}</a> 
+                            Published Post <a href="{{route('admin.posts.edit', $alreadyPublishedPost)}}" target="_blank">#{{$alreadyPublishedPost->id}}</a>
                         @else
                             New Post
                         @endif
@@ -88,6 +88,19 @@
                         @include('admin.posts.category-input', ['post' => $alreadyPublishedPost])
                         @include('admin.posts.cost-input', ['post' => $alreadyPublishedPost])
                         @include('admin.posts.additional-inputs', ['post' => $alreadyPublishedPost, 'withoutCountry' => 1, 'wide' => 1])
+
+                        @if ($alreadyPublishedPost)
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="update_imaged" value="1">
+                                            <label class="form-check-label">Update Images</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="col-md-12" style="font-size: 70%">
                             <a href="#" class="text-warning" data-toggle="modal" data-target="#some-posts-filled-automaticaly">
                                 Some fields filled automaticaly when publishing from scraped post
@@ -105,9 +118,9 @@
         <div class="col-sm-5">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Scraped Post #{{$scraperPost->id}}</h3>
+                    <h3 class="card-title">Scraped Post #{{$scraperPost->id}} <a href="{{$scraperPost->url}}" target="_blank">source</a></h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="max-height: 95vh;overflow-y: auto;">
                     <div class="row">
                         @foreach ($scraperPost->data as $field => $value)
                             <div class="col-md-12">
@@ -139,7 +152,7 @@
                     <ul>
                         @foreach ($posts as $post)
                             <li style="{{$post->id == $scraperPost->id ? 'border:1px solid red' : ''}}">
-                                {{$post->id}}: 
+                                {{$post->id}}:
                                 <a href="{{route('admin.scraper-posts.publishing', $post)}}" class="{{$post->statusClass()}}">
                                     {{$post->status->readable()}}
                                 </a>
@@ -171,10 +184,9 @@
                         <li>User: taken from scraper</li>
                         <li>Country: taken from user</li>
                         <li>Status: approved</li>
-                        <li>Original Lang: auto-detect</li>
+                        <li>Original Lang: en</li>
                         <li>Is Active: Yes</li>
                         <li>Is urgent: No</li>
-                        <li>Price Requests: Yes</li>
                     </ul>
                 </div>
             </div>
@@ -184,4 +196,5 @@
 
 @push('scripts')
     <script src="{{asset('/js/admin/scrapers.js')}}?v={{time()}}"></script>
+    <script src="{{asset('/js/admin/post-category-selector.js')}}"></script>
 @endpush
