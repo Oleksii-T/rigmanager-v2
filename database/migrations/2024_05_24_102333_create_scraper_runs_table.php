@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scraper_id')->constrained()->onDelete('cascade');
             $table->smallInteger('status');
-            $table->smallInteger('scraped')->nullable();
+            $table->smallInteger('scraped')->default(0);
             $table->smallInteger('max')->nullable();
+            $table->smallInteger('scrape_limit')->nullable();
+            $table->boolean('scraper_debug_enabled')->default(false);
+            $table->boolean('only_count')->default(false);
             $table->timestamp('end_at')->nullable();
             $table->timestamps();
         });

@@ -44,7 +44,7 @@ class ScraperPostController extends Controller
 
         $next = $scraperPost->run->postToPublish($scraperPost->id);
 
-        return $this->jsonSuccess('', ['redirect' => route('admin.scraper-posts.publishing', $next)]);
+        return $this->jsonSuccess('', ['redirect' => route('admin.scraper-posts.publishing', $next??$scraperPost)]);
     }
 
     private function publishHelper($request, $scraperPost)
@@ -61,9 +61,11 @@ class ScraperPostController extends Controller
             return;
         }
 
+        $ogLocale = 'en';
         $scraperRun = $scraperPost->run;
         $scraper = $scraperRun->scraper;
         $user = $scraper->user;
+        $category = \App\Models\Category::find($request->category_id);
 
         // get rules for post model
         $rules = (new PostRequest())->rules();
@@ -74,6 +76,10 @@ class ScraperPostController extends Controller
         unset($rules['country']);
         unset($rules['origin_lang']);
         unset($rules['status']);
+        unset($rules['meta_description']);
+        unset($rules['meta_description.en']);
+        unset($rules['meta_title']);
+        unset($rules['meta_title.en']);
 
         // run validation
         $input = $request->validate($rules);
@@ -81,6 +87,18 @@ class ScraperPostController extends Controller
         // add fields
         $input['user_id'] = $user->id;
         $input['status'] = 'approved';
+
+        // calculate meta title and description
+        $mTitles = [];
+        $mDescriptions = [];
+        foreach ($input['title'] as $locale => $title) {
+            $mTitles[$locale] = Post::generateMetaTitleHelper($title, $category->name);
+        }
+        foreach ($input['description'] as $locale => $description) {
+            $mDescriptions[$locale] = Post::generateMetaDescriptionHelper($description);
+        }
+
+        // escape description
         foreach ($input['description'] as &$desc) {
             $desc = \App\Sanitizer\Sanitizer::handle($desc, false);
         }
@@ -88,21 +106,26 @@ class ScraperPostController extends Controller
         if ($request->created_post_id) {
             $post = Post::findOrFail($request->created_post_id);
 
+            // update metas if new title
+            if ($input['title'][$ogLocale] != $post->title) {
+                $input['meta_title'] = $mTitles;
+                $input['meta_description'] = $mDescriptions;
+            }
+
             $post->update($input);
             $post->saveCosts($input);
             $post->saveTranslations($input);
 
             if ($request->update_imaged) {
-                // remove old images
                 foreach ($post->images as $img) {
                     $img->delete();
                 }
-
-                // download new images
                 ScraperImagesToPost::dispatch($scraperPost, $post);
             }
         } else {
             $input['duration'] = 'unlim';
+            $input['meta_title'] = $mTitles;
+            $input['meta_description'] = $mDescriptions;
             $input['slug'] = [];
             foreach ($input['title'] as $locale => $title) {
                 $allSlugs = \App\Models\Translation::query()

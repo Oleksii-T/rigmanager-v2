@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->json('base_urls');
             $table->json('exclude_urls')->nullable();
-            $table->boolean('is_debug');
-            $table->integer('scrape_limit')->unsigned()->nullable();
             $table->smallInteger('sleep')->nullable();
             $table->json('selectors');
             $table->timestamps();

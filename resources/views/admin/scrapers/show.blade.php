@@ -27,11 +27,34 @@
                 <form action="{{route('admin.scraper-runs.store')}}" method="post" class="card general-ajax-submit">
                     @csrf
                     <input type="hidden" name="scraper_id" value="{{$scraper->id}}">
+                    <input type="hidden" name="scraper_debug_enabled" value="0">
+                    <input type="hidden" name="only_count" value="0">
                     <div class="card-header">
                         <h3 class="card-title">Create Run</h3>
                     </div>
                     <div class="card-body">
-
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Scrape limit</label>
+                                    <input name="scrape_limit" type="number" class="form-control">
+                                    <span data-input="scrape_limit" class="input-error"></span>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>-</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="scraper_debug_enabled" value="1">
+                                        <label class="form-check-label">Scraper Debug Enables</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="only_count" value="1">
+                                        <label class="form-check-label">Only count</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-success min-w-100">Run</button>

@@ -73,11 +73,12 @@ Route::middleware('is-admin')->group(function () {
     Route::resource('feedback-bans', FeedbackBanController::class)->only('index', 'store', 'update', 'destroy');
 
     Route::resource('feedbacks', FeedbackController::class)->only('show', 'index', 'destroy', 'update');
-    
+
     Route::resource('scrapers', ScraperController::class);
 
+    Route::get('scraper-runs/{scraperRun}/extra', [ScraperRunController::class, 'extra'])->name('scraper-runs.extra');
     Route::resource('scraper-runs', ScraperRunController::class);
-    
+
     Route::get('scraper-posts/{scraperPost}', [ScraperPostController::class, 'publishing'])->name('scraper-posts.publishing');
     Route::post('scraper-posts/{scraperPost}', [ScraperPostController::class, 'publish'])->name('scraper-posts.publish');
 

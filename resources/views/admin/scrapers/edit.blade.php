@@ -12,8 +12,6 @@
     <form action="{{ route('admin.scrapers.update', $scraper) }}" method="POST" class="general-ajax-submit">
         @csrf
         @method('PUT')
-        <input type="hidden" name="with_cache" value="0">
-        <input type="hidden" name="is_debug" value="0">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">General</h3>
@@ -55,24 +53,9 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Scrape limit</label>
-                            <input name="scrape_limit" type="number" class="form-control" value="{{$scraper->scrape_limit}}">
-                            <span data-input="scrape_limit" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
                             <label>Sleep <small>between requests</small></label>
                             <input name="sleep" type="number" class="form-control" value="{{$scraper->sleep}}">
                             <span data-input="sleep" class="input-error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input id="is_debug" name="is_debug" class="form-check-input" type="checkbox" value="1" @checked($scraper->is_debug)>
-                                <label for="is_debug" class="form-check-label">Debug enabled</label>
-                            </div>
                         </div>
                     </div>
                 </div>

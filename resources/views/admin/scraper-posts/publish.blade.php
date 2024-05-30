@@ -47,18 +47,6 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label>Meta Title</label>
-                                <x-admin.multi-lang-input name="meta_title" :model="$alreadyPublishedPost" count="1" />
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label>Meta Description</label>
-                                <x-admin.multi-lang-input name="meta_description" :model="$alreadyPublishedPost" count="1" />
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
                                 <label>Description</label>
                                 <x-admin.multi-lang-input name="description" :model="$alreadyPublishedPost" richtextPostsDesc="1" />
                             </div>
@@ -179,14 +167,16 @@
                 </div>
                 <div class="modal-body">
                     <ul>
-                        <li>Slug: calculated based on title</li>
-                        <li>Group: equipment</li>
-                        <li>User: taken from scraper</li>
-                        <li>Country: taken from user</li>
-                        <li>Status: approved</li>
-                        <li>Original Lang: en</li>
-                        <li>Is Active: Yes</li>
-                        <li>Is urgent: No</li>
+                        <li><b>Slug</b>: calculated based on title</li>
+                        <li><b>Meta Title</b>: calcualted in format "TITLE | on CATEGORY rigmangars.com"<br>if publish to existing post, meta updated only if title changed</li>
+                        <li><b>Meta Description</b>: calcualted as first 140 chars of description and "| rigmangars.com" in the end</li>
+                        <li><b>Group</b>: equipment</li>
+                        <li><b>User</b>: taken from scraper</li>
+                        <li><b>Country</b>: taken from user</li>
+                        <li><b>Status</b>: approved</li>
+                        <li><b>Original Lang</b>: en</li>
+                        <li><b>Is Active</b>: Yes</li>
+                        <li><b>Is urgent</b>: No</li>
                     </ul>
                 </div>
             </div>

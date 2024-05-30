@@ -12,8 +12,6 @@ class Scraper extends Model
         'name',
         'base_urls',
         'exclude_urls',
-        'is_debug',
-        'scrape_limit',
         'sleep',
         'selectors',
     ];

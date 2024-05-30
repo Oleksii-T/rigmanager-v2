@@ -2,26 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Models\Post;
-use App\Models\User;
-use App\Enums\PostType;
 use App\Models\Scraper;
-use App\Enums\PostGroup;
-use App\Models\Attachment;
 use App\Models\ScraperRun;
-use App\Models\ScraperPost;
-use App\Jobs\PostTranslate;
-use App\Models\Translation;
-use Illuminate\Support\Str;
-use App\Enums\ScraperRunStatus;
-use App\Jobs\ProcessPostImages;
-use App\Enums\ScraperPostStatus;
-use Illuminate\Support\Facades\DB;
-use App\Services\TranslationService;
-use App\Services\PostScraperService;
-use App\Services\ProcessImageService;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Bus\Queueable;
+use App\Enums\ScraperRunStatus;
+use App\Enums\ScraperPostStatus;
+use App\Services\PostScraperService;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,16 +18,6 @@ class ScraperJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $user = null;
-    private $alreadyExisted = [];
-    private $failValidation = [];
-    private $cacheFile;
-    private $scrapeLimit;
-    private $importLimit;
-    private $sleep;
-    private $userEmail;
-    private $ignoreCache;
-    private $scraperDebug;
     private $runModel;
 
     public function __construct(ScraperRun $runModel)
@@ -53,8 +29,11 @@ class ScraperJob implements ShouldQueue
     {
         try {
             $run = $this->runModel;
-            $scraperModel = $run->scraper;
-            $cache = $run->cache_file;
+
+            // mark run as started
+            $run->update([
+                'status' => ScraperRunStatus::IN_PROGRESS
+            ]);
 
             $this->log('Start Count...');
 
@@ -63,11 +42,19 @@ class ScraperJob implements ShouldQueue
 
             $this->log('Count Result', $postsCount);
 
+            if ($run->only_count) {
+                $run->update([
+                    'max' => $postsCount,
+                    'status' => ScraperRunStatus::SUCCESS,
+                    'end_at' => now()
+                ]);
+                return;
+            }
+
             // save progress
             $run->update([
                 'scraped' => 0,
                 'max' => $postsCount,
-                'status' => ScraperRunStatus::IN_PROGRESS
             ]);
 
             $this->log('Start Scrapping...');
@@ -140,7 +127,7 @@ class ScraperJob implements ShouldQueue
                 ->post($postSelector)
                 ->postLink($postLinkSelector)
                 ->pagination($paginationSelector)
-                ->debug($config->is_debug)
+                ->debug($run->scraper_debug_enabled)
                 ->afterEachScrape(function ($post) use ($run) {
                     $run->increment('scraped');
                 })
@@ -150,8 +137,8 @@ class ScraperJob implements ShouldQueue
                     ]);
                 });
 
-            if ($config->scrape_limit) {
-                $scrapper->limit($config->scrape_limit);
+            if ($run->scrape_limit) {
+                $scrapper->limit($run->scrape_limit);
             }
 
             if ($config->sleep) {
@@ -178,7 +165,7 @@ class ScraperJob implements ShouldQueue
         return $result;
     }
 
-    private function saveScrapedPostsToDb($scrapedData)
+    private function saveScrapedPostsToDb(array $scrapedData) : void
     {
         foreach ($scrapedData as $url => $scrapedPostData) {
             $this->runModel->posts()->create([
@@ -189,244 +176,6 @@ class ScraperJob implements ShouldQueue
         }
     }
 
-    private function importScrapedPost($url, $scrapedPost)
-    {
-        if (!$this->validateScrapedPost($scrapedPost)) {
-            $this->failValidation[$url] = $scrapedPost;
-            return false;
-        }
-
-        $title = $this->parseTitle($scrapedPost);
-        $description = $this->parseDescription($scrapedPost);
-
-        if ($this->checkExist($url, $title, $scrapedPost)) {
-            return false;
-        }
-
-        $category = $this->parseCategory($scrapedPost);
-
-        $condition = $this->parseCondition($scrapedPost);
-
-        $country = $this->parseCountry($scrapedPost);
-
-        $post = [
-            'user_id' => $this->user->id,
-            'group' => PostGroup::EQUIPMENT,
-            'status' => 'pending',
-            'duration' => 'unlim',
-            'is_active' => true,
-            'origin_lang' => 'en',
-            'category_id' => $category->id,
-            'type' => PostType::SELL,
-            'condition' => $condition,
-            'country' => $country,
-            'is_tba' => true,
-            'scraped_url' => $url,
-            // 'amount' => '',
-            // 'manufacturer' => '',
-            // 'manufactureDate' => '',
-            // 'partNumber' => '',
-        ];
-
-        $post = Post::create($post);
-
-        $this->addImages($post, $this->parseImages($scrapedPost));
-        $this->addSavedImages($post, $this->parseSavedImages($scrapedPost));
-        $this->addCosts($post, $scrapedPost);
-        $this->addTranslations($post, $title, $description);
-
-        return true;
-    }
-
-    private function validateScrapedPost($scrapedPost)
-    {
-        return true;
-    }
-
-    /**
-     * Detec already scraped or dublicated post
-     *
-     */
-    private function checkExist($url, $title, $scrapedPost)
-    {
-        $exists = Post::where('scraped_url', $url)->count();
-
-        if ($exists) {
-            $this->alreadyExisted[$url] = $scrapedPost;
-            return true;
-        }
-
-        $exists = Translation::query()
-            ->where('field', 'title')
-            ->where('locale', 'en')
-            ->where('translatable_type', Post::class)
-            ->where('value', $title)
-            ->get();
-
-        if ($exists->isEmpty()) {
-            return false;
-        }
-
-        foreach ($exists as $e) {
-            $post = $e->translatable;
-            if (!$post) {
-                continue;
-            }
-            $this->log(" found '$title' in $e->id");
-            if ($post->user_id == $this->user->id) {
-                $this->alreadyExisted[$url] = $scrapedPost;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function addImages($post, $urls)
-    {
-        $attachments = [];
-        foreach ($urls as $url) {
-            if (!$url) {
-                continue;
-            }
-            $disk = Storage::disk('aimages');
-            try {
-                $contents = file_get_contents($url);
-            } catch (\Throwable $th) {
-                $this->log(" Can not download image from $url. " . $th->getMessage());
-                continue;
-            }
-            $ext = ProcessImageService::mimeFromUrl($url);
-
-            if (!$ext) {
-                $this->log(" Can not download image from $url. Can not autodetermine extension");
-                continue;
-            }
-
-            $name = substr($url, strrpos($url, '/') + 1);
-
-            if (strrpos($name, '.') === false) {
-                $name .= ".$ext";
-            }
-
-            $random_name = Str::random(40) . ".$ext";
-
-            $disk->put($random_name, $contents);
-
-            $size = $disk->size($random_name);
-            $mime = $disk->mimeType($random_name);
-
-            if (!in_array($mime, ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'])) {
-                $disk->delete($random_name);
-                $this->log(" Can not download image from $url. Invalid extension");
-                continue;
-            }
-
-            $attachments[] = Attachment::create([
-                'attachmentable_id' => $post->id,
-                'attachmentable_type' => Post::class,
-                'name' => $random_name,
-                'original_name' => $name,
-                'group' => 'images',
-                'type' => 'image',
-                'size' => $size
-            ]);
-        }
-        ProcessPostImages::dispatch($attachments);
-    }
-
-    private function parseSavedImages($scrapedPost)
-    {
-        return [];
-    }
-
-    private function parseCondition($scrapedPost)
-    {
-        return 'new';
-    }
-
-    private function addSavedImages($post, $paths)
-    {
-        if (!$paths) {
-            return;
-        }
-
-        $attachments = [];
-
-        foreach ($paths as $path) {
-            $disk = Storage::disk('aimages');
-
-            $fileName = basename($path);
-            copy($path, $disk->path($fileName));
-            $size = $disk->size($fileName);
-
-            $attachments[] = Attachment::create([
-                'attachmentable_id' => $post->id,
-                'attachmentable_type' => Post::class,
-                'name' => $fileName,
-                'original_name' => $fileName,
-                'group' => 'images',
-                'type' => 'image',
-                'size' => $size
-            ]);
-        }
-        ProcessPostImages::dispatch($attachments);
-    }
-
-    private function addTranslations($post, $title, $description)
-    {
-        $textLocale = (new TranslationService())->detectLanguage("$title. $description");
-        $mTitle = Post::generateMetaTitleHelper($title, $post->category->name);
-
-        $post->saveTranslations([
-            'slug' => [
-                $textLocale => makeSlug($title, Post::allSlugs())
-            ],
-            'title' => [
-                $textLocale => $title
-            ],
-            'description' => [
-                $textLocale => $description
-            ],
-            'meta_title' => [
-                $textLocale => $mTitle
-            ],
-            'meta_description' => [
-                $textLocale => $description ? Post::generateMetaDescriptionHelper($description) : $mTitle
-            ]
-        ]);
-
-        PostTranslate::dispatch($post);
-
-        if ($textLocale != 'en') {
-            $post->update([
-                'origin_lang' => $textLocale
-            ]);
-        }
-    }
-
-    private function addCosts($post, $scrapedPost)
-    {
-        return;
-    }
-
-    public function descriptionEscape($desc)
-    {
-        foreach ($this->getEscapedChars() as $esc) {
-            if ($esc[2]) {
-                $desc = preg_replace($esc[0], $esc[1], $desc);
-            } else {
-                $desc = str_replace($esc[0], $esc[1], $desc);
-            }
-        }
-
-        $desc = \App\Sanitizer\Sanitizer::handle($desc, false);
-        $desc = preg_replace('/<p>[ \n]*<\/p>/', '', $desc); // remove empty paragraphs
-        $desc = trim($desc);
-
-        return $desc;
-    }
-
     private function log(string $text, $data=[])
     {
         return $this->runModel->logs()->create([
@@ -434,13 +183,13 @@ class ScraperJob implements ShouldQueue
             'data' => $data ?: null
         ]);
 
-        $toLog = $text;
+        // $toLog = $text;
 
-        if ($data) {
-            $toLog .= (': ' . json_encode($data));
-        }
+        // if ($data) {
+        //     $toLog .= (': ' . json_encode($data));
+        // }
 
-        \Log::channel('scraping')->info($toLog);
+        // \Log::channel('scraping')->info($toLog);
 
     }
 

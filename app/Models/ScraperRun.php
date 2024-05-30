@@ -13,6 +13,9 @@ class ScraperRun extends Model
 {
     protected $fillable = [
         'scraper_id',
+        'scraper_debug_enabled',
+        'only_count',
+        'scrape_limit',
         'status',
         'scraped',
         'max',
@@ -54,10 +57,13 @@ class ScraperRun extends Model
         }
 
         $i = array_search($currentPostId, $posts);
-        $nextPostId = $posts[$i+1] ?? null;
-
-        if (!$nextPostId) {
+        if (!$i) {
             $nextPostId = $posts[0];
+        } else {
+            $nextPostId = $posts[$i+1] ?? null;
+            if (!$nextPostId) {
+                $nextPostId = $posts[0];
+            }
         }
 
         return ScraperPost::find($nextPostId);

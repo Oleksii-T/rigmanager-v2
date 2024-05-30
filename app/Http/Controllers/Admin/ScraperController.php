@@ -32,8 +32,8 @@ class ScraperController extends Controller
     {
         $input = $request->validated();
         $input['base_urls'] = explode(',', $input['base_urls']);
-        $input['selectors'] = $this->transformSelectors($input['selectors']);
-        $scraper = Scraper::create($input);
+        $input['base_urls'] = array_map('trim', $input['base_urls']);
+        Scraper::create($input);
 
         return $this->jsonSuccess('Scraper created successfully', [
             'redirect' => route('admin.scrapers.index')
@@ -61,13 +61,11 @@ class ScraperController extends Controller
     public function update(ScraperRequest $request, Scraper $scraper)
     {
         $input = $request->validated();
-        $input['selectors'] = $this->transformSelectors($input['selectors']);
         $input['base_urls'] = explode(',', $input['base_urls']);
+        $input['base_urls'] = array_map('trim', $input['base_urls']);
         $scraper->update($input);
 
-        return $this->jsonSuccess('Scraper updated successfully', [
-            'redirect' => route('admin.scrapers.index')
-        ]);
+        return $this->jsonSuccess('Scraper updated successfully');
     }
 
     public function destroy(Scraper $scraper)
@@ -75,31 +73,5 @@ class ScraperController extends Controller
         $scraper->delete();
 
         return $this->jsonSuccess('Scraper deleted successfully');
-    }
-
-    private function transformSelectors($input)
-    {
-        return $input;
-
-        $selectors = [];
-
-        foreach ($input['name'] as $i => $sName) {
-            $value = $input['value'][$i];
-
-            if (!$value || !$sName) {
-                continue;
-            }
-
-            $selectors[] = [
-                'name' => $sName,
-                'value' => $value,
-                'attribute' => $input['attribute'][$i],
-                'is_multiple' => Arr::get($input, "is_multiple.$i", false),
-                'from_posts_page' => Arr::get($input, "from_posts_page.$i", false),
-                'required' => Arr::get($input, "required.$i", false)
-            ];
-        }
-
-        return $selectors;
     }
 }
