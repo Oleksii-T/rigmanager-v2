@@ -234,11 +234,11 @@ class PostScraperService
      * @return self
      */
     public function value(
-        string $name, 
-        string $selector, 
-        string $attribute=null, 
-        bool $isMultiple=false, 
-        bool $getFromPostsPage=false, 
+        string $name,
+        string $selector,
+        string $attribute=null,
+        bool $isMultiple=false,
+        bool $getFromPostsPage=false,
         bool $required=true
     )
     {
@@ -317,10 +317,10 @@ class PostScraperService
         }
         $this->meta['parsed_posts_count'] = count($this->meta['parsed_posts']);
 
-        $this->meta['avg_time_per_post'] = $this->meta['parsed_posts_count'] 
+        $this->meta['avg_time_per_post'] = $this->meta['parsed_posts_count']
             ? $this->meta['parsed_posts_time'] / $this->meta['parsed_posts_count']
             : 0;
-        $this->meta['avg_time_per_page'] = $this->meta['parsed_pages_total'] 
+        $this->meta['avg_time_per_page'] = $this->meta['parsed_pages_total']
             ? $this->meta['parsed_pages_time'] / $this->meta['parsed_pages_total']
             : 0;
     }
@@ -355,7 +355,7 @@ class PostScraperService
 
             if ($this->enough()) {
                 $this->log("    ENOUGH");
-                return;
+                break;
             }
         }
 
@@ -377,6 +377,7 @@ class PostScraperService
 
     private function scrapePostHelper($postNode, $page, $url, $i)
     {
+        // get link to the post page from
         $postUrl = $this->querySelector($postNode, $this->postLinkSelector)->item(0)->getAttribute($this->postLinkAttribute)??null;
 
         $this->log("  Post #$page:" . $i+1 . " process: $postUrl");
@@ -501,13 +502,13 @@ class PostScraperService
                     ->select($selector, $i)
                     ->setScreenshotType('jpeg', 100)
                     ->newHeadless();
-                
+
                 if ($shotData['css']) {
                     $browserhot->setOption('addStyleTag', json_encode(['content' => $shotData['css']]));
                 }
 
                 $browserhot->save($path);
-                    
+
                 $result[] = $path;
                 $this->log("        done #$i");
             } catch (\Spatie\Browsershot\Exceptions\ElementNotFound $th) {

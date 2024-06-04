@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Scraper;
 use App\Models\ScraperRun;
+use App\Sanitizer\Sanitizer;
 use Illuminate\Bus\Queueable;
 use App\Enums\ScraperRunStatus;
 use App\Enums\ScraperPostStatus;
@@ -167,13 +168,47 @@ class ScraperJob implements ShouldQueue
 
     private function saveScrapedPostsToDb(array $scrapedData) : void
     {
+        $sanitize = $this->runModel->sanitize_html;
+        $htmlSelectors = array_filter($this->runModel->scraper->selectors, fn ($a) => ($a['attribute']??false) == 'html');
+        $htmlSelectors = array_column($htmlSelectors, 'name');
+
         foreach ($scrapedData as $url => $scrapedPostData) {
+            if ($sanitize) {
+                $scrapedPostData = $this->sanitizeScrapedPostData($scrapedPostData, $htmlSelectors);
+            }
+
             $this->runModel->posts()->create([
                 'url' => $url,
                 'status' => ScraperPostStatus::PENDING,
                 'data' => $scrapedPostData
             ]);
         }
+    }
+
+    private function sanitizeScrapedPostData($scrapedPostData, $htmlSelectors)
+    {
+        foreach ($scrapedPostData as $key => &$dataItem) {
+            if (!in_array($key, $htmlSelectors)) {
+                continue;
+            }
+            if (is_array($dataItem)) {
+                foreach ($dataItem as $i => $di) {
+                    $dataItem[$i] = Sanitizer::handle($dataItem[$i], false);
+                    $dataItem[$i] = str_replace("\t", '', $dataItem[$i]);
+                    $dataItem[$i] = str_replace("\r\n", '', $dataItem[$i]);
+                    $dataItem[$i] = str_replace("\n", '', $dataItem[$i]);
+                    $dataItem[$i] = preg_replace('/\s+/', ' ', $dataItem[$i]);
+                }
+            } else {
+                $dataItem = Sanitizer::handle($dataItem, false);
+                $dataItem = str_replace("\t", '', $dataItem);
+                $dataItem = str_replace("\r\n", '', $dataItem);
+                $dataItem = str_replace("\n", '', $dataItem);
+                $dataItem = preg_replace('/\s+/', ' ', $dataItem);
+            }
+        }
+
+        return $scrapedPostData;
     }
 
     private function log(string $text, $data=[])

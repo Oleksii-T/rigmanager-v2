@@ -36,8 +36,27 @@ class ScraperImagesToPost implements ShouldQueue
      */
     public function handle(): void
     {
+        dlog("ScraperImagesToPost@handle"); //! LOG
         $attachments = [];
-        $urls = $this->scraperPost->data['images'];
+        $scraper = $this->scraperPost->run->scraper;
+        $imgAttrs = ['src', 'data-original'];
+        $imageSelectors = array_filter($scraper->selectors, fn ($a) => in_array($a['attribute']??'', $imgAttrs));
+        $imageSelectors = array_column($imageSelectors, 'name');
+        $urls = [];
+
+        foreach ($this->scraperPost->data as $key => $scraperPostData) {
+            if (!in_array($key, $imageSelectors)) {
+                continue;
+            }
+
+            if (is_array($scraperPostData)) {
+                $urls = array_merge($urls, $scraperPostData);
+            } else {
+                $urls[] = $scraperPostData;
+            }
+        }
+
+        dlog(" urls", $urls); //! LOG
 
         foreach ($urls as $url) {
             if (!$url) {

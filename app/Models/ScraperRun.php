@@ -18,6 +18,7 @@ class ScraperRun extends Model
         'scrape_limit',
         'status',
         'scraped',
+        'sanitize_html',
         'max',
         'end_at',
     ];

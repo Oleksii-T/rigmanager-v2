@@ -20,6 +20,7 @@ class ScraperRunController extends Controller
             'scraper_debug_enabled' => ['required', 'bool'],
             'only_count' => ['required', 'bool'],
             'scrape_limit' => ['nullable', 'numeric'],
+            'sanitize_html' => ['nullable', 'bool'],
         ]);
         $input['status'] = ScraperRunStatus::PENDING;
         $scraper = Scraper::find($input['scraper_id']);

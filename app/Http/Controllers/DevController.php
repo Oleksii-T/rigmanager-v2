@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Sanitizer\Sanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -72,16 +73,64 @@ class DevController extends Controller
     {
         $d = [];
 
-        $log = \App\Models\ScraperLog::find(204);
-        dd($log->text, strlen($log->text), substr($log->text, 0, 20));
+        $scraperPost = \App\Models\ScraperPost::find(1281);
 
-        $run = \App\Models\ScraperRun::find(5);
-        $d = collect($run->scraper->selectors);
-        $d = $d->where('name', 'post')->first()['value'];
-        // \App\Jobs\ScraperJob::dispatch($run);
+        $attachments = [];
+        $scraper = $scraperPost->run->scraper;
+        $imgAttrs = ['src', 'data-original'];
+        $imageSelectors = array_filter($scraper->selectors, fn ($a) => in_array($a['attribute']??'', $imgAttrs));
+        $imageSelectors = array_column($imageSelectors, 'name');
+        $urls = [];
+
+        foreach ($scraperPost->data as $key => $scraperPostData) {
+            dump($key, $scraperPostData);
+            if (!in_array($key, $imageSelectors)) {
+                dump(' SKIP');
+                continue;
+            }
+
+            dump('Add', $scraperPostData);
+            if (is_array($scraperPostData)) {
+                $urls = array_merge($urls, $scraperPostData);
+            } else {
+                $urls[] = $scraperPostData;
+            }
+            dump('========');
+            dump('========');
+            dump('========');
+        }
+
+        $d = $urls;
+
 
 
         dd($d);
+    }
+
+    private function sanitizeScrapedPostData($scrapedPostData, $htmlSelectors)
+    {
+        foreach ($scrapedPostData as $key => &$dataItem) {
+            if (!in_array($key, $htmlSelectors)) {
+                continue;
+            }
+            if (is_array($dataItem)) {
+                foreach ($dataItem as $i => $di) {
+                    $dataItem[$i] = Sanitizer::handle($dataItem[$i], false);
+                    $dataItem[$i] = str_replace("\t", '', $dataItem[$i]);
+                    $dataItem[$i] = str_replace("\r\n", '', $dataItem[$i]);
+                    $dataItem[$i] = str_replace("\n", '', $dataItem[$i]);
+                    $dataItem[$i] = preg_replace('/\s+/', ' ', $dataItem[$i]);
+                }
+            } else {
+                $dataItem = Sanitizer::handle($dataItem, false);
+                $dataItem = str_replace("\t", '', $dataItem);
+                $dataItem = str_replace("\r\n", '', $dataItem);
+                $dataItem = str_replace("\n", '', $dataItem);
+                $dataItem = preg_replace('/\s+/', ' ', $dataItem);
+            }
+        }
+
+        return $scrapedPostData;
     }
 
     private function fixChars()
@@ -203,7 +252,7 @@ class DevController extends Controller
     </table>';
 
         // dump($table);
-        
+
         $t = \App\Sanitizer\Sanitizer::handle($table, false);
 
         dd($t);

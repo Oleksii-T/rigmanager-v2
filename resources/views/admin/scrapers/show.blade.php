@@ -34,14 +34,14 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-2">
                                 <div class="form-group">
                                     <label>Scrape limit</label>
                                     <input name="scrape_limit" type="number" class="form-control">
                                     <span data-input="scrape_limit" class="input-error"></span>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-2">
                                 <div class="form-group">
                                     <label>-</label>
                                     <div class="form-check">
@@ -51,6 +51,15 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="only_count" value="1">
                                         <label class="form-check-label">Only count</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label>-</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="sanitize_html" value="1" checked>
+                                        <label class="form-check-label">Sanitize HTML</label>
                                     </div>
                                 </div>
                             </div>

@@ -7,7 +7,7 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <div class="float-left">
-                    <h1 class="m-0">Scraper Run {{$scraperRun->id}}</h1>
+                    <h1 class="m-0">Scraper Run #{{$scraperRun->id}}</h1>
                 </div>
                 <div class="float-left pl-3">
                     <a href="{{route('admin.scrapers.show', $scraperRun->scraper)}}" class="btn btn-primary">

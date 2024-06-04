@@ -20,6 +20,7 @@ return new class extends Migration
             $table->smallInteger('scrape_limit')->nullable();
             $table->boolean('scraper_debug_enabled')->default(false);
             $table->boolean('only_count')->default(false);
+            $table->boolean('sanitize_html')->default(false);
             $table->timestamp('end_at')->nullable();
             $table->timestamps();
         });

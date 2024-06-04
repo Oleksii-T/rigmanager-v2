@@ -231,13 +231,14 @@ class AnalyticsService
     }
 
     // Calculate engagement values (place, points, percent) using activity-logs created by user.
-    public function engagement($user=null, array|null $between=null)
+    public function engagement($user=null, array|null $between=null, int|null $limit=null)
     {
         $biggest = 0;
         $users = User::query()
             ->with(['activitiesBy' => function ($q) use($between) {
                 $q->when($between, fn($q2) => $q2->whereBetween('created_at', $between));
             }])
+            ->when($limit, fn($q) => $q->limit($limit))
             ->get();
         $usersCount = $users->count();
 
@@ -312,7 +313,7 @@ class AnalyticsService
                 ->limit(5)
                 ->get();
         } elseif ($type == 'users-by-engagement') {
-            $result = $this->engagement()->take(10);
+            $result = $this->engagement(null, null, 10);
         } elseif ($type == 'posts-by-views-count') {
             $result = Post::query()
                 ->withCount('views')
