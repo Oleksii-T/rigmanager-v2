@@ -150,7 +150,7 @@ class PostController extends Controller
 
         $views = $post->views();
 
-        return MakeActivityLogTable::run($views);
+        return MakeActivityLogTable::run($request, $views);
     }
 
     public function approveAll()

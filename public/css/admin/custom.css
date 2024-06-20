@@ -37,6 +37,9 @@
 .help-tooltip-icon:hover svg path{
     fill: #fff;
 }
+.sidebar {
+    max-height: 92vh;
+}
 
 /* select2 fix */
 .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--multiple {
@@ -58,10 +61,10 @@
 }
 
 /* summernote fix */
-.note-frame table td,.note-frame table th {
+.note-frame table td {
     border: 1px solid #505050;
 }
-.note-frame table td,.note-frame table th {
+.note-frame table td {
     padding: 0 5px 0 5px;
 }
 .note-frame ul {

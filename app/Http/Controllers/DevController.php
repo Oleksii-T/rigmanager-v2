@@ -73,36 +73,78 @@ class DevController extends Controller
     {
         $d = [];
 
-        $scraperPost = \App\Models\ScraperPost::find(1281);
+        $run = \App\Models\ScraperRun::find(59);
+        $user = $run->scraper->user;
+        $posts = $run->posts()->where('status', \App\Enums\ScraperPostStatus::PENDING)->get();
 
-        $attachments = [];
-        $scraper = $scraperPost->run->scraper;
-        $imgAttrs = ['src', 'data-original'];
-        $imageSelectors = array_filter($scraper->selectors, fn ($a) => in_array($a['attribute']??'', $imgAttrs));
-        $imageSelectors = array_column($imageSelectors, 'name');
-        $urls = [];
+        foreach ($posts as $scraperPost) {
+            $post = Post::where('scraped_url', $scraperPost->url)->first();
+            $input = [];
 
-        foreach ($scraperPost->data as $key => $scraperPostData) {
-            dump($key, $scraperPostData);
-            if (!in_array($key, $imageSelectors)) {
-                dump(' SKIP');
+            $part1 = $scraperPost->data['description'];
+            $pos = strrpos($part1, '</table>');
+            $part1 = substr($part1, 0, $pos+8);
+
+            $part2 = '<p><p>Detail Information</b></p>';
+            $part2 .= $scraperPost->data['details'];
+            $part2 = str_replace('<tr> <td colspan="4"> Detail Information </td> </tr>', '', $part2);
+            $part2 = str_replace('</h2>', '', $part2);
+            $part2 = str_replace('<h2>', '', $part2);
+
+            $part3 = '<p><b>Product Details:</b></p>';
+            $part3 .= $scraperPost->data['specs'][0];
+            $part3 .= '<p><b>Payment & Shipping Terms:</b></p>';
+            $part3 .= $scraperPost->data['specs'][1];
+
+            $input['description'] = [
+                'en' => $part1 . $part2 . $part3
+            ];
+
+            if ($post) {
+                $post->saveTranslations($input);
                 continue;
             }
 
-            dump('Add', $scraperPostData);
-            if (is_array($scraperPostData)) {
-                $urls = array_merge($urls, $scraperPostData);
-            } else {
-                $urls[] = $scraperPostData;
+            $category = \App\Models\Category::find(1);
+            $input['category_id'] = $category->id;
+            $input['user_id'] = $user->id;
+            $input['type'] = \App\Enums\PostType::SELL;
+            $input['status'] = 'pending';
+            $input['title'] = [
+                'en' => $scraperPost->data['title']
+            ];
+            $mTitles = [];
+            $mDescriptions = [];
+            foreach ($input['title'] as $locale => $title) {
+                $mTitles[$locale] = Post::generateMetaTitleHelper($title, $category->name);
             }
-            dump('========');
-            dump('========');
-            dump('========');
+            foreach ($input['description'] as $locale => $description) {
+                $mDescriptions[$locale] = Post::generateMetaDescriptionHelper($description);
+            }
+            $input['duration'] = 'unlim';
+            $input['meta_title'] = $mTitles;
+            $input['meta_description'] = $mDescriptions;
+            $input['slug'] = [];
+            foreach ($input['title'] as $locale => $title) {
+                $allSlugs = \App\Models\Translation::query()
+                    ->where('field', 'slug')
+                    ->where('locale', $locale)
+                    ->where('translatable_type', Post::class)
+                    ->pluck('value')
+                    ->toArray();
+                $input['slug'][$locale] = makeSlug($title, $allSlugs);
+            }
+            $input['scraped_url'] = $scraperPost->url;
+            $input['country'] = $user->country;
+            $input['origin_lang'] = 'en';
+            $input['group'] = \App\Enums\PostGroup::EQUIPMENT;
+
+            // dd($input);
+
+            $post = Post::create($input);
+            $post->saveTranslations($input);
+            \App\Jobs\ScraperImagesToPost::dispatch($scraperPost, $post);
         }
-
-        $d = $urls;
-
-
 
         dd($d);
     }

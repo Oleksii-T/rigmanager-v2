@@ -115,11 +115,14 @@ class UserController extends Controller
         $infoInput['phones'] = $infoInput['phones'] ? json_decode($infoInput['phones']) : null;
         $user->info()->create($infoInput);
 
-        if ($input['verify_email_now']??false) {
+        if ($input['verify_email_now'] == 1) {
+            $user->email_verified_at = now();
+            $user->save();
+        } else if ($input['verify_email_now'] == 2) {
             $user->email_verified_at = now();
             $user->save();
             event(new \Illuminate\Auth\Events\Verified($user));
-        } else {
+        } elseif ($input['verify_email_now'] == 4) {
             event(new \Illuminate\Auth\Events\Registered($user));
         }
 

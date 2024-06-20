@@ -235,7 +235,7 @@ class AnalyticsService
     {
         $biggest = 0;
         $users = User::query()
-            ->with(['activitiesBy' => function ($q) use($between) {
+            ->withCount(['activitiesBy' => function ($q) use($between) {
                 $q->when($between, fn($q2) => $q2->whereBetween('created_at', $between));
             }])
             ->when($limit, fn($q) => $q->limit($limit))
@@ -247,7 +247,7 @@ class AnalyticsService
             // assume total logs count as engagement points.
             //? document points calculation logic in engagement trivia modal for admin.
             //todo: determine points based on user activity type. E.G.: 5 points for post create, 4 point for post update, 1 points for post view, etc..
-            $points = $u->activitiesBy->count();
+            $points = $u->activities_by_count;
             $biggest = $biggest < $points ? $points : $biggest;
             $u->engagement_points = $points;
         }

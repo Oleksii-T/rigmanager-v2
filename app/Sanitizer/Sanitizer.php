@@ -39,9 +39,15 @@ class Sanitizer
         $html = $safeHtml;
 
         $html = str_replace('<p></p>', '', $html);
+        $html = str_replace('<p><br></p>', '', $html);
+        $html = str_replace('<p><br /></p>', '', $html);
+        $html = str_replace("<p>\u{A0}</p>", '', $html);
         $html = str_replace('<br></p>', '</p>', $html);
+        $html = str_replace('<br /></p>', '</p>', $html);
         $html = str_replace('<p><strong></strong></p>', '', $html);
-                  
+        
+        // dd($html);
+
         if (str_contains($html, '</table>')) {
             $dom = new \DOMDocument;
             $html = str_replace('&nbsp;', '', $html);

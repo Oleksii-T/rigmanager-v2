@@ -324,6 +324,11 @@
             <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
         @endif
     </form>
+    <form action="{{route('admin.posts.destroy', $post)}}" method="post" class="general-ajax-submit">
+        @method('DELETE')
+        @csrf
+        <button type="submit" class="btn btn-danger ask">Delete</button>
+    </form>
 @endsection
 
 @push('scripts')

@@ -141,6 +141,8 @@ class ScraperPostController extends Controller
             $input['origin_lang'] = 'en';
             $input['group'] = PostGroup::EQUIPMENT;
 
+            // dd($input);
+
             $post = Post::create($input);
             $post->saveCosts($input);
             $post->saveTranslations($input);

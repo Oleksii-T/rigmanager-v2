@@ -4,8 +4,7 @@
 
 @section('content_header')
     <x-admin.title
-        text="Posts"
-        :button="['+ Add Post', route('admin.posts.create')]"
+        text="Post #{{$post->id}} views"
     />
 @stop
 
@@ -35,7 +34,7 @@
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-views">
                 Add View(s)
             </button>
-            <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary text-dark">Cancel</a>
+            <a href="{{ route('admin.posts.show', $post) }}" class="btn btn-outline-secondary text-dark">Cancel</a>
         </div>
     </div>
 

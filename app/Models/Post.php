@@ -254,11 +254,11 @@ class Post extends Model
                     return $this->getCost('eq',true);
                 }
 
-                $cost = $this->cost_from ? $this->getCost('from',true) : null;
+                $cost = $this->cost_from ? $this->getCost('from',true,null,false) : null;
 
                 if ($this->cost_to) {
                     $cost = $cost ? "$cost - " : "__ - ";
-                    $cost .= $this->getCost('to',true);
+                    $cost .= $this->getCost('to',true,null,false);
                 }
 
                 if (!$cost) {
@@ -274,7 +274,7 @@ class Post extends Model
         );
     }
 
-    public function getCost($type, $readable, $currency=null)
+    public function getCost($type, $readable, $currency=null, $withPer=true)
     {
         if (!$currency) {
             $requestedCurr = request()->currency;
@@ -299,7 +299,7 @@ class Post extends Model
 
         $cost = $symbol . number_format($costM->cost, 2);
 
-        if ($this->cost_per) {
+        if ($withPer && $this->cost_per) {
             $cost .= " per $this->cost_per";
         }
 
@@ -325,16 +325,16 @@ class Post extends Model
 
     public function saveCosts($input)
     {
-        // dlog("Post@saveCosts"); //! LOG
+        dlog("Post@saveCosts"); //! LOG
         if ($input['is_double_cost']??false) {
-            // dlog(" is double"); //! LOG
+            dlog(" is double"); //! LOG
             $costs = [
                 'eq' => null,
                 'from' => $input['cost_from']??null,
                 'to' => $input['cost_to']??null,
             ];
         } else {
-            // dlog(" is single :("); //! LOG
+            dlog(" is single :("); //! LOG
             if (($input['cost_to']??false) && !($input['cost_from']??false)) {
                 $input['cost'] = $input['cost_to'];
             }
@@ -349,7 +349,7 @@ class Post extends Model
         }
         $baseCurrency = $input['currency'];
 
-        // dlog(" res", $costs); //! LOG
+        dlog(" res", $costs); //! LOG
 
         foreach ($costs as $type => $cost) {
             if (!$cost) {

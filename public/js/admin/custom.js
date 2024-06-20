@@ -28,6 +28,7 @@ $(document).ready(function () {
     });
     $('.posts-rich-desc').summernote({
         minHeight: '140px',
+        maxHeight: '700px',
         toolbar: [
             ['style', ['style']],
             ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -94,7 +95,7 @@ $(document).ready(function () {
     });
 
     // general logic of ajax form submit (supports files)
-    $(document).on('click', 'form.general-ajax-submit button[type="submit"]', function (e) {
+    $(document).on('click', 'form.general-ajax-submit button[type="submit"]', async function (e) {
         e.preventDefault();
         loading();
         let form = $(this).closest('form');
@@ -103,6 +104,20 @@ $(document).ready(function () {
 
         if ($(this).attr('name')) {
             formData.append($(this).attr('name'), $(this).val());
+        }
+
+        if ($(this).hasClass('ask')) {
+            let answer = await swal.fire({
+                title: 'Are you sure?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            });
+
+            if (!answer.isConfirmed) {
+                return;
+            }
         }
 
         $.ajax({
@@ -146,10 +161,15 @@ $(document).ready(function () {
     // copy text
     $('[data-copy]').click(function(e) {
         e.preventDefault();
-        let text = $($(this).data('copy')).text();
+        let target = $(this).data('copy');
+        console.log(`target`, target); //! LOG
+        target = $(target);
+        console.log(`target`, target); //! LOG
+        let text = target.text();
         let message = $(this).data('message');
         var dummy = document.createElement("textarea");
         document.body.appendChild(dummy);
+        console.log(`copy`, text); //! LOG
         dummy.value = text;
         dummy.select();
         document.execCommand("copy");
@@ -240,7 +260,7 @@ function countCharsInInput(el) {
     let label;
     if (wraper.find('.nav-tabs')) {
         let locale = el.data('locale');
-        label = wraper.find(`.nav-tabs [data-locale="${locale}"]`);        
+        label = wraper.find(`.nav-tabs [data-locale="${locale}"]`);
     } else {
         label = wraper.find('label');
     }

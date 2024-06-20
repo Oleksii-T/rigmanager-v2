@@ -16,6 +16,9 @@
                     <a href="{{route('admin.scrapers.show', $scraper)}}" class="btn btn-primary">
                         Back to '{{$scraper->name}}' scraper
                     </a>
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#progress">
+                        Progress
+                    </a>
                 </div>
             </div>
         </div>
@@ -25,7 +28,7 @@
 @section('content')
     <div class="row">
         <div class="col-sm-7">
-            <form action="{{route('admin.scraper-posts.publish', $scraperPost)}}" method="post" class="card general-ajax-submit">
+            <form action="{{route('admin.scraper-posts.publish', $scraperPost)}}" method="post" class="card general-ajax-submit" style="margin-bottom: 0px">
                 @csrf
                 <input type="hidden" name="created_post_id" value="{{$alreadyPublishedPost?->id}}">
                 <div class="card-header">
@@ -37,7 +40,7 @@
                         @endif
                     </h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="max-height: 74vh;overflow-y: auto;">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
@@ -82,8 +85,8 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="update_imaged" value="1">
-                                            <label class="form-check-label">Update Images</label>
+                                            <input class="form-check-input" type="checkbox" name="update_imaged" value="1" checked>
+                                            <label class="form-check-label">Update Images <small>({{$alreadyPublishedPost->images()->count()}} images stored)</small></label>
                                         </div>
                                     </div>
                                 </div>
@@ -104,52 +107,38 @@
             </form>
         </div>
         <div class="col-sm-5">
-            <div class="card">
+            <div class="card" style="margin-bottom: 0px">
                 <div class="card-header">
-                    <h3 class="card-title">Scraped Post #{{$scraperPost->id}} <a href="{{$scraperPost->url}}" target="_blank">source</a></h3>
+                    <h3 class="card-title">
+                        Scraped Post #{{$scraperPost->id}} 
+                        <a href="{{$scraperPost->url}}" target="_blank">source</a>
+                    </h3>
+                    <span class="{{$scraperPost->statusClass()}}" style="float: right">
+                        {{$scraperPost->status->readable()}}
+                    </span>
                 </div>
-                <div class="card-body" style="max-height: 95vh;overflow-y: auto;">
+                <div class="card-body" style="max-height: 81vh;overflow-y: auto;">
                     <div class="row">
                         @foreach ($scraperPost->data as $field => $value)
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>{{$field}}</label>
-                                    {{-- <input name="name" type="text" class="form-control"> --}}
+                                    <label>
+                                        {{$field}}
+                                        <i class="fas fa-fw fa-copy" style="cursor: pointer" data-copy="#field-{{$field}}"></i>
+                                    </label>
                                     @if (is_array($value))
-                                        <ul>
+                                        <ul id="field-{{$field}}">
                                             @foreach ($value as $valueItem)
                                                 <li>{{$valueItem}}</li>
                                             @endforeach
                                         </ul>
                                     @else
-                                        <p>{{$value}}</p>
+                                        <p id="field-{{$field}}">{{$value}}</p>
                                     @endif
                                 </div>
                             </div>
                         @endforeach
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Progress</h3>
-                </div>
-                <div class="card-body">
-                    <ul>
-                        @foreach ($posts as $post)
-                            <li style="{{$post->id == $scraperPost->id ? 'border:1px solid red' : ''}}">
-                                {{$post->id}}:
-                                <a href="{{route('admin.scraper-posts.publishing', $post)}}" class="{{$post->statusClass()}}">
-                                    {{$post->status->readable()}}
-                                </a>
-                                <a href="{{$post->url}}" target="_blank">
-                                    {{$post->url}}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
                 </div>
             </div>
         </div>
@@ -177,6 +166,35 @@
                         <li><b>Original Lang</b>: en</li>
                         <li><b>Is Active</b>: Yes</li>
                         <li><b>Is urgent</b>: No</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="progress" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Progress</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        @foreach ($posts as $post)
+                            <li style="{{$post->id == $scraperPost->id ? 'border:1px solid red' : ''}}">
+                                {{$post->id}}:
+                                <a href="{{route('admin.scraper-posts.publishing', $post)}}" class="{{$post->statusClass()}}">
+                                    {{$post->status->readable()}}
+                                </a>
+                                <a href="{{$post->url}}" target="_blank">
+                                    {{$post->url}}
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>

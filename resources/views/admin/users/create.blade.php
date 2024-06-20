@@ -96,14 +96,28 @@
                                 <label>
                                     <input name="verify_email_now" type="radio" value="1" checked>
                                     yes
-                                    <small>send "welcome email" mail</small>
+                                    <small>(without mail)</small>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input name="verify_email_now" type="radio" value="0">
+                                    <input name="verify_email_now" type="radio" value="2">
+                                    yes
+                                    <small>(send "welcome email" mail)</small>
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input name="verify_email_now" type="radio" value="3">
                                     no
-                                    <small>send "verify email" mail</small>
+                                    <small>(without mail)</small>
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input name="verify_email_now" type="radio" value="4">
+                                    no
+                                    <small>(send "verify email" mail)</small>
                                 </label>
                             </div>
                         </div>
