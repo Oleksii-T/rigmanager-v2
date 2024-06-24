@@ -94,20 +94,18 @@ class ScraperJob implements ShouldQueue
 
     private function countPostsToBeScraped() : int
     {
-        $run = $this->runModel;
-        $config = $run->scraper;
-        $selectors = collect($config->selectors);
-        $postSelector = $selectors->where('name', 'post')->first()['value'];
-        $postLinkSelector = $selectors->where('name', 'post_link')->first()['value'];
-        $paginationSelector = $selectors->where('name', 'pagination')->first()['value'] ?? '';
+        $config = $this->runModel->scraper;
         $count = 0;
         foreach ($config['base_urls'] as $url) {
             $count += PostScraperService::make($url)
-                ->post($postSelector)
-                ->postLink($postLinkSelector)
-                ->pagination($paginationSelector)
+                ->post($config->post_selector ?? '')
+                ->postLink($config->post_link_selector ?? '')
+                ->pagination($config->pagination_selector ?? '')
+                ->category($config->category_selector ?? '')
                 ->sleep($config->sleep ?? 0)
-                ->count()['posts'];
+                ->ignorePageError($this->runModel->ignore_page_error)
+                ->onlyCount()
+                ->scrape()['posts'];
         }
 
         return $count;
@@ -118,17 +116,17 @@ class ScraperJob implements ShouldQueue
         $run = $this->runModel;
         $config = $run->scraper;
         $result = [];
-        $selectors = collect($config->selectors);
-        $postSelector = $selectors->where('name', 'post')->first()['value'];
-        $postLinkSelector = $selectors->where('name', 'post_link')->first()['value'];
-        $paginationSelector = $selectors->where('name', 'pagination')->first()['value'] ?? '';
 
         foreach ($config['base_urls'] as $url) {
             $scrapper = PostScraperService::make($url)
-                ->post($postSelector)
-                ->postLink($postLinkSelector)
-                ->pagination($paginationSelector)
+                ->post($config->post_selector ?? '')
+                ->postLink($config->post_link_selector ?? '')
+                ->pagination($config->pagination_selector ?? '')
+                ->category($config->category_selector ?? '')
                 ->debug($run->scraper_debug_enabled)
+                ->sleep($config->sleep ?? 0)
+                ->limit($run->scrape_limit ?? 0)
+                ->ignorePageError($run->ignore_page_error)
                 ->afterEachScrape(function ($post) use ($run) {
                     $run->increment('scraped');
                 })
@@ -138,18 +136,7 @@ class ScraperJob implements ShouldQueue
                     ]);
                 });
 
-            if ($run->scrape_limit) {
-                $scrapper->limit($run->scrape_limit);
-            }
-
-            if ($config->sleep) {
-                $scrapper->sleep($config->sleep);
-            }
-
-            foreach ($selectors as $selector) {
-                if (in_array($selector['name'], Scraper::getDefSelectors())) {
-                    continue;
-                }
+            foreach ($config->selectors as $selector) {
                 $scrapper->value(
                     $selector['name'],
                     $selector['value'],
@@ -188,27 +175,30 @@ class ScraperJob implements ShouldQueue
     private function sanitizeScrapedPostData($scrapedPostData, $htmlSelectors)
     {
         foreach ($scrapedPostData as $key => &$dataItem) {
-            if (!in_array($key, $htmlSelectors)) {
+            if (!$dataItem || !in_array($key, $htmlSelectors)) {
                 continue;
             }
             if (is_array($dataItem)) {
                 foreach ($dataItem as $i => $di) {
-                    $dataItem[$i] = Sanitizer::handle($dataItem[$i], false);
-                    $dataItem[$i] = str_replace("\t", '', $dataItem[$i]);
-                    $dataItem[$i] = str_replace("\r\n", '', $dataItem[$i]);
-                    $dataItem[$i] = str_replace("\n", '', $dataItem[$i]);
-                    $dataItem[$i] = preg_replace('/\s+/', ' ', $dataItem[$i]);
+                    $dataItem[$i] = $this->sanitize($dataItem[$i]);
                 }
             } else {
-                $dataItem = Sanitizer::handle($dataItem, false);
-                $dataItem = str_replace("\t", '', $dataItem);
-                $dataItem = str_replace("\r\n", '', $dataItem);
-                $dataItem = str_replace("\n", '', $dataItem);
-                $dataItem = preg_replace('/\s+/', ' ', $dataItem);
+                $dataItem = $this->sanitize($dataItem);
             }
         }
 
         return $scrapedPostData;
+    }
+
+    private function sanitize($html)
+    {
+        $html = Sanitizer::handle($html, false);
+        $html = str_replace("\t", '', $html);
+        $html = str_replace("\r\n", '', $html);
+        $html = str_replace("\n", '', $html);
+        $html = preg_replace('/\s+/', ' ', $html);
+
+        return $html;
     }
 
     private function log(string $text, $data=[])
@@ -217,18 +207,9 @@ class ScraperJob implements ShouldQueue
             'text' => $text,
             'data' => $data ?: null
         ]);
-
-        // $toLog = $text;
-
-        // if ($data) {
-        //     $toLog .= (': ' . json_encode($data));
-        // }
-
-        // \Log::channel('scraping')->info($toLog);
-
     }
 
-    public static function getEscapedChars()
+    private static function getEscapedChars()
     {
         return [
             ["\r\n", "\n", false], // ensure there all the same new lines symbo

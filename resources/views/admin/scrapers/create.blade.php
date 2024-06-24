@@ -58,6 +58,36 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Category selector</label>
+                            <input name="category_selector" type="text" class="form-control">
+                            <span data-input="category_selector" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Pagination selector</label>
+                            <input name="pagination_selector" type="text" class="form-control">
+                            <span data-input="pagination_selector" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Post selector</label>
+                            <input name="post_selector" type="text" class="form-control">
+                            <span data-input="post_selector" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Post link selector</label>
+                            <input name="post_link_selector" type="text" class="form-control">
+                            <span data-input="post_link_selector" class="input-error"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card">
@@ -104,54 +134,52 @@
                         </div>
                     </div>
                 </div>
-                @foreach (\App\Models\Scraper::getDefSelectors() as $i => $name)
-                    <div class="row og-selector">
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <input name="selectors[{{$i}}][name]" type="text" class="form-control" value="{{$name}}">
-                                <span data-input="selectors.{{$i}}.name" class="input-error"></span>
-                            </div>
+                <div class="row og-selector">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input name="selectors[0][name]" type="text" class="form-control" value="title">
+                            <span data-input="selectors.0.name" class="input-error"></span>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <input name="selectors[{{$i}}][value]" type="text" class="form-control">
-                                <span data-input="selectors.{{$i}}.value" class="input-error"></span>
-                            </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input name="selectors[0][value]" type="text" class="form-control">
+                            <span data-input="selectors.0.value" class="input-error"></span>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <input name="selectors[{{$i}}][attribute]" type="text" class="form-control">
-                                <span data-input="selectors.{{$i}}.attribute" class="input-error"></span>
-                            </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input name="selectors[0][attribute]" type="text" class="form-control">
+                            <span data-input="selectors.0.attribute" class="input-error"></span>
                         </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input id="is_debug" name="selectors[{{$i}}][is_multiple]" class="form-check-input" type="checkbox" value="1">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input id="is_debug" name="selectors[{{$i}}][from_posts_page]" class="form-check-input" type="checkbox" value="1">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input id="is_debug" name="selectors[{{$i}}][required]" class="form-check-input" type="checkbox" value="1" checked>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1 remove-wraper d-none">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-danger remove-selector">x</button>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input id="is_debug" name="selectors[0][is_multiple]" class="form-check-input" type="checkbox" value="1">
                             </div>
                         </div>
                     </div>
-                @endforeach
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input id="is_debug" name="selectors[0][from_posts_page]" class="form-check-input" type="checkbox" value="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input id="is_debug" name="selectors[0][required]" class="form-check-input" type="checkbox" value="1" checked>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1 remove-wraper d-none">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger remove-selector">x</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <button type="submit" class="btn btn-success min-w-100">Save</button>

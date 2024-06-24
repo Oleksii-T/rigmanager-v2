@@ -17,29 +17,36 @@ use App\Services\Css2XPathService;
  * Than, few base method should be called to configure scrapping behavior:
  * - post() - sets the selector for 'post cart' within posts page;
  * - postLink() - set the selector for link which must lead to post page;
- * - pagination() - set the seelctor for pagination links;
+ * - pagination() - set the selector for pagination links;
+ * - category() - set the selector for a link to the category page. Assumed 'category page' is 'posts page'.
  * - value() - set the selector for target value to be scraped;
  * - shot() - set the selector for screenshot;
  * - scrape() - start the scrapping.
  *
  * Algorithm breakdown:
  * 1. go to base url;
- * 2. find 'post cart';
- * 3. go to post page and scrape values;
+ * 2. find 'post carts';
+ * 3. go to non-scraped 'post page' and scrape values;
  * 4. check posts pagination and find next non-scraped page;
  * 5. go to next page;
  * 6. repeat steps 2-5 untill there is no non-scraped pages found in pagination.
  *
- * Can be used without pagination.
+ * Algorithm if 'category' specified:
+ * 1. go to base url;
+ * 2. find non scraped category link;
+ * 3. go to category page;
+ * 4. steps 2-6 from first algorithm;
+ * 5. repeat steps 2-4.
  *
  * There is other helper method to tweak the behavior:
- * - abortOnPageError() - Enable\disable exception when page can not be downloaded;
+ * - ignorePageError() - Enable\disable exception when page can not be downloaded;
  * - nullableValues() - Markes all values as nullable;
  * - debug() - Enable\disable scrapping logging;
- * - logUsing() - Define who logging logic;
- * - limit() - Set the limit;
- * - sleep() - Defile wait seconds before page will be downloaded;
- * - count() - Count pages instead on scrapping. Use instead of scrape();
+ * - logUsing() - Define logging;
+ * - limit() - Set the limit of posts to be scraped;
+ * - sleep() - Define wait seconds before page will be downloaded;
+ * - withMeta() - Define wether timing(meta) data will be included in result;
+ * - onlyCount() - Count pages instead on scrapping. Use instead of scrape();
  *
  * See detailed usage, parameters and return values in method comments.
  *
@@ -49,14 +56,17 @@ use App\Services\Css2XPathService;
 class PostScraperService
 {
     private string $url = '';
+    private string $categorySelector = '';
+    private string $currentCategory = '';
     private string $paginationSelector = '';
     private string $postSelector;
     private string $postLinkSelector;
     private string $postLinkAttribute;
     private string $currentUrl = '';
-    private bool $abortOnPageError = true;
+    private bool $ignorePageError = false;
     private bool $nullableValues = false;
     private bool $onlyCount = false;
+    private bool $withMeta = false;
     private bool $debug = false;
     private int $limitResult = 0;
     private int $sleep = 0;
@@ -100,9 +110,23 @@ class PostScraperService
         return $this;
     }
 
-    public function abortOnPageError(bool $abort)
+    public function withMeta()
     {
-        $this->abortOnPageError = $abort;
+        $this->withMeta = true;
+
+        return $this;
+    }
+
+    public function onlyCount(bool $is=true)
+    {
+        $this->onlyCount = $is;
+
+        return $this;
+    }
+
+    public function ignorePageError(bool $is=true)
+    {
+        $this->ignorePageError = $is;
 
         return $this;
     }
@@ -173,6 +197,22 @@ class PostScraperService
     public function sleep(int $sleep)
     {
         $this->sleep = $sleep;
+
+        return $this;
+    }
+
+    /**
+     * Set the selector for 'category page' links.
+     * Each 'category page' then will be treated as base url.
+     * We assume that there is no pagination for categories.
+     *
+     * @param string $selector Selector for post
+     *
+     * @return self
+     */
+    public function category($selector)
+    {
+        $this->categorySelector = $selector;
 
         return $this;
     }
@@ -267,30 +307,50 @@ class PostScraperService
     /**
      * Run the scraper but only count pages and posts
      *
-     * @param bool $includeMeta Flag wether to include additonal data about scrappping process or no
      * @return array Returs scraped posts as array (and additional data if paramere applied)
      */
-    public function scrape($includeMeta=false)
+    public function scrape()
     {
-        $this->scrapeHelper($this->url);
+        if ($this->categorySelector) {
+            // get the HTML page with categories links
+            $html = $this->getHTML($this->url);
+
+            // get all categories links
+            $categoriesNodeLists = $this->querySelector($html, $this->categorySelector);
+
+            // scrape each category page
+            foreach ($categoriesNodeLists as $i => $categoriesNode) {
+                $categoryPageLink = $categoriesNode->getAttribute('href');
+
+                if ($this->isLinkToFile($categoryPageLink)) {
+                    continue;
+                }
+
+                $this->currentCategory = $categoryPageLink;
+                $this->log('Scrapping of category #' . $i+1);
+                $this->scrapeHelper($categoryPageLink);
+            }
+        } else {
+            $this->log('Scrapping posts');
+            $this->scrapeHelper($this->url);
+        }
+
+        if ($this->onlyCount) {
+            return [
+                'posts' => count($this->meta['parsed_posts']),
+                'pages' => count($this->meta['parsed_pages'])
+            ];
+        }
+
+        if (!$this->withMeta) {
+            return $this->result;
+        }
+
         $this->sumarizeMeta();
 
-        return $includeMeta ? ['data' => $this->result, 'meta' => $this->meta] : $this->result;
-    }
-
-    /**
-     * Run the scraper but only count pages and posts
-     *
-     * @return array Count resut
-     */
-    public function count()
-    {
-        $this->onlyCount = true;
-        $this->scrapeHelper($this->url);
-
         return [
-            'posts' => count($this->meta['parsed_posts']),
-            'pages' => count($this->meta['parsed_pages'])
+            'data' => $this->result, 
+            'meta' => $this->meta
         ];
     }
 
@@ -335,18 +395,23 @@ class PostScraperService
      */
     public function scrapeHelper($url, $page=1)
     {
-        $this->log("scrapeHelper $url");
+        $this->log("Scrapping posts page #$page", 2);
+
         $this->meta['parsed_pages'][$url] = [
             'start' => microtime(true)
         ];
-        $html = $this->getHTML($url);
 
-        $this->log(" HTML: $html");
+        $this->log("URL: $url", 2);
+        $html = $this->getHTML($url);
+        $this->log("HTML: $html", 2);
+
         $postsNodeLists = $this->querySelector($html, $this->postSelector);
 
         // scrape posts
         foreach ($postsNodeLists as $i => $postNode) {
-            $scrapedPostData = $this->scrapePostHelper($postNode, $page, $url, $i);
+            $this->log("Scraping post #" . $i+1 . " from page #$page", 3);
+
+            $scrapedPostData = $this->scrapePostHelper($postNode, $url, $i);
 
             if (isset($this->afterEachScrapeClosure)) {
                 $function = $this->afterEachScrapeClosure;
@@ -359,15 +424,20 @@ class PostScraperService
             }
         }
 
-        $this->log("  Posts process done");
+        $this->log("Posts page #$page scraped", 2);
+
+        if ($this->enough()) {
+            $this->log("Scraping limit reached", 2);
+            return;
+        }
 
         $nextPageUrl = $this->getNextPaginationUrl($html);
 
         $this->meta['parsed_pages'][$url]['end'] = microtime(true);
 
         // check is next page must be scraped
-        if ($this->enough() || !$nextPageUrl) {
-            $this->log("  ENOUGH or NO PAGE");
+        if (!$nextPageUrl) {
+            $this->log("Next pagination URL not found", 2);
             return;
         }
 
@@ -375,22 +445,24 @@ class PostScraperService
         return $this->scrapeHelper($nextPageUrl, $page+1);
     }
 
-    private function scrapePostHelper($postNode, $page, $url, $i)
+    private function scrapePostHelper($postNode, $url, $i)
     {
         // get link to the post page from
-        $postUrl = $this->querySelector($postNode, $this->postLinkSelector)->item(0)->getAttribute($this->postLinkAttribute)??null;
+        $postUrl = $this->querySelector($postNode, $this->postLinkSelector)->item(0)?->getAttribute($this->postLinkAttribute);
 
-        $this->log("  Post #$page:" . $i+1 . " process: $postUrl");
+        $this->log("URL: $postUrl", 3);
 
         if (!$postUrl) {
-            $this->log("    NOT URL");
-            if ($this->abortOnPageError) {
+            if (!$this->ignorePageError) {
                 throw new \Exception("Post #" . $i+1 . " url at '$url' can not be retrived", 1);
+            } else {
+                $this->log("URL is empty", 3);
             }
             return;
         }
 
         if (in_array($postUrl, $this->ignoreUrls)) {
+            $this->log('Ignoring URL', 3);
             return;
         }
 
@@ -456,15 +528,15 @@ class PostScraperService
      */
     private function processPost($url)
     {
-        $this->log("    Post process start $url");
         $this->currentUrl = $url;
 
         $html = $this->getHTML($url);
-        $this->log("    HTML: $html");
+        $this->log("HTML: $html", 3);
+
         $values = [];
 
         foreach ($this->values as $key => $valueData) {
-            $this->log("      value '$key'", $valueData);
+            $this->log("value '$key'", 4, $valueData);
 
             if ($valueData['from_posts_page']) {
                 continue;
@@ -475,6 +547,10 @@ class PostScraperService
 
         foreach ($this->shots as $key => $shotData) {
             $values[$key] = $this->shotHelper($url, $key, $shotData);
+        }
+
+        if ($this->currentCategory) {
+            $values['category'] = $this->currentCategory;
         }
 
         return $values;
@@ -553,20 +629,16 @@ class PostScraperService
     {
         $nodeList = $this->querySelector($html, $valueData['selector']);
 
-        $this->log("        selector '{$valueData['selector']}'");
-
         if ($valueData['is_multiple']) {
-            $this->log("        is multiple");
             $res = [];
             foreach ($nodeList as $i => $node) {
                 $res[] = $this->scrapeValueHelper($node, $key, $valueData);
             }
-            $this->log("        result: ", $res);
+            $this->log("result: ", 5, $res);
         } else {
-            $this->log("        is not multiple");
             $node = $nodeList->item(0);
             $res = $this->scrapeValueHelper($node, $key, $valueData);
-            $this->log("        result: $res");
+            $this->log("result: $res", 5);
         }
 
         return $res;
@@ -589,7 +661,6 @@ class PostScraperService
 
         if ($attr && $attr == 'html') {
             $res = $node?->ownerDocument->saveHtml($node);
-            // $res = $this->crearHtml($res)??null;
         } else if ($attr) {
             $res = $node->getAttribute($attr)??null;
         } else {
@@ -605,37 +676,6 @@ class PostScraperService
         }
 
         return $res;
-    }
-
-    /**
-     * Remove arbitrary attributes from html
-     * ! breaks multibyte chars
-     *
-     * @param string $html Input html
-     *
-     * @return string $html Cleaned html
-     */
-    private function crearHtml($html)
-    {
-        if (!$html) return $html;
-
-        $dom = new \DOMDocument;
-        $dom->loadHTML($html);
-        $xpath = new \DOMXPath($dom);
-        $nodes = $xpath->query('.//*[@id]|.//*[@class]|.//*[@style]');
-        foreach ($nodes as $node) {
-            $node->removeAttribute('id');
-            $node->removeAttribute('class');
-            $node->removeAttribute('style');
-        }
-
-        $html = $dom->saveHTML();
-        $pos = strpos($html, '<body>');
-        $html = substr($html, $pos+6);
-        $pos = strpos($html, '</body>');
-        $html = substr($html, 0, $pos);
-
-        return $html;
     }
 
     private function getLinksFromUrl($html, $selector)
@@ -729,17 +769,21 @@ class PostScraperService
         return $this->limitResult && $this->limitResult <= count($this->result);
     }
 
-    private function log(string $text, $data=[])
+    private function log(string $text, int $level=1, $data=[])
     {
         if (!$this->debug) {
             return;
         }
+
+        $level = implode('', array_fill(0, $level-1, '- '));
 
         $toLog = str_replace(["\r\n", "\r", "\n"], ' ', $text);
 
         if ($data) {
             $toLog .= (': ' . json_encode($data));
         }
+
+        $toLog = '| ' . $level . $toLog;
 
         if (isset($this->logUsingClosure)) {
             $function = $this->logUsingClosure;
@@ -748,5 +792,14 @@ class PostScraperService
             \Log::channel('scraping')->info($toLog);
         }
 
+    }
+
+    private function isLinkToFile($url)
+    {
+        // Parse the URL to get the path component
+        $path = parse_url($url, PHP_URL_PATH);
+    
+        // Check if the path ends with a dot followed by characters (a simple file extension pattern)
+        return preg_match('/\.[a-zA-Z0-9]+$/', $path);
     }
 }

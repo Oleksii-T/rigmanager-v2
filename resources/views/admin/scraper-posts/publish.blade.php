@@ -32,13 +32,14 @@
                 @csrf
                 <input type="hidden" name="created_post_id" value="{{$alreadyPublishedPost?->id}}">
                 <div class="card-header">
-                    <h3 class="card-title">
-                        @if ($alreadyPublishedPost)
+                    @if ($alreadyPublishedPost)
+                        <h3 class="card-title">
                             Published Post <a href="{{route('admin.posts.edit', $alreadyPublishedPost)}}" target="_blank">#{{$alreadyPublishedPost->id}}</a>
-                        @else
-                            New Post
-                        @endif
-                    </h3>
+                        </h3>
+                        <span style="float: right">{{$alreadyPublishedPost->status}}</span>
+                    @else
+                        <h3>New Post</h3>
+                    @endif
                 </div>
                 <div class="card-body" style="max-height: 74vh;overflow-y: auto;">
                     <div class="row">
@@ -85,8 +86,8 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="update_imaged" value="1" checked>
-                                            <label class="form-check-label">Update Images <small>({{$alreadyPublishedPost->images()->count()}} images stored)</small></label>
+                                            <input class="form-check-input" type="checkbox" name="update_imaged" value="1" id="update_imaged" checked>
+                                            <label class="form-check-label" for="update_imaged">Update Images <small>({{$alreadyPublishedPost->images()->count()}} images stored)</small></label>
                                         </div>
                                     </div>
                                 </div>

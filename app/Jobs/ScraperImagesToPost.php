@@ -36,11 +36,10 @@ class ScraperImagesToPost implements ShouldQueue
      */
     public function handle(): void
     {
-        dlog("ScraperImagesToPost@handle"); //! LOG
+        // dlog("ScraperImagesToPost@handle"); //! LOG
         $attachments = [];
         $scraper = $this->scraperPost->run->scraper;
-        $imgAttrs = ['src', 'data-original'];
-        $imageSelectors = array_filter($scraper->selectors, fn ($a) => in_array($a['attribute']??'', $imgAttrs));
+        $imageSelectors = array_filter($scraper->selectors, fn ($a) => str_contains($a['name'], 'images'));
         $imageSelectors = array_column($imageSelectors, 'name');
         $urls = [];
 
@@ -56,7 +55,7 @@ class ScraperImagesToPost implements ShouldQueue
             }
         }
 
-        dlog(" urls", $urls); //! LOG
+        // dlog(" urls", $urls); //! LOG
 
         foreach ($urls as $url) {
             if (!$url) {

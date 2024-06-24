@@ -59,6 +59,36 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Category selector</label>
+                            <input name="category_selector" type="text" class="form-control" value="{{$scraper->category_selector}}">
+                            <span data-input="category_selector" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Pagination selector</label>
+                            <input name="pagination_selector" type="text" class="form-control" value="{{$scraper->pagination_selector}}">
+                            <span data-input="pagination_selector" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Post selector</label>
+                            <input name="post_selector" type="text" class="form-control" value="{{$scraper->post_selector}}">
+                            <span data-input="post_selector" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Post link selector</label>
+                            <input name="post_link_selector" type="text" class="form-control" value="{{$scraper->post_link_selector}}">
+                            <span data-input="post_link_selector" class="input-error"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card">

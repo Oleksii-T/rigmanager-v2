@@ -45,12 +45,12 @@
                                 <div class="form-group">
                                     <label>-</label>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="scraper_debug_enabled" value="1">
-                                        <label class="form-check-label">Scraper Debug Enables</label>
+                                        <input class="form-check-input" type="checkbox" name="scraper_debug_enabled" value="1" id="scraper_debug_enabled">
+                                        <label class="form-check-label" for="scraper_debug_enabled">Scraper Debug Enables</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="only_count" value="1">
-                                        <label class="form-check-label">Only count</label>
+                                        <input class="form-check-input" type="checkbox" name="only_count" value="1" id="only_count">
+                                        <label class="form-check-label" for="only_count">Only count</label>
                                     </div>
                                 </div>
                             </div>
@@ -58,8 +58,12 @@
                                 <div class="form-group">
                                     <label>-</label>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="sanitize_html" value="1" checked>
-                                        <label class="form-check-label">Sanitize HTML</label>
+                                        <input class="form-check-input" type="checkbox" name="sanitize_html" value="1" checked id="sanitize_html">
+                                        <label class="form-check-label" for="sanitize_html">Sanitize HTML</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ignore_page_error" value="1" id="ignore_page_error">
+                                        <label class="form-check-label" for="ignore_page_error">Ignore page errors</label>
                                     </div>
                                 </div>
                             </div>

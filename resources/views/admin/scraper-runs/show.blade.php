@@ -13,7 +13,7 @@
                     <a href="{{route('admin.scrapers.show', $scraperRun->scraper)}}" class="btn btn-primary">
                         Back to '{{$scraperRun->scraper->name}}' scraper
                     </a>
-                    @if ($scraperRun->status == \App\Enums\ScraperRunStatus::SUCCESS)
+                    @if ($scraperPostToPublish && $scraperRun->status == \App\Enums\ScraperRunStatus::SUCCESS)
                         <a href="{{route('admin.scraper-posts.publishing', $scraperPostToPublish)}}" class="btn btn-primary">
                             Got to publishing
                         </a>

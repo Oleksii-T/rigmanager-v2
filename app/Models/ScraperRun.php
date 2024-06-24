@@ -5,9 +5,7 @@ namespace App\Models;
 use App\Enums\ScraperRunStatus;
 use App\Enums\ScraperPostStatus;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class ScraperRun extends Model
 {
@@ -19,6 +17,7 @@ class ScraperRun extends Model
         'status',
         'scraped',
         'sanitize_html',
+        'ignore_page_error',
         'max',
         'end_at',
     ];
@@ -58,7 +57,8 @@ class ScraperRun extends Model
         }
 
         $i = array_search($currentPostId, $posts);
-        if (!$i) {
+
+        if ($i === false) {
             $nextPostId = $posts[0];
         } else {
             $nextPostId = $posts[$i+1] ?? null;

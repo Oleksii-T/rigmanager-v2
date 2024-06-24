@@ -159,7 +159,7 @@ class AppServiceProvider extends ServiceProvider
         foreach ($adminlteMenus as &$menu) {
             if (($menu['route']??null) == 'admin.posts.index') {
                 try {
-                    $pending = Post::status('pending')->count();
+                    $pending = Post::active()->status('pending')->count();
                     if ($pending) {
                         $menu['label'] = $pending;
                     }

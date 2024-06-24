@@ -32,6 +32,10 @@ class ScraperRequest extends FormRequest
             'exclude_urls' => ['nullable', 'string'],
             'sleep' => ['nullable', 'numeric', 'min:1'],
             'selectors' => ['required', 'array'],
+            'post_selector' => ['nullable', 'string', 'max:255'],
+            'post_link_selector' => ['nullable', 'string', 'max:255'],
+            'pagination_selector' => ['nullable', 'string', 'max:255'],
+            'category_selector' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

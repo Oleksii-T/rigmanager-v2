@@ -52,7 +52,7 @@
         <div class="form-group">
             <label>Price Requests</label>
             <div class="custom-control custom-checkbox">
-                <input class="custom-control-input" type="checkbox" id="is_tba" name="is_tba" value="1" @checked($post?->is_tba)>
+                <input class="custom-control-input" type="checkbox" id="is_tba" name="is_tba" value="1" @checked($post ? $post->is_tba : true)>
                 <label for="is_tba" class="custom-control-label">Yes</label>
             </div>
             <span data-input="is_tba" class="input-error"></span>

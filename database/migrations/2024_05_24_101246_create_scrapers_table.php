@@ -18,6 +18,10 @@ return new class extends Migration
             $table->json('base_urls');
             $table->json('exclude_urls')->nullable();
             $table->smallInteger('sleep')->nullable();
+            $table->string('post_selector')->nullable();
+            $table->string('post_link_selector')->nullable();
+            $table->string('pagination_selector')->nullable();
+            $table->string('category_selector')->nullable();
             $table->json('selectors');
             $table->timestamps();
         });

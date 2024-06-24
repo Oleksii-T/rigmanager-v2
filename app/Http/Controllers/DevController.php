@@ -73,79 +73,6 @@ class DevController extends Controller
     {
         $d = [];
 
-        $run = \App\Models\ScraperRun::find(59);
-        $user = $run->scraper->user;
-        $posts = $run->posts()->where('status', \App\Enums\ScraperPostStatus::PENDING)->get();
-
-        foreach ($posts as $scraperPost) {
-            $post = Post::where('scraped_url', $scraperPost->url)->first();
-            $input = [];
-
-            $part1 = $scraperPost->data['description'];
-            $pos = strrpos($part1, '</table>');
-            $part1 = substr($part1, 0, $pos+8);
-
-            $part2 = '<p><p>Detail Information</b></p>';
-            $part2 .= $scraperPost->data['details'];
-            $part2 = str_replace('<tr> <td colspan="4"> Detail Information </td> </tr>', '', $part2);
-            $part2 = str_replace('</h2>', '', $part2);
-            $part2 = str_replace('<h2>', '', $part2);
-
-            $part3 = '<p><b>Product Details:</b></p>';
-            $part3 .= $scraperPost->data['specs'][0];
-            $part3 .= '<p><b>Payment & Shipping Terms:</b></p>';
-            $part3 .= $scraperPost->data['specs'][1];
-
-            $input['description'] = [
-                'en' => $part1 . $part2 . $part3
-            ];
-
-            if ($post) {
-                $post->saveTranslations($input);
-                continue;
-            }
-
-            $category = \App\Models\Category::find(1);
-            $input['category_id'] = $category->id;
-            $input['user_id'] = $user->id;
-            $input['type'] = \App\Enums\PostType::SELL;
-            $input['status'] = 'pending';
-            $input['title'] = [
-                'en' => $scraperPost->data['title']
-            ];
-            $mTitles = [];
-            $mDescriptions = [];
-            foreach ($input['title'] as $locale => $title) {
-                $mTitles[$locale] = Post::generateMetaTitleHelper($title, $category->name);
-            }
-            foreach ($input['description'] as $locale => $description) {
-                $mDescriptions[$locale] = Post::generateMetaDescriptionHelper($description);
-            }
-            $input['duration'] = 'unlim';
-            $input['meta_title'] = $mTitles;
-            $input['meta_description'] = $mDescriptions;
-            $input['slug'] = [];
-            foreach ($input['title'] as $locale => $title) {
-                $allSlugs = \App\Models\Translation::query()
-                    ->where('field', 'slug')
-                    ->where('locale', $locale)
-                    ->where('translatable_type', Post::class)
-                    ->pluck('value')
-                    ->toArray();
-                $input['slug'][$locale] = makeSlug($title, $allSlugs);
-            }
-            $input['scraped_url'] = $scraperPost->url;
-            $input['country'] = $user->country;
-            $input['origin_lang'] = 'en';
-            $input['group'] = \App\Enums\PostGroup::EQUIPMENT;
-
-            // dd($input);
-
-            $post = Post::create($input);
-            $post->saveTranslations($input);
-            \App\Jobs\ScraperImagesToPost::dispatch($scraperPost, $post);
-        }
-
         dd($d);
     }
 
@@ -291,7 +218,7 @@ class DevController extends Controller
                 <td valign="top" style="box-sizing: content-box; margin: 0px; padding: 1px; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; float: none; color: rgb(0, 0, 0); border-style: solid; border-color: rgb(204, 204, 204);"><span style="box-sizing: content-box; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 16px; line-height: 24px; font-family: verdana, geneva; vertical-align: baseline;">&nbsp;</span></td>
             </tr>
         </tbody>
-    </table>';
+        </table>';
 
         // dump($table);
 
