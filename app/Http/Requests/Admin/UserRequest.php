@@ -50,7 +50,7 @@ class UserRequest extends FormRequest
             'info.emails' => ['nullable', 'json'],
             'info.phones' => ['nullable', 'json'],
 
-            'verify_email_now' => ['required', 'integer'],
+            'verify_email_now' => ['nullable', 'integer'],
         ];
     }
 }

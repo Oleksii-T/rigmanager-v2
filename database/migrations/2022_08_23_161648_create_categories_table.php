@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
             $table->boolean('is_active')->default(true);
+            $table->boolean('on_home_page');
             $table->timestamps();
         });
     }

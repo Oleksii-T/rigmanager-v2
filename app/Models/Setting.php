@@ -26,6 +26,7 @@ class Setting extends Model
                 'fake_autotranslation' => 'Fake auto-translation',
                 'detect_post_language' => 'Detect post original language',
                 'post_id_in_empty_mailer_text' => 'Post id in empty mailer text',
+                'admins_not_generating_views' => 'Admins not generating views',
                 // 'sort_categories_by' => 'Categories sorting (alphabet/posts)',
                 // 'hide_empty_categories' => 'Hide empty categories (1/0)',
             ]
@@ -138,7 +139,7 @@ class Setting extends Model
             $setting = $onlyValue ? $setting->data['value'] : $setting->data;
 
             if ($cache) {
-                cache()->put($cKey, $setting, 60);
+                cache()->put($cKey, $setting, 60*60);
             }
 
             return $setting;

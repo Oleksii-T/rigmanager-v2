@@ -44,7 +44,11 @@ class CategoryRequest extends FormRequest
             'add_desc_short.en' => ['nullable', 'string', 'max:5000'],
             'add_desc' => ['nullable', 'array'],
             'add_desc.en' => ['nullable', 'string', 'max:5000'],
+            'home_desc' => ['nullable', 'array'],
+            'home_desc.en' => ['nullable', 'string', 'max:5000'],
             'category_id' => ['nullable', 'exists:categories,id'],
+            'is_active' => ['nullable', 'bool'],
+            'on_home_page' => ['nullable', 'bool'],
         ];
 
         if (!$this->request->get('category_id')) {

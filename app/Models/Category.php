@@ -17,6 +17,7 @@ class Category extends Model
     protected $fillable = [
         'type',
         'category_id',
+        'on_home_page',
         'is_active'
     ];
 
@@ -35,6 +36,7 @@ class Category extends Model
         'meta_description',
         'add_desc_short',
         'add_desc',
+        'home_desc',
         'suggestions'
     ];
 
@@ -112,6 +114,11 @@ class Category extends Model
     public function addDesc(): Attribute
     {
         return $this->getTranslatedAttr('add_desc');
+    }
+
+    public function homeDesc(): Attribute
+    {
+        return $this->getTranslatedAttr('home_desc');
     }
 
     public function suggestions(): Attribute

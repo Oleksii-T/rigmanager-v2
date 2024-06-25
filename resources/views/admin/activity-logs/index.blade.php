@@ -76,6 +76,13 @@
                         <div class="col-lg-2">
                             <input type="text" name="period" class="form-control table-filter daterangepicker-mult">
                         </div>
+                        <div class="col-lg-2">
+                            <select class="table-filter form-control" name="bot">
+                                <option value="">Bots</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">

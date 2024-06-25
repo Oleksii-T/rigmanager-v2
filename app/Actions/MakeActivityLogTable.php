@@ -35,6 +35,12 @@ class MakeActivityLogTable
         )
         ->when($tsDate, fn($q) =>
             $q->whereDate('created_at', $tsDate)
+        )
+        ->when($request->bot == '1', fn ($q) =>
+            $q->whereRaw("JSON_EXTRACT(properties, '$.general_info.agent_info.is_robot') = true")
+        )
+        ->when($request->bot == '0', fn ($q) =>
+            $q->whereRaw("JSON_EXTRACT(properties, '$.general_info.agent_info.is_robot') = false")
         );
 
         return DataTables::of($query)
@@ -44,6 +50,11 @@ class MakeActivityLogTable
                     : '';
             })
             ->addColumn('subject', function ($model) {
+                if ($model->subject_type == \App\Models\Post::class) {
+                    $post = \App\Models\Post::find($model->subject_id);
+                    $url = route('admin.posts.edit', $post);
+                    return "<a href='$url'>$post->title</a>";
+                }
                 return $model->subject_type
                     ? $model->subject_type . ':' . $model->subject_id
                     : '';
@@ -70,7 +81,7 @@ class MakeActivityLogTable
             ->editColumn('created_at', function ($model) {
                 return $model->created_at->adminFormat();
             })
-            ->rawColumns(['description', 'properties'])
+            ->rawColumns(['subject', 'description', 'properties'])
             ->make(true);
     }
 }

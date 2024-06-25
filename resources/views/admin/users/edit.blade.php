@@ -167,6 +167,7 @@
             </div>
         </div>
         <button type="submit" class="btn btn-success min-w-100">Save</button>
+        <a href="{{ route('admin.users.show', $user) }}" class="btn btn-outline-secondary text-dark min-w-100">Got to View</a>
         <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary text-dark min-w-100">Cancel</a>
     </form>
 @endsection

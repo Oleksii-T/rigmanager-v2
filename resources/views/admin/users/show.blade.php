@@ -18,7 +18,7 @@
                     <p class="text-muted text-center">{{ $user->email }}</p>
                     <ul class="list-group list-group-unbordered mb-3">
                         <li class="list-group-item">
-                            <b>Last Online</b> <a class="float-right">{{ $user->last_active_at->diffForHumans() }}</a>
+                            <b>Last Online</b> <a class="float-right">{{ $user->last_active_at?->diffForHumans() }}</a>
                         </li>
                         <li class="list-group-item" title="total - notVisible">
                             <b>Posts</b>
@@ -28,6 +28,7 @@
                     @if ($currentUser->id != $user->id)
                         <a href="{{ route('admin.users.login', $user) }}" class="btn btn-primary btn-block"><b>Log In</b></a>
                     @endif
+                    <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary btn-block"><b>Edit</b></a>
                 </div>
             </div>
             <div class="card card-primary">

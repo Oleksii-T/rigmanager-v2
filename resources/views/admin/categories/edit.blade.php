@@ -89,6 +89,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Home description</label>
+                            <x-admin.multi-lang-input name="home_desc" :model="$category" richtext="1"/>
+                            <span data-input="home_desc" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Type</label>
                             <select class="form-control select2" name="type">
                                 @foreach (\App\Enums\CategoryType::all() as $key => $name)
@@ -100,12 +107,17 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Is Active</label>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="is_active" name="is_active" value="1" @checked($category->is_active)>
-                                <label for="is_active" class="custom-control-label">Yes</label>
+                            <label>-</label>
+                            <div class="form-check">
+                                <input type="hidden" name="is_active" value="0">
+                                <input class="form-check-input" type="checkbox" name="is_active" value="1" id="is_active" @checked($category->is_active)>
+                                <label class="form-check-label" for="is_active">Is Active</label>
                             </div>
-                            <span data-input="is_active" class="input-error"></span>
+                            <div class="form-check">
+                                <input type="hidden" name="on_home_page" value="0">
+                                <input class="form-check-input" type="checkbox" name="on_home_page" value="1" id="on_home_page" @checked($category->on_home_page)>
+                                <label class="form-check-label" for="on_home_page">On Home page</label>
+                            </div>
                         </div>
                     </div>
                 </div>

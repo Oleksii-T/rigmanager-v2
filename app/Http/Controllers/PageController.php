@@ -19,11 +19,19 @@ class PageController extends Controller
         $categoriesServiceColumns = $this->splitToThreeColumns(Category::service()->whereNull('category_id')->get());
         $newPosts = Post::equipment()->visible()->latest()->limit(7)->get();
         $urgentPosts = Post::equipment()->visible()->latest()->where('is_urgent', true)->limit(3)->get();
+        $promotedCategories = Category::query()
+            ->active()
+            ->where('on_home_page', true)
+            ->get()
+            ->map(function ($c) {
+                $c->posts = $c->postsAll()->visible()->latest()->limit(3)->get();
+                return $c;
+            });
         $partners = cache()->remember('partners', 60*10, function () {
             return Partner::orderBy('order')->get();
         });
 
-        return view('index', compact('categoriesEquipmentColumns', 'categoriesServiceColumns', 'newPosts', 'urgentPosts', 'partners'));
+        return view('index', compact('promotedCategories', 'categoriesEquipmentColumns', 'categoriesServiceColumns', 'newPosts', 'urgentPosts', 'partners'));
     }
 
     public function categories($type=null)

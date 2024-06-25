@@ -7,7 +7,7 @@
         <div class="row mb-2">
             <div class="col-12">
                 <div class="float-left">
-                    <h1 class="m-0">Publishing of {{$posts->count()}} scraped Posts from run #{{$scraperRun->id}} of '{{$scraper->name}}' scraper</h1>
+                    <h1 class="m-0">Publishing of scraped Posts from run #{{$scraperRun->id}} of '{{$scraper->name}}' scraper</h1>
                 </div>
                 <div class="float-left pl-3">
                     <a href="{{route('admin.scraper-runs.show', $scraperRun)}}" class="btn btn-primary">
@@ -17,13 +17,36 @@
                         Back to '{{$scraper->name}}' scraper
                     </a>
                     <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#progress">
-                        Progress
+                        Progress 
+                        <small>{{$posts->where('status', '!=', \App\Enums\ScraperPostStatus::PENDING)->count()}} / {{$posts->count()}}</small>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 @stop
+
+@push('styles')
+    <style>
+        .scraped-images {
+            position: relative;
+        }
+        .scraped-images div {
+            position: absolute;
+            width: 400px;
+            top: 35px;
+            z-index: 2;
+            border: 2px solid white;
+            display: none;
+        }
+        .scraped-images:hover div {
+            display: block;
+        }
+        .scraped-images img {
+            width: 100%;
+        }
+    </style> 
+@endpush
 
 @section('content')
     <div class="row">
@@ -41,7 +64,7 @@
                         <h3>New Post</h3>
                     @endif
                 </div>
-                <div class="card-body" style="max-height: 74vh;overflow-y: auto;">
+                <div class="card-body" style="height:74vh;overflow-y:auto;">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
@@ -86,7 +109,7 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="update_imaged" value="1" id="update_imaged" checked>
+                                            <input class="form-check-input" type="checkbox" name="update_imaged" value="1" id="update_imaged">
                                             <label class="form-check-label" for="update_imaged">Update Images <small>({{$alreadyPublishedPost->images()->count()}} images stored)</small></label>
                                         </div>
                                     </div>
@@ -118,7 +141,7 @@
                         {{$scraperPost->status->readable()}}
                     </span>
                 </div>
-                <div class="card-body" style="max-height: 81vh;overflow-y: auto;">
+                <div class="card-body" style="height:81vh;overflow-y: auto;">
                     <div class="row">
                         @foreach ($scraperPost->data as $field => $value)
                             <div class="col-md-12">
@@ -130,7 +153,16 @@
                                     @if (is_array($value))
                                         <ul id="field-{{$field}}">
                                             @foreach ($value as $valueItem)
-                                                <li>{{$valueItem}}</li>
+                                                @if (str_contains($field, 'images'))
+                                                    <li class="scraped-images">
+                                                        <a href="{{$valueItem}}" target="_blank">{{$valueItem}}</a>
+                                                        <div>
+                                                            <img src="{{$valueItem}}" alt="">
+                                                        </div>
+                                                    </li>
+                                                @else
+                                                    <li>{{$valueItem}}</li>
+                                                @endif
                                             @endforeach
                                         </ul>
                                     @else

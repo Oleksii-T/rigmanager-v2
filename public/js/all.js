@@ -575,7 +575,7 @@ $(document).ready(function () {
         if (button.hasClass('loading')) {
             return;
         }
-        let url = button.attr('href');
+        let url = button.data('url');
         button.addClass('loading')
         $.ajax({
             url: url,

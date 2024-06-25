@@ -77,6 +77,18 @@
                     @endforeach
                 </div>
             </div>
+            @foreach ($promotedCategories as $category)
+                <div class="ad-section">
+                    <h2>{{$category->name}}</h2>
+                    {!!$category->home_desc!!}
+                    <div class="ad-list">
+                        <x-home-items :posts="$category->posts" />
+                        <div class="ad-col ad-col-more">
+                            <a href="{{$category->getUrl()}}" class="ad-more">@lang('ui.morePosts')</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
             <div class="ad-section">
                 <h2>@lang('ui.newPosts')</h2>
                 <div class="ad-list">

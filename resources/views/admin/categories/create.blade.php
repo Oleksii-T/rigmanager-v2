@@ -74,6 +74,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Home description</label>
+                            <x-admin.multi-lang-input name="home_desc" :model="$category" richtext="1"/>
+                            <span data-input="home_desc" class="input-error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Type</label>
                             <select class="form-control select2" name="type">
                                 @foreach (\App\Enums\CategoryType::all() as $key => $name)

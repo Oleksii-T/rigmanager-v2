@@ -29,10 +29,10 @@ class ActivityLogController extends Controller
 
     private function getActivityGroups($groupBy, $column)
     {
-        $groups = Activity::distinct()->pluck('subject_type');
+        $groups = Activity::distinct()->pluck($groupBy);
         $result = [];
         foreach ($groups as $group) {
-            $result[$group] = Activity::distinct()->where('subject_type', $group)->pluck('subject_id')->toArray();
+            $result[$group] = Activity::distinct()->where($groupBy, $group)->pluck($column)->toArray();
         }
 
         return $result;

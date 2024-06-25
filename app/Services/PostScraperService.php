@@ -407,19 +407,24 @@ class PostScraperService
 
         $postsNodeLists = $this->querySelector($html, $this->postSelector);
 
+        dlog("START COUNT $url"); //! LOG
+        $calls = 1;
         // scrape posts
+
         foreach ($postsNodeLists as $i => $postNode) {
             $this->log("Scraping post #" . $i+1 . " from page #$page", 3);
 
             $scrapedPostData = $this->scrapePostHelper($postNode, $url, $i);
 
-            if (isset($this->afterEachScrapeClosure)) {
+            if ($scrapedPostData && isset($this->afterEachScrapeClosure)) {
                 $function = $this->afterEachScrapeClosure;
+                dlog("- call $calls of afterEachScrapeClosure() | in result: " . count($this->result) . ' | DATA: ' . json_encode($scrapedPostData)); //! LOG
+                $calls++;
                 $function($scrapedPostData);
             }
 
             if ($this->enough()) {
-                $this->log("    ENOUGH");
+                $this->log("Enough", 3);
                 break;
             }
         }
@@ -458,17 +463,22 @@ class PostScraperService
             } else {
                 $this->log("URL is empty", 3);
             }
-            return;
+            return false;
+        }
+
+        if (isset($this->result[$postUrl])) {
+            $this->log("Already scraped", 3);
+            return false;
         }
 
         if (in_array($postUrl, $this->ignoreUrls)) {
             $this->log('Ignoring URL', 3);
-            return;
+            return false;
         }
 
         if ($this->onlyCount) {
-            $this->meta['parsed_posts'][] = 1;
-            return;
+            $this->meta['parsed_posts'][$postUrl] = 1;
+            return true;
         }
 
         // ensure that link contains schema and domain

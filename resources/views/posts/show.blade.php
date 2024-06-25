@@ -184,6 +184,42 @@
                     <div class="prod-info-text">{{$post->updated_at->diffForHumans()}}</div>
                 </div>
             </div>
+            @if ($currentUser && $currentUser->isAdmin())
+                <div class="prod-info" style="border: 1px solid red">
+                    <div class="prod-info-title">Admin section</div>
+                    <div class="prod-info-item">
+                        <div class="prod-info-name">ID</div>
+                        <div class="prod-info-text">{{$post->id}}</div>
+                    </div>
+                    <div class="prod-info-item">
+                        <div class="prod-info-name">Views (total/fake/bots/real/unique_real)</div>
+                        @php
+                            $viewsStats = $post->viewsStats();
+                        @endphp
+                        <div class="prod-info-text">{{$viewsStats['total']}} / {{$viewsStats['fake']}} / {{$viewsStats['bots']}} / {{$viewsStats['real']}} / {{$viewsStats['ureal']}}</div>
+                    </div>
+                    @if ($post->scraped_url)
+                        <div class="prod-info-item">
+                            <div class="prod-info-name">Source</div>
+                            <div class="prod-info-text">
+                                <a href="{{$post->scraped_url}}" target="_blank" class="orange">{{$post->scraped_url}}</a>
+                            </div>
+                        </div>
+                    @endif
+                    <div class="prod-info-item">
+                        <div class="prod-info-name">Actions</div>
+                        <div class="prod-info-text">
+                            <a href="{{route('admin.posts.edit', $post)}}" target="_blank" class="orange">Edit Post</a>
+                        </div>
+                        <div class="prod-info-text">
+                            <a href="{{route('admin.users.show', $post->user)}}" target="_blank" class="orange">View User</a>
+                        </div>
+                        <div class="prod-info-text">
+                            <a href="{{route('admin.users.edit', $post->user)}}" target="_blank" class="orange">Edit User</a>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
     @if ($authorPosts->isNotEmpty())

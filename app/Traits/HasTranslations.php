@@ -15,6 +15,7 @@ trait HasTranslations
 
     public function translated($field, $locale=null)
     {
+        $locale = 'en'; //! USE ONLY ENGLISH TEXTS FOR NOW
         $currLocale = LaravelLocalization::getCurrentLocale();
         $translations = $this->translations->where('field', $field);
         $result = $translations->where('locale', $locale??$currLocale)->value('value');
