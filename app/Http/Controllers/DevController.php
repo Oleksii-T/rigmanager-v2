@@ -22,8 +22,6 @@ use App\Services\Css2XPathService;
  */
 class DevController extends Controller
 {
-    use \App\Traits\ScrapePosts;
-
     private $d = [];
     private $timings = [];
     private $queryLog = false;
@@ -63,7 +61,10 @@ class DevController extends Controller
 
         // dump $d only if we set some
         if ($this->d) {
-            dump('RESULT DUMP', $this->d);
+            dump('RESULT DUMP');
+            foreach ($this->d as $key => $value) {
+                dump($key, $value);
+            }
         }
 
         return $result;
@@ -636,7 +637,7 @@ class DevController extends Controller
     // authorize access to methods
     private function _authorize()
     {
-        $ok = true || isdev() || $this->user?->isAdmin();
+        $ok = isdev() || $this->user?->isAdmin();
 
         abort_if(!$ok, 403);
     }

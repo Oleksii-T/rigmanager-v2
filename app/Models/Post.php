@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\PostType;
 use App\Enums\PostGroup;
 use App\Traits\Viewable;
+use Laravel\Scout\Searchable;
 use App\Traits\HasAttachments;
 use App\Traits\HasTranslations;
 use Yajra\DataTables\DataTables;
@@ -17,7 +18,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class Post extends Model
 {
-    use HasFactory, HasTranslations, HasAttachments, SoftDeletes, Viewable, LogsActivityBasic;
+    use Searchable, HasFactory, HasTranslations, HasAttachments, SoftDeletes, Viewable, LogsActivityBasic;
 
     protected $fillable = [
         'user_id',
@@ -103,6 +104,45 @@ class Post extends Model
         return $s;
     }
 
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        $desc = $this->description;
+
+        // remove all tables
+        while (strpos($desc, '<table>') !== false) {
+            $start = strpos($desc, '<table>');
+            $end = strpos($desc, '</table>');
+            $desc = substr($desc, 0, $start) . substr($desc, $end+8);
+        }
+
+        // remove HTML
+        $desc = strip_tags($desc);
+
+        return [
+            'id' => (int) $this->id,
+            'title' => $this->title,
+            'description' => $desc,
+            'manufacturer' => $this->manufacturer
+        ];
+    }
+
+    /**
+     * Determine if the model should be searchable.
+     */
+    public function shouldBeSearchable(): bool
+    {
+        if (!$this->is_active || $this->is_trashed) {
+            return false;
+        }
+
+        return in_array($this->status, self::visibleStatuses());
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -150,22 +190,16 @@ class Post extends Model
 
     public function scopeVisible($query, $is=true)
     {
-        $hidePending = Setting::get('hide_pending_posts', true, true);
+        $visibleStatuses = self::visibleStatuses();
 
         if ($is) {
             $query->where('is_active', true);
             $query->where('is_trashed', false);
-
-            if ($hidePending) {
-                return $query->whereIn('status', ['approved', 'pre-approved']);
-            }
+            $query->whereIn('status', $visibleStatuses);
         } else {
             $query->where('is_active', false);
             $query->where('is_trashed', true);
-
-            if ($hidePending) {
-                return $query->where('status', 'pending');
-            }
+            $query->whereNotIn('status', $visibleStatuses);
         }
 
         return $query;
@@ -701,5 +735,16 @@ class Post extends Model
         }
 
         return $posts;
+    }
+
+    public static function visibleStatuses(): array
+    {
+        $statuses = ['approved', 'pre-approved'];
+
+        if (!Setting::get('hide_pending_posts', true, true)) {
+            $statuses[] = 'pending';
+        }
+
+        return $statuses;
     }
 }

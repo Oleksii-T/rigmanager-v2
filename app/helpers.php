@@ -50,9 +50,16 @@ if (!function_exists('intToAlphabet')) {
 
 if (!function_exists('isdev')) {
     function isdev() {
-        return false;
         if (isset($_GET['rmforcedebug63'])) {
             return true;
+        }
+
+        try {
+            if (isset($_COOKIE['debug']) && auth()->user()?->isAdmin()) {
+                return true;
+            }
+        } catch (\Exception $th) {
+            
         }
 
         $ips = [

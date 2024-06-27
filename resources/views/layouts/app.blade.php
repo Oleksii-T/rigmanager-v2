@@ -122,6 +122,19 @@
 							<li><a href="{{route('site-map')}}">@lang('ui.footerSiteMap')</a></li>
 						</ul>
 					</div>
+                    @if (isdev())
+                        <div class="footer-col">
+                            <ul class="footer-nav">
+                                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                    <li>
+                                        <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                            {{ $properties['native'] }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 					<div class="footer-col">
 						<ul class="footer-nav">
 							<li><a href="https://www.linkedin.com/company/rigmanagers-com/about">LinkedIn</a></li>

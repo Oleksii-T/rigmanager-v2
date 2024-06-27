@@ -46,6 +46,12 @@ $(document).ready(function () {
     // autocomplete global search
     $('.typeahead-input').each(function(index) {
         let type = $(this).data('ttt');
+        let ttAjax = null;
+        let ttAjaxTimeout = null;
+        let loadingBadgeTimeout = null;
+        let autocompleteTimeoutTimer = 400;
+
+        // 'twitter/typeahead.js' init
         $(this).typeahead(
             {
                 // hint: true,
@@ -53,16 +59,73 @@ $(document).ready(function () {
                 minLength: 1
             },
             {
+                // templates: {
+                //   empty: [
+                //     '<div class="tt-suggestion tt-selectable" style="pointer-events:none">',
+                //       'Enter less that 15 characters for autocomplete',
+                //     '</div>'
+                //   ].join('\n'),
+                // },
                 limit: 50,
                 source: function (search, cb, acb) {
-                    $.ajax({
-                        url: `/search-autocomplete/${type}`,
-                        data: {search},
-                        success: (response) => acb(response),
-                    });
+                    if (ttAjax) {
+                        ttAjax.abort();
+                    }
+
+                    if (ttAjaxTimeout) {
+                        clearTimeout(ttAjaxTimeout);
+                    }
+
+                    ttAjaxTimeout = setTimeout(() => {
+                        ttAjax = $.ajax({
+                            url: `/search-autocomplete/${type}`,
+                            data: {search},
+                            success: (response) => acb(response),
+                            complete: () => ttAjax = null,
+                        });
+                        ttAjaxTimeout = null;
+                    }, autocompleteTimeoutTimer);
+
                 }
             }
         );
+
+        // custom 'loading' visualisation
+        $(this).on('input', function (e) {
+            if (loadingBadgeTimeout) {
+                clearTimeout(loadingBadgeTimeout);
+            }
+
+            let wraper = $(this).closest('span');
+            let loadingBadge = wraper.find('.tt-loading_badge');
+
+            if (!$(this).val()) {
+                loadingBadge.addClass('d-none');
+                return;
+            }
+
+            if (loadingBadge.length) {
+                loadingBadge.removeClass('d-none');
+            } else {
+                let badge = [
+                    '<div class="tt-menu tt-open tt-loading_badge" style="pointer-events:none;position:absolute;top:100%;left:0px;z-index:100;display:block;">',
+                        '<div class="tt-dataset tt-dataset-1">',
+                            '<div class="tt-suggestion tt-selectable">',
+                                'Loading...',
+                            '</div>',
+                        '</div>',
+                    '</div>'
+                  ].join('\n')
+                wraper.append(badge);
+            }
+
+            loadingBadge = wraper.find('.tt-loading_badge');
+
+            loadingBadgeTimeout = setTimeout(() => {
+                loadingBadge.addClass('d-none');
+                loadingBadgeTimeout = null;
+            }, autocompleteTimeoutTimer);
+        })
     });
 
     // init user friendly title tooltips

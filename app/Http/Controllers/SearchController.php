@@ -146,7 +146,7 @@ class SearchController extends Controller
 
         $result = $this->formatAutocomplete($posts, $search);
 
-        cache()->put($cKey, $result, 60*5);
+        cache()->put($cKey, $result, 60*60);
 
         return $result;
     }

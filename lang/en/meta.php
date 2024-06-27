@@ -3,7 +3,7 @@
 return array (
   'title' => 
   array (
-    'home' => 'Drilling oil and gas equipment on the rigmanagers bulletin board.',
+    'home' => 'Drilling and oil and gas equipment on the rigmanagers bulletin board.',
     'catalog' => 'Catalog of categories of drilling and oil and gas equipment and services.',
     'auth' => 
     array (
