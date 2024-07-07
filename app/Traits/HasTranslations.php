@@ -15,7 +15,8 @@ trait HasTranslations
 
     public function translated($field, $locale=null)
     {
-        $locale = 'en'; //! USE ONLY ENGLISH TEXTS FOR NOW
+        $defaultLocale = config('app.default_locale');
+        $locale = $defaultLocale; //! USE ONLY ENGLISH TEXTS FOR NOW
         $currLocale = LaravelLocalization::getCurrentLocale();
         $translations = $this->translations->where('field', $field);
         $result = $translations->where('locale', $locale??$currLocale)->value('value');
@@ -23,7 +24,7 @@ trait HasTranslations
         if (!$result && !$locale) {
             $this->failed_translation = true;
             $origin = $this->origin_lang;
-            $result = $translations->where('locale', $origin ? $origin : 'en')->value('value');
+            $result = $translations->where('locale', $origin ? $origin : $defaultLocale)->value('value');
         }
 
         return $result;

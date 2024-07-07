@@ -47,79 +47,39 @@ class SitemapGenerate extends Command
     {
         try {
 
+            $paths = [
+                'master' => public_path('sitemap.xml'),
+                'posts' => public_path('sitemap-posts.xml'),
+                'categories' => public_path('sitemap-categories.xml'),
+                'blogs' => public_path('sitemap-blogs.xml'),
+                'users' => public_path('sitemap-users.xml'),
+            ];
+
             // master sitemap
             Sitemap::create()
-                ->add(Url::create('/')
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(1.0))
-                ->add(Url::create('/sitemap-posts.xml')
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.9))
-                ->add(Url::create('/sitemap-categories.xml')
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.9))
-                ->add(Url::create('/sitemap-blogs.xml')
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.6))
-                ->add(Url::create('/sitemap-users.xml')
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.6))
-                ->add(Url::create(route('search'))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.9))
-                ->add(Url::create(route('categories'))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.8))
-                ->add(Url::create(route('faq'))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.8))
-                ->add(Url::create(route('terms'))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.8))
-                ->add(Url::create(route('privacy'))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.8))
-                ->add(Url::create(route('site-map'))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.8))
-                ->add(Url::create('/blog')
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.8))
-                ->add(Url::create(route('feedbacks.create'))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.8))
-                ->add(Url::create(route('about'))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.8))
-                ->add(Url::create(route('plans.index'))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                    ->setPriority(0.7))
-                ->writeToFile(public_path('sitemap.xml'));
+                ->add(Url::create('/')->setLastModificationDate(now()))
+                ->add(Url::create('/sitemap-posts.xml')->setLastModificationDate(now()))
+                ->add(Url::create('/sitemap-categories.xml')->setLastModificationDate(now()))
+                ->add(Url::create('/sitemap-blogs.xml')->setLastModificationDate(now()))
+                ->add(Url::create('/sitemap-users.xml')->setLastModificationDate(now()))
+                ->add(Url::create(route('search'))->setLastModificationDate(now()))
+                ->add(Url::create(route('categories'))->setLastModificationDate(now()))
+                ->add(Url::create(route('faq'))->setLastModificationDate(now()))
+                ->add(Url::create(route('terms'))->setLastModificationDate(now()))
+                ->add(Url::create(route('privacy'))->setLastModificationDate(now()))
+                ->add(Url::create(route('site-map'))->setLastModificationDate(now()))
+                ->add(Url::create('/blog')->setLastModificationDate(now()))
+                ->add(Url::create(route('feedbacks.create'))->setLastModificationDate(now()))
+                ->add(Url::create(route('about'))->setLastModificationDate(now()))
+                ->add(Url::create(route('plans.index'))->setLastModificationDate(now()))
+                ->writeToFile($paths['master']);
 
             // posts sitemap
             $sm = Sitemap::create();
             foreach (Post::visible()->get() as $p) {
-                $sm->add(Url::create(route('posts.show', $p))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
-                    ->setPriority(0.9));
+                $sm->add(Url::create(route('posts.show', $p))->setLastModificationDate(now()));
             }
-            $sm->writeToFile(public_path('sitemap-posts.xml'));
+            $sm->writeToFile($paths['posts']);
 
             // categories sitemap
             $sm = Sitemap::create();
@@ -127,32 +87,35 @@ class SitemapGenerate extends Command
                 if (!$c->postsAll()->visible()->count()) {
                     continue;
                 }
-                $sm->add(Url::create($c->getUrl())
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
-                    ->setPriority(0.8));
+                $sm->add(Url::create($c->getUrl())->setLastModificationDate(now()));
             }
-            $sm->writeToFile(public_path('sitemap-categories.xml'));
+            $sm->writeToFile($paths['categories']);
 
             // blogs sitemap
             $sm = Sitemap::create();
             foreach (Blog::published()->get() as $b) {
-                $sm->add(Url::create(route('blog.show', $b))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-                    ->setPriority(0.6));
+                $sm->add(Url::create(route('blog.show', $b))->setLastModificationDate(now()));
             }
-            $sm->writeToFile(public_path('sitemap-blogs.xml'));
+            $sm->writeToFile($paths['blogs']);
 
             // users sitemap
             $sm = Sitemap::create();
             foreach (User::all() as $u) {
-                $sm->add(Url::create(route('users.show', $u))
-                    ->setLastModificationDate(now())
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-                    ->setPriority(0.6));
+                $sm->add(Url::create(route('users.show', $u))->setLastModificationDate(now()));
             }
-            $sm->writeToFile(public_path('sitemap-users.xml'));
+            $sm->writeToFile($paths['users']);
+
+            foreach ($paths as $path) {
+                // Read the file into a string
+                $content = file_get_contents($path);
+            
+                // Remove lines containing '<priority>' using regex
+                $content = preg_replace('/.*<priority>.*\n/', '', $content);
+                $content = preg_replace('/.*<changefreq>.*\n/', '', $content);
+            
+                // Write the modified string back to the file
+                file_put_contents($path, $content);
+            }
 
         } catch (\Throwable $th) {
             Log::channel('commands')->error("[$this->signature] " . exceptionAsString($th));

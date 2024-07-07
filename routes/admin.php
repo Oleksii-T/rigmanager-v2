@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\MailerController;
 use App\Http\Controllers\Admin\MessageController;
@@ -66,6 +67,8 @@ Route::middleware('is-admin')->group(function () {
     Route::get('users/{user}/get-chart/{type}', [UserController::class, 'getChart'])->name('users.get-chart');
     Route::get('users/{user}/login', [UserController::class, 'login'])->name('users.login');
     Route::resource('users', UserController::class);
+
+    Route::resource('pages', PageController::class)->except('show');
 
     Route::resource('faqs', FaqController::class)->except('show');
 

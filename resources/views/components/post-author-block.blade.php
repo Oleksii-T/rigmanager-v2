@@ -59,10 +59,10 @@
     </a>
     <br>
     @if ($currentUser?->id == $post->user_id)
-        <button class="button button-light send-message-to-self">{{__('ui.startChat')}}</button>
+        <button class="button button-light send-message-to-self">{{__('ui.chat')}}</button>
     @else
         @if ($hasChat)
-            <a href="{{route('profile.chat')}}?chat_with={{$post->user_id}}" class="button button-light">{{__('ui.openChat')}}</a>
+            <a href="{{route('profile.chat')}}?chat_with={{$post->user_id}}" class="button button-light">{{__('ui.chat')}}</a>
         @else
             <a 
                 href="#" 
@@ -70,7 +70,7 @@
                 data-user="{{$currentUser?->isSub() ? $post->user->name : maskedUserName()}}" 
                 class="button button-light send-message"
             >
-                {{__('ui.sendMessage')}}
+                {{__('ui.chat')}}
             </a>
         @endif
     @endif

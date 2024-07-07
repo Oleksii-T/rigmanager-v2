@@ -262,7 +262,9 @@ class ProfileController extends Controller
 
     public function subscription(Request $request)
     {
-        return redirect()->route('profile.index');
+        if (!isdev()) {
+            return redirect()->route('profile.index');
+        }
 
         $user = auth()->user();
         $sub = $user->activeSubscription();

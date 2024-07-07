@@ -303,7 +303,7 @@
                             @php
                                 $cl = $approvingPost->getApprovingClass();
                                 if ($post->id == $approvingPost->id) {
-                                    $cl .= ' font-weight-bold font-italic';
+                                    $cl .= ' font-weight-bold font-italic font-underline';
                                 }
                             @endphp
                             <div class="col-md-4">

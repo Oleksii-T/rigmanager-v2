@@ -1,5 +1,7 @@
 @extends('layouts.page')
 
+@section('canonical', 'https://rigmanagers.com/'.request()->path())
+
 @section('meta')
     @include('components.search-metas')
 @endsection

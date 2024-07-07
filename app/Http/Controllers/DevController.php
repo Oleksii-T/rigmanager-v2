@@ -74,7 +74,47 @@ class DevController extends Controller
     {
         $d = [];
 
-        dd($d);
+        $d = trans('ui');
+        $res = [];
+
+        foreach ($d as $value) {
+            if (!is_array($value)) {
+                $res[] = $value;
+                continue;
+            }
+
+            foreach ($value as $value1) {
+                if (!is_array($value1)) {
+                    $res[] = $value1;
+                    continue;
+                }
+
+                foreach ($value1 as $value2) {
+                    if (!is_array($value2)) {
+                        $res[] = $value2;
+                    }
+                }
+            }
+        }
+
+        $res = array_map(function ($a) {
+            return preg_replace('/\s\s+/', ' ',$a); 
+        }, $res);
+
+        $res = array_map(function ($a) {
+            return str_replace("\n", '', $a);
+        }, $res);
+
+        $translator = new \App\Services\DeepLService;
+
+        $translated = [];
+
+        foreach ($res as $english) {
+            $chineese = $translator->translate($english, 'ZH');
+            $translated[$english] = $chineese;
+        }
+
+        dd($translated);
     }
 
     private function sanitizeScrapedPostData($scrapedPostData, $htmlSelectors)

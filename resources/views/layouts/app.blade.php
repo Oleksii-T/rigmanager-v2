@@ -12,7 +12,13 @@
 	@yield('meta')
 	<link rel="icon" href="{{asset('icons/favicon.ico')}}">
 	<meta property="og:image" content="{{asset('icons/og-favicon.png')}}" />
-    <link rel="canonical" href="https://rigmanagers.com{{request()->getRequestUri()}}" />
+    <link rel="canonical" href="@yield('canonical', 'https://rigmanagers.com'.request()->getRequestUri())" />
+    @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+        @php
+            $hreflang = $localeCode == config('app.default_locale') ? 'x-default' : $localeCode;
+        @endphp
+        <link rel="alternate" href="{{LaravelLocalization::getLocalizedURL($localeCode)}}" hreflang="{{$hreflang}}">
+    @endforeach
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/all.css')}}" />
 	<link media="all" rel="stylesheet" type="text/css" href="{{asset('css/custom.css')}}" />
@@ -126,11 +132,17 @@
                         <div class="footer-col">
                             <ul class="footer-nav">
                                 @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-                                    <li>
-                                        <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
-                                            {{ $properties['native'] }}
-                                        </a>
-                                    </li>
+                                    @if ($currentLocale == $localeCode)
+                                        <li>
+                                            <span>{{ $properties['native'] }}</span>
+                                        </li>
+                                    @else
+                                        <li>
+                                            <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                                {{ $properties['native'] }}
+                                            </a>
+                                        </li>
+                                    @endif
                                 @endforeach
                             </ul>
                         </div>

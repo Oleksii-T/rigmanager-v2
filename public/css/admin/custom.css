@@ -2,6 +2,9 @@
     font-size: 80%;
     color: red;
 }
+.font-underline {
+    text-decoration: underline;
+}
 .ids-column {
     width: 30px;
 }

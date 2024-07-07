@@ -343,6 +343,11 @@ return [
         ],
         'EXTRA',
         [
+            'text' => 'Pages',
+            'route'  => 'admin.pages.index',
+            'icon' => 'fas fa-fw fa-pages',
+        ],
+        [
             'text' => 'FAQs',
             'route'  => 'admin.faqs.index',
             'icon' => 'fas fa-fw fa-question-circle',

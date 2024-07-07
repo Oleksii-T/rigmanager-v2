@@ -10,7 +10,9 @@
             <li><a href="{{route('mailers.index')}}" class="{{$active=="mailer" ? 'active' : ''}}">@lang('ui.mailer')</a></li>
             <li><a href="{{route('profile.chat')}}" class="{{$active=="chat" ? 'active' : ''}}">@lang('ui.chat')</a></li>
             <li><a href="{{route('notifications.index')}}" class="{{$active=="notifications" ? 'active' : ''}}">@lang('ui.notifications')</a></li>
-            {{-- <li><a href="{{route('profile.subscription')}}" class="{{$active=="subscription" ? 'active' : ''}}">@lang('ui.mySubscription')</a></li> --}}
+            @if (isdev())   
+                <li><a href="{{route('profile.subscription')}}" class="{{$active=="subscription" ? 'active' : ''}}">@lang('ui.mySubscription')</a></li>
+            @endif
             @if ($currentUser->isAdmin())
                 <li><a href="{{route('admin.index')}}">Admin Panel</a></li>
             @endif
