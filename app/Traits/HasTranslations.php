@@ -16,7 +16,7 @@ trait HasTranslations
     public function translated($field, $locale=null)
     {
         $defaultLocale = config('app.default_locale');
-        $locale = $defaultLocale; //! USE ONLY ENGLISH TEXTS FOR NOW
+        // $locale = $defaultLocale; //! USE ONLY ENGLISH TEXTS FOR NOW
         $currLocale = LaravelLocalization::getCurrentLocale();
         $translations = $this->translations->where('field', $field);
         $result = $translations->where('locale', $locale??$currLocale)->value('value');

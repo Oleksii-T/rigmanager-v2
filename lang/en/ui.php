@@ -667,4 +667,72 @@ Cancel at any time, for any reason.',
         'titleInLang' => 'Title in',
         'descriptionInLang' => 'Description in',
     ],
+    'readMore' => 'Read More',
+    'catalogHeadline' => '
+        <h5>Browse Top Oil & Gas Equipment</h5>
+        <p>Discover the best deals on Rig & Accessories, Well Control Equipment, and more. Upgrade your oilfield operations today!</p>
+    ',
+    'catalogEndInfo' => '
+        <h2>High-Quality Oil & Gas Equipment for Sale</h2>
+        <p>
+            Our catalog features a wide selection of top-tier Oil & Gas equipment, including Rig & Accessories, Well Control Equipment, Solid Control Equipment, and more. 
+            Each product is designed to meet the highest standards of quality and reliability, ensuring optimal performance in the field. 
+            Whether you\'re in need of Drill String, Handling Tools, or Downhole Tools, we have you covered.  
+        </p>
+        <p>
+            Our range also includes Mud Pump & Spare Parts, Production Equipment & OCTG, Wellhead Equipment, Flowline Products, and Others & Spare parts. 
+            Additionally, we offer Coil Tubing, Vehicles, and various accessories to meet all your oilfield needs. 
+            Browse our catalog today to find the perfect equipment for your operation!
+        </p>
+    ',
+    'equipmentForSale' => 'equipment for sale',
+    'findNewOrUsed' => 'Find new or used',
+    'eqForSaleOrRent' => 'equipment for sale or rent at rigmanagers.com',
+    'about-us-content' => '
+        <p>rigmanagers.com - is a free bulletin board specialized for Oil&Gas procurement processes.</p>
+				
+        <b>What do we offer?</b>
+        <ul>
+            <li>Simplifying the procurement process;</li>
+            <li>Forging broader, faster, and more effective collaboration between members of your niche;</li>
+            <li>Additional opportunity for procurement planning;</li>
+            <li>Reduction of potential procurement costs;</li>
+            <li>Increasing the level of sales.</li>
+        </ul>
+
+        <b>What we are suggesting for <u>sellers</u>?</b>
+        <ul>
+            <li><a href="/posts/create">Free advertising of equipment</a> - no costs applied for placement of our equipment;</li>
+            <li>Increasing internet visibility of listings - our platform takes the responsibility to deliver potential buyers traffic;</li>
+            <li><a href="/imports/create">Bulk posts importing</a>  - for businesses with a wide range of listings;</li>
+            <li><a href="/contact-us">Support with post creation</a> - we may assist you with category selection, bulk posts importing, and maintaining of your listings.</li>
+        </ul>
+
+        <b>What we are suggesting for <u>buyers</u>?</b>
+        <ul>
+            <li>Structured data - our search, <a href="/categories">categorization</a>, filters, and author makes navigation easier;</li>
+            <li>Extensive amount of posts - from <a href="/catalog/others-spare-parts">Spare Parts</a> to <a href="/catalog/rig-accessories">Drilling Rigs</a>, we got everything you need;</li>
+            <li>Analytics tool - study the market and learn active proposals;</li>
+            <li><a href="/mailers">Smart Mailer feature</a> - will email you if any new post has been created by your request;</li>
+            <li>Regular updates - our marketing team constantly contacts new sellers thanks to who our <a href="/catalog">catalog</a> grows bigger.</li>
+        </ul>
+
+        <b>Why do we stand out?</b>
+        <p>We believe that modern technologies can ease communication and save time for procurement specialists. 
+            Our goal is to present digital tool that will be effective in local and international markets.
+            In addition, our team may propose automation for some of your routine tasks.
+        </p>
+
+        <b>Our Team</b>
+        <p>The core of the rigmanagers.com team spend years in Oil&Gas industry. 
+            Now they are trying to solve the existing problem of the market which bothers them during their work experience.
+            Meet our founders:
+            Pavlo - Head of the Procurement Department;
+            Dmitriy - Senior Drilling Engineer (former construction engineer);
+            Alexey - Fullstack web developer (former on-site interpreter).
+            Besides, the team was expanded by specialists in digital marketing and sales managers which helps us to deliver the solution to the industry.
+        </p>
+
+        <p>We do appreciate <b>any feedback</b> and are ready to answer all the questions you may have - <a href="/contact-us">Contact Us</a></p>
+    ',
 ];

@@ -29,7 +29,7 @@
                     <div class="catalog-date">{{$post->created_at->diffForHumans()}}</div>
                 </div>
                 <!--description-->
-                <div class="catalog-text">{{strip_tags($post->description)}}</div>
+                <div class="catalog-text">{{$post->description_short}}</div>
                 <!--under description line. Lables: cost, urgent, import-->
                 <div class="catalog-line-bottom">
                     <!--price-->

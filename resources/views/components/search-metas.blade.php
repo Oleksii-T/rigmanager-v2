@@ -1,17 +1,17 @@
 @if (isset($category))
     @if (isset($filters['author']))
-        <title>{{$filters['author']}} {{$category->name}} equipment for sale | rigmanagers.com</title>
-        <meta name="description" content="Find new or used {{$filters['author']}} {{$category->name}} equipment for sale or rent at rigmanagers.com">
+        <title>{{$filters['author']}} {{$category->name}} @lang('ui.equipmentForSale') | rigmanagers.com</title>
+        <meta name="description" content="@lang('ui.findNewOrUsed') {{$filters['author']}} {{$category->name}} @lang('ui.eqForSaleOrRent')">
     @else
         <title>{{$category->meta_title}}</title>
-        <meta name="description" content="Find new or used {{$category->name}} equipment for sale or rent at rigmanagers.com">
+        <meta name="description" content="@lang('ui.findNewOrUsed') {{$category->name}} @lang('ui.eqForSaleOrRent')">
     @endif
 @else
     @if (isset($filters['author']))
-        <title>{{$filters['author']}} equipment for sale | rigmanagers.com</title>
-        <meta name="description" content="Find new or used {{$filters['author']}} equipment for sale or rent at rigmanagers.com">
+        <title>{{$filters['author']}} @lang('ui.equipmentForSale') | rigmanagers.com</title>
+        <meta name="description" content="@lang('ui.findNewOrUsed') {{$filters['author']}} @lang('ui.eqForSaleOrRent')">
     @else
-        <title>Oil&Gas equipment for sale | rigmanagers.com</title>
-        <meta name="description" content="Find new or used drilling equipment for sale or rent at rigmanagers.com">
+        <title>@lang('meta.title.search.list')</title>
+        <meta name="description" content="@lang('meta.description.search.list')">
     @endif
 @endif

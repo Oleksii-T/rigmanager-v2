@@ -1,6 +1,6 @@
 @extends('layouts.page')
 
-@section('canonical', 'https://rigmanagers.com/'.request()->path())
+{{-- @section('canonical', 'https://rigmanagers.com/'.request()->path()) --}}
 
 @section('meta')
     @include('components.search-metas')
@@ -17,14 +17,13 @@
         <div class="search-category-short-description">
             {!!$category->add_desc_short!!}
             @if ($category->add_desc)
-                <a href="#search-category-description">Read more</a>
+                <a href="#search-category-description">@lang('ui.readMore')</a>
             @endif
         </div>
     @elseif(!isset($category) && !isset($filters['author']))
         <div class="search-category-short-description">
-            <h5> Browse Top Oil & Gas Equipment</h5>
-            <p>Discover the best deals on Rig & Accessories, Well Control Equipment, and more. Upgrade your oilfield operations today!</p>
-            <a href="#search-category-description">Read more</a>
+            @lang('ui.catalogHeadline')
+            <a href="#search-category-description">@lang('ui.readMore')</a>
         </div>
     @endif
 
@@ -136,17 +135,7 @@
         </div>
     @elseif(!isset($category) && !isset($filters['author']))
         <div id="search-category-description">
-            <h2>High-Quality Oil & Gas Equipment for Sale</h2>
-            <p>
-                Our catalog features a wide selection of top-tier Oil & Gas equipment, including Rig & Accessories, Well Control Equipment, Solid Control Equipment, and more. 
-                Each product is designed to meet the highest standards of quality and reliability, ensuring optimal performance in the field. 
-                Whether you're in need of Drill String, Handling Tools, or Downhole Tools, we have you covered.  
-            </p>
-            <p>
-                Our range also includes Mud Pump & Spare Parts, Production Equipment & OCTG, Wellhead Equipment, Flowline Products, and Others & Spare parts. 
-                Additionally, we offer Coil Tubing, Vehicles, and various accessories to meet all your oilfield needs. 
-                Browse our catalog today to find the perfect equipment for your operation!
-            </p>
+            @lang('ui.catalogEndInfo')
         </div>
     @endif
 

@@ -317,3 +317,14 @@ if (!function_exists('strposX')) {
         );
     }
 }
+
+if (!function_exists('hreflang')) {
+    function hreflang($locale, $canonical=false)
+    {
+        if ($canonical) {
+
+        }
+
+        return \LaravelLocalization::getLocalizedURL($locale);
+    }
+}

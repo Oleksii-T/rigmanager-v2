@@ -43,4 +43,18 @@ $(document).ready(function () {
 
         $(this).closest('.card[data-dynamic]').remove();
     });
+
+    $('.collapse-all').click(function(e) {
+        e.preventDefault();
+        $('.card:not(.collapsed-card) [data-card-widget="collapse"]').each(function(index) {
+            $(this).trigger('click');
+        });
+    })
+
+    $('.unwrap-all').click(function(e) {
+        e.preventDefault();
+        $('.collapsed-card [data-card-widget="collapse"]').each(function(index) {
+            $(this).trigger('click');
+        });
+    })
 });

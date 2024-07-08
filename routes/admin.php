@@ -68,6 +68,12 @@ Route::middleware('is-admin')->group(function () {
     Route::get('users/{user}/login', [UserController::class, 'login'])->name('users.login');
     Route::resource('users', UserController::class);
 
+    Route::prefix('pages')->name('pages.')->group(function () {
+        Route::get('{page}/blocks', [PageController::class, 'editBlocks'])->name('blocks');
+        Route::get('{page}/template', [PageController::class, 'template'])->name('template');
+        Route::put('{page}/update-template', [PageController::class, 'updateTemplate'])->name('update-template');
+        Route::post('{page}/blocks', [PageController::class, 'updateBlocks'])->name('update-blocks');
+    });
     Route::resource('pages', PageController::class)->except('show');
 
     Route::resource('faqs', FaqController::class)->except('show');

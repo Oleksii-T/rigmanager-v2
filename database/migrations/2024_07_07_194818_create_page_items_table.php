@@ -8,27 +8,24 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('page_blocks', function (Blueprint $table) {
+        Schema::create('page_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('page_id')->constrained()->onDelete('cascade');
-            $table->string('name')->nullable();
-            $table->json('data')->nullable();
+            $table->string('name');
+            $table->string('group');
+            $table->unsignedInteger('type');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('page_blocks');
+        Schema::dropIfExists('page_items');
     }
 };

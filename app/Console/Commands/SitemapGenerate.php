@@ -55,29 +55,36 @@ class SitemapGenerate extends Command
                 'users' => public_path('sitemap-users.xml'),
             ];
 
+            $postLastUpdatedAt = Post::latest('updated_at')->value('updated_at');
+            $categoryLastUpdatedAt = Category::latest('updated_at')->value('updated_at');
+            $userLastUpdatedAt = User::latest('updated_at')->value('updated_at');
+            $blogLastUpdatedAt = Blog::latest('updated_at')->value('updated_at');
+            $staticPagesUpdatedAt = \Carbon\Carbon::parse('01/01/2024'); // m/d/y
+            $aboutUsUpdatedAt = \Carbon\Carbon::parse('07/05/2024');
+
             // master sitemap
             Sitemap::create()
-                ->add(Url::create('/')->setLastModificationDate(now()))
-                ->add(Url::create('/sitemap-posts.xml')->setLastModificationDate(now()))
-                ->add(Url::create('/sitemap-categories.xml')->setLastModificationDate(now()))
-                ->add(Url::create('/sitemap-blogs.xml')->setLastModificationDate(now()))
-                ->add(Url::create('/sitemap-users.xml')->setLastModificationDate(now()))
-                ->add(Url::create(route('search'))->setLastModificationDate(now()))
-                ->add(Url::create(route('categories'))->setLastModificationDate(now()))
-                ->add(Url::create(route('faq'))->setLastModificationDate(now()))
-                ->add(Url::create(route('terms'))->setLastModificationDate(now()))
-                ->add(Url::create(route('privacy'))->setLastModificationDate(now()))
-                ->add(Url::create(route('site-map'))->setLastModificationDate(now()))
-                ->add(Url::create('/blog')->setLastModificationDate(now()))
-                ->add(Url::create(route('feedbacks.create'))->setLastModificationDate(now()))
-                ->add(Url::create(route('about'))->setLastModificationDate(now()))
-                ->add(Url::create(route('plans.index'))->setLastModificationDate(now()))
+                ->add(Url::create('/')->setLastModificationDate($postLastUpdatedAt))
+                ->add(Url::create('/sitemap-posts.xml')->setLastModificationDate($postLastUpdatedAt))
+                ->add(Url::create('/sitemap-categories.xml')->setLastModificationDate($categoryLastUpdatedAt))
+                ->add(Url::create('/sitemap-blogs.xml')->setLastModificationDate($blogLastUpdatedAt))
+                ->add(Url::create('/sitemap-users.xml')->setLastModificationDate($userLastUpdatedAt))
+                ->add(Url::create(route('search'))->setLastModificationDate($postLastUpdatedAt))
+                ->add(Url::create(route('categories'))->setLastModificationDate($categoryLastUpdatedAt))
+                ->add(Url::create(route('faq'))->setLastModificationDate($staticPagesUpdatedAt))
+                ->add(Url::create(route('terms'))->setLastModificationDate($staticPagesUpdatedAt))
+                ->add(Url::create(route('privacy'))->setLastModificationDate($staticPagesUpdatedAt))
+                ->add(Url::create(route('site-map'))->setLastModificationDate($staticPagesUpdatedAt))
+                ->add(Url::create('/blog')->setLastModificationDate($blogLastUpdatedAt))
+                ->add(Url::create(route('feedbacks.create'))->setLastModificationDate($staticPagesUpdatedAt))
+                ->add(Url::create(route('about'))->setLastModificationDate($aboutUsUpdatedAt))
+                // ->add(Url::create(route('plans.index'))->setLastModificationDate($staticPagesUpdatedAt))
                 ->writeToFile($paths['master']);
 
             // posts sitemap
             $sm = Sitemap::create();
             foreach (Post::visible()->get() as $p) {
-                $sm->add(Url::create(route('posts.show', $p))->setLastModificationDate(now()));
+                $sm->add(Url::create(route('posts.show', $p))->setLastModificationDate($p->updated_at));
             }
             $sm->writeToFile($paths['posts']);
 
@@ -87,21 +94,21 @@ class SitemapGenerate extends Command
                 if (!$c->postsAll()->visible()->count()) {
                     continue;
                 }
-                $sm->add(Url::create($c->getUrl())->setLastModificationDate(now()));
+                $sm->add(Url::create($c->getUrl())->setLastModificationDate($c->updated_at));
             }
             $sm->writeToFile($paths['categories']);
 
             // blogs sitemap
             $sm = Sitemap::create();
             foreach (Blog::published()->get() as $b) {
-                $sm->add(Url::create(route('blog.show', $b))->setLastModificationDate(now()));
+                $sm->add(Url::create(route('blog.show', $b))->setLastModificationDate($b->updated_at));
             }
             $sm->writeToFile($paths['blogs']);
 
             // users sitemap
             $sm = Sitemap::create();
             foreach (User::all() as $u) {
-                $sm->add(Url::create(route('users.show', $u))->setLastModificationDate(now()));
+                $sm->add(Url::create(route('users.show', $u))->setLastModificationDate($u->updated_at));
             }
             $sm->writeToFile($paths['users']);
 

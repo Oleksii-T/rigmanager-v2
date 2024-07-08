@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use App\Enums\PageStatus;
+use App\Traits\HasTranslations;
 use Yajra\DataTables\DataTables;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Page extends Model
 {
+    use HasTranslations;
+
     protected $fillable = [
         'user_id',
         'status',
@@ -23,19 +27,39 @@ class Page extends Model
         'status' => PageStatus::class
     ];
 
+    protected $appends = self::TRANSLATABLES + [
+
+    ];
+
+    const TRANSLATABLES = [
+        'content',
+        'meta_title',
+        'meta_description',
+    ];
+
+    public function content(): Attribute
+    {
+        return $this->getTranslatedAttr('content');
+    }
+
+    public function metaTitle(): Attribute
+    {
+        return $this->getTranslatedAttr('meta_title');
+    }
+
+    public function metaDescription(): Attribute
+    {
+        return $this->getTranslatedAttr('meta_description');
+    }
+
     public static function get($url)
     {
         return self::where('link', $url)->first();
     }
 
-    public function pageBlocks()
+    public function items()
     {
-        return $this->hasMany(PageBlock::class);
-    }
-
-    public function blocks()
-    {
-        return $this->morphMany(ContentBlock::class, 'blockable');
+        return $this->hasMany(PageItem::class);
     }
 
     public function isStatic()

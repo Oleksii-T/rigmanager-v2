@@ -1147,6 +1147,19 @@ textarea.form-error {
 	color: #ffffff;
 	font-size: 28px;
 }
+.about-us p:first-child{
+	color: #ffffff;
+	font-size: 28px;
+}
+.about-us p{
+	white-space: pre-line;
+}
+.about-us a{
+	color: #ff8d11;
+}
+.about-us ul {
+	margin-bottom: 24px;
+}
 .aboutus-body {
 	white-space: pre-line;
 }

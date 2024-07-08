@@ -56,14 +56,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Meta title</label>
-                                <input name="meta_title" type="text" class="form-control" value="{{$page->meta_title}}">
+                                <x-admin.multi-lang-input name="meta_title" :model="$page" />
                                 <span data-input="meta_title" class="input-error"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Meta description</label>
-                                <input name="meta_description" type="text" class="form-control" value="{{$page->meta_description}}">
+                                <x-admin.multi-lang-input name="meta_description" :model="$page" />
                                 <span data-input="title" class="input-error"></span>
                             </div>
                         </div>

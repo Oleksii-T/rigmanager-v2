@@ -8,27 +8,20 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('pages', function (Blueprint $table) {
+        Schema::create('page_items', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('status');
-            $table->string('title');
-            $table->string('link')->unique();
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('page_items');
     }
 };

@@ -74,44 +74,21 @@ class DevController extends Controller
     {
         $d = [];
 
-        $d = trans('ui');
-        $res = [];
-
-        foreach ($d as $value) {
-            if (!is_array($value)) {
-                $res[] = $value;
-                continue;
-            }
-
-            foreach ($value as $value1) {
-                if (!is_array($value1)) {
-                    $res[] = $value1;
-                    continue;
-                }
-
-                foreach ($value1 as $value2) {
-                    if (!is_array($value2)) {
-                        $res[] = $value2;
-                    }
-                }
-            }
-        }
-
-        $res = array_map(function ($a) {
-            return preg_replace('/\s\s+/', ' ',$a); 
-        }, $res);
-
-        $res = array_map(function ($a) {
-            return str_replace("\n", '', $a);
-        }, $res);
+        $posts = \App\Models\Post::all();
 
         $translator = new \App\Services\DeepLService;
 
         $translated = [];
 
-        foreach ($res as $english) {
-            $chineese = $translator->translate($english, 'ZH');
-            $translated[$english] = $chineese;
+        foreach ($posts as $post) {
+            $t = [
+                'title' => ['zh' => $post->title],
+                'meta_title' => ['zh' => $post->title],
+                'meta_description' => ['zh' => $post->meta_description],
+                'description' => ['zh' => $post->description],
+            ];
+
+            $post->saveTranslations($t);
         }
 
         dd($translated);

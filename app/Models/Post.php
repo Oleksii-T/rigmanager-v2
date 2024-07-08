@@ -197,6 +197,18 @@ class Post extends Model
         return $this->getTranslatedAttr(__FUNCTION__);
     }
 
+    public function descriptionShort(): Attribute
+    {
+        $d = strip_tags($this->description);
+        $max = 230;
+
+        if (strlen($d) > $max) {
+            $d = substr($d, 0, $max) . '...';
+        }
+
+        return new Attribute(fn () => $d);
+    }
+
     public function metaTitle(): Attribute
     {
         return $this->getTranslatedAttr('meta_title');
