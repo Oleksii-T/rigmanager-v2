@@ -119,7 +119,8 @@ if (!function_exists('qroute')) {
     function qroute($route, $data=null) {
         $route = $data ? route($route, $data) : route($route);
         $params = $_GET;
-        $q = http_build_query($_GET);
+        unset($params['page']);
+        $q = http_build_query($params);
         $route .= '?';
         $route .= $q;
 
@@ -196,7 +197,7 @@ if (!function_exists('currencies')) {
 
 // get general info for activity log creation
 if (!function_exists('infoForActivityLog')) {
-    function infoForActivityLog() {
+    function infoForActivityLog($wrapped=true) {
         $location = null;
         $ip = request()->ip();
         $agentString = request()->header('User-Agent');
@@ -250,7 +251,7 @@ if (!function_exists('infoForActivityLog')) {
             'request_params' => $requestParams,
         ];
 
-        return ['general_info' => $info];
+        return $wrapped ? ['general_info' => $info] : $info;
     }
 }
 

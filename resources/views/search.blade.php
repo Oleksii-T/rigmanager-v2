@@ -3,29 +3,17 @@
 {{-- @section('canonical', 'https://rigmanagers.com/'.request()->path()) --}}
 
 @section('meta')
-    @include('components.search-metas')
+    @include('components.search.metas')
 @endsection
 
 @section('bc')
-    @include('components.search-bci')
+    @include('components.search.bci')
 @endsection
 
 @section('content')
     <span class="hidden" data-category="{{isset($category) ? $category->id : ''}}" page-data></span>
 
-    @if (isset($category) && $category->add_desc_short && strip_tags($category->add_desc_short))
-        <div class="search-category-short-description">
-            {!!$category->add_desc_short!!}
-            @if ($category->add_desc)
-                <a href="#search-category-description">@lang('ui.readMore')</a>
-            @endif
-        </div>
-    @elseif(!isset($category) && !isset($filters['author']))
-        <div class="search-category-short-description">
-            @lang('ui.catalogHeadline')
-            <a href="#search-category-description">@lang('ui.readMore')</a>
-        </div>
-    @endif
+    @include('components.search.subheader')
 
     <div class="main-block">
         <aside class="side">
@@ -117,7 +105,7 @@
             </div>
         </aside>
         <div class="content">
-            @include('components.search-header')
+            @include('components.search.header')
             <div class="searched-categories-content"></div>
             <div class="searched-content"></div>
             <div class="searched-loading hidden">
@@ -129,15 +117,7 @@
         </div>
     </div>
 
-    @if (isset($category) && $category->add_desc && strip_tags($category->add_desc))
-        <div id="search-category-description">
-            {!!$category->add_desc!!}
-        </div>
-    @elseif(!isset($category) && !isset($filters['author']))
-        <div id="search-category-description">
-            @lang('ui.catalogEndInfo')
-        </div>
-    @endif
+    @include('components.search.subheader-extended')
 
 @endsection
 

@@ -12,13 +12,22 @@
         <section class="top-section">
             <div class="holder">
                 <h1>@lang('ui.introduction')</h1>
+                <p>
+                    @lang('ui.subIntroduction')
+                    <span class="link-w-icon" style="font-size:90%">
+                        <a href="{{route('about')}}">more</a>
+                        <img src="{{asset('icons/link.svg')}}" alt="link icon">
+                    </span>
+                </p>
                 <div class="top-links">
                     <div class="top-links-item">
                         <a href="{{route('search', ['types'=>['sell', 'lease']])}}">@lang('ui.introSellEq')</a>
                     </div>
+                    {{-- 
                     <div class="top-links-item">
                         <a href="{{route('search-services')}}">@lang('ui.introSe')</a>
-                    </div>
+                    </div> 
+                    --}}
                     <div class="top-links-item">
                         <a href="{{route('search', ['types'=>['buy', 'rent']])}}">@lang('ui.introBuyEq')</a>
                     </div>
@@ -39,10 +48,12 @@
     <section class="main-section">
         <div class="holder">
             <div class="main-category">
+                {{-- 
                 <ul class="tabs">
                     <li><a href="#tab1">{{__('ui.equipment')}}</a></li>
                     <li><a href="#tab2">{{__('ui.service')}}</a></li>
-                </ul>
+                </ul> 
+                --}}
                 <div id="tab1" class="tab-content">
                     <div class="main-category-block">
                         @foreach ($categoriesEquipmentColumns as $column)
@@ -54,6 +65,7 @@
                         @endforeach
                     </div>
                 </div>
+                {{-- 
                 <div id="tab2" class="tab-content">
                     <div class="main-category-block">
                         @foreach ($categoriesServiceColumns as $column)
@@ -64,7 +76,8 @@
                             </ul>
                         @endforeach
                     </div>
-                </div>
+                </div> 
+                --}}
             </div>
             <div class="brand-line">
                 <div class="brand-slider">

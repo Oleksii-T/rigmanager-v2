@@ -17,6 +17,7 @@ class SocialAuthController extends Controller
 
     public function callback($provider)
     {
+        dlog("social login data", request()->all()); //! LOG
         $socialUser = Socialite::driver($provider)->user();
 
         $user = User::where('email', $socialUser->email)->first();

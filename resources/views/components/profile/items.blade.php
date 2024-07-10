@@ -14,7 +14,7 @@
                     <!--under title line. Lables: type, view, region, date-->
                     <div class="catalog-line">
                         <!--type-->
-                        <a href="{{route('posts.show', $post)}}" class="catalog-tag">{{$post->type->readable()}}</a>
+                        <a href="{{route('search', ['types' => [$post->type->value]])}}" class="catalog-tag">{{$post->type->readable()}}</a>
                         <!--country-->
                         <div class="catalog-lable catalog-region">{{$post->country_readable}}</div>
                         <!--views-->

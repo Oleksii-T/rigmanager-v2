@@ -26,11 +26,16 @@ class SearchController extends Controller
         }
 
         if ($filters['author']??null) {
-            $filters['author_name'] = User::where('slug', $filters['author'])->value('name');
+            $authorModel = User::where('slug', $filters['author'])->first();
+            $filters['author_name'] = $authorModel->name;
+            $filters['author_bio'] = $authorModel->info->bio;
+            $filters['author_profile_link'] = route('users.show', $authorModel);
         }
 
-        if (!$request->ajax()) {
-            return view('search', compact('category', 'filters'));
+        if (!$request->ajax()) {        
+            $catalogPageIsNoindex = $this->catalogPageIsNoindex($filters);
+
+            return view('search', compact('category', 'filters', 'catalogPageIsNoindex'));
         }
 
         $posts = Post::query()
@@ -47,6 +52,8 @@ class SearchController extends Controller
         $postView = $posts->count()
             ? view('components.search.items', ['posts' => $posts])->render()
             : view('components.search.empty-result')->render();
+
+        $this->logSearch($filters, $posts);
 
         return $this->jsonSuccess('', [
             'posts' => $postView,
@@ -147,6 +154,8 @@ class SearchController extends Controller
         $result = $this->formatAutocomplete($posts, $search);
 
         cache()->put($cKey, $result, 60*60);
+   
+        $this->logAutocomplete($result);
 
         return $result;
     }
@@ -219,5 +228,55 @@ class SearchController extends Controller
         $result = array_values($result);
 
         return $result;
+    }
+
+    private function catalogPageIsNoindex($filters)
+    {
+        return isset($filters['currency']) || 
+            isset($filters['cost_from']) || 
+            isset($filters['cost_to']) || 
+            isset($filters['country']) || 
+            isset($filters['conditions']) || 
+            isset($filters['types']) || 
+            isset($filters['is_urgent']) || 
+            isset($filters['search']) || 
+            isset($filters['sorting']) ||
+            isset($filters['status']);
+    }
+
+    private function logAutocomplete($result)
+    {
+        $info = infoForActivityLog(false);
+
+        if ($info['agent_info']['is_robot']) {
+            return;
+        }
+
+        \Log::channel('activity')->info("AUTOCOMPLETE", array_merge($info, ['result' => $result]));
+    }
+
+    private function logSearch($filters, $posts)
+    {
+        $someFilterUsed = isset($filters['currency']) || 
+            isset($filters['cost_from']) || 
+            isset($filters['cost_to']) || 
+            isset($filters['country']) || 
+            isset($filters['conditions']) || 
+            isset($filters['types']) || 
+            isset($filters['is_urgent']) || 
+            isset($filters['search']) || 
+            isset($filters['status']);
+
+        if (!$someFilterUsed) {
+            return;
+        }
+
+        $info = infoForActivityLog(false);
+
+        if ($info['agent_info']['is_robot']) {
+            return;
+        }
+
+        \Log::channel('activity')->info("SEARCH", array_merge($info, ['posts_found_count' => $posts->count()]));
     }
 }

@@ -17,6 +17,14 @@
 .wrap-text {
     white-space: pre-line;
 }
+.top-section h1 {
+    margin-bottom: 17px;
+}
+.top-section p {
+    text-align: center;
+    color: white;
+    margin-bottom: 40px;
+}
 .full-loader {
     z-index: 199;
     position: absolute;
@@ -293,6 +301,16 @@
 }
 .blurred.b-13.white {
     text-shadow: 0 0 13px #fff;
+}
+
+/* link with icon */
+.link-w-icon a {
+    color: #ff8d11;
+}
+.link-w-icon img {
+    height: 1em;
+    vertical-align: baseline;
+    cursor: pointer;
 }
 
 /* help icon */

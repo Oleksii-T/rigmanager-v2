@@ -15,3 +15,7 @@
         <meta name="description" content="@lang('meta.description.search.list')">
     @endif
 @endif
+
+@if ($catalogPageIsNoindex)
+    <meta name="robots" content="noindex, nofollow">
+@endif

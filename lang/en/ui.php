@@ -53,7 +53,8 @@ If you have significant amount of posts, consider using <a href="/imports" targe
     'maintenanceSoon' => 'soon',
     'home' => 'Home',
     'cabinet' => 'Profile',
-    'introduction' => 'Specialized platform for cooperation of oil and gas companies',
+    'introduction' => 'Specialized <b>bulletin board</b> for cooperation of oil and gas companies',
+    'subIntroduction' => 'Sell, find, buy drilling equipment from dozens of companies for <b>FREE</b>!',
     'introSellEq' => 'Sell of drilling
         equipment',
     'introBuyEq' => 'Buy and loan
@@ -727,9 +728,9 @@ Cancel at any time, for any reason.',
         <p>The core of the rigmanagers.com team spend years in Oil&Gas industry. 
             Now they are trying to solve the existing problem of the market which bothers them during their work experience.
             Meet our founders:
-            Pavlo - Head of the Procurement Department;
-            Dmitriy - Senior Drilling Engineer (former construction engineer);
-            Alexey - Fullstack web developer (former on-site interpreter).
+            <u>Pavlo</u> - Head of the Procurement Department;
+            <u>Dmitriy</u> - Senior Drilling Engineer (former construction engineer);
+            <u>Alexey</u> - Fullstack web developer (former on-site interpreter).
             Besides, the team was expanded by specialists in digital marketing and sales managers which helps us to deliver the solution to the industry.
         </p>
 

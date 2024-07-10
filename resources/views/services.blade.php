@@ -1,11 +1,11 @@
 @extends('layouts.page')
 
 @section('meta')
-    @include('components.search-metas')
+    @include('components.search.metas')
 @endsection
 
 @section('bc')
-    @include('components.search-bci')
+    @include('components.search.bci')
 @endsection
 
 @section('content')
@@ -47,7 +47,7 @@
             </div>
         </aside>
         <div class="content">
-            @include('components.search-header')
+            @include('components.search.header')
             <div class="searched-categories-content"></div>
             <div class="searched-content"></div>
             <div class="searched-loading hidden">

@@ -101,6 +101,11 @@ return [
             'path' => storage_path('logs/dev.log'),
         ],
 
+        'activity' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/activity.log'),
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

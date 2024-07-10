@@ -42,9 +42,9 @@
                     <button class="header-button send-message-to-self">{{__('ui.sendMessage')}}</button>
                 @else
                     @if ($hasChat)
-                        <a href="{{route('profile.chat')}}?chat_with={{$user->id}}" class="header-button">{{__('ui.openChat')}}</a>
+                        <a href="{{route('profile.chat')}}?chat_with={{$user->id}}" class="header-button">{{__('ui.chat')}}</a>
                     @else
-                        <button data-url="{{route('profile.chat.store', $user->slug)}}" data-user="{{$user->name}}" class="header-button send-message">{{__('ui.sendMessage')}}</button>
+                        <button data-url="{{route('profile.chat.store', $user->slug)}}" data-user="{{$user->name}}" class="header-button send-message">{{__('ui.chat')}}</button>
                     @endif
                 @endif
                 <button data-url="{{route('users.contacts', $user)}}" class="header-button show-contacts">

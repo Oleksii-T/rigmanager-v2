@@ -74,24 +74,15 @@ class DevController extends Controller
     {
         $d = [];
 
-        $posts = \App\Models\Post::all();
+        $s = new \App\Services\GoogleSearchConsoleService;
+        $d = $s->inspectUrl('https://rigmanagers.com/catalog');
+        $users = User::all();
 
-        $translator = new \App\Services\DeepLService;
-
-        $translated = [];
-
-        foreach ($posts as $post) {
-            $t = [
-                'title' => ['zh' => $post->title],
-                'meta_title' => ['zh' => $post->title],
-                'meta_description' => ['zh' => $post->meta_description],
-                'description' => ['zh' => $post->description],
-            ];
-
-            $post->saveTranslations($t);
+        foreach ($users as $key => $value) {
+            # code...
         }
 
-        dd($translated);
+        dd($d);
     }
 
     private function sanitizeScrapedPostData($scrapedPostData, $htmlSelectors)

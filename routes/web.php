@@ -79,7 +79,11 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
     Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');
     Route::put('posts/{post}/view', [PostController::class, 'view'])->name('posts.view');
-    Route::put('users/{user}/view', [UserController::class, 'view'])->name('users.view');
+
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::put('{user}/view', [UserController::class, 'view'])->name('view');
+        Route::get('{user}', [UserController::class, 'show'])->name('show');
+    });
 
     Route::middleware(['auth', 'not-banned'])->group(function () {
 
@@ -155,7 +159,6 @@ Route::middleware(['localeSessionRedirect', 'localizationRedirect'])->prefix(Lar
 
                 Route::prefix('users')->name('users.')->group(function () {
                     Route::get('{user}/contacts', [UserController::class, 'contacts'])->name('contacts');
-                    Route::get('{user}', [UserController::class, 'show'])->name('show');
                 });
 
                 Route::prefix('posts')->name('posts.')->group(function () {

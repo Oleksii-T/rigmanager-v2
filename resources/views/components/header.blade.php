@@ -12,6 +12,7 @@
                     </svg>
                     @lang('ui.catalog')
                 </a>
+                {{-- 
                 <ul>
                     <li>
                         <a href="{{route('search')}}">
@@ -25,7 +26,8 @@
                             @lang('ui.seCatalog')
                         </a>
                     </li>
-                </ul>
+                </ul> 
+                --}}
             </div>
             <div class="header-cabinet">
                 <a href="{{route('categories')}}" class="header-catalog">
@@ -34,6 +36,7 @@
                     </svg>
                     @lang('ui.categories')
                 </a>
+                {{-- 
                 <ul>
                     <li>
                         <a href="{{route('categories')}}">
@@ -47,7 +50,8 @@
                             @lang('ui.seCategories')
                         </a>
                     </li>
-                </ul>
+                </ul> 
+                --}}
             </div>
             <div class="header-search">
                 <a href="" class="header-search-link"></a>
@@ -119,6 +123,7 @@
                     <a href="{{route('posts.create')}}" class="header-button">
                         @lang('ui.addPost')
                     </a>
+                    {{-- 
                     <ul>
                         <li>
                             <a href="{{route('posts.create')}}">
@@ -132,7 +137,8 @@
                                 @lang('ui.addSePost')
                             </a>
                         </li>
-                    </ul>
+                    </ul> 
+                    --}}
                 </div>
             </div>
             <div class="mob-nav">
