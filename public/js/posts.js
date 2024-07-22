@@ -10,6 +10,7 @@ $(document).ready(function() {
         showPopupAfterClose: 2, // close popup counter within one page load
         todo: true,
         did: false,
+        changedAfterInserted: false,
         description: null
     };
 
@@ -422,10 +423,13 @@ $(document).ready(function() {
         });
     }
 
-    $(document).on('input', '[name="description"]', function (e) {
+    $('[name="description"]').on('summernote.change', function (e) {
         // disable category suggestion if user changed description manually after suggestion was made
+        console.log('summernote change'); //! LOG
         if (categorySuggestion.did) {
+            console.log('summernote did, so suggest only via modals'); //! LOG
             categorySuggestion.todo = false;
+            // categorySuggestion.changedAfterInserted = true;
         }
     });
     $(document).on('selectmenuchange', '.categories-level-selects select', function (e) {
@@ -446,13 +450,21 @@ $(document).ready(function() {
                 categorySuggestion.description = descriptionEl.val();
             }
 
-            categorySuggestion.did = true;
+            // add line breaks for fields (HTML friendly)
+            fields = fields.replace(/[\r\n]/g, "<br/>");
 
             let newDescription = categorySuggestion.description
                 ? categorySuggestion.description + '\n\n' + fields
                 : fields;
 
-            descriptionEl.val(newDescription);
+            // insert suggestion text to description
+            descriptionEl.summernote('code', newDescription);
+
+            // insertion above triggers 'change' event and 'todo' set to false, so change 'todo' to true manualy.
+            categorySuggestion.todo = true;
+
+            // mark that suggestion been inserted in description
+            categorySuggestion.did = true;
 
             return;
         }
@@ -463,10 +475,12 @@ $(document).ready(function() {
             return;
         }
 
+        // do not show modal if maximum closed count (per page load) is reached
         if (categorySuggestion.showPopupAfterClose <= 0) {
             return;
         }
 
+        // do not show modal if maximum closed count (per session) is reached
         if (+(localStorage.getItem('categorySuggestionCloseCounter') ?? 0) >= categorySuggestion.globalCloseLimit) {
             return;
         }
@@ -479,14 +493,17 @@ $(document).ready(function() {
         popUp.removeClass('d-none');
     })
     $('#post-category-suggestion .pa-close').click(function(e) {
-        // count how many times user closed suggestion popup
+        // get closed count (per page load)
         categorySuggestion.showPopupAfterClose--;
 
+        // get closed count (per session)
         let closeCounter = +(localStorage.getItem('categorySuggestionCloseCounter') ?? 0);
 
+        // increment closed count (per session)
         closeCounter++;
         localStorage.setItem('categorySuggestionCloseCounter', closeCounter);
 
+        // show message that maximum closed count (per session) is reached
         if (closeCounter == categorySuggestion.globalCloseLimit) {
             showToast('Post Category Suggestion popup will not be shown anymore');
         }
@@ -610,14 +627,14 @@ $(document).ready(function() {
         e.preventDefault();
         let url = $(this).attr('href');
         let title = $(this).hasClass('only-trash')
-            ?  'Move post to Trash?'
-            : 'Are you sure?';//! TRANSLATE
+            ? window.Laravel.translations.messages_areYouSureMoveToTrash
+            : window.Laravel.translations.messages_areYouSure;
         let text = $(this).hasClass('only-trash')
-            ? 'Trashed posts wll be automatically deleted after one week.'
-            : "You won't be able to revert this!";//! TRANSLATE
+            ? window.Laravel.translations.messages_trashedPostsAutoDeleted
+            : window.Laravel.translations.messages_canNotRevert;
         let confirmButtonText = $(this).hasClass('only-trash')
-            ? 'Yes, move to trash!'
-            : 'Yes, delete it!';//! TRANSLATE
+            ? window.Laravel.translations.messages_yesMoveToTrash
+            : window.Laravel.translations.messages_yesDeleteIt;
 
         let res = await swal.fire({
             title,
@@ -718,12 +735,13 @@ $(document).ready(function() {
         let url = $(this).attr('href');
 
         let res = await swal.fire({
-            title: 'Are you sure?',//! TRANSLATE
-            text: "All Favorite Posts will be cleared",//! TRANSLATE
-            showCancelButton: true,
+            title: window.Laravel.translations.messages_areYouSure,
+            text: window.Laravel.translations.messages_clearFavsConfirmMessage,
             confirmButtonColor: '#3085d6',
+            confirmButtonText: window.Laravel.translations.messages_clearFavsConfirmBtn,
+            showCancelButton: true,
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, clear Favorites!'//! TRANSLATE
+            cancelButtonText: window.Laravel.translations.ui_tba_modal.cancel,
         });
 
         if (!res.isConfirmed) {

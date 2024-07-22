@@ -16,6 +16,6 @@
     @endif
 @endif
 
-@if ($catalogPageIsNoindex)
+@if (@$catalogPageIsNoindex)
     <meta name="robots" content="noindex, nofollow">
 @endif

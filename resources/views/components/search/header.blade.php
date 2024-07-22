@@ -10,14 +10,14 @@
         @elseif (isset($filters['search']))
             "{{$filters['search']}}"
         @elseif (isset($category))
-            {{$category->name}}
+            {{$category->name}} @lang('ui.forSale')
         @else
             {{$title}}
         @endif
     </h1>
     @if (isset($filters['author']))
         <span class="link-w-icon">
-            <a href="{{$filters['author_profile_link']}}">profile</a>
+            <a href="{{$filters['author_profile_link']}}">@lang('ui.profile')</a>
             <img src="{{asset('icons/link.svg')}}" alt="">
         </span>
     @endif

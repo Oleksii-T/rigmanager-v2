@@ -401,13 +401,7 @@ class Post extends Model
 
     public function generateMetaDescription()
     {
-        $d = $this->description;
-
-        if (!$d) {
-            return $this->generateMetaTitle();
-        }
-
-        return $this->generateMetaDescriptionHelper($d);
+        return $this->generateMetaDescriptionHelper($this->title, $this->condition);
     }
 
     public function getApprovingClass()
@@ -427,20 +421,14 @@ class Post extends Model
 
     public static function generateMetaTitleHelper(string $title, string $category)
     {
-        return $title . ' - ' . $category . ' on rigmanagers.com';
+        return $title;
     }
 
-    public static function generateMetaDescriptionHelper(string $description)
+    public static function generateMetaDescriptionHelper(string $title, $condition=null)
     {
-        $description = strip_tags($description);
-        $maxSeoDesc = 140;
-        $seoDescSufix = ' | rigmanagers.com';
-        $seoDescSufixLength = strlen($seoDescSufix);
-        $maxSeoDesc -= $seoDescSufixLength;
+        $condition ??= 'new';
 
-        return strlen($description) > $maxSeoDesc
-            ? (substr($description, 0, $maxSeoDesc) . "...$seoDescSufix")
-            : $description . $seoDescSufix;
+        return "Buy $condition $title for sale at rigmanagers.com";
     }
 
     public static function dataTable($query)

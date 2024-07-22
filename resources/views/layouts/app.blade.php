@@ -99,61 +99,11 @@
 <body>
 	<div id="wrapper">
         <div class="hidden" data-flashnotif="{{json_encode(getActiveFlash())}}"></div>
+
 		@yield('page-content')
-		<footer class="footer">
-			<div class="holder">
-				<div class="footer-block">
-					<div class="footer-copy">
-						&copy; {{date("Y")}}
-						<span>«Rigmanager»</span> - @lang('ui.introduction'). @lang('ui.footerCopyright')
-					</div>
-					<div class="footer-col">
-						<ul class="footer-nav">
-							<li><a href="{{route('about')}}">@lang('ui.footerAbout')</a></li>
-							<li><a href="{{route('blog.index')}}">@lang('ui.footerBlog')</a></li>
-							<li><a href="{{route('search')}}">@lang('ui.catalog')</a></li>
-						</ul>
-					</div>
-					<div class="footer-col">
-						<ul class="footer-nav">
-							{{-- <li><a href="{{route('plans.index')}}">@lang('ui.footerSubscription')</a></li> --}}
-							<li><a href="{{route('feedbacks.create')}}">@lang('ui.footerContact')</a></li>
-							<li><a href="{{route('faq')}}">FAQ</a></li>
-						</ul>
-					</div>
-					<div class="footer-col">
-						<ul class="footer-nav">
-							<li><a href="{{route('terms')}}">@lang('ui.footerTerms')</a></li>
-							<li><a href="{{route('privacy')}}">@lang('ui.footerPrivacy')</a></li>
-							<li><a href="{{route('site-map')}}">@lang('ui.footerSiteMap')</a></li>
-						</ul>
-					</div>
-                    <div class="footer-col">
-                        <ul class="footer-nav">
-                            @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-                                @if ($currentLocale == $localeCode)
-                                    <li>
-                                        <span>{{ $properties['native'] }}</span>
-                                    </li>
-                                @else
-                                    <li>
-                                        <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
-                                            {{ $properties['native'] }}
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
-                    </div>
-					<div class="footer-col">
-						<ul class="footer-nav">
-							<li><a href="https://www.linkedin.com/company/rigmanagers-com/about">LinkedIn</a></li>
-							<li><a href="https://www.facebook.com/rigmanagerscom">Facebook</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</footer>
+		
+        <x-footer />
+
 		<div class="development-alert d-none">
 			<p>
                 @lang('ui.development')
@@ -162,71 +112,7 @@
 		</div>
 	</div>
 
-    <div id="page-assist-importCreate" class="page-assist d-none">
-        <div>
-            <div class="pa-header">
-                <b>@lang('ui.page-assists.importCreate.title')</b>
-                <span class="pa-close">
-                    @svg('icons/close.svg')
-                </span>
-            </div>
-            <div class="pa-content">@lang('ui.page-assists.importCreate.body')</div>
-        </div>
-    </div>
-
-    <div id="page-assist-importValidationErrors" class="page-assist d-none">
-        <div>
-            <div class="pa-header">
-                <b>@lang('ui.page-assists.importValidationErrors.title')</b>
-                <span class="pa-close">
-                    @svg('icons/close.svg')
-                </span>
-            </div>
-            <div class="pa-content">@lang('ui.page-assists.importValidationErrors.body')</div>
-        </div>
-    </div>
-
-    <div id="page-assist-postCreate" class="page-assist d-none">
-        <div>
-            <div class="pa-header">
-                <b>@lang('ui.page-assists.postCreate.title')</b>
-                <span class="pa-close">
-                    @svg('icons/close.svg')
-                </span>
-            </div>
-            <div class="pa-content">@lang('ui.page-assists.postCreate.body')</div>
-        </div>
-    </div>
-
-    <div id="post-category-suggestion" class="page-assist d-none">
-        <div>
-            <div class="pa-header">
-                <b>Suggestion: fields for <span class="cname"></span></b>
-                <span class="pa-close">
-                    @svg('icons/close.svg')
-                </span>
-            </div>
-            <div class="pa-content" style="padding:0">Please consider including following information into your post:
-                <span class="cfields" title="click to copy" data-copy></span>
-                This will help other users to understand your post.
-            </div>
-            <form
-                action="{{route('feedbacks.store', 'report-category-fields')}}"
-                method="post"
-                class="general-ajax-submit with-recaptcha ask"
-                data-asktitle="Are you sure?"
-                data-asktext="We will make sure to review the issue you faced"
-                data-askno="Cancel"
-                data-askyes="Report suggestion"
-            >
-                @csrf
-                <input type="hidden" name="data[category_id]" class="cid">
-                <button type="submit" class="report-category-fields-suggestion">
-                    Report suggestion
-                </button>
-            </form>
-        </div>
-    </div>
+    <x-page-assists />
 
 	@yield('modals')
 

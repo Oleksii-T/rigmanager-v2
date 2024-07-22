@@ -545,6 +545,7 @@ $(document).ready(function () {
                         <p>${trans('ui_phone')}: <b>${phones}</b></p>`,
                     showConfirmButton: false,
                     showCancelButton: true,
+                    cancelButtonText: window.Laravel.translations.ui_tba_modal.cancel,
                 });
             },
             error: function(response) {
@@ -565,6 +566,7 @@ $(document).ready(function () {
             showConfirmButton: true,
             showCancelButton: true,
             showLoaderOnConfirm: true,
+            cancelButtonText: window.Laravel.translations.ui_tba_modal.cancel,
             preConfirm: (message) => {
                 let response = $.ajax({
                     async: false,

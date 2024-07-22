@@ -55,6 +55,7 @@ If you have significant amount of posts, consider using <a href="/imports" targe
     'cabinet' => 'Profile',
     'introduction' => 'Specialized <b>bulletin board</b> for cooperation of oil and gas companies',
     'subIntroduction' => 'Sell, find, buy drilling equipment from dozens of companies for <b>FREE</b>!',
+    'more' => 'more',
     'introSellEq' => 'Sell of drilling
         equipment',
     'introBuyEq' => 'Buy and loan
@@ -162,7 +163,7 @@ If you have significant amount of posts, consider using <a href="/imports" targe
     'noFavPostsBySearch' => 'Unfortunately, we cannot find any posts by your request.',
     'inFav' => 'In favourites',
     'removeFromFav' => 'Remove from favourites',
-    'profile' => 'Profle',
+    'profile' => 'Profile',
     'viewAsmember' => 'View as member',
     'topCategories' => 'Top Categories',
     'totalPublications' => 'Total Publications',
@@ -689,6 +690,7 @@ Cancel at any time, for any reason.',
     'equipmentForSale' => 'equipment for sale',
     'findNewOrUsed' => 'Find new or used',
     'eqForSaleOrRent' => 'equipment for sale or rent at rigmanagers.com',
+    'forSale' => 'for sale',
     'about-us-content' => '
         <p>rigmanagers.com - is a free bulletin board specialized for Oil&Gas procurement processes.</p>
 				

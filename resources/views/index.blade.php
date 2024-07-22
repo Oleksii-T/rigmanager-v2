@@ -15,7 +15,7 @@
                 <p>
                     @lang('ui.subIntroduction')
                     <span class="link-w-icon" style="font-size:90%">
-                        <a href="{{route('about')}}">more</a>
+                        <a href="{{route('about')}}">@lang('ui.more')</a>
                         <img src="{{asset('icons/link.svg')}}" alt="link icon">
                     </span>
                 </p>

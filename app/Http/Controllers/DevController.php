@@ -74,13 +74,65 @@ class DevController extends Controller
     {
         $d = [];
 
-        $s = new \App\Services\GoogleSearchConsoleService;
-        $d = $s->inspectUrl('https://rigmanagers.com/catalog');
-        $users = User::all();
+        $tooLong = [];
+        $translator = new \App\Services\DeepLService;
 
-        foreach ($users as $key => $value) {
-            # code...
+        $trans = trans('ui');
+        $d = [];
+
+        foreach ($trans as $t) {
+            if (is_array($t)) {
+                foreach ($t as $t1) {
+                    if (is_array($t1)) {
+                        foreach ($t1 as $t2) {
+                            $d[] = $t2;
+                        }
+                        continue;
+                    }
+                    $d[] = $t1;
+                }
+                continue;
+            }
+
+            $d[] = $t;
         }
+
+        $trans = trans('messages');
+
+        foreach ($trans as $t) {
+            if (is_array($t)) {
+                foreach ($t as $t1) {
+                    if (is_array($t1)) {
+                        foreach ($t1 as $t2) {
+                            $d[] = $t2;
+                        }
+                        continue;
+                    }
+                    $d[] = $t1;
+                }
+                continue;
+            }
+
+            $d[] = $t;
+        }
+
+        // foreach (\App\Models\Category::all() as $category) {
+        //     $mt = "$category->name for sale";
+        //     $md = "Discover a wide range of new and used $category->name for sale at rigmanagers.com.";
+
+        //     $category->saveTranslations([
+        //         'meta_title' => [
+        //             'en' => $mt,
+        //             'zh' => $translator->translate($mt, 'zh'),
+        //         ],
+        //         'meta_description' => [
+        //             'en' => $md,
+        //             'zh' => $translator->translate($md, 'zh'),
+        //         ]
+        //     ]);
+        // }
+
+        $d = implode(' ', $d);
 
         dd($d);
     }

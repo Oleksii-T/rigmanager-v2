@@ -95,7 +95,7 @@ class PostController extends Controller
             $textLocale => Post::generateMetaTitleHelper($ogTitle, $c->name)
         ];
         $input['meta_description'] = [
-            $textLocale => Post::generateMetaDescriptionHelper($ogDesc)
+            $textLocale => Post::generateMetaDescriptionHelper($ogTitle, $input['condition'])
         ];
         $post = $user->posts()->create($input);
 
@@ -280,13 +280,13 @@ class PostController extends Controller
 
         if ($post->is_active) {
             $post->is_active = false;
-            $message = 'Post deactivated';//! TRANSLATE
+            $message = trans('messages.postDisactivated');
         } else {
             if ($this->reachedPostsLimit($user)) {
                 return $this->subscriptionErrorResponse(2);
             }
             $post->is_active = true;
-            $message = 'Post activated';//! TRANSLATE
+            $message = trans('messages.postActivated');
         }
 
         $post->update();
@@ -394,7 +394,7 @@ class PostController extends Controller
             'is_trashed' => false
         ]);
 
-        return $this->jsonSuccess('Post recovered'); //! TRANSLATE
+        return $this->jsonSuccess(trans('messages.postRecovered'));
     }
 
     public function trash(Request $request, Post $post)
@@ -407,7 +407,7 @@ class PostController extends Controller
             'is_trashed' => true
         ]);
 
-        return $this->jsonSuccess('Post trashed'); //! TRANSLATE
+        return $this->jsonSuccess(trans('messages.postTrashed'));
     }
 
     public function destroy(Request $request, Post $post)
@@ -419,6 +419,6 @@ class PostController extends Controller
         $post->delete();
 
 
-        return $this->jsonSuccess('Post deleted'); //! TRANSLATE
+        return $this->jsonSuccess(trans('messages.postDeleted'));
     }
 }

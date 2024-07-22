@@ -53,6 +53,7 @@ return [
     'cabinet' => '简介',
     'introduction' => '石油和天然气公司合作专用<b>公告栏</b>。',
     'subIntroduction' => '<b>免费</b>从数十家公司出售、查找和购买钻井设备！',
+    'more' => '更多',
     'introSellEq' => '销售钻井设备',
     'introBuyEq' => '购买和借用钻探设备',
     'introSe' => '提供和申请服务',
@@ -153,7 +154,7 @@ return [
     'noFavPostsBySearch' => '很遗憾，我们找不到您所要求的任何帖子。',
     'inFav' => '最受欢迎',
     'removeFromFav' => '从收藏夹中删除',
-    'profile' => 'Profle',
+    'profile' => '简介',
     'viewAsmember' => '以会员身份查看',
     'topCategories' => '热门类别',
     'totalPublications' => '出版物总数',
@@ -644,6 +645,7 @@ return [
     'equipmentForSale' => '设备出售',
     'findNewOrUsed' => '查找全新或二手',
     'eqForSaleOrRent' => '在 rigmanagers.com 出售或出租设备',
+    'forSale' => '待售',
     'about-us-content' => '
         <p>rigmanagers.com - 是一个专门针对石油和天然气采购流程的免费公告板。</p>
 				

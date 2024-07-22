@@ -95,7 +95,7 @@ class ScraperPostController extends Controller
             $mTitles[$locale] = Post::generateMetaTitleHelper($title, $category->name);
         }
         foreach ($input['description'] as $locale => $description) {
-            $mDescriptions[$locale] = Post::generateMetaDescriptionHelper($description);
+            $mDescriptions[$locale] = Post::generateMetaDescriptionHelper($title);
         }
 
         // escape description

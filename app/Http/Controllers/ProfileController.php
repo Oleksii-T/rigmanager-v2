@@ -169,7 +169,7 @@ class ProfileController extends Controller
             $query->whereNotIn('id', $selected);
         } else {
             if (!$selected) {
-                return $this->jsonError('No posts selected');//! TRANSLATE
+                return $this->jsonError(trans('messages.noPostsSelected'));
             }
             $query->whereIn('id', $selected);
         }
@@ -183,25 +183,25 @@ class ProfileController extends Controller
                     return $this->subscriptionErrorResponse(2);
                 }
 
-                $message = "$count posts activated";//! TRANSLATE
+                $message = trans('messages.postsActivated', ['count' => $count]);
                 $query->update([
                     'is_active' => true
                 ]);
                 break;
             case 'deactivate':
-                $message = "$count posts deactivated";//! TRANSLATE
+                $message = trans('messages.postsDeactivated', ['count' => $count]);
                 $query->update([
                     'is_active' => false
                 ]);
                 break;
             case 'trash':
-                $message = "$count posts trashed";//! TRANSLATE
+                $message = trans('messages.postsTrashed', ['count' => $count]);
                 $query->update([
                     'is_trashed' => true
                 ]);
                 break;
             case 'recover':
-                $message = "$count posts recovered";//! TRANSLATE
+                $message = trans('messages.postsRecovered', ['count' => $count]);
 
                 $data = [
                     'is_trashed' => false
@@ -214,7 +214,7 @@ class ProfileController extends Controller
                 $query->update($data);
                 break;
             default:
-                return $this->jsonError('Invalid action');//! TRANSLATE
+                return $this->jsonError(trans('messages.invalidAction'));
         }
 
         return $this->jsonSuccess($message);
@@ -255,7 +255,7 @@ class ProfileController extends Controller
         $user = auth()->user();
         $user->favorites()->sync([]);
 
-        flash('Favorites cleared');//! TRANSLATE
+        flash(trans('messages.favsCleared'));
 
         return $this->jsonSuccess();
     }

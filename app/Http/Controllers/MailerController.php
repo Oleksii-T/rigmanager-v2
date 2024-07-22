@@ -52,7 +52,7 @@ class MailerController extends Controller
         $input['slug'] = makeSlug($input['title'], Mailer::where('id', '!=', $mailer->id)->pluck('slug')->toArray());
         $mailer->update($input);
 
-        flash(trans('messages.mailers.updated')); //! TRANSLATE
+        flash(trans('messages.mailers.updated'));
 
         return $this->jsonSuccess('', [
             'redirect' => route('mailers.index')

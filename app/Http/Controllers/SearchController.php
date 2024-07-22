@@ -252,7 +252,7 @@ class SearchController extends Controller
             return;
         }
 
-        \Log::channel('activity')->info("AUTOCOMPLETE", array_merge($info, ['result' => $result]));
+        \Log::channel('activity')->info("AUTOCOMPLETE", array_merge($info, ['result' => $result, 'user_id' => auth()->id()]));
     }
 
     private function logSearch($filters, $posts)
@@ -277,6 +277,6 @@ class SearchController extends Controller
             return;
         }
 
-        \Log::channel('activity')->info("SEARCH", array_merge($info, ['posts_found_count' => $posts->count()]));
+        \Log::channel('activity')->info("SEARCH", array_merge($info, ['posts_found_count' => $posts->count(), 'user_id' => auth()->id()]));
     }
 }

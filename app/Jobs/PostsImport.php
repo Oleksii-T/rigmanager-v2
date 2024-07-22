@@ -279,7 +279,7 @@ class PostsImport implements ShouldQueue
                 $textLocale => Post::generateMetaTitleHelper($title, $c->name)
             ],
             'meta_description' => [
-                $textLocale => Post::generateMetaDescriptionHelper($description)
+                $textLocale => Post::generateMetaDescriptionHelper($title, $post->condition)
             ]
         ]);
 

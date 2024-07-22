@@ -4,7 +4,11 @@
     </div>
 @elseif(!isset($category) && ($filters['author_bio']??'') && strlen($filters['author_bio']) > 180)
     <div id="search-category-description">
-        <p class="wrap-text">{{$filters['author_bio']}}
+        {{$filters['author_bio']}}
+        <span class="link-w-icon">
+            <a href="{{$filters['author_profile_link']}}">@lang('ui.profile')</a>
+            <img src="{{asset('icons/link.svg')}}" alt="">
+        </span>
     </div>
 @elseif(!isset($category) && !isset($filters['author']))
     <div id="search-category-description">
